@@ -1,7 +1,6 @@
 WhoBPyT - Whole-Brain Modelling in PyTorch
 =================
-
-_"Or there and Back Again": https://en.wikipedia.org/wiki/The_Hobbit
+(`Or There and Back Again <https://en.wikipedia.org/wiki/The_Hobbit>`_)
 
 
 Summary
