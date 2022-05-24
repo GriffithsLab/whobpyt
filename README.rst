@@ -29,4 +29,5 @@ Structure
 
 There are three main components to the code base:
 
+
 |  ``doc`` folder - Documentation pages text and organization
