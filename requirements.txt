@@ -6,7 +6,7 @@ matplotlib
 seaborn
 h5py
 pooch
-pytorch
+torch
 
 
 # Docs requirements
