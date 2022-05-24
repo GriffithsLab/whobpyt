@@ -31,3 +31,6 @@ There are three main components to the code base:
 
 
 |  ``doc`` folder - Documentation pages text and organization
+|  ``whobpyt`` folder - The importable python library
+|  ``examples`` folder - Example usage scripts that become the gallery
+  items in the CI-managed sphinx gallery site
