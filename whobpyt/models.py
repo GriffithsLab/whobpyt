@@ -457,7 +457,7 @@ class JR_Params():
 
 class Jansen_Layer(torch.nn.Module):
     def __init__(self, num_regions, params, Con_Mtx, useBC = False):        
-        super(RNNJANSEN, self).__init__() # To inherit parameters attribute
+        super(Jansen_Layer, self).__init__() # To inherit parameters attribute
         
         # Initialize the RNN Model 
         #
@@ -485,7 +485,7 @@ class Jansen_Layer(torch.nn.Module):
         ## JR Constants
         #############################################
 
-	    self.A = params.A # magnitude of second order system for populations E and P
+	self.A = params.A # magnitude of second order system for populations E and P
         self.a = params.a # decay rate of the 2nd order system for population E and P
         self.B = params.B # magnitude of second order system for population I
         self.b = params.b # decay rate of the 2nd order system for population I
@@ -548,26 +548,26 @@ class Jansen_Layer(torch.nn.Module):
         # JR and State Values
         M = init_state[:, 0]
         E = init_state[:, 1]
-	    I = init_state[:, 2]
-	    Mv = init_state[:, 3]
+	I = init_state[:, 2]
+	Mv = init_state[:, 3]
         Ev = init_state[:, 4]
-	    Iv = init_state[:, 5]
+	Iv = init_state[:, 5]
 	
         num_steps = int(sim_len/step_size)
         # Might need to change the c to add global gain g
         for i in range(num_steps):    
-	        dM = Mv
+	    dM = Mv
             dMv = self.A*self.a*sigmoid(E - I, self.vmax, self.v0, self.r) - 2*self.a*Mv-M*self.a**(2)
             dE = Ev
             dEv = self.A*self.a*(std_in + self.c2*sigmoid(self.c1*M, self.vmax, self.v0, self.r)) - 2*self.a*Ev - E*self.a**(2)
-	        dI = Iv
+	    dI = Iv
             dIv = self.B*self.b*(self.c4*sigmoid(self.c3*M, self.vmax, self.v0, self.r)) - 2*self.b*Iv - I*self.b**(2)
 		
             # UPDATE VALUES
             
-	        M = M + step_size*dM
-	        E = E + step_size*dE
-	        I = I + step_size*dI
+	    M = M + step_size*dM
+	    E = E + step_size*dE
+	    I = I + step_size*dI
             Mv = Mv + step_size*dMv
             Ev = Ev + step_size*dEv
             Iv = Iv + step_size*dIv
@@ -582,7 +582,7 @@ class Jansen_Layer(torch.nn.Module):
                 Iv = 1000*torch.tanh(dIv/1000)#(con_1 + torch.tanh(dv - con_1))
                 Mv = 1000*torch.tanh(dMv/1000)#(con_1 + torch.tanh(dq - con_1))
             
-	        state_hist[i, :, 0] = M
+	    state_hist[i, :, 0] = M
             state_hist[i, :, 1] = E 
             state_hist[i, :, 2] = I
             state_hist[i, :, 3] = Mv 
