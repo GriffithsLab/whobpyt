@@ -66,7 +66,7 @@ class RWW_Layer(torch.nn.Module):
     # Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.
     # Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.  
   
-    def __init__(self, num_regions, params, Con_Mtx, useBC = False):        
+    def __init__(self, num_regions, params, Con_Mtx, Dist_Mtx, step_size = 0.0001, useBC = False):        
         super(RWW_Layer, self).__init__() # To inherit parameters attribute
         
         # Initialize the RWW Model 
@@ -77,11 +77,18 @@ class RWW_Layer(torch.nn.Module):
         #  Con_Mtx: Tensor [num_regions, num_regions] - With connectivity (eg. structural connectivity)
         #  useBC: Boolean - Whether to use extra boundary conditions to make more numerically stable. Not fully tested.
         #                   NOTE: This is discouraged as it will likely influence results. Instead, choose a smaller step size. 
-        
+
         
         self.num_regions = num_regions
         self.Con_Mtx = Con_Mtx
+        self.Dist_Mtx = Dist_Mtx
         
+        self.max_delay = 0.1 #This should be greater than what is possible of max(Dist_Mtx)/velocity
+        self.buffer_len = int(self.max_delay/step_size)
+        self.delayed_S_E = torch.zeros(self.buffer_len, num_regions)
+
+        self.buffer_idx = 0
+
         #############################################
         ## RWW Constants
         #############################################
@@ -154,7 +161,7 @@ class RWW_Layer(torch.nn.Module):
         
         return r_I
     
-    def forward(self, init_state, step_size, sim_len, withOptVars = False, useGPU = False, debug = False):
+    def forward(self, init_state, step_size, sim_len, useDelays = False, useLaplacian = False, withOptVars = False, useGPU = False, debug = False):
                 
         # Runs the RWW Model 
         #
@@ -187,9 +194,57 @@ class RWW_Layer(torch.nn.Module):
 
         num_steps = int(sim_len/step_size)
         for i in range(num_steps):
+            
+            if((not useDelays) & (not useLaplacian)):
+                Network_S_E =  torch.matmul(self.Con_Mtx, S_E)
+
+            if(useDelays & (not useLaplacian)):
+                self.delays_idx = ((self.dist / (1.5 + torch.nn.functional.relu(self.mu)) / self.step_size) * 0.001).type(torch.int64)
+
+                S_E_history_new = self.delayed_S_E # TODO: Check if this needs to be cloned to work
+                S_E_delayed_Mtx = S_E_history_new.gather(1, (self.buffer_idx - self.delays)%self.buffer_len)  # delayed E
+
+                S_E_delayed_Vector = torch.reshape(torch.sum(self.sc_modified * torch.transpose(S_E_delayed_Mtx, 0, 1), 1),(self.node_size, 1))  # weights on delayed E
+
+                Delayed_S_E = torch.nn.functional.relu(self.G) * (S_E_delayed_Vector)
+
+                Network_S_E = Delayed_S_E
+
+            if(useLaplacian & (not useDelays)):
+                
+                newSC = torch.exp(self.sc_withGains) * torch.tensor(self.Con_Mtx, dtype=torch.float32)
+                self.sc_modified = torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))) / torch.linalg.norm(torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))))
+                
+                Laplacian_diagonal = -torch.diag(torch.sum(self.sc_modified, axis=1))
+                S_E_laplacian = torch.matmul(self.Con_Mtx + Laplacian_diagonal, S_E)
+
+                Network_S_E = S_E_laplacian 
+
+
+            if(useDelays & useLaplacian):
+
+                self.sc_withGains = 0
+                # Update the Laplacian based on the updated connection gains w_bb.
+                newSC = torch.exp(self.sc_withGains) * torch.tensor(self.Con_Mtx, dtype=torch.float32)
+                self.sc_modified = torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))) / torch.linalg.norm(torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))))
+                
+                Laplacian_diagonal = -torch.diag(torch.sum(self.sc_modified, axis=1))
+
+                self.delays_idx = ((self.dist / (1.5 + torch.nn.functional.relu(self.mu)) / self.step_size) * 0.001).type(torch.int64)
+
+                S_E_history_new = self.delayed_S_E # TODO: Check if this needs to be cloned to work
+                S_E_delayed_Mtx = S_E_history_new.gather(1, (self.buffer_idx - self.delays)%self.buffer_len)  # delayed E
+
+                S_E_delayed_Vector = torch.reshape(torch.sum(self.sc_modified * torch.transpose(S_E_delayed_Mtx, 0, 1), 1),(self.node_size, 1))  # weights on delayed E
+
+                Delayed_Laplacian_S_E = torch.nn.functional.relu(self.G) * (S_E_delayed_Vector + 1 * torch.matmul(Laplacian_diagonal, S_E))
+
+                Network_S_E = Delayed_Laplacian_S_E
+
+
             # Currents
-            I_E = self.W_E*self.I_0 + self.w_plus*self.J_NMDA*S_E + self.G*self.J_NMDA*torch.matmul(self.Con_Mtx, S_E) - self.J*S_I + self.I_external
-            I_I = self.W_I*self.I_0 + self.J_NMDA*S_E - S_I + self.Lambda*self.G*self.J_NMDA*torch.matmul(self.Con_Mtx, S_E)
+            I_E = self.W_E*self.I_0 + self.w_plus*self.J_NMDA*S_E + self.G*self.J_NMDA*Network_S_E - self.J*S_I + self.I_external
+            I_I = self.W_I*self.I_0 + self.J_NMDA*S_E - S_I + self.Lambda*self.G*self.J_NMDA*Network_S_E
             
             # Firing Rates
             # Orig
@@ -215,6 +270,13 @@ class RWW_Layer(torch.nn.Module):
             
             state_hist[i, :, 0] = S_E
             state_hist[i, :, 1] = S_I 
+
+            self.delayed_S_E[self.buffer_idx, :] = S_E
+
+            if (self.buffer_idx == (self.buffer_len - 1)):
+                self.buffer_idx = 0
+            else: 
+                self.buffer_idx = self.buffer_idx + 1
             
             if(withOptVars):
                 opt_hist[i, :, 0] = I_I
@@ -224,11 +286,12 @@ class RWW_Layer(torch.nn.Module):
             
         state_vals = torch.cat((torch.unsqueeze(S_E, 1), torch.unsqueeze(S_I, 1)), 1)
         
+
+
         if(withOptVars):
             layer_hist = torch.cat((state_hist, opt_hist), 2)
         else:
             layer_hist = state_hist
-            
         
         return state_vals, layer_hist
         
