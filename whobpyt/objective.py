@@ -172,3 +172,69 @@ class functionalConnectivityLoss():
         cor = torch.corrcoef(torch.stack((simFC_tril,targetFC_tril)))[0,1]
         
         return 0.5 - 0.5*cor
+        
+        
+        # zheng's version
+        class Costs:
+    def __init__(self, method):
+        self.method = method
+    def cost_dist(self, sim, emp):
+        """
+        Calculate the Pearson Correlation between the simFC and empFC.
+        From there, the probability and negative log-likelihood.
+        Parameters
+        ----------
+        logits_series_tf: tensor with node_size X datapoint
+            simulated EEG
+        labels_series_tf: tensor with node_size X datapoint
+            empirical EEG
+        """
+        losses = torch.sqrt(torch.mean((sim - emp)**2))#
+        return losses
+    def cost_psd(self, sim, emp):
+        """
+        Calculate the Pearson Correlation between the simFC and empFC.
+        From there, the probability and negative log-likelihood.
+        Parameters
+        ----------
+        logits_series_tf: tensor with node_size X datapoint
+            simulated EEG
+        labels_series_tf: tensor with node_size X datapoint
+            empirical EEG
+        """
+        sp_sim = torch.fft.fftn(sim)
+        sp_emp = torch.fft.fftn(emp)
+        abs_sim = sp_sim.real**2 + sp_sim.imag**2
+        abs_emp = sp_emp.real**2 + sp_emp.imag**2
+        losses = torch.sqrt(torch.mean((abs_sim - abs_emp)**2))#
+        return losses
+    def cost_r(self, sim, emp):
+        """
+        Calculate the Pearson Correlation between the simFC and empFC.
+        From there, the probability and negative log-likelihood.
+        Parameters
+        ----------
+        logits_series_tf: tensor with node_size X datapoint
+            simulated BOLD
+        labels_series_tf: tensor with node_size X datapoint
+            empirical BOLD
+        """
+        # get node_size(batch_size) and batch_size()
+        node_size = sim.shape[0]
+        truncated_backprop_length = sim.shape[1]
+        mask = torch.tril_indices(node_size, node_size, -1)
+        # fc for sim and empirical BOLDs
+        fc_sim = torch.corrcoef(sim)
+        fc_emp = torch.corrcoef(emp)
+        # corr_coef
+        corr_FC = torch.corrcoef(fc_sim[mask], fc_emp[mask])[0,1]
+        # use surprise: corr to calculate probability and -log
+        losses_corr = -torch.log(0.5000 + 0.5*corr_FC) #torch.mean((FC_v -FC_sim_v)**2)#
+        return losses_corr
+    def cost_eff(self, sim, emp):
+        if self.method == 0:
+            return self.cost_dist(sim,emp)
+        elif self.method == 1:
+            return self.cost_r(sim,emp)
+        else:
+            return self.cost_psd(sim,emp)

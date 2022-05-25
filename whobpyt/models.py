@@ -7,7 +7,7 @@ import torch
 class RWW_Params():
     ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
     #
-    # Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation–inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.
+    # Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitationâ€“inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.
     # Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.
     # Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.
     # Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.
@@ -61,7 +61,7 @@ class RWW_Params():
 class RWW_Layer(torch.nn.Module):
     ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
     #
-    # Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation–inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.
+    # Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitationâ€“inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.
     # Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.
     # Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.
     # Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.  
@@ -422,3 +422,581 @@ class BOLD_Layer(torch.nn.Module):
         state_vals = torch.cat((torch.unsqueeze(x, 1), torch.unsqueeze(f, 1), torch.unsqueeze(v, 1), torch.unsqueeze(q, 1)),1)
         
         return state_vals, layer_hist
+
+
+### zheng's version
+def sys2nd(A, a,  u, x, v):
+    return A*a*u -2*a*v-a**2*x
+
+def sigmoid(x, vmax, v0, r):
+    return vmax/(1+torch.exp(r*(v0-x)))
+
+
+class RNNJANSEN(torch.nn.Module):
+    """
+    A module for forward model (JansenRit) to simulate a batch of EEG signals
+    Attibutes
+    ---------
+    state_size : int
+        the number of states in the JansenRit model
+    input_size : int
+        the number of states with noise as input
+    tr : float
+        tr of image
+    step_size: float
+        Integration step for forward model
+    hidden_size: int
+        the number of step_size in a tr
+    batch_size: int
+        the number of EEG signals to simulate
+    node_size: int
+        the number of ROIs
+    sc: float node_size x node_size array
+        structural connectivity
+    fit_gains: bool
+        flag for fitting gains 1: fit 0: not fit
+    g, c1, c2, c3,c4: tensor with gradient on
+        model parameters to be fit
+    w_bb: tensor with node_size x node_size (grad on depends on fit_gains)
+        connection gains
+    std_in std_out: tensor with gradient on
+        std for state noise and output noise
+    hyper parameters for prior distribution of model parameters
+    Methods
+    -------
+    forward(input, noise_out, hx)
+        forward model (JansenRit) for generating a number of EEG signals with current model parameters
+    """
+    state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
+    model_name = "JR"
+
+    def __init__(self, input_size: int, node_size: int,
+                 batch_size: int, step_size: float, output_size: int, tr: float, sc: float, lm: float, dist: float,
+                 fit_gains_flat: bool, \
+                 fit_lfm_flat: bool, param: ParamsJR) -> None:
+        """
+        Parameters
+        ----------
+        state_size : int
+        the number of states in the JansenRit model
+        input_size : int
+            the number of states with noise as input
+        tr : float
+            tr of image
+        step_size: float
+            Integration step for forward model
+        hidden_size: int
+            the number of step_size in a tr
+        batch_size: int
+            the number of EEG signals to simulate
+        node_size: int
+            the number of ROIs
+        output_size: int
+            the number of channels EEG
+        sc: float node_size x node_size array
+            structural connectivity
+        fit_gains: bool
+            flag for fitting gains 1: fit 0: not fit
+        param from ParamJR
+        """
+        super(RNNJANSEN, self).__init__()
+        self.state_size = 6  # 6 states WWD model
+        self.input_size = input_size  # 1 or 2 or 3
+        self.tr = tr  # tr ms (integration step 0.1 ms)
+        self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.1 ms
+        self.hidden_size = np.int(tr / step_size)
+        self.batch_size = batch_size  # size of the batch used at each step
+        self.node_size = node_size  # num of ROI
+        self.output_size = output_size  # num of EEG channels
+        self.sc = sc  # matrix node_size x node_size structure connectivity
+        self.dist = torch.tensor(dist, dtype=torch.float32)
+        self.fit_gains_flat = fit_gains_flat  # flag for fitting gains
+        self.fit_lfm_flat = fit_lfm_flat
+        self.param = param
+
+        self.output_size = lm.shape[0]  # number of EEG channels
+
+        # set model parameters (variables: need to calculate gradient) as Parameter others : tensor
+        # set w_bb as Parameter if fit_gain is True
+        if self.fit_gains_flat == True:
+            self.w_bb = Parameter(torch.tensor(np.zeros((node_size, node_size)) + 0.05,
+                                               dtype=torch.float32))  # connenction gain to modify empirical sc
+        else:
+            self.w_bb = torch.tensor(np.zeros((node_size, node_size)), dtype=torch.float32)
+
+        if self.fit_lfm_flat == True:
+            self.lm = Parameter(torch.tensor(lm, dtype=torch.float32))  # leadfield matrix from sourced data to eeg
+        else:
+            self.lm = torch.tensor(lm, dtype=torch.float32)  # leadfield matrix from sourced data to eeg
+
+        vars = [a for a in dir(param) if not a.startswith('__') and not callable(getattr(param, a))]
+        for var in vars:
+            if np.any(getattr(param, var)[1] > 0):
+                setattr(self, var, Parameter(
+                    torch.tensor(getattr(param, var)[0] + 1 / getattr(param, var)[1] * np.random.randn(1, )[0],
+                                 dtype=torch.float32)))
+                if var != 'std_in':
+                    dict_nv = {}
+                    dict_nv['m'] = getattr(param, var)[0]
+                    dict_nv['v'] = getattr(param, var)[1]
+
+                    dict_np = {}
+                    dict_np['m'] = var + '_m'
+                    dict_np['v'] = var + '_v'
+
+                    for key in dict_nv:
+                        setattr(self, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
+            else:
+                setattr(self, var, torch.tensor(getattr(param, var)[0], dtype=torch.float32))
+
+    """def check_input(self, input: Tensor) -> None:
+        expected_input_dim = 2 
+        if input.dim() != expected_input_dim:
+            raise RuntimeError(
+                'input must have {} dimensions, got {}'.format(
+                    expected_input_dim, input.dim()))
+        if self.input_size != input.size(-1):
+            raise RuntimeError(
+                'input.size(-1) must be equal to input_size. Expected {}, got {}'.format(
+                    self.input_size, input.size(-1)))
+        if self.batch_size != input.size(0):
+            raise RuntimeError(
+                'input.size(0) must be equal to batch_size. Expected {}, got {}'.format(
+                    self.batch_size, input.size(0)))"""
+
+    def forward(self, input, noise_in, noise_out, hx, hE):
+        """
+        Forward step in simulating the EEG signal.
+        Parameters
+        ----------
+        input: tensor with node_size x hidden_size x batch_size x input_size
+            noise for states
+        noise_out: tensor with node_size x batch_size
+            noise for EEG
+        hx: tensor with node_size x state_size
+            states of JansenRit model
+        Outputs
+        -------
+        next_state: dictionary with keys:
+        'current_state''EEG_batch''E_batch''I_batch''M_batch''Ev_batch''Iv_batch''Mv_batch'
+            record new states and EEG
+        """
+
+        # define some constants
+        conduct_lb = 1.5  # lower bound for conduct velocity
+        u_2ndsys_ub = 500  # the bound of the input for second order system
+        noise_std_lb = 150  # lower bound of std of noise
+        lb = 0.01  # lower bound of local gains
+        s2o_coef = 0.0001  # coefficient from states (source EEG) to EEG
+        k_lb = 0.5  # lower bound of coefficient of external inputs
+
+        next_state = {}
+
+        M = hx[:, 0:1]  # current of main population
+        E = hx[:, 1:2]  # current of excitory population
+        I = hx[:, 2:3]  # current of inhibitory population
+
+        Mv = hx[:, 3:4]  # voltage of main population
+        Ev = hx[:, 4:5]  # voltage of exictory population
+        Iv = hx[:, 5:6]  # voltage of inhibitory population
+
+        dt = self.step_size
+        # Generate the ReLU module for model parameters gEE gEI and gIE
+
+        m = torch.nn.ReLU()
+
+        # define constant 1 tensor
+        con_1 = torch.tensor(1.0, dtype=torch.float32)
+        if self.sc.shape[0] > 1:
+
+            # Update the Laplacian based on the updated connection gains w_bb.
+            w = torch.exp(self.w_bb) * torch.tensor(self.sc, dtype=torch.float32)
+            w_n = torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))) / torch.linalg.norm(
+                torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))))
+            self.sc_m = w_n
+            dg = -torch.diag(torch.sum(w_n, axis=1))
+        else:
+            l_s = torch.tensor(np.zeros((1, 1)), dtype=torch.float32)
+
+        self.delays = (self.dist / (conduct_lb * con_1 + m(self.mu))).type(torch.int64)
+        # print(torch.max(self.delays), self.delays.shape)
+
+        # placeholder for the updated corrent state
+        current_state = torch.zeros_like(hx)
+
+        # placeholders for output BOLD, history of E I x f v and q
+        eeg_batch = []
+        E_batch = []
+        I_batch = []
+        M_batch = []
+        Ev_batch = []
+        Iv_batch = []
+        Mv_batch = []
+
+        # Use the forward model to get EEGsignal at ith element in the batch.
+        for i_batch in range(self.batch_size):
+            # Get the noise for EEG output.
+            noiseEEG = noise_out[:, i_batch:i_batch + 1]
+
+            for i_hidden in range(self.hidden_size):
+                Ed = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)  # delayed E
+
+                """for ind in range(self.node_size):
+                    #print(ind, hE[ind,:].shape, self.delays[ind,:].shape)
+                    Ed[ind] = torch.index_select(hE[ind,:], 0, self.delays[ind,:])"""
+                hE_new = hE.clone()
+                Ed = hE_new.gather(1, self.delays)  # delayed E
+
+                LEd = torch.reshape(torch.sum(w_n * torch.transpose(Ed, 0, 1), 1),
+                                    (self.node_size, 1))  # weights on delayed E
+
+                # Input noise for M.
+                noiseE = noise_in[:, i_hidden, i_batch, 0:1]
+                noiseI = noise_in[:, i_hidden, i_batch, 1:2]
+                noiseM = noise_in[:, i_hidden, i_batch, 2:3]
+                u = input[:, i_hidden:i_hidden + 1, i_batch]
+
+                # LEd+torch.matmul(dg,E): Laplacian on delayed E
+
+                rM = sigmoid(E - I, self.vmax, self.v0, self.r)  # firing rate for Main population
+                rE = (noise_std_lb * con_1 + m(self.std_in)) * noiseE + (lb * con_1 + m(self.g)) * (
+                            LEd + 1 * torch.matmul(dg, E)) \
+                     + (lb * con_1 + m(self.c2)) * sigmoid((lb * con_1 + m(self.c1)) * M, self.vmax, self.v0,
+                                                           self.r)  # firing rate for Excitory population
+                rI = (lb * con_1 + m(self.c4)) * sigmoid((lb * con_1 + m(self.c3)) * M, self.vmax, self.v0,
+                                                         self.r)  # firing rate for Inhibitory population
+
+                # Update the states by step-size.
+                ddM = M + dt * Mv
+                ddE = E + dt * Ev
+                ddI = I + dt * Iv
+                ddMv = Mv + dt * sys2nd(0 * con_1 + m(self.A), 1 * con_1 + m(self.a),
+                                        + u_2ndsys_ub * torch.tanh(rM / u_2ndsys_ub), M, Mv) \
+                       + 0 * torch.sqrt(dt) * (1.0 * con_1 + m(self.std_in)) * noiseM
+
+                ddEv = Ev + dt * sys2nd(0 * con_1 + m(self.A), 1 * con_1 + m(self.a), \
+                                        (k_lb * con_1 + m(self.k)) * u \
+                                        + u_2ndsys_ub * torch.tanh(rE / u_2ndsys_ub), E,
+                                        Ev)  # (0.001*con_1+m_kw(self.kw))/torch.sum(0.001*con_1+m_kw(self.kw))*
+
+                ddIv = Iv + dt * sys2nd(0 * con_1 + m(self.B), 1 * con_1 + m(self.b), \
+                                        +u_2ndsys_ub * torch.tanh(rI / u_2ndsys_ub), I, Iv) + 0 * torch.sqrt(dt) * (
+                                   1.0 * con_1 + m(self.std_in)) * noiseI
+
+                # Calculate the saturation for model states (for stability and gradient calculation).
+                E = ddE  # 1000*torch.tanh(ddE/1000)#torch.tanh(0.00001+torch.nn.functional.relu(ddE))
+                I = ddI  # 1000*torch.tanh(ddI/1000)#torch.tanh(0.00001+torch.nn.functional.relu(ddI))
+                M = ddM  # 1000*torch.tanh(ddM/1000)
+                Ev = ddEv  # 1000*torch.tanh(ddEv/1000)#(con_1 + torch.tanh(df - con_1))
+                Iv = ddIv  # 1000*torch.tanh(ddIv/1000)#(con_1 + torch.tanh(dv - con_1))
+                Mv = ddMv  # 1000*torch.tanh(ddMv/1000)#(con_1 + torch.tanh(dq - con_1))
+
+                # update placeholders for E buffer
+                hE[:, 0] = E[:, 0]
+
+            # Put M E I Mv Ev and Iv at every tr to the placeholders for checking them visually.
+            M_batch.append(M)
+            I_batch.append(I)
+            E_batch.append(E)
+            Mv_batch.append(Mv)
+            Iv_batch.append(Iv)
+            Ev_batch.append(Ev)
+            hE = torch.cat([E, hE[:, :-1]], axis=1)  # update placeholders for E buffer
+
+            # Put the EEG signal each tr to the placeholder being used in the cost calculation.
+            lm_t = (self.lm - 1 / self.output_size * torch.matmul(torch.ones((1, self.output_size)), self.lm))
+            temp = s2o_coef * self.cy0 * torch.matmul(lm_t, E - I) - 1 * self.y0
+            eeg_batch.append(temp)  # torch.abs(E) - torch.abs(I) + 0.0*noiseEEG)
+
+        # Update the current state.
+        current_state = torch.cat([M, E, I, Mv, Ev, Iv], axis=1)
+        next_state['current_state'] = current_state
+        next_state['eeg_batch'] = torch.cat(eeg_batch, axis=1)
+        next_state['E_batch'] = torch.cat(E_batch, axis=1)
+        next_state['I_batch'] = torch.cat(I_batch, axis=1)
+        next_state['P_batch'] = torch.cat(M_batch, axis=1)
+        next_state['Ev_batch'] = torch.cat(Ev_batch, axis=1)
+        next_state['Iv_batch'] = torch.cat(Iv_batch, axis=1)
+        next_state['Pv_batch'] = torch.cat(Mv_batch, axis=1)
+
+        return next_state, hE
+        
+class RNNWWD(torch.nn.Module):
+    """
+    A module for forward model (WWD) to simulate a batch of BOLD signals
+    Attibutes
+    ---------
+    state_size : int
+        the number of states in the WWD model
+    input_size : int
+        the number of states with noise as input
+    tr : float
+        tr of fMRI image
+    step_size: float
+        Integration step for forward model
+    hidden_size: int
+        the number of step_size in a tr
+    batch_size: int
+        the number of BOLD signals to simulate
+    node_size: int
+        the number of ROIs
+    sc: float node_size x node_size array
+        structural connectivity
+    fit_gains: bool
+        flag for fitting gains 1: fit 0: not fit
+    g, g_EE, gIE, gEI: tensor with gradient on
+        model parameters to be fit
+    w_bb: tensor with node_size x node_size (grad on depends on fit_gains)
+        connection gains
+    std_in std_out: tensor with gradient on
+        std for state noise and output noise
+    g_m g_v sup_ca sup_cb sup_cc: tensor with gradient on
+        hyper parameters for prior distribution of g gIE and gEI
+    Methods
+    -------
+    forward(input, noise_out, hx)
+        forward model (WWD) for generating a number of BOLD signals with current model parameters
+    """
+    state_names = ['E', 'I', 'x', 'f', 'v', 'q']
+    model_name = "WWD"
+    fit_lfm_flat = False
+
+    def __init__(self, input_size: int, node_size: int,
+                 batch_size: int, step_size: float, tr: float, sc: float, dist: float, fit_gains_flat: bool,
+                 param: ParamsJR) -> None:
+        """
+        Parameters
+        ----------
+        state_size : int
+        the number of states in the WWD model
+        input_size : int
+            the number of states with noise as input
+        tr : float
+            tr of fMRI image
+        step_size: float
+            Integration step for forward model
+        hidden_size: int
+            the number of step_size in a tr
+        batch_size: int
+            the number of BOLD signals to simulate
+        node_size: int
+            the number of ROIs
+        sc: float node_size x node_size array
+            structural connectivity
+        fit_gains: bool
+            flag for fitting gains 1: fit 0: not fit
+        g_mean_ini: float, optional
+            prior mean of g (default 100)
+        g_std_ini: float, optional
+            prior std of g (default 2.5)
+        gEE_mean_ini: float, optional
+            prior mean of gEE (default 2.5)
+        gEE_std_ini: float, optional
+            prior std of gEE (default 0.5)
+        """
+        super(RNNWWD, self).__init__()
+        self.state_size = 6  # 6 states WWD model
+        self.input_size = input_size  # 1 or 2
+        self.tr = tr  # tr fMRI image
+        self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.05
+        self.hidden_size = np.int(tr // step_size)
+        self.batch_size = batch_size  # size of the batch used at each step
+        self.node_size = node_size  # num of ROI
+        self.sc = sc  # matrix node_size x node_size structure connectivity
+        self.dist = torch.tensor(dist, dtype=torch.float32)
+        self.fit_gains_flat = fit_gains_flat  # flag for fitting gains
+
+        self.param = param
+
+        self.output_size = node_size  # number of EEG channels
+
+        # set model parameters (variables: need to calculate gradient) as Parameter others : tensor
+        # set w_bb as Parameter if fit_gain is True
+        if self.fit_gains_flat == True:
+            self.w_bb = Parameter(torch.tensor(np.zeros((node_size, node_size)) + 0.05,
+                                               dtype=torch.float32))  # connenction gain to modify empirical sc
+        else:
+            self.w_bb = torch.tensor(np.zeros((node_size, node_size)), dtype=torch.float32)
+
+        vars = [a for a in dir(param) if not a.startswith('__') and not callable(getattr(param, a))]
+        for var in vars:
+            if np.any(getattr(param, var)[1] > 0):
+                setattr(self, var, Parameter(
+                    torch.tensor(getattr(param, var)[0] + 1 / getattr(param, var)[1] * np.random.randn(1, )[0],
+                                 dtype=torch.float32)))
+                if var != 'std_in':
+                    dict_nv = {}
+                    dict_nv['m'] = getattr(param, var)[0]
+                    dict_nv['v'] = getattr(param, var)[1]
+
+                    dict_np = {}
+                    dict_np['m'] = var + '_m'
+                    dict_np['v'] = var + '_v'
+
+                    for key in dict_nv:
+                        setattr(self, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
+            else:
+                setattr(self, var, torch.tensor(getattr(param, var)[0], dtype=torch.float32))
+
+    """def check_input(self, input: Tensor) -> None:
+        expected_input_dim = 2 
+        if input.dim() != expected_input_dim:
+            raise RuntimeError(
+                'input must have {} dimensions, got {}'.format(
+                    expected_input_dim, input.dim()))
+        if self.input_size != input.size(-1):
+            raise RuntimeError(
+                'input.size(-1) must be equal to input_size. Expected {}, got {}'.format(
+                    self.input_size, input.size(-1)))
+        if self.batch_size != input.size(0):
+            raise RuntimeError(
+                'input.size(0) must be equal to batch_size. Expected {}, got {}'.format(
+                    self.batch_size, input.size(0)))"""
+
+    def forward(self, external, input, noise_out, hx, hE):
+        """
+        Forward step in simulating the BOLD signal.
+        Parameters
+        ----------
+        input: tensor with node_size x hidden_size x batch_size x input_size
+            noise for states
+        noise_out: tensor with node_size x batch_size
+            noise for BOLD
+        hx: tensor with node_size x state_size
+            states of WWD model
+        Outputs
+        -------
+        next_state: dictionary with keys:
+        'current_state''bold_batch''E_batch''I_batch''x_batch''f_batch''v_batch''q_batch'
+            record new states and BOLD
+        """
+        next_state = {}
+
+        # hx is current state (6) 0: E 1:I (neural activitiveties) 2:x 3:f 4:v 5:f (BOLD)
+
+        E = hx[:, 0:1]
+        I = hx[:, 1:2]
+        x = hx[:, 2:3]
+        f = hx[:, 3:4]
+        v = hx[:, 4:5]
+        q = hx[:, 5:6]
+
+        dt = self.step_size
+        con_1 = torch.ones_like(dt)
+        # Generate the ReLU module for model parameters gEE gEI and gIE
+        m = torch.nn.ReLU()
+
+        # Update the Laplacian based on the updated connection gains w_bb.
+        if self.sc.shape[0] > 1:
+
+            # Update the Laplacian based on the updated connection gains w_bb.
+            w = torch.exp(self.w_bb) * torch.tensor(self.sc, dtype=torch.float32)
+            w_n = torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))) / torch.linalg.norm(
+                torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))))
+            self.sc_m = w_n
+            dg = -torch.diag(torch.sum(w_n, axis=1))
+        else:
+            l_s = torch.tensor(np.zeros((1, 1)), dtype=torch.float32)
+
+        self.delays = (self.dist / (1.5 * con_1 + m(self.mu)) / self.tr * 0.001).type(torch.int64)
+
+        # placeholder for the updated corrent state
+        current_state = torch.zeros_like(hx)
+
+        # placeholders for output BOLD, history of E I x f v and q
+        bold_batch = []
+        E_batch = []
+        I_batch = []
+        x_batch = []
+        f_batch = []
+        v_batch = []
+        q_batch = []
+
+        # Use the forward model to get BOLD signal at ith element in the batch.
+        for i_batch in range(self.batch_size):
+            # Get the noise for BOLD output.
+            noiseBold = noise_out[:, i_batch:i_batch + 1]
+
+            # Since tr is about second we need to use a small step size like 0.05 to integrate the model states.
+            for i_hidden in range(self.hidden_size):
+                Ed = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)  # delayed E
+
+                """for ind in range(self.node_size):
+                    #print(ind, hE[ind,:].shape, self.delays[ind,:].shape)
+                    Ed[ind] = torch.index_select(hE[ind,:], 0, self.delays[ind,:])"""
+                hE_new = hE.clone()
+                Ed = hE_new.gather(1, self.delays)  # delayed E
+
+                LEd = torch.reshape(torch.sum(w_n * torch.transpose(Ed, 0, 1), 1),
+                                    (self.node_size, 1))  # weights on delayed E
+
+                # Input noise for E and I.
+                noiseE = input[:, i_hidden, i_batch, 0:1]
+                noiseI = input[:, i_hidden, i_batch, 1:2]
+                u = external[:, i_hidden:i_hidden + 1, i_batch]
+
+                # Calculate the input recurrents.
+                IE = m(self.W_E * self.I_0 + (0.001 * con_1 + m(self.g_EE)) * E \
+                       + self.g * (1 * LEd + 1 * torch.matmul(0 * w_n + dg, E)) - (
+                                   0.001 * con_1 + m(self.g_IE)) * I) + u  # input currents for E
+                II = m(self.W_I * self.I_0 + (0.001 * con_1 + m(self.g_EI)) * E - I)  # input currents for I
+
+                # Calculate the firing rates.
+                rE = h_tf(self.aE, self.bE, self.dE, IE)  # firing rate for E
+                rI = h_tf(self.aI, self.bI, self.dI, II)  # firing rate for I
+
+                # Update the states by step-size 0.05.
+                ddE = E + dt * (-E * torch.reciprocal(self.tau_E) + self.gamma_E * (1. - E) * rE) \
+                      + torch.sqrt(dt) * noiseE * (0.02 * con_1 + m(
+                    self.std_in))  ### equlibrim point at E=(tau_E*gamma_E*rE)/(1+tau_E*gamma_E*rE)
+                ddI = I + dt * (-I * torch.reciprocal(self.tau_I) + self.gamma_I * rI) \
+                      + torch.sqrt(dt) * noiseI * (0.02 * con_1 + m(self.std_in))
+
+                dx = x + dt * (E - torch.reciprocal(self.tau_s) * x - torch.reciprocal(self.tau_f) * (f - con_1))
+                df = f + dt * x
+                dv = v + dt * (f - torch.pow(v, torch.reciprocal(self.alpha))) * torch.reciprocal(self.tau_0)
+                dq = q + dt * (
+                            f * (con_1 - torch.pow(con_1 - self.rho, torch.reciprocal(f))) * torch.reciprocal(self.rho) \
+                            - q * torch.pow(v, torch.reciprocal(self.alpha)) * torch.reciprocal(v)) \
+                     * torch.reciprocal(self.tau_0)
+
+                # Calculate the saturation for model states (for stability and gradient calculation).
+                E = torch.tanh(0.00001 + torch.nn.functional.relu(ddE))
+                I = torch.tanh(0.00001 + torch.nn.functional.relu(ddI))
+                x = torch.tanh(dx)
+                f = (con_1 + torch.tanh(df - con_1))
+                v = (con_1 + torch.tanh(dv - con_1))
+                q = (con_1 + torch.tanh(dq - con_1))
+
+                hE[:, 0] = E[:, 0]
+                # Put each time step E and I into placeholders (need them to calculate Entropy of E and I
+                # in the loss (maximize the entropy)).
+                E_batch.append(E)
+                I_batch.append(I)
+
+            # Put x f v q from each tr to the placeholders for checking them visually.
+            x_batch.append(x)
+            f_batch.append(f)
+            v_batch.append(v)
+            q_batch.append(q)
+            hE = torch.cat([E, hE[:, :-1]], axis=1)  # update placeholders for E buffer
+            # Put the BOLD signal each tr to the placeholder being used in the cost calculation.
+            bold_batch.append((0.001 * con_1 + m(self.std_out)) * noiseBold + \
+                              100.0 * self.V * torch.reciprocal(self.E0) * (self.k1 * (con_1 - q) \
+                                                                            + self.k2 * (con_1 - q * torch.reciprocal(
+                        v)) + self.k3 * (con_1 - v)))
+
+        # Update the current state.
+        current_state = torch.cat([E, I, x, f, v, q], axis=1)
+        next_state['current_state'] = current_state
+        next_state['bold_batch'] = torch.cat(bold_batch, axis=1)
+        next_state['E_batch'] = torch.cat(E_batch, axis=1)
+        next_state['I_batch'] = torch.cat(I_batch, axis=1)
+        next_state['x_batch'] = torch.cat(x_batch, axis=1)
+        next_state['f_batch'] = torch.cat(f_batch, axis=1)
+        next_state['v_batch'] = torch.cat(v_batch, axis=1)
+        next_state['q_batch'] = torch.cat(q_batch, axis=1)
+
+        return next_state, hE
+        
+        
