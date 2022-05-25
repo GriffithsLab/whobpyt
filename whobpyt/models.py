@@ -289,7 +289,6 @@ class EEG_Layer():
         return layer_hist
 
 
-
 class BOLD_Params():
     def __init__(self):
         #############################################
@@ -423,6 +422,193 @@ class BOLD_Layer(torch.nn.Module):
         
         return state_vals, layer_hist
 
+    
+### New JR Shrey-Sorenza Draft
+
+class JR_Params():
+    def __init__(self, num_regions = 1): 
+        #############################################
+        ## JR Constants
+        #############################################
+	
+	        
+        #Zeroing the components which deal with a connected network
+        self.G = 1
+        ##self.SUM_Cij_Sj_E = 0
+        self.Lambda = 0 #1 or 0 depending on using long range feed forward inhibition (FFI)
+        
+	self.A = 3.25 # magnitude of second order system for populations E and P
+        self.a = 100 # decay rate of the 2nd order system for population E and P
+        self.B = 22 # magnitude of second order system for population I
+        self.b = 50 # decay rate of the 2nd order system for population I
+        self.g= 1000 # global gain
+        self.c1= 135 # local gain from P to E (pre)
+        self.c2= 135 * 0.8 # local gain from P to E (post)
+        self.c3= 135 * 0.25 # local gain from P to I
+        self.c4= 135 * 0.25 # local gain from P to I
+        self.mu = 0.5
+        self.y0 = 2
+        self.std_in= 100 # local gain from P to I
+        self.cy0 = 5
+        self.vmax = 5
+        self.v0 = 6
+        self.r = 0.56
+        self.k = 1
+
+class Jansen_Layer(torch.nn.Module):
+    def __init__(self, num_regions, params, Con_Mtx, useBC = False):        
+        super(Jansen_Layer, self).__init__() # To inherit parameters attribute
+        
+        # Initialize the RNN Model 
+        #
+        # INPUT
+        #  num_regions: Int - Number of nodes in network to model
+        #  params: RWW_Params - The parameters that all nodes in the network will share
+        #  Con_Mtx: Tensor [num_regions, num_regions] - With connectivity (eg. structural connectivity)
+        #  useBC: Boolean - Whether to use extra boundary conditions to make more numerically stable. Not fully tested.
+        #                   NOTE: This is discouraged as it will likely influence results. Instead, choose a smaller step size. 
+        
+        
+        self.num_regions = num_regions
+        self.Con_Mtx = Con_Mtx
+        
+        #############################################
+        ## RNNJANSEN Constants
+        #############################################
+        
+        #Zeroing the components which deal with a connected network
+        self.G = params.G
+        ##self.SUM_Cij_Sj_E = params.SUM_Cij_Sj_E
+        self.Lambda = params.Lambda #1 or 0 depending on using long range feed forward inhibition (FFI)
+        
+            #############################################
+        ## JR Constants
+        #############################################
+
+	self.A = params.A # magnitude of second order system for populations E and P
+        self.a = params.a # decay rate of the 2nd order system for population E and P
+        self.B = params.B # magnitude of second order system for population I
+        self.b = params.b # decay rate of the 2nd order system for population I
+        self.g= params.g # global gain
+        self.c1= params.c1 # local gain from P to E (pre)
+        self.c2= params.c2 # local gain from P to E (post)
+        self.c3= params.c3 # local gain from P to I
+        self.c4= params.c4 # local gain from P to I
+        self.mu = params.mu
+        self.y0 = params.y0
+        self.std_in= params.std_in # local gain from P to I
+        self.cy0 = params.cy0
+        self.vmax = params.vmax
+        self.v0 = params.v0
+        self.r = params.r
+        self.k = params.k
+
+	# std_in is noise input
+
+        #Starting Condition
+	# Do we need for JR?
+        #S_E = 0.25 # The average synaptic gating variable of excitatory 
+        #S_I = 0.25 # The average synaptic gating variable of inhibitory
+       
+        
+        #############################################
+        ## Other
+        #############################################
+        
+        self.useBC = useBC   #useBC: is if we want the model to use boundary conditions
+        
+    
+    def forward(self, init_state, step_size, sim_len, withOptVars = False, useGPU = False, debug = False):
+                
+        # Runs the RNN Model 
+        #
+        # INPUT
+        #  init_state: Tensor [regions, state_vars] # Regions is number of nodes and should match self.num_regions. There are 2 state variables. 
+        #  step_size: Float - The step size in msec 
+        #  sim_len: Int - The length of time to simulate in msec
+        #  withOptVars: Boolean - Whether to include the Current and Firing rate variables of excitatory and inhibitory populations in layer_history
+        #  useGPU:  Boolean - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network Code
+        #
+        # OUTPUT
+        #  state_vars:  Tensor - [regions, state_vars]
+        #  layer_history: Tensor - [time_steps, regions, state_vars (+ opt_params)]
+        #
+        
+        #if(useGPU):
+        #    v_of_T = torch.normal(0,1,size = (len(torch.arange(0, sim_len, step_size)), self.num_regions)).cuda()
+        #    state_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 2).cuda()
+        #    if(withOptVars):
+        #        opt_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 4).cuda()
+        #else:
+        #    v_of_T = torch.normal(0,1,size = (len(torch.arange(0, sim_len, step_size)), self.num_regions))
+        #    state_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 2)
+        #    if(withOptVars):
+                opt_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 4)
+        
+        # JR and State Values
+        M = init_state[:, 0]
+        E = init_state[:, 1]
+	I = init_state[:, 2]
+	Mv = init_state[:, 3]
+        Ev = init_state[:, 4]
+	Iv = init_state[:, 5]
+	
+        num_steps = int(sim_len/step_size)
+        # Might need to change the c to add global gain g
+        for i in range(num_steps):    
+	    dM = Mv
+            dMv = self.A*self.a*sigmoid(E - I, self.vmax, self.v0, self.r) - 2*self.a*Mv-M*self.a**(2)
+            dE = Ev
+            dEv = self.A*self.a*(std_in + self.c2*sigmoid(self.c1*M, self.vmax, self.v0, self.r)) - 2*self.a*Ev - E*self.a**(2)
+	    dI = Iv
+            dIv = self.B*self.b*(self.c4*sigmoid(self.c3*M, self.vmax, self.v0, self.r)) - 2*self.b*Iv - I*self.b**(2)
+		
+            # UPDATE VALUES
+            
+	    M = M + step_size*dM
+	    E = E + step_size*dE
+	    I = I + step_size*dI
+            Mv = Mv + step_size*dMv
+            Ev = Ev + step_size*dEv
+            Iv = Iv + step_size*dIv
+	    
+	    # Not sure about this boundary			
+            # Bound the possible values of state variables (From fit.py code for numerical stability)
+            if(self.useBC):
+                E = 1000*torch.tanh(dE/1000)#torch.tanh(0.00001+torch.nn.functional.relu(dE))
+                I = 1000*torch.tanh(dI/1000)#torch.tanh(0.00001+torch.nn.functional.relu(dI))
+                M = 1000*torch.tanh(dM/1000)
+                Ev = 1000*torch.tanh(dEv/1000)#(con_1 + torch.tanh(df - con_1))
+                Iv = 1000*torch.tanh(dIv/1000)#(con_1 + torch.tanh(dv - con_1))
+                Mv = 1000*torch.tanh(dMv/1000)#(con_1 + torch.tanh(dq - con_1))
+            
+	    state_hist[i, :, 0] = M
+            state_hist[i, :, 1] = E 
+            state_hist[i, :, 2] = I
+            state_hist[i, :, 3] = Mv 
+            state_hist[i, :, 4] = Ev
+            state_hist[i, :, 5] = Iv
+            
+	    # Not sure if needed with JR
+            #if(withOptVars):
+             #   opt_hist[i, :, 0] = I_I
+             #  opt_hist[i, :, 1] = I_E
+             #   opt_hist[i, :, 2] = r_I
+             #   opt_hist[i, :, 3] = r_E
+            
+        state_vals = torch.cat((torch.unsqueeze(M, 1), torch.unsqueeze(E, 1), torch.unsqueeze(I, 1), torch.unsqueeze(Mv, 1), torch.unsqueeze(Ev, 1), torch.unsqueeze(Iv, 1)), 1)
+        
+        #if(withOptVars):
+        #    layer_hist = torch.cat((state_hist, opt_hist), 2)
+        #else:
+        #    layer_hist = state_hist
+            
+        
+        return state_vals, layer_hist
+ 
+def sigmoid(x, vmax, v0, r):
+    return vmax/(1+torch.exp(r*(v0-x)))
+        
 
 ### zheng's version
 def sys2nd(A, a,  u, x, v):
