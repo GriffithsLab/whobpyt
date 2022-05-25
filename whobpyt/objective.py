@@ -174,8 +174,10 @@ class functionalConnectivityLoss():
         return 0.5 - 0.5*cor
         
         
-        # zheng's version
-        class Costs:
+# zheng's version
+    
+class Costs:
+
     def __init__(self, method):
         self.method = method
     def cost_dist(self, sim, emp):
