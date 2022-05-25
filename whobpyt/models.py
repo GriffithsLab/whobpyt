@@ -439,7 +439,7 @@ class BOLD_Layer(torch.nn.Module):
 ### New JR Shrey-Sorenza Draft
 
 class JR_Params():
-    def __init__(self, num_regions = 1): 
+   def __init__(self, num_regions = 1): 
         #############################################
         ## JR Constants
         #############################################
@@ -447,9 +447,8 @@ class JR_Params():
 	        
         #Zeroing the components which deal with a connected network
         self.G = 1
-        ##self.SUM_Cij_Sj_E = 0
-        self.Lambda = 0 #1 or 0 depending on using long range feed forward inhibition (FFI)
-        
+	##self.SUM_Cij_Sj_E = 0
+	self.Lambda = 0 #1 or 0 depending on using long range feed forward inhibition (FFI)
 	self.A = 3.25 # magnitude of second order system for populations E and P
         self.a = 100 # decay rate of the 2nd order system for population E and P
         self.B = 22 # magnitude of second order system for population I
