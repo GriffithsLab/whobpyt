@@ -21,7 +21,7 @@ class RWW_Params():
         self.G = 1
         ##self.SUM_Cij_Sj_E = 0
         self.Lambda = 0 #1 or 0 depending on using long range feed forward inhibition (FFI)
-        
+
         #Excitatory Gating Variables
         self.a_E = 310               # nC^(-1)
         self.b_E = 125               # Hz
@@ -447,9 +447,9 @@ class JR_Params():
 	        
         #Zeroing the components which deal with a connected network
         self.G = 1
-	##self.SUM_Cij_Sj_E = 0
-	self.Lambda = 0 #1 or 0 depending on using long range feed forward inhibition (FFI)
-	self.A = 3.25 # magnitude of second order system for populations E and P
+        ##self.SUM_Cij_Sj_E = 0
+        self.Lambda = 0 #1 or 0 depending on using long range feed forward inhibition (FFI)
+        self.A = 3.25 # magnitude of second order system for populations E and P
         self.a = 100 # decay rate of the 2nd order system for population E and P
         self.B = 22 # magnitude of second order system for population I
         self.b = 50 # decay rate of the 2nd order system for population I
@@ -493,11 +493,10 @@ class Jansen_Layer(torch.nn.Module):
         ##self.SUM_Cij_Sj_E = params.SUM_Cij_Sj_E
         self.Lambda = params.Lambda #1 or 0 depending on using long range feed forward inhibition (FFI)
         
-            #############################################
+        #############################################
         ## JR Constants
         #############################################
-
-	self.A = params.A # magnitude of second order system for populations E and P
+        self.A = params.A # magnitude of second order system for populations E and P
         self.a = params.a # decay rate of the 2nd order system for population E and P
         self.B = params.B # magnitude of second order system for population I
         self.b = params.b # decay rate of the 2nd order system for population I
@@ -515,10 +514,10 @@ class Jansen_Layer(torch.nn.Module):
         self.r = params.r
         self.k = params.k
 
-	# std_in is noise input
+    	# std_in is noise input
 
         #Starting Condition
-	# Do we need for JR?
+    	# Do we need for JR?
         #S_E = 0.25 # The average synaptic gating variable of excitatory 
         #S_I = 0.25 # The average synaptic gating variable of inhibitory
        
@@ -555,36 +554,35 @@ class Jansen_Layer(torch.nn.Module):
         #    v_of_T = torch.normal(0,1,size = (len(torch.arange(0, sim_len, step_size)), self.num_regions))
         #    state_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 2)
         #    if(withOptVars):
-                opt_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 4)
+        opt_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 4)
         
         # JR and State Values
         M = init_state[:, 0]
         E = init_state[:, 1]
-	I = init_state[:, 2]
-	Mv = init_state[:, 3]
+        I = init_state[:, 2]
+        Mv = init_state[:, 3]
         Ev = init_state[:, 4]
-	Iv = init_state[:, 5]
-	
+        Iv = init_state[:, 5]
         num_steps = int(sim_len/step_size)
         # Might need to change the c to add global gain g
         for i in range(num_steps):    
-	    dM = Mv
+            dM = Mv
             dMv = self.A*self.a*sigmoid(E - I, self.vmax, self.v0, self.r) - 2*self.a*Mv-M*self.a**(2)
             dE = Ev
             dEv = self.A*self.a*(std_in + self.c2*sigmoid(self.c1*M, self.vmax, self.v0, self.r)) - 2*self.a*Ev - E*self.a**(2)
-	    dI = Iv
+            dI = Iv
             dIv = self.B*self.b*(self.c4*sigmoid(self.c3*M, self.vmax, self.v0, self.r)) - 2*self.b*Iv - I*self.b**(2)
-		
+
             # UPDATE VALUES
-            
-	    M = M + step_size*dM
-	    E = E + step_size*dE
-	    I = I + step_size*dI
+
+            M = M + step_size*dM
+            E = E + step_size*dE
+            I = I + step_size*dI
             Mv = Mv + step_size*dMv
             Ev = Ev + step_size*dEv
             Iv = Iv + step_size*dIv
-	    
-	    # Not sure about this boundary			
+	        
+	        # Not sure about this boundary			
             # Bound the possible values of state variables (From fit.py code for numerical stability)
             if(self.useBC):
                 E = 1000*torch.tanh(dE/1000)#torch.tanh(0.00001+torch.nn.functional.relu(dE))
@@ -593,27 +591,27 @@ class Jansen_Layer(torch.nn.Module):
                 Ev = 1000*torch.tanh(dEv/1000)#(con_1 + torch.tanh(df - con_1))
                 Iv = 1000*torch.tanh(dIv/1000)#(con_1 + torch.tanh(dv - con_1))
                 Mv = 1000*torch.tanh(dMv/1000)#(con_1 + torch.tanh(dq - con_1))
-            
-	    state_hist[i, :, 0] = M
+
+            state_hist[i, :, 0] = M
             state_hist[i, :, 1] = E 
             state_hist[i, :, 2] = I
             state_hist[i, :, 3] = Mv 
             state_hist[i, :, 4] = Ev
             state_hist[i, :, 5] = Iv
             
-	    # Not sure if needed with JR
+	        # Not sure if needed with JR
             #if(withOptVars):
-             #   opt_hist[i, :, 0] = I_I
-             #  opt_hist[i, :, 1] = I_E
-             #   opt_hist[i, :, 2] = r_I
-             #   opt_hist[i, :, 3] = r_E
+            #   opt_hist[i, :, 0] = I_I
+            #  opt_hist[i, :, 1] = I_E
+            #   opt_hist[i, :, 2] = r_I
+            #   opt_hist[i, :, 3] = r_E
             
-        state_vals = torch.cat((torch.unsqueeze(M, 1), torch.unsqueeze(E, 1), torch.unsqueeze(I, 1), torch.unsqueeze(Mv, 1), torch.unsqueeze(Ev, 1), torch.unsqueeze(Iv, 1)), 1)
+            state_vals = torch.cat((torch.unsqueeze(M, 1), torch.unsqueeze(E, 1), torch.unsqueeze(I, 1), torch.unsqueeze(Mv, 1), torch.unsqueeze(Ev, 1), torch.unsqueeze(Iv, 1)), 1)
         
-        #if(withOptVars):
-        #    layer_hist = torch.cat((state_hist, opt_hist), 2)
-        #else:
-        #    layer_hist = state_hist
+            #if(withOptVars):
+            #    layer_hist = torch.cat((state_hist, opt_hist), 2)
+            #else:
+            #    layer_hist = state_hist
             
         
         return state_vals, layer_hist
@@ -626,9 +624,91 @@ def sigmoid(x, vmax, v0, r):
 def sys2nd(A, a,  u, x, v):
     return A*a*u -2*a*v-a**2*x
 
-def sigmoid(x, vmax, v0, r):
-    return vmax/(1+torch.exp(r*(v0-x)))
+#def sigmoid(x, vmax, v0, r):
+#    return vmax/(1+torch.exp(r*(v0-x)))
 
+
+class ParamsJR():
+
+    def __init__(self, model_name, **kwargs):
+        if model_name == 'WWD':
+            param = {
+
+                "std_in": [0.02, 0],  # standard deviation of the Gaussian noise
+                "std_out": [0.02, 0],  # standard deviation of the Gaussian noise
+                # Parameters for the ODEs
+                # Excitatory population
+                "W_E": [1., 0],  # scale of the external input
+                "tau_E": [100., 0],  # decay time
+                "gamma_E": [0.641 / 1000., 0],  # other dynamic parameter (?)
+
+                # Inhibitory population
+                "W_I": [0.7, 0],  # scale of the external input
+                "tau_I": [10., 0],  # decay time
+                "gamma_I": [1. / 1000., 0],  # other dynamic parameter (?)
+
+                # External input
+                "I_0": [0.32, 0],  # external input
+                "I_external": [0., 0],  # external stimulation
+
+                # Coupling parameters
+                "g": [20., 0],  # global coupling (from all nodes E_j to single node E_i)
+                "g_EE": [.1, 0],  # local self excitatory feedback (from E_i to E_i)
+                "g_IE": [.1, 0],  # local inhibitory coupling (from I_i to E_i)
+                "g_EI": [0.1, 0],  # local excitatory coupling (from E_i to I_i)
+
+                "aE": [310, 0],
+                "bE": [125, 0],
+                "dE": [0.16, 0],
+                "aI": [615, 0],
+                "bI": [177, 0],
+                "dI": [0.087, 0],
+
+                # Output (BOLD signal)
+
+                "alpha": [0.32, 0],
+                "rho": [0.34, 0],
+                "k1": [2.38, 0],
+                "k2": [2.0, 0],
+                "k3": [0.48, 0],  # adjust this number from 0.48 for BOLD fluctruate around zero
+                "V": [.02, 0],
+                "E0": [0.34, 0],
+                "tau_s": [0.65, 0],
+                "tau_f": [0.41, 0],
+                "tau_0": [0.98, 0],
+                "mu": [0.5, 0]
+
+            }
+        elif model_name == "JR":
+            param = {
+                "A ": [3.25, 0], "a": [100, 0.], "B": [22, 0], "b": [50, 0], "g": [1000, 0], \
+                "c1": [135, 0.], "c2": [135 * 0.8, 0.], "c3 ": [135 * 0.25, 0.], "c4": [135 * 0.25, 0.], \
+                "std_in": [100, 0], "vmax": [5, 0], "v0": [6, 0], "r": [0.56, 0], "y0": [2, 0], \
+                "mu": [.5, 0], "k": [5, 0], "cy0": [5, 0], "ki": [1, 0]
+            }
+        for var in param:
+            setattr(self, var, param[var])
+
+        for var in kwargs:
+            setattr(self, var, kwargs[var])
+        """self.A = A # magnitude of second order system for populations E and P
+        self.a = a # decay rate of the 2nd order system for population E and P
+        self.B = B # magnitude of second order system for population I
+        self.b = b # decay rate of the 2nd order system for population I
+        self.g= g # global gain
+        self.c1= c1# local gain from P to E (pre)
+        self.c2= c2 # local gain from P to E (post)
+        self.c3= c3 # local gain from P to I
+        self.c4= c4 # local gain from P to I
+        self.mu = mu
+        self.y0 = y0
+        self.std_in= std_in # local gain from P to I
+        self.cy0 = cy0
+        self.vmax = vmax
+        self.v0 = v0
+        self.r = r
+        self.k = k"""
+	
 
 class RNNJANSEN(torch.nn.Module):
     """
@@ -920,87 +1000,6 @@ class RNNJANSEN(torch.nn.Module):
         return next_state, hE
         
 
-class ParamsJR():
-
-    def __init__(self, model_name, **kwargs):
-        if model_name == 'WWD':
-            param = {
-
-                "std_in": [0.02, 0],  # standard deviation of the Gaussian noise
-                "std_out": [0.02, 0],  # standard deviation of the Gaussian noise
-                # Parameters for the ODEs
-                # Excitatory population
-                "W_E": [1., 0],  # scale of the external input
-                "tau_E": [100., 0],  # decay time
-                "gamma_E": [0.641 / 1000., 0],  # other dynamic parameter (?)
-
-                # Inhibitory population
-                "W_I": [0.7, 0],  # scale of the external input
-                "tau_I": [10., 0],  # decay time
-                "gamma_I": [1. / 1000., 0],  # other dynamic parameter (?)
-
-                # External input
-                "I_0": [0.32, 0],  # external input
-                "I_external": [0., 0],  # external stimulation
-
-                # Coupling parameters
-                "g": [20., 0],  # global coupling (from all nodes E_j to single node E_i)
-                "g_EE": [.1, 0],  # local self excitatory feedback (from E_i to E_i)
-                "g_IE": [.1, 0],  # local inhibitory coupling (from I_i to E_i)
-                "g_EI": [0.1, 0],  # local excitatory coupling (from E_i to I_i)
-
-                "aE": [310, 0],
-                "bE": [125, 0],
-                "dE": [0.16, 0],
-                "aI": [615, 0],
-                "bI": [177, 0],
-                "dI": [0.087, 0],
-
-                # Output (BOLD signal)
-
-                "alpha": [0.32, 0],
-                "rho": [0.34, 0],
-                "k1": [2.38, 0],
-                "k2": [2.0, 0],
-                "k3": [0.48, 0],  # adjust this number from 0.48 for BOLD fluctruate around zero
-                "V": [.02, 0],
-                "E0": [0.34, 0],
-                "tau_s": [0.65, 0],
-                "tau_f": [0.41, 0],
-                "tau_0": [0.98, 0],
-                "mu": [0.5, 0]
-
-            }
-        elif model_name == "JR":
-            param = {
-                "A ": [3.25, 0], "a": [100, 0.], "B": [22, 0], "b": [50, 0], "g": [1000, 0], \
-                "c1": [135, 0.], "c2": [135 * 0.8, 0.], "c3 ": [135 * 0.25, 0.], "c4": [135 * 0.25, 0.], \
-                "std_in": [100, 0], "vmax": [5, 0], "v0": [6, 0], "r": [0.56, 0], "y0": [2, 0], \
-                "mu": [.5, 0], "k": [5, 0], "cy0": [5, 0], "ki": [1, 0]
-            }
-        for var in param:
-            setattr(self, var, param[var])
-
-        for var in kwargs:
-            setattr(self, var, kwargs[var])
-        """self.A = A # magnitude of second order system for populations E and P
-        self.a = a # decay rate of the 2nd order system for population E and P
-        self.B = B # magnitude of second order system for population I
-        self.b = b # decay rate of the 2nd order system for population I
-        self.g= g # global gain
-        self.c1= c1# local gain from P to E (pre)
-        self.c2= c2 # local gain from P to E (post)
-        self.c3= c3 # local gain from P to I
-        self.c4= c4 # local gain from P to I
-        self.mu = mu
-        self.y0 = y0
-        self.std_in= std_in # local gain from P to I
-        self.cy0 = cy0
-        self.vmax = vmax
-        self.v0 = v0
-        self.r = r
-        self.k = k"""
-  	
 
 	
 class RNNWWD(torch.nn.Module):
