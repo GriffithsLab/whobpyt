@@ -195,13 +195,14 @@ class RWW_Layer(torch.nn.Module):
         num_steps = int(sim_len/step_size)
         for i in range(num_steps):
             
-        
+            if((not useDelays) & (not useLaplacian)):
+                Network_S_E =  torch.matmul(self.Con_Mtx, S_E)
 
             if(useDelays & (not useLaplacian)):
                 self.delays_idx = ((self.dist / (1.5 + torch.nn.functional.relu(self.mu)) / self.step_size) * 0.001).type(torch.int64)
 
                 S_E_history_new = self.delayed_S_E # TODO: Check if this needs to be cloned to work
-                S_E_delayed_Mtx = S_E_history_new.gather(1, self.buffer_idx - self.delays)  # delayed E
+                S_E_delayed_Mtx = S_E_history_new.gather(1, (self.buffer_idx - self.delays)%self.buffer_len)  # delayed E
 
                 S_E_delayed_Vector = torch.reshape(torch.sum(self.sc_modified * torch.transpose(S_E_delayed_Mtx, 0, 1), 1),(self.node_size, 1))  # weights on delayed E
 
@@ -222,7 +223,7 @@ class RWW_Layer(torch.nn.Module):
 
             if(useDelays & useLaplacian):
 
-                sc_withGains = 0
+                self.sc_withGains = 0
                 # Update the Laplacian based on the updated connection gains w_bb.
                 newSC = torch.exp(self.sc_withGains) * torch.tensor(self.Con_Mtx, dtype=torch.float32)
                 self.sc_modified = torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))) / torch.linalg.norm(torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))))
@@ -232,7 +233,7 @@ class RWW_Layer(torch.nn.Module):
                 self.delays_idx = ((self.dist / (1.5 + torch.nn.functional.relu(self.mu)) / self.step_size) * 0.001).type(torch.int64)
 
                 S_E_history_new = self.delayed_S_E # TODO: Check if this needs to be cloned to work
-                S_E_delayed_Mtx = S_E_history_new.gather(1, self.buffer_idx - self.delays)  # delayed E
+                S_E_delayed_Mtx = S_E_history_new.gather(1, (self.buffer_idx - self.delays)%self.buffer_len)  # delayed E
 
                 S_E_delayed_Vector = torch.reshape(torch.sum(self.sc_modified * torch.transpose(S_E_delayed_Mtx, 0, 1), 1),(self.node_size, 1))  # weights on delayed E
 
