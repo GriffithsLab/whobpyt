@@ -75,16 +75,19 @@ class RWW_Layer(torch.nn.Module):
         #  num_regions: Int - Number of nodes in network to model
         #  params: RWW_Params - The parameters that all nodes in the network will share
         #  Con_Mtx: Tensor [num_regions, num_regions] - With connectivity (eg. structural connectivity)
+        #  Dist_Mtx: Tensor [num_regions, num_regions]
+        #  step_size: Float - The step size in msec 
         #  useBC: Boolean - Whether to use extra boundary conditions to make more numerically stable. Not fully tested.
         #                   NOTE: This is discouraged as it will likely influence results. Instead, choose a smaller step size. 
 
+        self.step_size = step_size
         
         self.num_regions = num_regions
         self.Con_Mtx = Con_Mtx
         self.Dist_Mtx = Dist_Mtx
         
         self.max_delay = 0.1 #This should be greater than what is possible of max(Dist_Mtx)/velocity
-        self.buffer_len = int(self.max_delay/step_size)
+        self.buffer_len = int(self.max_delay/self.step_size)
         self.delayed_S_E = torch.zeros(self.buffer_len, num_regions)
 
         self.buffer_idx = 0
@@ -161,13 +164,12 @@ class RWW_Layer(torch.nn.Module):
         
         return r_I
     
-    def forward(self, init_state, step_size, sim_len, useDelays = False, useLaplacian = False, withOptVars = False, useGPU = False, debug = False):
+    def forward(self, init_state, sim_len, useDelays = False, useLaplacian = False, withOptVars = False, useGPU = False, debug = False):
                 
         # Runs the RWW Model 
         #
         # INPUT
         #  init_state: Tensor [regions, state_vars] # Regions is number of nodes and should match self.num_regions. There are 2 state variables. 
-        #  step_size: Float - The step size in msec 
         #  sim_len: Int - The length of time to simulate in msec
         #  withOptVars: Boolean - Whether to include the Current and Firing rate variables of excitatory and inhibitory populations in layer_history
         #  useGPU:  Boolean - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network Code
@@ -178,27 +180,29 @@ class RWW_Layer(torch.nn.Module):
         #
         
         if(useGPU):
-            v_of_T = torch.normal(0,1,size = (len(torch.arange(0, sim_len, step_size)), self.num_regions)).cuda()
-            state_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 2).cuda()
+            v_of_T = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions)).cuda()
+            state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 2).cuda()
             if(withOptVars):
-                opt_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 4).cuda()
+                opt_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 4).cuda()
         else:
-            v_of_T = torch.normal(0,1,size = (len(torch.arange(0, sim_len, step_size)), self.num_regions))
-            state_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 2)
+            v_of_T = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions))
+            state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 2)
             if(withOptVars):
-                opt_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 4)
+                opt_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 4)
         
         # RWW and State Values
         S_E = init_state[:, 0]
         S_I = init_state[:, 1]
 
-        num_steps = int(sim_len/step_size)
+        num_steps = int(sim_len/self.step_size)
         for i in range(num_steps):
             
             if((not useDelays) & (not useLaplacian)):
                 Network_S_E =  torch.matmul(self.Con_Mtx, S_E)
 
             if(useDelays & (not useLaplacian)):
+                # WARNING: This has not been tested
+                
                 self.delays_idx = ((self.dist / (1.5 + torch.nn.functional.relu(self.mu)) / self.step_size) * 0.001).type(torch.int64)
 
                 S_E_history_new = self.delayed_S_E # TODO: Check if this needs to be cloned to work
@@ -211,6 +215,7 @@ class RWW_Layer(torch.nn.Module):
                 Network_S_E = Delayed_S_E
 
             if(useLaplacian & (not useDelays)):
+                # WARNING: This has not been tested
                 
                 newSC = torch.exp(self.sc_withGains) * torch.tensor(self.Con_Mtx, dtype=torch.float32)
                 self.sc_modified = torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))) / torch.linalg.norm(torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))))
@@ -222,7 +227,8 @@ class RWW_Layer(torch.nn.Module):
 
 
             if(useDelays & useLaplacian):
-
+                # WARNING: This has not been tested
+                
                 self.sc_withGains = 0
                 # Update the Laplacian based on the updated connection gains w_bb.
                 newSC = torch.exp(self.sc_withGains) * torch.tensor(self.Con_Mtx, dtype=torch.float32)
@@ -260,8 +266,8 @@ class RWW_Layer(torch.nn.Module):
             dS_I = - S_I/self.tau_I + self.gammaI*r_I + self.sig*v_of_T[i, :]
             
             # UPDATE VALUES
-            S_E = S_E + step_size*dS_E
-            S_I = S_I + step_size*dS_I
+            S_E = S_E + self.step_size*dS_E
+            S_I = S_I + self.step_size*dS_I
             
             # Bound the possible values of state variables (From fit.py code for numerical stability)
             if(self.useBC):
@@ -271,12 +277,13 @@ class RWW_Layer(torch.nn.Module):
             state_hist[i, :, 0] = S_E
             state_hist[i, :, 1] = S_I 
 
-            self.delayed_S_E[self.buffer_idx, :] = S_E
+            if useDelays:
+                self.delayed_S_E[self.buffer_idx, :] = S_E
 
-            if (self.buffer_idx == (self.buffer_len - 1)):
-                self.buffer_idx = 0
-            else: 
-                self.buffer_idx = self.buffer_idx + 1
+                if (self.buffer_idx == (self.buffer_len - 1)):
+                    self.buffer_idx = 0
+                else: 
+                    self.buffer_idx = self.buffer_idx + 1
             
             if(withOptVars):
                 opt_hist[i, :, 0] = I_I
@@ -286,7 +293,7 @@ class RWW_Layer(torch.nn.Module):
             
         state_vals = torch.cat((torch.unsqueeze(S_E, 1), torch.unsqueeze(S_I, 1)), 1)
         
-
+        #self.delayed_S_E = self.delayed_S_E.detach() # So that RAM does not accumulate in later batches/epochs
 
         if(withOptVars):
             layer_hist = torch.cat((state_hist, opt_hist), 2)
