@@ -46,8 +46,7 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="WhoBPyT Demo" href="eg001x__template.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,30 +96,8 @@
             
             
               <p class="caption"><span class="caption-text">Getting Started</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eg001x__template.html">WhoBPyT Demo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="eg001x__template.html#importage">Importage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg001x__template.html#some-thing">Some thing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg001x__template.html#do-a-thing">Do a thing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg001x__template.html#do-another-thing">Do another thing</a></li>
-</ul>
-</li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#importage">Importage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#defining-the-cnmm-model">Defining the CNMM Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#defining-the-objective-function">Defining the Objective Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#training-the-model">Training The Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-eeg-psd">Plots of EEG PSD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-bold-fc">Plots of BOLD FC</a></li>
-</ul>
-</li>
 </ul>
 
             
@@ -186,10 +163,10 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-eg002x-multimodal-simulation-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="fitting-s-e-mean-to-0-164-using-default-rww-parameters">
-<span id="sphx-glr-auto-examples-eg002x-multimodal-simulation-py"></span><h1>Fitting S_E Mean to 0.164 using default RWW Parameters<a class="headerlink" href="#fitting-s-e-mean-to-0-164-using-default-rww-parameters" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-auto-examples-eg002r-multimodal-simulation-py"></span><h1>Fitting S_E Mean to 0.164 using default RWW Parameters<a class="headerlink" href="#fitting-s-e-mean-to-0-164-using-default-rww-parameters" title="Permalink to this headline">¶</a></h1>
 <p>What is being modeled:</p>
 <ul class="simple">
 <li><p>Created a Sphere’d Cube (chosen points on cube projected onto radius = 1 sphere), so that regions were more evently distributed. All corners of cube chosen as regions, thus there are 8 regions.</p></li>
@@ -284,6 +261,13 @@
 <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;SC of Artificial Data&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="SC of Artificial Data" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.)
+
+Text(0.5, 1.0, &#39;SC of Artificial Data&#39;)
 </pre></div>
 </div>
 </div>
@@ -460,6 +444,95 @@ Also, written in such a way as to be able to track and plot indiviual components
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;J_</span><span class="si">{i}</span><span class="s2"> Values Changing Over Training Epochs&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="J_{i} Values Changing Over Training Epochs" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_002.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[(&#39;nodes.J&#39;, Parameter containing:
+tensor([0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500],
+       requires_grad=True))]
+0
+totalLoss =  0.45755019783973694
+J values =  [0.2499999  0.24999991 0.24999991 0.24999991 0.24999991 0.24999991
+ 0.24999991 0.24999991]
+1
+totalLoss =  0.4481217861175537
+J values =  [0.35012928 0.35012576 0.35012466 0.350132   0.35012484 0.35013387
+ 0.35011253 0.35012966]
+2
+totalLoss =  0.43872204422950745
+J values =  [0.45046902 0.45046595 0.4504653  0.45047387 0.45046583 0.45047754
+ 0.45045    0.45046473]
+3
+totalLoss =  0.4277992248535156
+J values =  [0.55111337 0.55110675 0.55110776 0.55112815 0.55110645 0.5511315
+ 0.5510874  0.5511065 ]
+4
+totalLoss =  0.41459694504737854
+J values =  [0.6521566  0.6521432  0.65215117 0.652169   0.6521569  0.6521799
+ 0.6521244  0.6521473 ]
+5
+totalLoss =  0.4015486240386963
+J values =  [0.75368327 0.7536523  0.75368    0.75369805 0.75368375 0.7537112
+ 0.7536524  0.7536741 ]
+6
+totalLoss =  0.3866325318813324
+J values =  [0.85578245 0.85573775 0.85578156 0.85580444 0.85578245 0.8558158
+ 0.85575455 0.85577303]
+7
+totalLoss =  0.3707345426082611
+J values =  [0.9585372  0.9584831  0.95853835 0.95856375 0.95853806 0.95857537
+ 0.95851314 0.95852804]
+8
+totalLoss =  0.3525303602218628
+J values =  [1.0620242 1.0619625 1.062027  1.0620549 1.062026  1.0620656 1.0620028
+ 1.0620154]
+9
+totalLoss =  0.32938894629478455
+J values =  [1.1662991 1.1662289 1.1663022 1.1663368 1.1663039 1.1663418 1.166281
+ 1.1662927]
+10
+totalLoss =  0.3043454587459564
+J values =  [1.2713852 1.2713096 1.2713879 1.2714342 1.2713957 1.2714309 1.2713715
+ 1.2713792]
+11
+totalLoss =  0.2739674150943756
+J values =  [1.3772388 1.3771586 1.3772476 1.3773046 1.3772613 1.377289  1.3772285
+ 1.3772362]
+12
+totalLoss =  0.238336443901062
+J values =  [1.483707  1.4835902 1.4837003 1.483786  1.4837261 1.4837476 1.4836713
+ 1.4836972]
+13
+totalLoss =  0.19269688427448273
+J values =  [1.5901237 1.5900182 1.5902028 1.5903573 1.5902324 1.5902495 1.5901357
+ 1.5901806]
+14
+totalLoss =  0.12345171719789505
+J values =  [1.6935549 1.6934049 1.6936985 1.6939224 1.6937795 1.6937027 1.6936132
+ 1.693698 ]
+15
+totalLoss =  0.0026734170969575644
+J values =  [1.7947115 1.7947398 1.7950261 1.7952975 1.7951103 1.7949953 1.7936634
+ 1.7949393]
+16
+totalLoss =  0.0067567890509963036
+J values =  [1.885181  1.8853347 1.8855864 1.8859036 1.8857292 1.885491  1.8830712
+ 1.8854278]
+17
+totalLoss =  0.008442776277661324
+J values =  [1.9662731 1.9665169 1.9667447 1.9671347 1.9669615 1.9665716 1.9632342
+ 1.9665445]
+18
+totalLoss =  0.009175209328532219
+J values =  [2.0390964 2.039442  2.0395794 2.040073  2.039832  2.0394154 2.0352373
+ 2.0393305]
+19
+totalLoss =  0.010964570567011833
+J values =  [2.1045344 2.104963  2.10508   2.1056406 2.10528   2.1048942 2.0998874
+ 2.1047494]
+
+Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
+</pre></div>
+</div>
 </div>
 <div class="section" id="plots-of-s-e-and-s-i-after-training">
 <h2>Plots of S_E and S_I After Training<a class="headerlink" href="#plots-of-s-e-and-s-i-after-training" title="Permalink to this headline">¶</a></h2>
@@ -471,6 +544,11 @@ Also, written in such a way as to be able to track and plot indiviual components
 
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time Steps (multiply by step_size to get msec), step_size = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">step_size</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_003.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f4bb2ae8e20&gt;
 </pre></div>
 </div>
 </div>
@@ -488,6 +566,11 @@ Also, written in such a way as to be able to track and plot indiviual components
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated EEG PSD: After Training&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="Simulated EEG PSD: After Training" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Simulated EEG PSD: After Training&#39;)
+</pre></div>
+</div>
 </div>
 <div class="section" id="plots-of-bold-fc">
 <h2>Plots of BOLD FC<a class="headerlink" href="#plots-of-bold-fc" title="Permalink to this headline">¶</a></h2>
@@ -500,13 +583,20 @@ Also, written in such a way as to be able to track and plot indiviual components
 <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">sim_FC</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002x-multimodal-simulation-py">
+<img alt="Simulated BOLD FC: After Training" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_005.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([15000, 8])
+
+&lt;AxesSubplot:title={&#39;center&#39;:&#39;Simulated BOLD FC: After Training&#39;}&gt;
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 18 minutes  8.016 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/e7f487f0b93bd5161243d5c73f44ebe0/eg002x__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002x__multimodal_simulation.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/b03cd7c4db3f3b955625698fd0dc9350/eg002x__multimodal_simulation.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg002x__multimodal_simulation.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/ffcccd2473b23df05707338e01c6303f/eg002r__multimodal_simulation.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg002r__multimodal_simulation.ipynb</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -518,13 +608,6 @@ Also, written in such a way as to be able to track and plot indiviual components
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="eg001x__template.html" class="btn btn-neutral float-left" title="WhoBPyT Demo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
