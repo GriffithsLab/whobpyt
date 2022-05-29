@@ -46,7 +46,8 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Installation" href="../getting_started/installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,13 +97,21 @@
             
             
               <p class="caption"><span class="caption-text">Getting Started</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eg001x__template.html">WhoBPyT Demo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="eg001x__template.html#importage">Importage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg001x__template.html#some-thing">Some thing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg001x__template.html#do-a-thing">Do a thing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg001x__template.html#do-another-thing">Do another thing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defining-model-parameters">Defining Model Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defining-the-cnmm-model">Defining the CNMM Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defining-the-objective-function">Defining the Objective Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-the-model">Training The Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-of-eeg-psd">Plots of EEG PSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-of-bold-fc">Plots of BOLD FC</a></li>
 </ul>
 </li>
 </ul>
@@ -457,85 +466,85 @@ Also, written in such a way as to be able to track and plot indiviual components
 tensor([0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500],
        requires_grad=True))]
 0
-totalLoss =  0.45906248688697815
-J values =  [0.24999991 0.24999991 0.24999991 0.24999991 0.24999991 0.24999991
+totalLoss =  0.4574579894542694
+J values =  [0.2499999  0.24999991 0.24999991 0.24999991 0.24999991 0.24999991
  0.24999991 0.24999991]
 1
-totalLoss =  0.4479690194129944
-J values =  [0.35013303 0.35012394 0.35012624 0.35012904 0.35012773 0.35012084
- 0.3501332  0.350135  ]
+totalLoss =  0.4497454762458801
+J values =  [0.3501319  0.35012546 0.3501268  0.35011816 0.35012868 0.3501158
+ 0.35012686 0.35011864]
 2
-totalLoss =  0.4391207993030548
-J values =  [0.4504776  0.45046794 0.45046872 0.45047277 0.45047557 0.45045385
- 0.4504767  0.45048264]
+totalLoss =  0.43812790513038635
+J values =  [0.45047706 0.45046744 0.4504707  0.45046166 0.45047498 0.45045507
+ 0.45047405 0.4504596 ]
 3
-totalLoss =  0.42577624320983887
-J values =  [0.5511304 0.5511237 0.5511224 0.5511275 0.5511304 0.5510977 0.5511323
- 0.5511397]
+totalLoss =  0.4261136054992676
+J values =  [0.55113375 0.55112046 0.5511138  0.5511089  0.55112296 0.5510923
+ 0.55112565 0.5511104 ]
 4
-totalLoss =  0.4141526520252228
-J values =  [0.65218055 0.65217006 0.6521653  0.65217924 0.6521858  0.65214294
- 0.65219176 0.652187  ]
+totalLoss =  0.4142245352268219
+J values =  [0.6521922  0.65217036 0.65215117 0.65214866 0.6521642  0.65213513
+ 0.6521713  0.6521657 ]
 5
-totalLoss =  0.4010459780693054
-J values =  [0.75371134 0.75369954 0.75368214 0.75371325 0.75372446 0.7536749
- 0.7537258  0.75372195]
+totalLoss =  0.4031105935573578
+J values =  [0.7537287  0.75370544 0.75366545 0.75368345 0.75368595 0.75365704
+ 0.7537023  0.7536931 ]
 6
-totalLoss =  0.38756275177001953
-J values =  [0.8558144  0.8557969  0.8557744  0.85581285 0.85582876 0.85577655
- 0.8558274  0.85578895]
+totalLoss =  0.3864513635635376
+J values =  [0.8558356  0.8558123  0.8557561  0.85578126 0.85578394 0.85575676
+ 0.85580504 0.8557906 ]
 7
-totalLoss =  0.3705490827560425
-J values =  [0.95857334 0.95855033 0.95852524 0.95856893 0.9585885  0.95853335
- 0.9585843  0.9585206 ]
+totalLoss =  0.37148308753967285
+J values =  [0.9585968 0.9585722 0.9585051 0.9585325 0.9585378 0.9585105 0.9585634
+ 0.9585427]
 8
-totalLoss =  0.35165318846702576
-J values =  [1.0620633 1.0620358 1.0620079 1.0620555 1.0620792 1.0620216 1.0620725
- 1.0619859]
+totalLoss =  0.3515322506427765
+J values =  [1.0620865 1.0620308 1.0619849 1.0620166 1.0620236 1.0619957 1.062052
+ 1.0620271]
 9
-totalLoss =  0.32924458384513855
-J values =  [1.1663369 1.1662238 1.1662757 1.1663231 1.1663542 1.1662952 1.1663477
- 1.1662387]
+totalLoss =  0.3278639614582062
+J values =  [1.1663597 1.1662887 1.1662482 1.1662891 1.166295  1.1662658 1.1663253
+ 1.1662989]
 10
-totalLoss =  0.3060835599899292
-J values =  [1.2714342 1.2712729 1.2713642 1.2714144 1.2714493 1.2713931 1.2714443
- 1.2712942]
+totalLoss =  0.3044987916946411
+J values =  [1.2714529 1.2713848 1.2713348 1.2714413 1.2713938 1.2713561 1.271414
+ 1.2713907]
 11
-totalLoss =  0.2748994529247284
-J values =  [1.3772998 1.3771256 1.3772227 1.3772755 1.3773175 1.377262  1.3773082
- 1.3771214]
+totalLoss =  0.2745994031429291
+J values =  [1.3773241 1.3772682 1.3771913 1.3773044 1.3772682 1.3772233 1.3772832
+ 1.377263 ]
 12
-totalLoss =  0.23560376465320587
-J values =  [1.4837117 1.4835349 1.483644  1.4836963 1.4837346 1.4836899 1.4837024
- 1.4834759]
+totalLoss =  0.23515959084033966
+J values =  [1.4837427 1.4837208 1.4835827 1.4836608 1.4836974 1.4836193 1.4837013
+ 1.4836943]
 13
-totalLoss =  0.1884237825870514
-J values =  [1.5900286 1.5899055 1.5899091 1.5900327 1.5900749 1.5900203 1.5900774
- 1.589759 ]
+totalLoss =  0.19257132709026337
+J values =  [1.5901988 1.5902805 1.5900627 1.5900445 1.5901885 1.5901172 1.5902288
+ 1.5902061]
 14
-totalLoss =  0.12035459280014038
-J values =  [1.6932802 1.6934081 1.6932552 1.6931992 1.6933013 1.6933386 1.6932179
- 1.6930932]
+totalLoss =  0.11788781732320786
+J values =  [1.6930028 1.6933715 1.692978  1.6928445 1.6931221 1.6931438 1.6930972
+ 1.6931475]
 15
-totalLoss =  0.005455118604004383
-J values =  [1.7950529 1.7953097 1.7950181 1.7946233 1.7950486 1.7949938 1.7947098
- 1.7917821]
+totalLoss =  0.0017050706082955003
+J values =  [1.79298   1.7943054 1.7930632 1.7930502 1.793122  1.7935222 1.7930195
+ 1.7932285]
 16
-totalLoss =  0.005542507395148277
-J values =  [1.8861204 1.8864694 1.8860761 1.885378  1.8860952 1.8858783 1.8854636
- 1.8799522]
+totalLoss =  0.005046079400926828
+J values =  [1.8824446 1.8846593 1.882565  1.8827294 1.8826283 1.8833611 1.8823718
+ 1.8827529]
 17
-totalLoss =  0.006823086179792881
-J values =  [1.9677896 1.9683055 1.9677247 1.9667969 1.9678165 1.967417  1.9668789
- 1.9589785]
+totalLoss =  0.007451534736901522
+J values =  [1.9626724 1.9656622 1.9628503 1.9631135 1.962967  1.9639397 1.9624397
+ 1.9630435]
 18
-totalLoss =  0.010124892927706242
-J values =  [2.0411513 2.0417595 2.0410652 2.0399075 2.0411894 2.0406125 2.039993
- 2.0299137]
+totalLoss =  0.010293455794453621
+J values =  [2.03472   2.038388  2.0348706 2.0353138 2.0350397 2.0362225 2.0343604
+ 2.035109 ]
 19
-totalLoss =  0.009796395897865295
-J values =  [2.1071343 2.107765  2.107006  2.105619  2.1071818 2.1064234 2.1057074
- 2.0936198]
+totalLoss =  0.012152411043643951
+J values =  [2.0994527 2.1037416 2.099625  2.1002018 2.0997329 2.1011343 2.0989776
+ 2.0998702]
 
 Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </pre></div>
@@ -555,7 +564,7 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fd2eb039e20&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f8a5e78d490&gt;
 </pre></div>
 </div>
 </div>
@@ -597,7 +606,7 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 &lt;AxesSubplot:title={&#39;center&#39;:&#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 20 minutes  50.358 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 16 minutes  29.084 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>
@@ -615,6 +624,13 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../getting_started/installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
