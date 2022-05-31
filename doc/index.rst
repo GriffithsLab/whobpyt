@@ -17,5 +17,5 @@ Welcome to WhoBPyT documentation!
    :glob:
  
    getting_started/installation
-   auto_examples/eg001r__template
+   auto_examples/eg002r__multimodal_simulation
    

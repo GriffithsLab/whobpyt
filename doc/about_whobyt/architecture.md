@@ -38,9 +38,59 @@ fitter.run(num_epochs=50)
 fitted_res = fitter.test()
 
 
-
 ## Notes
+```
+
+## System, Model, and Biophysical Parameters
+### RWW_Params
+```
+G = 1
+Lambda = 0 #1 or 0 depending on using long range feed forward inhibition (FFI)
+
+#Excitatory Gating Variables
+a_E # nC^(-1)
+b_E # Hz
+d_E # s
+tau_E = tau_NMDA # ms
+W_E 
+
+#Inhibitory Gating Variables
+a_I # nC^(-1)
+b_I # Hz
+d_I # s
+tau_I # ms
+W_I
+
+#Setting other variables
+w_plus # Local excitatory recurrence
+J_NMDA # Excitatory synaptic coupling in nA
+J # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
+gamma # a kinetic parameter in ms
+sig # Noise amplitude at node in nA
+#v_of_T # Uncorrelated standard Gaussian noise # NOTE: Now defined at time of running forward model
+I_0 # The overall effective external input in nA
+
+I_external # External input current 
+
+#Starting Condition
+#S_E # The average synaptic gating variable of excitatory 
+#S_I # The average synaptic gating variable of inhibitory
+
+#############################################
+## Model Additions/modifications
+#############################################
+
+self.gammaI = 1/1000 # Zheng suggested this to get oscillations
+```
 
 
+### RWW_Layer
+```
+## EQUATIONS & BIOLOGICAL VARIABLES FROM:
+# Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation-inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.
+# Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.
+# Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.
+# Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.
+```
 
 
