@@ -86,11 +86,12 @@ class RWW_Layer(torch.nn.Module):
         self.Con_Mtx = Con_Mtx
         self.Dist_Mtx = Dist_Mtx
         
-        self.max_delay = 0.1 #This should be greater than what is possible of max(Dist_Mtx)/velocity
+        self.max_delay = 100 #msec #This should be greater than what is possible of max(Dist_Mtx)/velocity
         self.buffer_len = int(self.max_delay/self.step_size)
         self.delayed_S_E = torch.zeros(self.buffer_len, num_regions)
 
         self.buffer_idx = 0
+        self.mu = torch.tensor([0]) #Connection Speed addition
 
         #############################################
         ## RWW Constants
@@ -203,24 +204,22 @@ class RWW_Layer(torch.nn.Module):
             if(useDelays & (not useLaplacian)):
                 # WARNING: This has not been tested
                 
-                self.delays_idx = ((self.dist / (1.5 + torch.nn.functional.relu(self.mu)) / self.step_size) * 0.001).type(torch.int64)
+                speed = (1.5 + torch.nn.functional.relu(self.mu)) * (self.step_size * 0.001)
+                self.delays_idx = (self.Dist_Mtx / speed).type(torch.int64) #TODO: What is the units of the distance matrix then? Needs to be in meters?
 
                 S_E_history_new = self.delayed_S_E # TODO: Check if this needs to be cloned to work
-                S_E_delayed_Mtx = S_E_history_new.gather(1, (self.buffer_idx - self.delays)%self.buffer_len)  # delayed E
+                S_E_delayed_Mtx = S_E_history_new.gather(0, (self.buffer_idx - self.delays_idx)%self.buffer_len)  # delayed E #TODO: Is distance matrix symmetric, should this be transposed?
 
-                S_E_delayed_Vector = torch.reshape(torch.sum(self.sc_modified * torch.transpose(S_E_delayed_Mtx, 0, 1), 1),(self.node_size, 1))  # weights on delayed E
-
-                Delayed_S_E = torch.nn.functional.relu(self.G) * (S_E_delayed_Vector)
+                Delayed_S_E = torch.sum(torch.mul(self.Con_Mtx, S_E_delayed_Mtx), 1) # weights on delayed E
 
                 Network_S_E = Delayed_S_E
 
             if(useLaplacian & (not useDelays)):
                 # WARNING: This has not been tested
                 
-                newSC = torch.exp(self.sc_withGains) * torch.tensor(self.Con_Mtx, dtype=torch.float32)
-                self.sc_modified = torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))) / torch.linalg.norm(torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))))
+                # NOTE: We are acutally using the NEGATIVE Laplacian
                 
-                Laplacian_diagonal = -torch.diag(torch.sum(self.sc_modified, axis=1))
+                Laplacian_diagonal = -torch.diag(torch.sum(self.Con_Mtx, axis=1))    #Con_Mtx should be normalized, so this should just add a diagonal of -1's
                 S_E_laplacian = torch.matmul(self.Con_Mtx + Laplacian_diagonal, S_E)
 
                 Network_S_E = S_E_laplacian 
@@ -229,23 +228,22 @@ class RWW_Layer(torch.nn.Module):
             if(useDelays & useLaplacian):
                 # WARNING: This has not been tested
                 
-                self.sc_withGains = 0
-                # Update the Laplacian based on the updated connection gains w_bb.
-                newSC = torch.exp(self.sc_withGains) * torch.tensor(self.Con_Mtx, dtype=torch.float32)
-                self.sc_modified = torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))) / torch.linalg.norm(torch.log1p(0.5 * (newSC + torch.transpose(newSC, 0, 1))))
+                # NOTE: We are acutally using the NEGATIVE Laplacian
+
+                Laplacian_diagonal = -torch.diag(torch.sum(self.Con_Mtx, axis=1))    #Con_Mtx should be normalized, so this should just add a diagonal of -1's
+                           
+                speed = (1.5 + torch.nn.functional.relu(self.mu)) * (self.step_size * 0.001)
+                self.delays_idx = (self.Dist_Mtx / speed).type(torch.int64) #TODO: What is the units of the distance matrix then?
                 
-                Laplacian_diagonal = -torch.diag(torch.sum(self.sc_modified, axis=1))
-
-                self.delays_idx = ((self.dist / (1.5 + torch.nn.functional.relu(self.mu)) / self.step_size) * 0.001).type(torch.int64)
-
                 S_E_history_new = self.delayed_S_E # TODO: Check if this needs to be cloned to work
-                S_E_delayed_Mtx = S_E_history_new.gather(1, (self.buffer_idx - self.delays)%self.buffer_len)  # delayed E
-
-                S_E_delayed_Vector = torch.reshape(torch.sum(self.sc_modified * torch.transpose(S_E_delayed_Mtx, 0, 1), 1),(self.node_size, 1))  # weights on delayed E
-
-                Delayed_Laplacian_S_E = torch.nn.functional.relu(self.G) * (S_E_delayed_Vector + 1 * torch.matmul(Laplacian_diagonal, S_E))
-
+                S_E_delayed_Mtx = S_E_history_new.gather(0, (self.buffer_idx - self.delays_idx)%self.buffer_len) 
+                
+                S_E_delayed_Vector = torch.sum(torch.mul(self.Con_Mtx, S_E_delayed_Mtx), 1) # weights on delayed E
+                
+                Delayed_Laplacian_S_E = (S_E_delayed_Vector + torch.matmul(Laplacian_diagonal, S_E))
+                
                 Network_S_E = Delayed_Laplacian_S_E
+                
 
 
             # Currents
@@ -278,7 +276,7 @@ class RWW_Layer(torch.nn.Module):
             state_hist[i, :, 1] = S_I 
 
             if useDelays:
-                self.delayed_S_E[self.buffer_idx, :] = S_E
+                self.delayed_S_E = self.delayed_S_E.clone(); self.delayed_S_E[self.buffer_idx, :] = S_E #TODO: This means that not back-propagating the network just the individual nodes
 
                 if (self.buffer_idx == (self.buffer_len - 1)):
                     self.buffer_idx = 0
@@ -293,7 +291,9 @@ class RWW_Layer(torch.nn.Module):
             
         state_vals = torch.cat((torch.unsqueeze(S_E, 1), torch.unsqueeze(S_I, 1)), 1)
         
-        #self.delayed_S_E = self.delayed_S_E.detach() # So that RAM does not accumulate in later batches/epochs
+        # So that RAM does not accumulate in later batches/epochs 
+        # & Because can't back pass through twice
+        self.delayed_S_E = self.delayed_S_E.detach() 
 
         if(withOptVars):
             layer_hist = torch.cat((state_hist, opt_hist), 2)
