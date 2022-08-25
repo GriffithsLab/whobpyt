@@ -1,5 +1,13 @@
 """
+=====================
 WhoBPyt Model Classes
+=====================
+
+For each model 'M', two classes are defined: 
+
+- `M_Params` - Parameters class. Parameters to be fit should be overwritten after initialization as PyTorch parameters. 
+- `M_Layer`  - Model implementation. Includes in particular a `forward()` method that implements numerical integration. 
+
 """
 
 import torch
@@ -71,7 +79,7 @@ class RWW_Layer(torch.nn.Module):
         
         # Initialize the RWW Model 
         #
-        # INPUT
+        #  INPUT
         #  num_regions: Int - Number of nodes in network to model
         #  params: RWW_Params - The parameters that all nodes in the network will share
         #  Con_Mtx: Tensor [num_regions, num_regions] - With connectivity (eg. structural connectivity)
