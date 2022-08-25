@@ -505,9 +505,47 @@ class BOLD_Layer(torch.nn.Module):
         
         return state_vals, layer_hist
 
+### New linear version of NMM
+
+class LinearRNN_Params():
+    def __init__(self, num_regions):
+        self.SC = torch.rand((num_regions, num_regions))/num_regions
+
+class LinearRNN_Layer(torch.nn.Module):
+    def __init__(self, num_regions, params, step_size = 0.0001, useBC = False):
+        super(LinearRNN_Layer, self).__init__()
+        self.step_size = step_size
+        self.num_regions = num_regions
+        self.SC = params.SC
     
-	
-	
+    def forward(self, init_state, sim_len, useDelays = False, useLaplacian = True, withOptVars = False, useGPU = False, debug = False):
+        
+        whiteNoise = torch.normal(0, 1, size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions))
+        
+        state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions) # initializing state history vector
+        E = init_state
+        
+        if(useLaplacian): # using laplacian to make signal more stable (make sure it does not explode)
+            lap_sc = -(torch.diag(sum(self.SC,1))-self.SC)
+            init_sc = lap_sc
+        else:
+            init_sc = self.sc
+            
+        num_steps = int(sim_len/self.step_size)        
+        
+        dt = torch.tensor(self.step_size) 
+        
+        for i in range(num_steps):
+            
+            E = E + (torch.matmul(init_sc, E))*dt + torch.sqrt(dt)*whiteNoise[i, :] # calculating current E value
+            state_hist[i, :] = E 
+            
+        return state_hist, E
+            
+            
+            
+
+
 	
 	
 	
