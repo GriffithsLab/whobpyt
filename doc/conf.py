@@ -25,7 +25,7 @@ import sphinx_rtd_theme
 from sphinx.locale import _
 
 
-project = 'KFTools'
+project = 'WhoBPyT'
 slug = re.sub(r'\W+', '-', project.lower())
 version = '0.0.0'
 release = '0.0.0'
@@ -222,7 +222,7 @@ html_theme_options = {
         ("Examples", "auto_examples/index"),
         ("User guide", "user_guide/index"),
         ("FAQ", "faq"),
-        ("GitHub", "https://github.com/neurotechx/eeg-notebooks", True),
+        ("GitHub", "https://github.com/griffithslab/whobpyt", True),
     ],
 
     # Set the page width to not be restricted to hardset value
@@ -258,10 +258,10 @@ html_show_sourcelink = False
 sphinx_gallery_conf = {'filename_pattern': '(?=.*r__)(?=.*.py)', 
                        'examples_dirs': ['../examples'],
                        'gallery_dirs': ['auto_examples'],
-                       'within_subsection_order': FileNameSortKey, #'default_thumb_file': 'img/kftools_logo.png',
+                       'within_subsection_order': FileNameSortKey, #'default_thumb_file': 'img/whobpyt_logo.png',
                        'backreferences_dir': 'generated',   # Where to drop linking files between examples & API
-                       'doc_module': ('kftools'),
-                       'reference_url': {'kftools': None},
+                       'doc_module': ('whobpyt'),
+                       'reference_url': {'whobpyt': None},
                        'remove_config_comments': True}
 
 """

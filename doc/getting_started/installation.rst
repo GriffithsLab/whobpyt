@@ -3,8 +3,13 @@ Installation
 ============
 
 
-Using latest github master source
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Create an environment
+
+.. code::
+
+   $ conda create -n "whobpyt" git pip python=3.9
+   $ conda activate whobpyt
+
 
 Clone latest version from github
 
@@ -15,7 +20,6 @@ Clone latest version from github
     
 Now go to the cloned folder and install manually 
 
- 
 .. code::
 
    $ cd whobpyt

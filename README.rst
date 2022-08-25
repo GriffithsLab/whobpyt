@@ -1,16 +1,16 @@
 WhoBPyT - Whole-Brain Modelling in PyTorch
 =================
-
-_"Or there and Back Again": https://en.wikipedia.org/wiki/The_Hobbit
+(`Or There and Back Again <https://en.wikipedia.org/wiki/The_Hobbit>`_)
 
 
 Summary
 -------
 
-``whobpyt`` is a Python library for Pytorch-based whole-brain modeling in Python.
+``whobpyt`` (pronounce as 'hobbit') is a Python library for PyTorch-based whole-brain modeling in Python.
 
 Please note that the code here is still very preliminary, under active
 development, and subject to substantial change.
+
 
 Rationale
 ---------
