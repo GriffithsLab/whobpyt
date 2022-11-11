@@ -425,6 +425,121 @@ class BOLD_Layer(torch.nn.Module):
 
 
 ### zheng's version
+#from Model_pytorch import wwd_model_pytorch_new
+import matplotlib.pyplot as plt # for plotting
+import numpy as np # for numerical operations
+import pandas as pd # for data manipulation
+import seaborn as sns # for plotting 
+import time # for timer
+import torch
+import torch.optim as optim
+from sklearn.metrics.pairwise import cosine_similarity
+import pickle
+
+from torch.nn.parameter import Parameter
+
+
+class OutputNM():
+    mode_all = ['train', 'test']
+    stat_vars_all = ['m', 'v']
+
+    def __init__(self, model_name, node_size, param, fit_weights=False, fit_lfm=False):
+        self.loss = np.array([])
+        if model_name == 'WWD':
+            state_names = ['E', 'I', 'x', 'f', 'v', 'q']
+            self.output_name = "bold"
+        elif model_name == "JR":
+            state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
+            self.output_name = "eeg"
+        for name in state_names + [self.output_name]:
+            for m in self.mode_all:
+                setattr(self, name + '_' + m, [])
+
+        vars = [a for a in dir(param) if not a.startswith('__') and not callable(getattr(param, a))]
+        for var in vars:
+            if np.any(getattr(param, var)[1] > 0):
+                if var != 'std_in':
+                    setattr(self, var, np.array([]))
+                    for stat_var in self.stat_vars_all:
+                        setattr(self, var + '_' + stat_var, [])
+                else:
+                    setattr(self, var, [])
+        if fit_weights == True:
+            self.weights = []
+        if model_name == 'JR' and fit_lfm == True:
+            self.leadfield = []
+
+    def save(self, filename):
+        with open(filename, 'wb') as f:
+            pickle.dump(self, f)
+
+
+class ParamsJR():
+
+    def __init__(self, model_name, **kwargs):
+        if model_name == 'WWD':
+            param = {
+
+                "std_in": [0.02, 0],  # standard deviation of the Gaussian noise
+                "std_out": [0.02, 0],  # standard deviation of the Gaussian noise
+                # Parameters for the ODEs
+                # Excitatory population
+                "W_E": [1., 0],  # scale of the external input
+                "tau_E": [100., 0],  # decay time
+                "gamma_E": [0.641 / 1000., 0],  # other dynamic parameter (?)
+
+                # Inhibitory population
+                "W_I": [0.7, 0],  # scale of the external input
+                "tau_I": [10., 0],  # decay time
+                "gamma_I": [1. / 1000., 0],  # other dynamic parameter (?)
+
+                # External input
+                "I_0": [0.32, 0],  # external input
+                "I_external": [0., 0],  # external stimulation
+
+                # Coupling parameters
+                "g": [20., 0],  # global coupling (from all nodes E_j to single node E_i)
+                "g_EE": [.1, 0],  # local self excitatory feedback (from E_i to E_i)
+                "g_IE": [.1, 0],  # local inhibitory coupling (from I_i to E_i)
+                "g_EI": [0.1, 0],  # local excitatory coupling (from E_i to I_i)
+
+                "aE": [310, 0],
+                "bE": [125, 0],
+                "dE": [0.16, 0],
+                "aI": [615, 0],
+                "bI": [177, 0],
+                "dI": [0.087, 0],
+
+                # Output (BOLD signal)
+
+                "alpha": [0.32, 0],
+                "rho": [0.34, 0],
+                "k1": [2.38, 0],
+                "k2": [2.0, 0],
+                "k3": [0.48, 0],  # adjust this number from 0.48 for BOLD fluctruate around zero
+                "V": [.02, 0],
+                "E0": [0.34, 0],
+                "tau_s": [0.65, 0],
+                "tau_f": [0.41, 0],
+                "tau_0": [0.98, 0],
+                "mu": [0.5, 0]
+
+            }
+        elif model_name == "JR":
+            param = {
+                "A ": [3.25, 0], "a": [100, 0.], "B": [22, 0], "b": [50, 0], "g": [1000, 0], \
+                "c1": [135, 0.], "c2": [135 * 0.8, 0.], "c3 ": [135 * 0.25, 0.], "c4": [135 * 0.25, 0.], \
+                "std_in": [100, 0], "vmax": [5, 0], "v0": [6, 0], "r": [0.56, 0], "y0": [2, 0], \
+                "mu": [.5, 0], "k": [5, 0], "cy0": [5, 0], "ki": [1, 0]
+            }
+        for var in param:
+            setattr(self, var, param[var])
+
+        for var in kwargs:
+            setattr(self, var, kwargs[var])
+        
+        
+        
 def sys2nd(A, a,  u, x, v):
     return A*a*u -2*a*v-a**2*x
 
@@ -504,7 +619,7 @@ class RNNJANSEN(torch.nn.Module):
         self.input_size = input_size  # 1 or 2 or 3
         self.tr = tr  # tr ms (integration step 0.1 ms)
         self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.1 ms
-        self.hidden_size = np.int(tr / step_size)
+        self.hidden_size = int(tr / step_size)
         self.batch_size = batch_size  # size of the batch used at each step
         self.node_size = node_size  # num of ROI
         self.output_size = output_size  # num of EEG channels
@@ -564,7 +679,7 @@ class RNNJANSEN(torch.nn.Module):
                 'input.size(0) must be equal to batch_size. Expected {}, got {}'.format(
                     self.batch_size, input.size(0)))"""
 
-    def forward(self, input, noise_in, noise_out, hx, hE):
+    def forward(self, input, hx, hE):
         """
         Forward step in simulating the EEG signal.
         Parameters
@@ -636,7 +751,7 @@ class RNNJANSEN(torch.nn.Module):
         # Use the forward model to get EEGsignal at ith element in the batch.
         for i_batch in range(self.batch_size):
             # Get the noise for EEG output.
-            noiseEEG = noise_out[:, i_batch:i_batch + 1]
+            
 
             for i_hidden in range(self.hidden_size):
                 Ed = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)  # delayed E
@@ -651,15 +766,13 @@ class RNNJANSEN(torch.nn.Module):
                                     (self.node_size, 1))  # weights on delayed E
 
                 # Input noise for M.
-                noiseE = noise_in[:, i_hidden, i_batch, 0:1]
-                noiseI = noise_in[:, i_hidden, i_batch, 1:2]
-                noiseM = noise_in[:, i_hidden, i_batch, 2:3]
+                
                 u = input[:, i_hidden:i_hidden + 1, i_batch]
 
                 # LEd+torch.matmul(dg,E): Laplacian on delayed E
 
                 rM = sigmoid(E - I, self.vmax, self.v0, self.r)  # firing rate for Main population
-                rE = (noise_std_lb * con_1 + m(self.std_in)) * noiseE + (lb * con_1 + m(self.g)) * (
+                rE =  (noise_std_lb * con_1 + m(self.std_in)) * torch.randn((self.node_size, 1)) + (lb * con_1 + m(self.g)) * (
                             LEd + 1 * torch.matmul(dg, E)) \
                      + (lb * con_1 + m(self.c2)) * sigmoid((lb * con_1 + m(self.c1)) * M, self.vmax, self.v0,
                                                            self.r)  # firing rate for Excitory population
@@ -671,17 +784,13 @@ class RNNJANSEN(torch.nn.Module):
                 ddE = E + dt * Ev
                 ddI = I + dt * Iv
                 ddMv = Mv + dt * sys2nd(0 * con_1 + m(self.A), 1 * con_1 + m(self.a),
-                                        + u_2ndsys_ub * torch.tanh(rM / u_2ndsys_ub), M, Mv) \
-                       + 0 * torch.sqrt(dt) * (1.0 * con_1 + m(self.std_in)) * noiseM
-
+                                        + u_2ndsys_ub * torch.tanh(rM / u_2ndsys_ub), M, Mv) 
                 ddEv = Ev + dt * sys2nd(0 * con_1 + m(self.A), 1 * con_1 + m(self.a), \
                                         (k_lb * con_1 + m(self.k)) * u \
-                                        + u_2ndsys_ub * torch.tanh(rE / u_2ndsys_ub), E,
-                                        Ev)  # (0.001*con_1+m_kw(self.kw))/torch.sum(0.001*con_1+m_kw(self.kw))*
+                                        + u_2ndsys_ub * torch.tanh(rE / u_2ndsys_ub), E, Ev) 
 
                 ddIv = Iv + dt * sys2nd(0 * con_1 + m(self.B), 1 * con_1 + m(self.b), \
-                                        +u_2ndsys_ub * torch.tanh(rI / u_2ndsys_ub), I, Iv) + 0 * torch.sqrt(dt) * (
-                                   1.0 * con_1 + m(self.std_in)) * noiseI
+                                        +u_2ndsys_ub * torch.tanh(rI / u_2ndsys_ub), I, Iv) 
 
                 # Calculate the saturation for model states (for stability and gradient calculation).
                 E = ddE  # 1000*torch.tanh(ddE/1000)#torch.tanh(0.00001+torch.nn.functional.relu(ddE))
@@ -720,7 +829,102 @@ class RNNJANSEN(torch.nn.Module):
         next_state['Pv_batch'] = torch.cat(Mv_batch, axis=1)
 
         return next_state, hE
-        
+
+
+class Costs:
+    def __init__(self, method):
+        self.method = method
+
+    def cost_dist(self, sim, emp):
+        """
+        Calculate the Pearson Correlation between the simFC and empFC.
+        From there, the probability and negative log-likelihood.
+        Parameters
+        ----------
+        logits_series_tf: tensor with node_size X datapoint
+            simulated EEG
+        labels_series_tf: tensor with node_size X datapoint
+            empirical EEG
+        """
+
+        losses = torch.sqrt(torch.mean((sim - emp) ** 2))  #
+        return losses
+
+    def cost_r(self, logits_series_tf, labels_series_tf):
+        """
+        Calculate the Pearson Correlation between the simFC and empFC.
+        From there, the probability and negative log-likelihood.
+        Parameters
+        ----------
+        logits_series_tf: tensor with node_size X datapoint
+            simulated BOLD
+        labels_series_tf: tensor with node_size X datapoint
+            empirical BOLD
+        """
+        # get node_size(batch_size) and batch_size()
+        node_size = logits_series_tf.shape[0]
+        truncated_backprop_length = logits_series_tf.shape[1]
+
+        # remove mean across time
+        labels_series_tf_n = labels_series_tf - torch.reshape(torch.mean(labels_series_tf, 1),
+                                                              [node_size, 1])  # - torch.matmul(
+
+        logits_series_tf_n = logits_series_tf - torch.reshape(torch.mean(logits_series_tf, 1),
+                                                              [node_size, 1])  # - torch.matmul(
+
+        # correlation
+        cov_sim = torch.matmul(logits_series_tf_n, torch.transpose(logits_series_tf_n, 0, 1))
+        cov_def = torch.matmul(labels_series_tf_n, torch.transpose(labels_series_tf_n, 0, 1))
+
+        # fc for sim and empirical BOLDs
+        FC_sim_T = torch.matmul(torch.matmul(torch.diag(torch.reciprocal(torch.sqrt( \
+            torch.diag(cov_sim)))), cov_sim),
+            torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_sim)))))
+        FC_T = torch.matmul(torch.matmul(torch.diag(torch.reciprocal(torch.sqrt( \
+            torch.diag(cov_def)))), cov_def),
+            torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_def)))))
+
+        # mask for lower triangle without diagonal
+        ones_tri = torch.tril(torch.ones_like(FC_T), -1)
+        zeros = torch.zeros_like(FC_T)  # create a tensor all ones
+        mask = torch.greater(ones_tri, zeros)  # boolean tensor, mask[i] = True iff x[i] > 1
+
+        # mask out fc to vector with elements of the lower triangle
+        FC_tri_v = torch.masked_select(FC_T, mask)
+        FC_sim_tri_v = torch.masked_select(FC_sim_T, mask)
+
+        # remove the mean across the elements
+        FC_v = FC_tri_v - torch.mean(FC_tri_v)
+        FC_sim_v = FC_sim_tri_v - torch.mean(FC_sim_tri_v)
+
+        # corr_coef
+        corr_FC = torch.sum(torch.multiply(FC_v, FC_sim_v)) \
+                  * torch.reciprocal(torch.sqrt(torch.sum(torch.multiply(FC_v, FC_v)))) \
+                  * torch.reciprocal(torch.sqrt(torch.sum(torch.multiply(FC_sim_v, FC_sim_v))))
+
+        # use surprise: corr to calculate probability and -log
+        losses_corr = -torch.log(0.5000 + 0.5 * corr_FC)  # torch.mean((FC_v -FC_sim_v)**2)#
+        return losses_corr
+
+    def cost_eff(self, sim, emp):
+        if self.method == 0:
+            return self.cost_dist(sim, emp)
+        else:
+            return self.cost_r(sim, emp)
+
+
+def h_tf(a, b, d, z):
+    """
+    Neuronal input-output functions of excitatory pools and inhibitory pools.
+    Take the variables a, x, and b and convert them to a linear equation (a*x - b) while adding a small
+    amount of noise 0.00001 while dividing that term to an exponential of the linear equation multiplied by the
+    d constant for the appropriate dimensions.
+    """
+    num = 0.00001 + torch.abs(a * z - b)
+    den = 0.00001 * d + torch.abs(1.0000 - torch.exp(-d * (a * z - b)))
+    return torch.divide(num, den)
+
+
 class RNNWWD(torch.nn.Module):
     """
     A module for forward model (WWD) to simulate a batch of BOLD signals
@@ -761,8 +965,8 @@ class RNNWWD(torch.nn.Module):
     model_name = "WWD"
     fit_lfm_flat = False
 
-    def __init__(self, input_size: int, node_size: int,
-                 batch_size: int, step_size: float, tr: float, sc: float, dist: float, fit_gains_flat: bool,
+    def __init__(self, node_size: int,
+                 batch_size: int, step_size: float, repeat_size: float, tr: float, sc: float, fit_gains_flat: bool,
                  param: ParamsJR) -> None:
         """
         Parameters
@@ -796,21 +1000,32 @@ class RNNWWD(torch.nn.Module):
         """
         super(RNNWWD, self).__init__()
         self.state_size = 6  # 6 states WWD model
-        self.input_size = input_size  # 1 or 2
+        #self.input_size = input_size  # 1 or 2
         self.tr = tr  # tr fMRI image
-        self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.05
-        self.hidden_size = np.int(tr // step_size)
+        self.step_size = step_size  # integration step 0.05
+        self.hidden_size = int(tr /step_size)
         self.batch_size = batch_size  # size of the batch used at each step
         self.node_size = node_size  # num of ROI
+        self.repeat_size = repeat_size
         self.sc = sc  # matrix node_size x node_size structure connectivity
-        self.dist = torch.tensor(dist, dtype=torch.float32)
+        #self.dist = torch.tensor(dist, dtype=torch.float32)
         self.fit_gains_flat = fit_gains_flat  # flag for fitting gains
 
         self.param = param
 
         self.output_size = node_size  # number of EEG channels
 
-        # set model parameters (variables: need to calculate gradient) as Parameter others : tensor
+        # set states E I f v mean and 1/sqrt(variance)
+        self.E_m = Parameter(torch.tensor(0.16, dtype=torch.float32))
+        self.I_m = Parameter(torch.tensor(0.1, dtype=torch.float32))
+        self.f_m = Parameter(torch.tensor(1.0, dtype=torch.float32))
+        self.v_m = Parameter(torch.tensor(1.0, dtype=torch.float32))
+
+        self.E_v = Parameter(torch.tensor(20, dtype=torch.float32))
+        self.I_v = Parameter(torch.tensor(20, dtype=torch.float32))
+        self.f_v = Parameter(torch.tensor(10, dtype=torch.float32))
+        self.v_v = Parameter(torch.tensor(10, dtype=torch.float32))
+
         # set w_bb as Parameter if fit_gain is True
         if self.fit_gains_flat == True:
             self.w_bb = Parameter(torch.tensor(np.zeros((node_size, node_size)) + 0.05,
@@ -853,7 +1068,7 @@ class RNNWWD(torch.nn.Module):
                 'input.size(0) must be equal to batch_size. Expected {}, got {}'.format(
                     self.batch_size, input.size(0)))"""
 
-    def forward(self, external, input, noise_out, hx, hE):
+    def forward(self, external,  hx, hE):
         """
         Forward step in simulating the BOLD signal.
         Parameters
@@ -874,14 +1089,13 @@ class RNNWWD(torch.nn.Module):
 
         # hx is current state (6) 0: E 1:I (neural activitiveties) 2:x 3:f 4:v 5:f (BOLD)
 
-        E = hx[:, 0:1]
-        I = hx[:, 1:2]
+        
         x = hx[:, 2:3]
         f = hx[:, 3:4]
         v = hx[:, 4:5]
         q = hx[:, 5:6]
 
-        dt = self.step_size
+        dt = torch.tensor(self.step_size, dtype=torch.float32)
         con_1 = torch.ones_like(dt)
         # Generate the ReLU module for model parameters gEE gEI and gIE
         m = torch.nn.ReLU()
@@ -894,109 +1108,335 @@ class RNNWWD(torch.nn.Module):
             w_n = torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))) / torch.linalg.norm(
                 torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))))
             self.sc_m = w_n
-            dg = -torch.diag(torch.sum(w_n, axis=1))
+            l_s = -torch.diag(torch.sum(w_n, axis=1)) + w_n
         else:
             l_s = torch.tensor(np.zeros((1, 1)), dtype=torch.float32)
 
-        self.delays = (self.dist / (1.5 * con_1 + m(self.mu)) / self.tr * 0.001).type(torch.int64)
-
+        
         # placeholder for the updated corrent state
         current_state = torch.zeros_like(hx)
 
         # placeholders for output BOLD, history of E I x f v and q
-        bold_batch = []
-        E_batch = []
-        I_batch = []
-        x_batch = []
-        f_batch = []
-        v_batch = []
-        q_batch = []
+        # placeholders for output BOLD, history of E I x f v and q
+        bold_batch = torch.zeros((self.node_size,self.batch_size))
+        E_batch = torch.zeros((self.node_size,self.batch_size))
+        I_batch = torch.zeros((self.node_size,self.batch_size))
+        
+        x_batch = torch.zeros((self.node_size,self.batch_size))
+        f_batch = torch.zeros((self.node_size,self.batch_size))
+        v_batch = torch.zeros((self.node_size,self.batch_size))
+        q_batch = torch.zeros((self.node_size,self.batch_size))
 
-        # Use the forward model to get BOLD signal at ith element in the batch.
+        E_bat_hid=torch.zeros((self.node_size,self.batch_size, self.hidden_size))
+        E_mn = hx[:,0:1]
+        I_mn = hx[:,1:2]
+        #print(E_m.shape)
+        # Use the forward model to get neural activity at ith element in the batch. 
         for i_batch in range(self.batch_size):
-            # Get the noise for BOLD output.
-            noiseBold = noise_out[:, i_batch:i_batch + 1]
-
-            # Since tr is about second we need to use a small step size like 0.05 to integrate the model states.
+            
+            
+            #print(E.shape)
+            
+            
+            # Since tr is about second we need to use a small step size like 0.05 to integrate the model states. 
             for i_hidden in range(self.hidden_size):
-                Ed = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)  # delayed E
-
-                """for ind in range(self.node_size):
-                    #print(ind, hE[ind,:].shape, self.delays[ind,:].shape)
-                    Ed[ind] = torch.index_select(hE[ind,:], 0, self.delays[ind,:])"""
-                hE_new = hE.clone()
-                Ed = hE_new.gather(1, self.delays)  # delayed E
-
-                LEd = torch.reshape(torch.sum(w_n * torch.transpose(Ed, 0, 1), 1),
-                                    (self.node_size, 1))  # weights on delayed E
-
-                # Input noise for E and I.
-                noiseE = input[:, i_hidden, i_batch, 0:1]
-                noiseI = input[:, i_hidden, i_batch, 1:2]
-                u = external[:, i_hidden:i_hidden + 1, i_batch]
-
-                # Calculate the input recurrents.
-                IE = m(self.W_E * self.I_0 + (0.001 * con_1 + m(self.g_EE)) * E \
-                       + self.g * (1 * LEd + 1 * torch.matmul(0 * w_n + dg, E)) - (
-                                   0.001 * con_1 + m(self.g_IE)) * I) + u  # input currents for E
-                II = m(self.W_I * self.I_0 + (0.001 * con_1 + m(self.g_EI)) * E - I)  # input currents for I
-
-                # Calculate the firing rates.
-                rE = h_tf(self.aE, self.bE, self.dE, IE)  # firing rate for E
-                rI = h_tf(self.aI, self.bI, self.dI, II)  # firing rate for I
-
-                # Update the states by step-size 0.05.
-                ddE = E + dt * (-E * torch.reciprocal(self.tau_E) + self.gamma_E * (1. - E) * rE) \
-                      + torch.sqrt(dt) * noiseE * (0.02 * con_1 + m(
-                    self.std_in))  ### equlibrim point at E=(tau_E*gamma_E*rE)/(1+tau_E*gamma_E*rE)
-                ddI = I + dt * (-I * torch.reciprocal(self.tau_I) + self.gamma_I * rI) \
-                      + torch.sqrt(dt) * noiseI * (0.02 * con_1 + m(self.std_in))
-
-                dx = x + dt * (E - torch.reciprocal(self.tau_s) * x - torch.reciprocal(self.tau_f) * (f - con_1))
-                df = f + dt * x
-                dv = v + dt * (f - torch.pow(v, torch.reciprocal(self.alpha))) * torch.reciprocal(self.tau_0)
-                dq = q + dt * (
-                            f * (con_1 - torch.pow(con_1 - self.rho, torch.reciprocal(f))) * torch.reciprocal(self.rho) \
-                            - q * torch.pow(v, torch.reciprocal(self.alpha)) * torch.reciprocal(v)) \
-                     * torch.reciprocal(self.tau_0)
-
-                # Calculate the saturation for model states (for stability and gradient calculation).
-                E = torch.tanh(0.00001 + torch.nn.functional.relu(ddE))
-                I = torch.tanh(0.00001 + torch.nn.functional.relu(ddI))
-                x = torch.tanh(dx)
-                f = (con_1 + torch.tanh(df - con_1))
-                v = (con_1 + torch.tanh(dv - con_1))
-                q = (con_1 + torch.tanh(dq - con_1))
-
-                hE[:, 0] = E[:, 0]
-                # Put each time step E and I into placeholders (need them to calculate Entropy of E and I
-                # in the loss (maximize the entropy)).
-                E_batch.append(E)
-                I_batch.append(I)
-
+                E = torch.zeros((self.node_size, self.repeat_size))
+                I = torch.zeros((self.node_size, self.repeat_size))
+                for i_rep in range(self.repeat_size):
+                    E[:,i_rep] = E_mn[:,0]+0.02*torch.randn(self.node_size)#hx[i_batch-1,:,0]
+                    I[:,i_rep] = I_mn[:,0]+0.001*torch.randn(self.node_size)##hx[i_batch-1,:,1]"""
+               
+                    
+                # Calculate the input recurrents. 
+                IE = m(self.W_E*self.I_0 + (0.001*con_1 + m(self.g_EE))*E \
+                    + self.g*torch.matmul(l_s, E) - (0.001*con_1 + m(self.g_IE))*I) # input currents for E
+                II = m(self.W_I*self.I_0 + (0.001*con_1 + m(self.g_EI))*E -I) # input currents for I 
+                
+                # Calculate the firing rates. 
+                rE = h_tf(self.aE, self.bE, self.dE, IE) # firing rate for E
+                rI = h_tf(self.aI, self.bI, self.dI, II) # firing rate for I 
+                # Update the states by step-size 0.05. 
+                ddE = E + dt*(-E*torch.reciprocal(self.tau_E) +self.gamma_E*(1.-E)*rE) \
+                      + torch.sqrt(dt)*(0.02*con_1 + m(self.std_in))*torch.randn((self.node_size, self.repeat_size))### equlibrim point at E=(tau_E*gamma_E*rE)/(1+tau_E*gamma_E*rE)
+                ddI = I + dt*(-I*torch.reciprocal(self.tau_I) +self.gamma_I*rI) \
+                      + torch.sqrt(dt)*torch.randn(self.node_size, self.repeat_size) * (0.02*con_1 + m(self.std_in))
+                    
+                    
+                    
+                # Calculate the saturation for model states (for stability and gradient calculation). 
+                E = torch.tanh(0.00001+m(ddE))
+                I = torch.tanh(0.00001+m(ddI))
+                    
+                
+                I_mn = (I.mean(1)[:,np.newaxis])
+                E_mn = (E.mean(1)[:,np.newaxis])
+                E_bat_hid[:,i_batch,i_hidden]=E_mn[:,0]
+                
+            
+            """hx[i_batch,:,0] = E_m
+            hx[i_batch,:,1] = I_m"""
+            E_batch[:,i_batch]=E_mn[:,0]
+            I_batch[:,i_batch]=I_mn[:,0]
+        
+        
+        for i_batch in range(self.batch_size):
+            
+            
+            for i_hidden in range(self.hidden_size):
+                dx = x + 1*dt*(E_bat_hid[:,i_batch,i_hidden][:,np.newaxis] - torch.reciprocal(self.tau_s) * x - torch.reciprocal(self.tau_f)* (f - con_1))
+                df = f + 1*dt*x
+                dv = v + 1*dt*(f - torch.pow(v, torch.reciprocal(self.alpha))) * torch.reciprocal(self.tau_0)
+                dq = q + 1*dt*(f * (con_1 - torch.pow(con_1 - self.rho, torch.reciprocal(f)))*torch.reciprocal(self.rho) \
+                            - q * torch.pow(v, torch.reciprocal(self.alpha)) *torch.reciprocal(v)) \
+                              * torch.reciprocal(self.tau_0)
+                    
+                    
+                x = dx#torch.tanh(dx)
+                f = df#(con_1 + torch.tanh(df - con_1))
+                v = dv#(con_1 + torch.tanh(dv - con_1))
+                q = dq#(con_1 + torch.tanh(dq - con_1))    
             # Put x f v q from each tr to the placeholders for checking them visually.
-            x_batch.append(x)
-            f_batch.append(f)
-            v_batch.append(v)
-            q_batch.append(q)
-            hE = torch.cat([E, hE[:, :-1]], axis=1)  # update placeholders for E buffer
+            x_batch[:,i_batch]=x[:,0]
+            f_batch[:,i_batch]=f[:,0]
+            v_batch[:,i_batch]=v[:,0]
+            q_batch[:,i_batch]=x[:,0]
             # Put the BOLD signal each tr to the placeholder being used in the cost calculation.
-            bold_batch.append((0.001 * con_1 + m(self.std_out)) * noiseBold + \
-                              100.0 * self.V * torch.reciprocal(self.E0) * (self.k1 * (con_1 - q) \
-                                                                            + self.k2 * (con_1 - q * torch.reciprocal(
-                        v)) + self.k3 * (con_1 - v)))
-
-        # Update the current state.
-        current_state = torch.cat([E, I, x, f, v, q], axis=1)
+            #print(q_batch[-1])
+            bold_batch[:,i_batch]=((0.001*con_1 + m(self.std_out))*torch.randn(self.node_size,1)+ \
+                                100.0*self.V*torch.reciprocal(self.E0)*(self.k1 * (con_1 - q) \
+                                + self.k2 * (con_1 - q *torch.reciprocal(v)) + self.k3 * (con_1 - v)) )[:,0]
+        
+        # Update the current state. 
+        #print(E_m.shape)
+        current_state = torch.cat([E_mn, I_mn, x, f, v, q], axis = 1)
         next_state['current_state'] = current_state
-        next_state['bold_batch'] = torch.cat(bold_batch, axis=1)
-        next_state['E_batch'] = torch.cat(E_batch, axis=1)
-        next_state['I_batch'] = torch.cat(I_batch, axis=1)
-        next_state['x_batch'] = torch.cat(x_batch, axis=1)
-        next_state['f_batch'] = torch.cat(f_batch, axis=1)
-        next_state['v_batch'] = torch.cat(v_batch, axis=1)
-        next_state['q_batch'] = torch.cat(q_batch, axis=1)
+        next_state['bold_batch'] = bold_batch
+        next_state['E_batch'] = E_batch
+        next_state['I_batch'] = I_batch
+        next_state['x_batch'] = x_batch
+        next_state['f_batch'] = f_batch
+        next_state['v_batch'] = v_batch
+        next_state['q_batch'] = q_batch
 
         return next_state, hE
         
+def h_tf_np(a, b, d, z):
+    """
+    Neuronal input-output functions of excitatory pools and inhibitory pools.  
+            
+    Take the variables a, x, and b and convert them to a linear equation (a*x - b) while adding a small 
+    amount of noise 0.00001 while dividing that term to an exponential of the linear equation multiplied by the 
+    d constant for the appropriate dimensions.  
+    """
+    num = 0.00001 + np.abs(a * z - b)
+    den = 0.00001 * d + np.abs(1.0000 - np.exp(-d * (a * z - b)))
+    return num/den
+class WWD_np( ):
+    """
+    A module for forward model (WWD) to simulate a batch of BOLD signals
+    
+    Attibutes
+    ---------
+    state_size : int
+        the number of states in the WWD model
+    input_size : int
+        the number of states with noise as input
+    tr : float
+        tr of fMRI image
+    step_size: float
+        Integration step for forward model
+    hidden_size: int
+        the number of step_size in a tr 
+    batch_size: int
+        the number of BOLD signals to simulate
+    node_size: int
+        the number of ROIs
+    sc: float node_size x node_size array   
+        structural connectivity
+    fit_gains: bool
+        flag for fitting gains 1: fit 0: not fit
+    g, g_EE, gIE, gEI: tensor with gradient on
+        model parameters to be fit
+    w_bb: tensor with node_size x node_size (grad on depends on fit_gains)
+        connection gains
+    std_in std_out: tensor with gradient on
+        std for state noise and output noise
+    g_m g_v sup_ca sup_cb sup_cc: tensor with gradient on
+        hyper parameters for prior distribution of g gIE and gEI
+    Methods
+    -------
+    forward(input, noise_out, hx)
+        forward model (WWD) for generating a number of BOLD signals with current model parameters
+    """
+    def __init__(self, node_size: int, batch_size: int, step_size: float, tr: float, sc: float, param: ParamsJR) -> None:
+        """
+        Parameters
+        ----------
+        state_size : int
+        the number of states in the WWD model
+        input_size : int
+            the number of states with noise as input
+        tr : float
+            tr of fMRI image
+        step_size: float
+            Integration step for forward model
+        hidden_size: int
+            the number of step_size in a tr 
+        batch_size: int
+            the number of BOLD signals to simulate
+        node_size: int
+            the number of ROIs
+        sc: float node_size x node_size array   
+            structural connectivity
+        fit_gains: bool
+            flag for fitting gains 1: fit 0: not fit
+        g_mean_ini: float, optional
+            prior mean of g (default 100)
+        g_std_ini: float, optional
+            prior std of g (default 2.5)
+        gEE_mean_ini: float, optional
+            prior mean of gEE (default 2.5)
+        gEE_std_ini: float, optional
+            prior std of gEE (default 0.5)
+        """
+        super(WWD_np, self).__init__()
+        
+        
+        self.step_size = step_size# integration step 0.05
+        
+        self.node_size = node_size # num of ROI    
+        self.hidden_size =  int(tr/step_size)
+        self.batch_size = batch_size
+        self.sc = sc # matrix node_size x node_size structure connectivity
+         
+        vars = [a for a in dir(param) if not a.startswith('__') and not callable(getattr(param, a))]
+        for var in vars:
+            setattr(self, var, getattr(param, var)[0])
+    
+        
+    def forward(self, hx, u, u_out):
+        """
+        Forward step in simulating the BOLD signal. 
+        Parameters
+        ----------
+        input: tensor with node_size x hidden_size x batch_size x input_size
+            noise for states
+        noise_out: tensor with node_size x batch_size
+            noise for BOLD
+        hx: tensor with node_size x state_size
+            states of WWD model
+        Outputs
+        -------
+        next_state: dictionary with keys:
+        'current_state''bold_batch''E_batch''I_batch''x_batch''f_batch''v_batch''q_batch'
+            record new states and BOLD
+        """
+        next_state = {}
+        dt = self.step_size
+        
+        
+        l_s = -np.diag(self.sc.sum(1)) + self.sc 
+        
+        
+        
+        
+        E = hx[:,0:1]
+        I = hx[:,1:2]
+        x = hx[:,2:3]
+        f = hx[:,3:4]
+        v = hx[:,4:5]
+        q = hx[:,5:6] 
+        E_batch = np.zeros((self.node_size, self.batch_size))
+        I_batch = np.zeros((self.node_size, self.batch_size))
+        bold_batch = np.zeros((self.node_size, self.batch_size))
+        x_batch = np.zeros((self.node_size, self.batch_size))
+        v_batch = np.zeros((self.node_size, self.batch_size))
+        f_batch = np.zeros((self.node_size, self.batch_size))
+        q_batch = np.zeros((self.node_size, self.batch_size))
+
+        E_bat_hidd=np.zeros((self.node_size, self.batch_size, self.hidden_size))
+        # Use the forward model to get neural activity at ith element in the batch. 
+        for i_batch in range(self.batch_size):
+            
+            
+            #print(E.shape)
+            
+            
+            # Since tr is about second we need to use a small step size like 0.05 to integrate the model states. 
+            for i_hidden in range(self.hidden_size):
+                
+
+                noise_E= u[:,i_batch, i_hidden, 0][:,np.newaxis] 
+                noise_I= u[:,i_batch, i_hidden, 1][:,np.newaxis]             
+                              
+                IE = self.W_E*self.I_0 + max([0,self.g_EE])*E \
+                    + self.g*l_s.dot(E) - max([0,self.g_IE])*I # input currents for E
+                II = self.W_I*self.I_0 + max([0,self.g_EI])*E -I # input currents for I 
+                IE[IE<0]=0
+                II[II<0]=0
+                # Calculate the firing rates. 
+                rE = h_tf_np(self.aE, self.bE, self.dE, IE) # firing rate for E
+                rI = h_tf_np(self.aI, self.bI, self.dI, II) # firing rate for I 
+                # Update the states by step-size 0.05. 
+                
+                ddE = E + dt*(-E/self.tau_E +self.gamma_E*(1.-E)*rE) \
+                      + np.sqrt(dt)*(0.02 + max([0,self.std_in]))*noise_E### equlibrim point at E=(tau_E*gamma_E*rE)/(1+tau_E*gamma_E*rE)
+                ddI = I + dt*(-I/self.tau_I +self.gamma_I*rI) \
+                      + np.sqrt(dt)*noise_I * (0.02 + max([0, self.std_in]))
+                ddE[ddE<0] = 0 
+                ddI[ddI<0] = 0   
+                E = np.tanh(0.00001+ddE)
+                I = np.tanh(0.00001+ddI)   
+                E_bat_hidd[:,i_batch,i_hidden] = E[:,0]   
+               
+            E_batch[:,i_batch] = E[:,0]
+            I_batch[:,i_batch] = I[:,0]
+        
+        magic=int(50/dt)
+        
+        for i_batch in range(self.batch_size):
+            
+            noise_out= u_out[:,i_batch][:,np.newaxis]
+            for i_hidden in range(int(self.hidden_size/magic)):
+                
+                dx = x + 0.05*((E_bat_hidd[:,i_batch, i_hidden*magic:(1+i_hidden)*magic]).mean(1)[:,np.newaxis] - x/self.tau_s- (f - 1)/self.tau_f)
+                df = f + 0.05*x
+                dv = v + 0.05*(f - np.power(v, 1/self.alpha)) /self.tau_0
+                dq = q + 0.05*(f * (1 - np.power(1 - self.rho, 1/f))/self.rho \
+                            - q * np.power(v, 1/self.alpha) /v)/self.tau_0
+                    
+                    
+                x = np.tanh(dx)
+                f = (1 + np.tanh(df - 1))
+                v = (1 + np.tanh(dv - 1))
+                q = (1 + np.tanh(dq - 1))    
+            # Put x f v q from each tr to the placeholders for checking them visually.
+            x_batch[:,i_batch]=x[:,0]
+            f_batch[:,i_batch]=f[:,0]
+            v_batch[:,i_batch]=v[:,0]
+            q_batch[:,i_batch]=x[:,0]
+            # Put the BOLD signal each tr to the placeholder being used in the cost calculation.
+            #print(q_batch[-1])
+            bold_batch[:,i_batch]=(0.001 + max([0, self.std_out])*noise_out+ \
+                                100.0*self.V/self.E0*(self.k1 * (1 - q) \
+                                + self.k2 * (1 - q/v) + self.k3 * (1 - v)) )[:,0]
+        
+        # Update the current state. 
+        #print(E_m.shape)
+        current_state = np.concatenate([E, I, x, f, v, q], axis = 1)
+        next_state['current_state'] = current_state
+        next_state['bold_batch'] = bold_batch
+        next_state['E_batch'] = E_batch
+        next_state['I_batch'] = I_batch
+        next_state['x_batch'] = x_batch
+        next_state['f_batch'] = f_batch
+        next_state['v_batch'] = v_batch
+        next_state['q_batch'] = q_batch
+        return next_state
+
+    def update_param(self, param_new):
+        vars = [a for a in dir(param_new) if not a.startswith('__') and not callable(getattr(param_new, a))]
+        for var in vars:
+            setattr(self, var, getattr(param_new, var)[0])
+
         
