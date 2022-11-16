@@ -84,8 +84,8 @@ class Model_fitting:
                 epoch_min = 10  # run minimum epoch # part of stop criteria
                 r_lb = 0.85  # lowest pearson correlation # part of stop criteria
         else:
-            epoch_min = 10  # run minimum epoch # part of stop criteria
-            r_lb = 0.85
+            epoch_min = 100  # run minimum epoch # part of stop criteria
+            r_lb = 0.95
 
         self.u = u
 
@@ -199,7 +199,7 @@ class Model_fitting:
                         fit_param[key].append(value.detach().numpy().ravel().copy())
 
                 if self.model.use_fit_gains:
-                    fit_sc.append(self.model.sc_fitted.detach().numpy()[mask].copy())
+                    fit_sc.append(self.model.sc_m_l.detach().numpy()[mask].copy())
                 if self.model.model_name == "JR" and self.model.use_fit_lfm:
                     fit_lm.append(self.model.lm.detach().numpy().ravel().copy())
 
@@ -209,7 +209,8 @@ class Model_fitting:
                 hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
                 # print(hE_new.detach().numpy()[20:25,0:20])
                 # print(hE.shape)
-            fc = np.corrcoef(self.ts.mean(0))
+            ts_emp = np.concatenate(list(self.ts[i_epoch]),1)
+            fc = np.corrcoef(ts_emp)
 
             tmp_ls = getattr(self.output_sim, self.output_sim.output_name + '_train')
             ts_sim = np.concatenate(tmp_ls, axis=1)
@@ -218,7 +219,7 @@ class Model_fitting:
             print('epoch: ', i_epoch, loss.detach().numpy())
 
             print('epoch: ', i_epoch, np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 'cos_sim: ',
-                  np.diag(cosine_similarity(ts_sim, self.ts.mean(0))).mean())
+                  np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
 
             for name in self.model.state_names + [self.output_sim.output_name]:
                 tmp_ls = getattr(self.output_sim, name + '_train')
@@ -282,13 +283,13 @@ class Model_fitting:
             setattr(self.output_sim, name + '_test', [])
 
         u_hat = np.zeros(
-            (self.model.node_size, self.model.steps_per_TR,
-             base_window_num * self.model.TRs_per_window + self.ts.shape[2]))
+            (self.model.node_size,self.model.steps_per_TR,
+             base_window_num *self.model.TRs_per_window + self.u.shape[2]))
         u_hat[:, :, base_window_num * self.model.TRs_per_window:] = self.u
 
         # Perform the training in batches.
 
-        for TR_i in range(num_windows):
+        for TR_i in range(num_windows + base_window_num):
 
             # Get the input and output noises for the module.
 
@@ -313,13 +314,15 @@ class Model_fitting:
             hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
             # print(hE_new.detach().numpy()[20:25,0:20])
             # print(hE.shape)
-        fc = np.corrcoef(self.ts.mean(0))
-
+        
+        ts_emp = np.concatenate(list(self.ts[-1]),1)
+        fc = np.corrcoef(ts_emp)
         tmp_ls = getattr(self.output_sim, self.output_sim.output_name + '_test')
         ts_sim = np.concatenate(tmp_ls, axis=1)
 
         fc_sim = np.corrcoef(ts_sim[:, transient_num:])
-
+        print(np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 'cos_sim: ',
+                  np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
         for name in self.model.state_names + [self.output_sim.output_name]:
             tmp_ls = getattr(self.output_sim, name + '_test')
             setattr(self.output_sim, name + '_test', np.concatenate(tmp_ls, axis=1))

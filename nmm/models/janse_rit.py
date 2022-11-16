@@ -92,6 +92,7 @@ class RNNJANSEN(torch.nn.Module):
         self.output_size = output_size  # num of EEG channels
         self.sc = sc  # matrix node_size x node_size structure connectivity
         self.dist = torch.tensor(dist, dtype=torch.float32)
+        self.lm = lm
         self.use_fit_gains = use_fit_gains  # flag for fitting gains
         self.use_fit_lfm = use_fit_lfm
         self.param = param
