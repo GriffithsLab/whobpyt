@@ -108,13 +108,29 @@ def setModelParameters(model):
         vars_name = [a for a in dir(model.param) if not a.startswith('__') and not callable(getattr(model.param, a))]
         for var in vars_name:
             if np.any(getattr(model.param, var)[1] > 0):
-                setattr(model, var, Parameter(
-                    torch.tensor(getattr(model.param, var)[0] + 1 / getattr(model.param, var)[1] * np.random.randn(1, )[0],
-                                 dtype=torch.float32)))
+                # print(type(getattr(param, var)[1]))
+                if type(getattr(model.param, var)[1]) is np.ndarray:
+                    if var == 'lm':
+                        size = getattr(model.param, var)[1].shape
+                        setattr(model, var, Parameter(
+                            torch.tensor(getattr(model.param, var)[0] - 1 * np.ones((size[0], size[1])),
+                                         dtype=torch.float32)))
+                        print(getattr(model, var))
+                    else:
+                        size = getattr(model.param, var)[1].shape
+                        setattr(model, var, Parameter(
+                            torch.tensor(
+                                getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(size[0], size[1]),
+                                dtype=torch.float32)))
+                        # print(getattr(self, var))
+                else:
+                    setattr(model, var, Parameter(
+                        torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],
+                                     dtype=torch.float32)))
                 if var != 'std_in':
-                    dict_nv = {'m': getattr(model.param, var)[0], 'v': getattr(model.param, var)[1]}
+                    dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
 
-                    dict_np = {'m': var + '_m', 'v': var + '_v'}
+                    dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
 
                     for key in dict_nv:
                         setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
@@ -455,9 +471,9 @@ def integration_forward(model, external, hx, hE):
         Mv_window = []
 
         # Use the forward model to get EEG signal at ith element in the window.
-        for i_window in range(model.window_size):
+        for i_window in range(model.TRs_per_window):
 
-            for i_hidden in range(model.hidden_size):
+            for i_hidden in range(model.TRs_per_window):
                 Ed = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)  # delayed E
 
                 """for ind in range(model.node_size):
@@ -474,15 +490,13 @@ def integration_forward(model, external, hx, hE):
                                       (model.node_size, 1))  # weights on delayed E
                 # Input noise for M.
 
-                u_tms = input[:, i_hidden:i_hidden + 1, i_window, 0]
-                u_aud = input[:, i_hidden:i_hidden + 1, i_window, 1]
-                u_0 = input[:, i_hidden:i_hidden + 1, i_window, 2]
+                u_tms = external[:, i_hidden:i_hidden + 1, i_window]
+                #u_aud = external[:, i_hidden:i_hidden + 1, i_window, 1]
+                #u_0 = external[:, i_hidden:i_hidden + 1, i_window, 2]
 
                 # LEd+torch.matmul(dg,E): Laplacian on delayed E
 
                 rM = (k_lb * con_1 + m(model.k)) * model.ki * u_tms + \
-                     (k_lb * con_1 + m(model.k)) * model.k_aud * u_aud \
-                     + (k_lb * con_1 + m(model.k)) * u_0 + \
                      (0.1 * con_1 + m(model.std_in)) * torch.randn(model.node_size, 1) + \
                      1 * (lb * con_1 + m(model.g)) * (
                              LEd_l + 1 * torch.matmul(dg_l, M)) + \
