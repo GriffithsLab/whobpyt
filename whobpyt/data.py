@@ -1,4 +1,0 @@
-"""
-WhoBPyt Data Classes
-"""
-
