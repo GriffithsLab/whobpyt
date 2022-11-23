@@ -12,7 +12,7 @@ class Model_fitting:
     ts: array with num_tr x node_size
         empirical EEG time-series
     num_epoches: int
-        the times for repeating trainning
+        the times for repeating training
     Methods:
     train()
         train model
