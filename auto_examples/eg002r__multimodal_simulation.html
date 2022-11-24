@@ -195,9 +195,9 @@
 <div class="section" id="importage">
 <h2>Importage<a class="headerlink" href="#importage" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># whobpyt stuff</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span><span class="p">,</span><span class="n">ParamsJR</span><span class="p">,</span><span class="n">RNNWWD</span><span class="p">,</span><span class="n">RWW_Layer</span><span class="p">,</span><span class="n">RWW_Params</span><span class="p">,</span><span class="n">BOLD_Layer</span><span class="p">,</span><span class="n">BOLD_Params</span><span class="p">,</span><span class="n">EEG_Layer</span><span class="p">,</span><span class="n">EEG_Params</span><span class="p">,</span><span class="n">Jansen_Layer</span>
-<span class="kn">from</span> <span class="nn">whobpyt.objective</span> <span class="kn">import</span> <span class="n">meanVariableLoss</span><span class="p">,</span><span class="n">powerSpectrumLoss</span><span class="p">,</span><span class="n">functionalConnectivityLoss</span>
-<span class="kn">from</span> <span class="nn">whobpyt.fit</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
+<span class="kn">from</span> <span class="nn">whobpyt.depr.models</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span><span class="p">,</span><span class="n">ParamsJR</span><span class="p">,</span><span class="n">RNNWWD</span><span class="p">,</span><span class="n">RWW_Layer</span><span class="p">,</span><span class="n">RWW_Params</span><span class="p">,</span><span class="n">BOLD_Layer</span><span class="p">,</span><span class="n">BOLD_Params</span><span class="p">,</span><span class="n">EEG_Layer</span><span class="p">,</span><span class="n">EEG_Params</span><span class="p">,</span><span class="n">Jansen_Layer</span>
+<span class="kn">from</span> <span class="nn">whobpyt.depr.objective</span> <span class="kn">import</span> <span class="n">meanVariableLoss</span><span class="p">,</span><span class="n">powerSpectrumLoss</span><span class="p">,</span><span class="n">functionalConnectivityLoss</span>
+<span class="kn">from</span> <span class="nn">whobpyt.depr.fit</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
 
 <span class="c1"># general python stuff</span>
 <span class="kn">import</span> <span class="nn">torch</span><span class="o">,</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="o">,</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -466,85 +466,85 @@ Also, written in such a way as to be able to track and plot indiviual components
 tensor([0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500],
        requires_grad=True))]
 0
-totalLoss =  0.45792874693870544
+totalLoss =  0.45609527826309204
 J values =  [0.24999991 0.24999991 0.24999991 0.24999991 0.24999991 0.24999991
  0.24999991 0.24999991]
 1
-totalLoss =  0.44819748401641846
-J values =  [0.35013497 0.35013175 0.3501245  0.35011318 0.35013065 0.3501352
- 0.3501218  0.35011712]
+totalLoss =  0.4489363431930542
+J values =  [0.35011327 0.3501134  0.35012335 0.35012004 0.35011673 0.35012332
+ 0.3501213  0.3501261 ]
 2
-totalLoss =  0.43866902589797974
-J values =  [0.4504811  0.4504707  0.45046854 0.45044464 0.4504663  0.45047438
- 0.45046508 0.45045507]
+totalLoss =  0.43773218989372253
+J values =  [0.45043695 0.45043683 0.4504552  0.45045283 0.45045328 0.4504635
+ 0.45046967 0.45047367]
 3
-totalLoss =  0.4270980656147003
-J values =  [0.55113196 0.5511106  0.55112153 0.5510819  0.55111176 0.5511212
- 0.55111474 0.5510932 ]
+totalLoss =  0.4274386167526245
+J values =  [0.5510809  0.55107224 0.5510959  0.5510742  0.5510981  0.5511136
+ 0.55112034 0.55112356]
 4
-totalLoss =  0.4158720374107361
-J values =  [0.65217173 0.652145   0.65216434 0.6521192  0.652151   0.65216637
- 0.65215313 0.6521238 ]
+totalLoss =  0.4148496091365814
+J values =  [0.6521103  0.6521087  0.65213346 0.65209574 0.6521417  0.65215224
+ 0.65216684 0.65216106]
 5
-totalLoss =  0.4012949466705322
-J values =  [0.75370157 0.75366473 0.75366294 0.7536461  0.75367504 0.75369453
- 0.7536791  0.7536433 ]
+totalLoss =  0.4026893973350525
+J values =  [0.7536283  0.753628   0.7536538  0.7536035  0.7536635  0.75367916
+ 0.7536949  0.7536861 ]
 6
-totalLoss =  0.3859928548336029
-J values =  [0.85580385 0.85575974 0.8557445  0.8557481  0.8557742  0.8557968
- 0.8557774  0.8557394 ]
+totalLoss =  0.38664954900741577
+J values =  [0.85572296 0.85572416 0.85574806 0.8556915  0.8557604  0.8557795
+ 0.85579556 0.8557832 ]
 7
-totalLoss =  0.3727840483188629
-J values =  [0.9585601  0.9585108  0.95848596 0.9585046  0.95852745 0.9585528
- 0.9585321  0.9584923 ]
+totalLoss =  0.3689139485359192
+J values =  [0.95847595 0.9584783  0.9584786  0.9584389  0.95851505 0.95853657
+ 0.95855206 0.9585378 ]
 8
-totalLoss =  0.349921852350235
-J values =  [1.0620472 1.0619936 1.0619602 1.06199   1.0620114 1.0620382 1.0620167
- 1.0619746]
+totalLoss =  0.35175880789756775
+J values =  [1.0619608 1.0619638 1.061944  1.0619197 1.0620021 1.0620246 1.0620407
+ 1.0620246]
 9
-totalLoss =  0.3299173414707184
-J values =  [1.16632   1.1662629 1.1662201 1.1662604 1.1662803 1.1662158 1.1662886
- 1.1662443]
+totalLoss =  0.33021286129951477
+J values =  [1.1662351 1.1662409 1.1661981 1.1661907 1.1662815 1.1663021 1.1663182
+ 1.1663   ]
 10
-totalLoss =  0.3031167685985565
-J values =  [1.2713983 1.271343  1.2712846 1.2713385 1.2713581 1.2712475 1.2713706
- 1.2713214]
+totalLoss =  0.30459344387054443
+J values =  [1.2713228 1.2713327 1.2712632 1.2712777 1.2713772 1.2713931 1.2714103
+ 1.2713878]
 11
-totalLoss =  0.2747479975223541
-J values =  [1.3772612 1.377209  1.3771319 1.3771937 1.3772229 1.3771024 1.3772334
- 1.3771743]
+totalLoss =  0.27591145038604736
+J values =  [1.3771902 1.3772057 1.37711   1.3771414 1.3772609 1.377269  1.377289
+ 1.3772532]
 12
-totalLoss =  0.23670479655265808
-J values =  [1.4836866 1.4836246 1.4835525 1.4836123 1.4836491 1.4835823 1.4836688
- 1.4835829]
+totalLoss =  0.24114802479743958
+J values =  [1.4836687 1.4836807 1.4835755 1.48363   1.4837692 1.483762  1.4837781
+ 1.4837295]
 13
-totalLoss =  0.18623781204223633
-J values =  [1.5899957 1.5898849 1.5897732 1.5898482 1.5898869 1.5900097 1.589929
- 1.5898557]
+totalLoss =  0.1893225759267807
+J values =  [1.5900035 1.5900304 1.5899228 1.5900154 1.5901314 1.5901738 1.5901384
+ 1.5900972]
 14
-totalLoss =  0.11912272125482559
-J values =  [1.6926256 1.6927688 1.6924806 1.6925071 1.6926961 1.6928804 1.6927848
- 1.6926712]
+totalLoss =  0.12558689713478088
+J values =  [1.6937861 1.6937048 1.6936897 1.6938965 1.6938404 1.6938405 1.6938998
+ 1.6939691]
 15
-totalLoss =  0.0028886040672659874
-J values =  [1.7931284 1.7935869 1.7930255 1.7930758 1.7934923 1.793536  1.7932166
- 1.7933395]
+totalLoss =  0.0027142425533384085
+J values =  [1.7958465 1.7956879 1.7957901 1.7959222 1.795928  1.7958665 1.7958792
+ 1.7961832]
 16
-totalLoss =  0.005750397220253944
-J values =  [1.8830863 1.8837658 1.8829542 1.8830245 1.8836399 1.8835701 1.8830833
- 1.8833997]
+totalLoss =  0.005348866805434227
+J values =  [1.8871466 1.8869295 1.8870862 1.8872119 1.8872249 1.8871715 1.8871578
+ 1.8876625]
 17
-totalLoss =  0.008472681976854801
-J values =  [1.9637126 1.9646163 1.963604  1.9636556 1.9645181 1.9642849 1.9636761
- 1.9642351]
+totalLoss =  0.00786597840487957
+J values =  [1.9690124 1.9686803 1.9689735 1.969014  1.9690657 1.9690237 1.968953
+ 1.9697226]
 18
-totalLoss =  0.00966897513717413
-J values =  [2.0361357 2.037229  2.036015  2.0360467 2.0371892 2.0368483 2.0360103
- 2.0368123]
+totalLoss =  0.01048542931675911
+J values =  [2.0425308 2.042089  2.0425134 2.0424085 2.0425317 2.0425625 2.042393
+ 2.0433805]
 19
-totalLoss =  0.009988600388169289
-J values =  [2.101193  2.1025362 2.1010866 2.1011379 2.1024857 2.1021316 2.1010072
- 2.1020572]
+totalLoss =  0.012152763083577156
+J values =  [2.1085794 2.1081054 2.1085742 2.1083786 2.1085258 2.108604  2.1084292
+ 2.109546 ]
 
 Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </pre></div>
@@ -564,7 +564,7 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f7bf7fc4670&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f8c270da2b0&gt;
 </pre></div>
 </div>
 </div>
@@ -603,10 +603,10 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([15000, 8])
 
-&lt;AxesSubplot:title={&#39;center&#39;:&#39;Simulated BOLD FC: After Training&#39;}&gt;
+&lt;AxesSubplot: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 19 minutes  33.169 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 15 minutes  1.778 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>

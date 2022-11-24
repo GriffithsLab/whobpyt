@@ -22,9 +22,9 @@ What is being modeled:
 #
 
 # whobpyt stuff
-from whobpyt.models import RNNJANSEN,ParamsJR,RNNWWD,RWW_Layer,RWW_Params,BOLD_Layer,BOLD_Params,EEG_Layer,EEG_Params,Jansen_Layer
-from whobpyt.objective import meanVariableLoss,powerSpectrumLoss,functionalConnectivityLoss
-from whobpyt.fit import Model_fitting
+from whobpyt.depr.models import RNNJANSEN,ParamsJR,RNNWWD,RWW_Layer,RWW_Params,BOLD_Layer,BOLD_Params,EEG_Layer,EEG_Params,Jansen_Layer
+from whobpyt.depr.objective import meanVariableLoss,powerSpectrumLoss,functionalConnectivityLoss
+from whobpyt.depr.fit import Model_fitting
 
 # general python stuff
 import torch, numpy as np, pandas as pd
