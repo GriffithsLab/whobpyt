@@ -444,7 +444,7 @@ def integration_forward(model, external, hx, hE):
             w_n_l = torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))) / torch.linalg.norm(
                 torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))))
 
-            model.sc_m_l = w_n_l
+            model.sc_fitted = w_n_l
             dg_l = -torch.diag(torch.sum(w_n_l, dim=1))
         else:
             l_s = torch.tensor(np.zeros((1, 1)), dtype=torch.float32)
