@@ -5,9 +5,9 @@ module for wong-wang model
 """
 
 import torch
-from nmm.datatypes.modelparameters import ParamsModel
-from nmm.functions.pytorch_funs import setModelParameters
-from nmm.functions.pytorch_funs import integration_forward
+from whobpyt.datatypes.modelparameters import ParamsModel
+from whobpyt.functions.pytorch_funs import setModelParameters
+from whobpyt.functions.pytorch_funs import integration_forward
 
 
 class RNNRWW(torch.nn.Module):

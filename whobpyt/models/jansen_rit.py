@@ -13,9 +13,9 @@ module for JR with forward backward and lateral connection for EEG
 Importage
 """
 import torch
-from nmm.datatypes.modelparameters import ParamsModel
-from nmm.functions.pytorch_funs import setModelParameters
-from nmm.functions.pytorch_funs import integration_forward
+from whobpyt.datatypes.modelparameters import ParamsModel
+from whobpyt.functions.pytorch_funs import setModelParameters
+from whobpyt.functions.pytorch_funs import integration_forward
 
 
 class RNNJANSEN(torch.nn.Module):

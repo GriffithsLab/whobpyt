@@ -5,9 +5,9 @@ module for linear model
 """
 
 import torch
-from nmm.datatypes.modelparameters import ParamsModel
-from nmm.functions.pytorch_funs import integration_forward
-from nmm.functions.pytorch_funs import setModelParameters
+from whobpyt.datatypes.modelparameters import ParamsModel
+from whobpyt.functions.pytorch_funs import integration_forward
+from whobpyt.functions.pytorch_funs import setModelParameters
 
 
 class RNNLIN(torch.nn.Module):

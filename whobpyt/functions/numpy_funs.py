@@ -5,7 +5,7 @@ module for wong-wang model
 """
 
 import numpy as np  # for numerical operations
-from nmm.datatypes.modelparameters import ParamsModel
+from whobpyt.datatypes.modelparameters import ParamsModel
 
 
 def h_tf_np(a, b, d, z):
