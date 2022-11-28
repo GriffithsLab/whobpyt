@@ -18,7 +18,7 @@ Fitting Wong_Wang model (HCP data)
 # os stuff
 import os
 import sys
-sys.path.append('..') 
+sys.path.append('..')
 
 # whobpyt stuff
 import whobpyt
@@ -37,13 +37,22 @@ import pandas as pd
 # viz stuff
 import matplotlib.pyplot as plt
 
-
+#gdown
+import gdown
 # %%
-# define the data path
-base_dir = '../HCP/'
+# define destination path and download data
+des_dir = '../'
+if not os.path.exists(des_dir):
+    os.makedirs(des_dir)  # create folder if it does not exist
+url = "https://drive.google.com/drive/folders/18smy3ElTd4VksoL4Z15dhwT5l3yjk6xS"
+os.chdir(des_dir)
+gdown.download_folder(url, remaining_ok = True)
+os.chdir('examples/')
+
 
 # %%
 #get subject list
+base_dir = '../HCP/'
 #subs =sorted([sc_file[-10:-4] for sc_file in os.listdir(base_dir) if sc_file[:8] == 'weights_'])
 sub = '100307'
 
