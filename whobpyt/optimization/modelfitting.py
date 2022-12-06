@@ -7,7 +7,7 @@ module for model fitting using pytorch
 import numpy as np  # for numerical operations
 import torch
 import torch.optim as optim
-from whobpyt.optmizition.cost_funs import Costs
+from whobpyt.optimization.cost_funs import Costs
 from whobpyt.datatypes.outputs import OutputNM
 from whobpyt.functions.numpy_funs import WWD_np
 import pickle
