@@ -7,9 +7,9 @@ module for model fitting using pytorch
 import numpy as np  # for numerical operations
 import torch
 import torch.optim as optim
-from nmm.optmizition.cost_funs import Costs
-from nmm.datatypes.outputs import OutputNM
-from nmm.functions.numpy_funs import WWD_np
+from whobpyt.optimization.cost_funs import Costs
+from whobpyt.datatypes.outputs import OutputNM
+from whobpyt.functions.numpy_funs import WWD_np
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -199,7 +199,7 @@ class Model_fitting:
                         fit_param[key].append(value.detach().numpy().ravel().copy())
 
                 if self.model.use_fit_gains:
-                    fit_sc.append(self.model.sc_m_l.detach().numpy()[mask].copy())
+                    fit_sc.append(self.model.sc_fitted.detach().numpy()[mask].copy())
                 if self.model.model_name == "JR" and self.model.use_fit_lfm:
                     fit_lm.append(self.model.lm.detach().numpy().ravel().copy())
 
@@ -284,7 +284,7 @@ class Model_fitting:
 
         u_hat = np.zeros(
             (self.model.node_size,self.model.steps_per_TR,
-             base_window_num *self.model.TRs_per_window + self.u.shape[2]))
+             base_window_num *self.model.TRs_per_window + self.ts.shape[1]*self.ts.shape[2]))
         u_hat[:, :, base_window_num * self.model.TRs_per_window:] = self.u
 
         # Perform the training in batches.
