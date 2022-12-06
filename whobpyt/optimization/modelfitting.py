@@ -199,7 +199,7 @@ class Model_fitting:
                         fit_param[key].append(value.detach().numpy().ravel().copy())
 
                 if self.model.use_fit_gains:
-                    fit_sc.append(self.model.sc_m_l.detach().numpy()[mask].copy())
+                    fit_sc.append(self.model.sc_fitted.detach().numpy()[mask].copy())
                 if self.model.model_name == "JR" and self.model.use_fit_lfm:
                     fit_lm.append(self.model.lm.detach().numpy().ravel().copy())
 
