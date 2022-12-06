@@ -7,9 +7,9 @@ module for model fitting using pytorch
 import numpy as np  # for numerical operations
 import torch
 import torch.optim as optim
-from nmm.optmizition.cost_funs import Costs
-from nmm.datatypes.outputs import OutputNM
-from nmm.functions.numpy_funs import WWD_np
+from whobpyt.optmizition.cost_funs import Costs
+from whobpyt.datatypes.outputs import OutputNM
+from whobpyt.functions.numpy_funs import WWD_np
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 
