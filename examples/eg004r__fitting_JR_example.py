@@ -33,8 +33,6 @@ import numpy as np
 import pandas as pd
 import scipy.io
 
-# import nii stuff
-import nibabel as nib
 
 # viz stuff
 import matplotlib.pyplot as plt
@@ -60,16 +58,7 @@ eeg_sub = np.loadtxt(eeg_file)
 
 # %%
 # get stimulus weights on regions
-e_field = nib.load(base_dir + 'auditory stimuli_association-test_z_FDR_0.01.nii').get_data()
-Schaefer_atlas = nib.load(base_dir + 'Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.nii').get_data()
-stim_weights = np.zeros((200))
-for roi in range(1,201):
-    x,y,z = np.where(Schaefer_atlas==roi)
-    stim_weights[roi-1] = np.mean(e_field[x,y,z])
-
-stim_weights_thr = stim_weights.copy()
-stim_weights_thr[stim_weights_thr< stim_weights_thr.max() * 0.45] = 0
-ki0 =stim_weights_thr[:,np.newaxis]
+ki0 =np.loadtxt(base_dir + 'stimulus_weights.txt')[:,np.newaxis]
 
 # %%
 # get SC and distance template
@@ -83,7 +72,7 @@ sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 
 # %%
 # define options for JR model
-node_size = stim_weights_thr.shape[0]
+node_size = sc.shape[0]
 output_size = eeg_sub.shape[0]
 batch_size = 16
 step_size = 0.0001
