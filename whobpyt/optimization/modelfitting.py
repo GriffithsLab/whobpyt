@@ -284,7 +284,7 @@ class Model_fitting:
 
         u_hat = np.zeros(
             (self.model.node_size,self.model.steps_per_TR,
-             base_window_num *self.model.TRs_per_window + self.ts.shape[1]*self.ts.shape[2]))
+             base_window_num *self.model.TRs_per_window + self.ts.shape[1]*self.ts.shape[3]))
         u_hat[:, :, base_window_num * self.model.TRs_per_window:] = self.u
 
         # Perform the training in batches.
