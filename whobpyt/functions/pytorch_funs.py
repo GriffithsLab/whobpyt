@@ -473,7 +473,7 @@ def integration_forward(model, external, hx, hE):
         # Use the forward model to get EEG signal at ith element in the window.
         for i_window in range(model.TRs_per_window):
 
-            for i_hidden in range(model.TRs_per_window):
+            for step_i in range(model.steps_per_TR):
                 Ed = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)  # delayed E
 
                 """for ind in range(model.node_size):
@@ -490,7 +490,7 @@ def integration_forward(model, external, hx, hE):
                                       (model.node_size, 1))  # weights on delayed E
                 # Input noise for M.
 
-                u_tms = external[:, i_hidden:i_hidden + 1, i_window]
+                u_tms = external[:, step_i:step_i + 1, i_window]
                 #u_aud = external[:, i_hidden:i_hidden + 1, i_window, 1]
                 #u_0 = external[:, i_hidden:i_hidden + 1, i_window, 2]
 
