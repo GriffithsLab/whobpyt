@@ -199,8 +199,8 @@ def integration_forward(model, external, hx, hE):
 
             # Update the Laplacian based on the updated connection gains gains_con.
             sc_mod = torch.exp(model.gains_con) * torch.tensor(model.sc, dtype=torch.float32)
-            sc_mod_normalized = torch.log1p(0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))) / torch.linalg.norm(
-                torch.log1p(0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))))
+            sc_mod_normalized = (0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))) / torch.linalg.norm(
+                0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1)))
             model.sc_fitted = sc_mod_normalized
 
             if model.use_Laplacian:
@@ -428,21 +428,20 @@ def integration_forward(model, external, hx, hE):
 
             # Update the Laplacian based on the updated connection gains w_bb.
             w_b = torch.exp(model.w_bb) * torch.tensor(model.sc, dtype=torch.float32)
-            w_n_b = torch.log1p(w_b) / torch.linalg.norm(torch.log1p(w_b))
+            w_n_b = w_b / torch.linalg.norm(w_b)
 
             model.sc_m_b = w_n_b
             dg_b = -torch.diag(torch.sum(w_n_b, dim=1))
             # Update the Laplacian based on the updated connection gains w_bb.
             w_f = torch.exp(model.w_ff) * torch.tensor(model.sc, dtype=torch.float32)
-            w_n_f = torch.log1p(w_f) / torch.linalg.norm(
-                torch.log1p(w_f))
+            w_n_f = w_f / torch.linalg.norm(w_f)
 
             model.sc_m_f = w_n_f
             dg_f = -torch.diag(torch.sum(w_n_f, dim=1))
             # Update the Laplacian based on the updated connection gains w_bb.
             w = torch.exp(model.w_ll) * torch.tensor(model.sc, dtype=torch.float32)
-            w_n_l = torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))) / torch.linalg.norm(
-                torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))))
+            w_n_l = (0.5 * (w + torch.transpose(w, 0, 1))) / torch.linalg.norm(
+                0.5 * (w + torch.transpose(w, 0, 1)))
 
             model.sc_fitted = w_n_l
             dg_l = -torch.diag(torch.sum(w_n_l, dim=1))
@@ -602,8 +601,8 @@ def integration_forward(model, external, hx, hE):
 
             # Update the Laplacian based on the updated connection gains gains_con.
             sc_mod = torch.exp(model.gains_con) * torch.tensor(model.sc, dtype=torch.float32)
-            sc_mod_normalized = torch.log1p(0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))) / torch.linalg.norm(
-                torch.log1p(0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))))
+            sc_mod_normalized = (0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))) / torch.linalg.norm(
+                0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1)))
             model.sc_fitted = sc_mod_normalized
 
             if model.use_Laplacian:
