@@ -199,8 +199,8 @@ def integration_forward(model, external, hx, hE):
 
             # Update the Laplacian based on the updated connection gains gains_con.
             sc_mod = torch.exp(model.gains_con) * torch.tensor(model.sc, dtype=torch.float32)
-            sc_mod_normalized = torch.log1p(0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))) / torch.linalg.norm(
-                torch.log1p(0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))))
+            sc_mod_normalized = (0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))) / torch.linalg.norm(
+                0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1)))
             model.sc_fitted = sc_mod_normalized
 
             if model.use_Laplacian:
@@ -428,23 +428,22 @@ def integration_forward(model, external, hx, hE):
 
             # Update the Laplacian based on the updated connection gains w_bb.
             w_b = torch.exp(model.w_bb) * torch.tensor(model.sc, dtype=torch.float32)
-            w_n_b = torch.log1p(w_b) / torch.linalg.norm(torch.log1p(w_b))
+            w_n_b = w_b / torch.linalg.norm(w_b)
 
             model.sc_m_b = w_n_b
             dg_b = -torch.diag(torch.sum(w_n_b, dim=1))
             # Update the Laplacian based on the updated connection gains w_bb.
             w_f = torch.exp(model.w_ff) * torch.tensor(model.sc, dtype=torch.float32)
-            w_n_f = torch.log1p(w_f) / torch.linalg.norm(
-                torch.log1p(w_f))
+            w_n_f = w_f / torch.linalg.norm(w_f)
 
             model.sc_m_f = w_n_f
             dg_f = -torch.diag(torch.sum(w_n_f, dim=1))
             # Update the Laplacian based on the updated connection gains w_bb.
             w = torch.exp(model.w_ll) * torch.tensor(model.sc, dtype=torch.float32)
-            w_n_l = torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))) / torch.linalg.norm(
-                torch.log1p(0.5 * (w + torch.transpose(w, 0, 1))))
+            w_n_l = (0.5 * (w + torch.transpose(w, 0, 1))) / torch.linalg.norm(
+                0.5 * (w + torch.transpose(w, 0, 1)))
 
-            model.sc_m_l = w_n_l
+            model.sc_fitted = w_n_l
             dg_l = -torch.diag(torch.sum(w_n_l, dim=1))
         else:
             l_s = torch.tensor(np.zeros((1, 1)), dtype=torch.float32)
@@ -473,7 +472,7 @@ def integration_forward(model, external, hx, hE):
         # Use the forward model to get EEG signal at ith element in the window.
         for i_window in range(model.TRs_per_window):
 
-            for i_hidden in range(model.TRs_per_window):
+            for step_i in range(model.steps_per_TR):
                 Ed = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)  # delayed E
 
                 """for ind in range(model.node_size):
@@ -490,7 +489,7 @@ def integration_forward(model, external, hx, hE):
                                       (model.node_size, 1))  # weights on delayed E
                 # Input noise for M.
 
-                u_tms = external[:, i_hidden:i_hidden + 1, i_window]
+                u_tms = external[:, step_i:step_i + 1, i_window]
                 #u_aud = external[:, i_hidden:i_hidden + 1, i_window, 1]
                 #u_0 = external[:, i_hidden:i_hidden + 1, i_window, 2]
 
@@ -602,8 +601,8 @@ def integration_forward(model, external, hx, hE):
 
             # Update the Laplacian based on the updated connection gains gains_con.
             sc_mod = torch.exp(model.gains_con) * torch.tensor(model.sc, dtype=torch.float32)
-            sc_mod_normalized = torch.log1p(0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))) / torch.linalg.norm(
-                torch.log1p(0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))))
+            sc_mod_normalized = (0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1))) / torch.linalg.norm(
+                0.5 * (sc_mod + torch.transpose(sc_mod, 0, 1)))
             model.sc_fitted = sc_mod_normalized
 
             if model.use_Laplacian:
