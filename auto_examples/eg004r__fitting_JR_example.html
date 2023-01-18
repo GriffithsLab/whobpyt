@@ -1,0 +1,636 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fitting JR model (Tepit data) &mdash; WhoBPyT 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_override.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/debug.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Fitting Wong_Wang model (HCP data)" href="eg003r__fitting_rww_example.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> WhoBPyT
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eg003r__fitting_rww_example.html#importage">Importage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fitting JR model (Tepit data)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#importage">Importage</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WhoBPyT</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Fitting JR model (Tepit data)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="fitting-jr-model-tepit-data">
+<span id="sphx-glr-auto-examples-eg004r-fitting-jr-example-py"></span><h1>Fitting JR model (Tepit data)<a class="headerlink" href="#fitting-jr-model-tepit-data" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="section" id="importage">
+<h2>Importage<a class="headerlink" href="#importage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># os stuff</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+
+<span class="c1"># whobpyt stuff</span>
+<span class="kn">import</span> <span class="nn">whobpyt</span>
+<span class="kn">from</span> <span class="nn">whobpyt.data.dataload</span> <span class="kn">import</span> <span class="n">dataloader</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.jansen_rit</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.wong_wang</span> <span class="kn">import</span> <span class="n">RNNRWW</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes.modelparameters</span> <span class="kn">import</span> <span class="n">ParamsModel</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization.modelfitting</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
+
+<span class="c1"># array and pd stuff</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span>
+
+
+<span class="c1"># viz stuff</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1">#gdown</span>
+<span class="kn">import</span> <span class="nn">gdown</span>
+</pre></div>
+</div>
+<p>define destination path and download data</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">des_dir</span> <span class="o">=</span> <span class="s1">&#39;../&#39;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">des_dir</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">des_dir</span><span class="p">)</span>  <span class="c1"># create folder if it does not exist</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://drive.google.com/drive/folders/1uXrtehuMlLBvPCV8zDaUYxF-MoMaD0fk&#39;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">des_dir</span><span class="p">)</span>
+<span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">use_cookies</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;examples/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>get  EEG data</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">base_dir</span> <span class="o">=</span> <span class="s1">&#39;../Tepit/&#39;</span>
+<span class="n">eeg_file</span> <span class="o">=</span> <span class="n">base_dir</span> <span class="o">+</span> <span class="s1">&#39;eeg_data.npy&#39;</span>
+<span class="n">eeg_data_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">eeg_file</span><span class="p">)</span>
+<span class="n">eeg_data</span> <span class="o">=</span> <span class="n">eeg_data_all</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">eeg_data</span> <span class="o">=</span> <span class="n">eeg_data</span><span class="p">[:,</span><span class="mi">700</span><span class="p">:</span><span class="mi">1100</span><span class="p">]</span> <span class="o">/</span> <span class="mi">12</span>
+</pre></div>
+</div>
+<p>get stimulus weights on regions</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ki0</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">base_dir</span> <span class="o">+</span> <span class="s1">&#39;stim_weights.txt&#39;</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>get SC and distance template</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sc_file</span> <span class="o">=</span> <span class="n">base_dir</span> <span class="o">+</span> <span class="s1">&#39;Schaefer2018_200Parcels_7Networks_count.csv&#39;</span>
+<span class="n">dist_file</span> <span class="o">=</span> <span class="n">base_dir</span> <span class="o">+</span> <span class="s1">&#39;Schaefer2018_200Parcels_7Networks_distance.csv&#39;</span>
+<span class="n">sc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sc_file</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">sc_df</span><span class="o">.</span><span class="n">values</span>
+<span class="n">dist_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dist_file</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">dist_df</span><span class="o">.</span><span class="n">values</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">sc</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>define options for JR model</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">node_size</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">output_size</span> <span class="o">=</span> <span class="n">eeg_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span>
+<span class="n">num_epoches</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="n">tr</span> <span class="o">=</span> <span class="mf">0.001</span>
+<span class="n">state_size</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">base_batch_num</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">time_dim</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="n">state_size</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">base_batch_num</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">hidden_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tr</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>prepare data structure of the model</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_mean</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">(</span><span class="n">eeg_data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>get model parameters structure and define the fitted parameters by setting non-zero variance for the model</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span><span class="mi">200</span><span class="p">))</span>
+<span class="n">lm_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span><span class="mi">200</span><span class="p">))</span>
+<span class="n">par</span> <span class="o">=</span> <span class="n">ParamsModel</span><span class="p">(</span><span class="s1">&#39;JR&#39;</span><span class="p">,</span> <span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">B</span> <span class="o">=</span> <span class="p">[</span><span class="mi">22</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">g_f</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">g_b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>\
+                    <span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c4</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>\
+                    <span class="n">std_in</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">v0</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="o">=</span><span class="p">[</span><span class="mf">0.56</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y0</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span> <span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>\
+                    <span class="n">mu</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="c1">#k = [10, .3],</span>
+                    <span class="c1">#cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \</span>
+                    <span class="n">cy0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ki</span><span class="o">=</span><span class="p">[</span><span class="n">ki0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lm</span><span class="o">=</span><span class="p">[</span><span class="n">lm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span> <span class="n">node_size</span><span class="p">))</span><span class="o">+</span><span class="n">lm_v</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>call model want to fit</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RNNJANSEN</span><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>initial model parameters and set the fitted model parameter in Tensors</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">setModelParameters</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Parameter containing:
+tensor([[-1., -1., -1.,  ..., -1., -1., -1.],
+        [-1., -1., -1.,  ..., -1., -1., -1.],
+        [-1., -1., -1.,  ..., -1., -1., -1.],
+        ...,
+        [-1., -1., -1.,  ..., -1., -1., -1.],
+        [-1., -1., -1.,  ..., -1., -1., -1.],
+        [-1., -1., -1.,  ..., -1., -1., -1.]], requires_grad=True)
+</pre></div>
+</div>
+<p>call model fit</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>model training</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">))</span>
+<span class="n">u</span><span class="p">[:,:,</span><span class="mi">110</span><span class="p">:</span><span class="mi">120</span><span class="p">]</span><span class="o">=</span> <span class="mi">200</span>
+<span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 5702.8467
+epoch:  0 0.2061235910561788 cos_sim:  0.020199208867725776
+epoch:  1 316.94922
+epoch:  1 0.01580105975185725 cos_sim:  0.021208058584787033
+epoch:  2 -2636.1477
+epoch:  2 0.024749382283542398 cos_sim:  0.024531752501300977
+epoch:  3 -4806.161
+epoch:  3 0.25574833827061794 cos_sim:  0.2043449553125685
+epoch:  4 -6567.668
+epoch:  4 0.7201339877995142 cos_sim:  0.36072871875336504
+epoch:  5 -8059.7725
+epoch:  5 0.588728030431463 cos_sim:  0.3311844795096852
+epoch:  6 -9355.917
+epoch:  6 0.8079440341002162 cos_sim:  0.41480202142561035
+epoch:  7 -10502.249
+epoch:  7 0.37790839226192047 cos_sim:  0.3395738640275312
+epoch:  8 -11530.053
+epoch:  8 0.7014220171286529 cos_sim:  0.39573861305683455
+epoch:  9 -12461.995
+epoch:  9 0.7482408237981726 cos_sim:  0.4437503852174336
+epoch:  10 -13314.722
+epoch:  10 0.6556396374013226 cos_sim:  0.4243063390287235
+epoch:  11 -14100.678
+epoch:  11 0.8070596581163776 cos_sim:  0.43772057742468995
+epoch:  12 -14829.972
+epoch:  12 0.7056930185340278 cos_sim:  0.49513831499440275
+epoch:  13 -15510.272
+epoch:  13 0.824930139140875 cos_sim:  0.4636672771799048
+epoch:  14 -16147.948
+epoch:  14 0.7119579345951954 cos_sim:  0.48229932915051715
+epoch:  15 -16748.064
+epoch:  15 0.780411044373235 cos_sim:  0.4752349011325246
+epoch:  16 -17315.293
+epoch:  16 0.8230943325498603 cos_sim:  0.5086217089238285
+epoch:  17 -17852.908
+epoch:  17 0.7142347725405135 cos_sim:  0.5195492846911267
+epoch:  18 -18363.812
+epoch:  18 0.8136574981106391 cos_sim:  0.5317268316232652
+epoch:  19 -18850.852
+epoch:  19 0.8563127688554617 cos_sim:  0.5602983174592083
+epoch:  20 -19316.242
+epoch:  20 0.7713529892507531 cos_sim:  0.5625890837689341
+epoch:  21 -19761.746
+epoch:  21 0.8435112574973754 cos_sim:  0.5563615163189592
+epoch:  22 -20189.277
+epoch:  22 0.8577745179439444 cos_sim:  0.583615795764387
+epoch:  23 -20600.225
+epoch:  23 0.8004927461325809 cos_sim:  0.5852107425694738
+epoch:  24 -20995.805
+epoch:  24 0.8292920512265283 cos_sim:  0.5735347918112779
+epoch:  25 -21377.312
+epoch:  25 0.8535350719749186 cos_sim:  0.6121608373722082
+epoch:  26 -21745.7
+epoch:  26 0.8012254982643686 cos_sim:  0.583785215417629
+epoch:  27 -22101.908
+epoch:  27 0.8155791995877776 cos_sim:  0.5886695495119623
+epoch:  28 -22446.824
+epoch:  28 0.8648280238469702 cos_sim:  0.6191125407001802
+epoch:  29 -22781.098
+epoch:  29 0.8141233672684789 cos_sim:  0.6235850442044679
+epoch:  30 -23105.494
+epoch:  30 0.8517356225701397 cos_sim:  0.6302143826244113
+epoch:  31 -23420.592
+epoch:  31 0.8637719416318725 cos_sim:  0.6575216551241968
+epoch:  32 -23726.896
+epoch:  32 0.8911245431257969 cos_sim:  0.6807488234818747
+epoch:  33 -24025.006
+epoch:  33 0.88185024565861 cos_sim:  0.6858924649578482
+epoch:  34 -24315.34
+epoch:  34 0.9092930162007385 cos_sim:  0.6920263391107272
+epoch:  35 -24598.305
+epoch:  35 0.8977169773110506 cos_sim:  0.7179249289161813
+epoch:  36 -24874.361
+epoch:  36 0.9153783883203752 cos_sim:  0.7130495360299908
+epoch:  37 -25143.832
+epoch:  37 0.904893189323718 cos_sim:  0.7263834404627189
+epoch:  38 -25407.037
+epoch:  38 0.930328738632371 cos_sim:  0.7374332948610778
+epoch:  39 -25664.357
+epoch:  39 0.9292437025844901 cos_sim:  0.7190167650871081
+epoch:  40 -25916.008
+epoch:  40 0.9086132161670676 cos_sim:  0.7475698603349477
+epoch:  41 -26162.297
+epoch:  41 0.9327020555574724 cos_sim:  0.7342991297402459
+epoch:  42 -26403.479
+epoch:  42 0.9356296972566873 cos_sim:  0.7282388086412437
+epoch:  43 -26639.752
+epoch:  43 0.8775725771771479 cos_sim:  0.7551604506474472
+epoch:  44 -26871.352
+epoch:  44 0.9549987957347097 cos_sim:  0.7134454619389787
+epoch:  45 -27098.492
+epoch:  45 0.9200133799568206 cos_sim:  0.7468295163178738
+epoch:  46 -27321.361
+epoch:  46 0.9230972028396274 cos_sim:  0.7321508969363419
+epoch:  47 -27540.13
+epoch:  47 0.9334994206140623 cos_sim:  0.7665403536479864
+epoch:  48 -27754.979
+epoch:  48 0.9251684284404834 cos_sim:  0.7658363512872141
+epoch:  49 -27966.053
+epoch:  49 0.9394995972132449 cos_sim:  0.7551847162229571
+epoch:  50 -28173.479
+epoch:  50 0.9152833191400734 cos_sim:  0.7704777084584825
+epoch:  51 -28377.443
+epoch:  51 0.9376176287710352 cos_sim:  0.7609402315936283
+epoch:  52 -28578.064
+epoch:  52 0.9277966588808503 cos_sim:  0.7480212534499133
+epoch:  53 -28775.465
+epoch:  53 0.932865741156116 cos_sim:  0.7562241447444225
+epoch:  54 -28969.756
+epoch:  54 0.9288789670526105 cos_sim:  0.7632002335738054
+epoch:  55 -29161.047
+epoch:  55 0.9329031536532616 cos_sim:  0.7608614024691092
+epoch:  56 -29349.465
+epoch:  56 0.9372758960047523 cos_sim:  0.777764202645449
+epoch:  57 -29535.08
+epoch:  57 0.9441449811948128 cos_sim:  0.7695553174880704
+epoch:  58 -29718.012
+epoch:  58 0.9404151442323291 cos_sim:  0.762676452712579
+epoch:  59 -29898.355
+epoch:  59 0.9340634512046333 cos_sim:  0.7629670688190342
+epoch:  60 -30076.172
+epoch:  60 0.9481109342471957 cos_sim:  0.7773793651780377
+epoch:  61 -30251.566
+epoch:  61 0.9326801188734726 cos_sim:  0.7683510978060699
+epoch:  62 -30424.6
+epoch:  62 0.9445291871091889 cos_sim:  0.7877255156296414
+epoch:  63 -30595.352
+epoch:  63 0.9438735919179279 cos_sim:  0.77136344371662
+epoch:  64 -30763.932
+epoch:  64 0.937343595263114 cos_sim:  0.7878222276543203
+epoch:  65 -30930.334
+epoch:  65 0.9441501482660152 cos_sim:  0.7750254297189769
+epoch:  66 -31094.684
+epoch:  66 0.9515830776988773 cos_sim:  0.7924714360034492
+epoch:  67 -31257.021
+epoch:  67 0.933094937406875 cos_sim:  0.7893189731355588
+epoch:  68 -31417.404
+epoch:  68 0.9540075196577874 cos_sim:  0.8027232049985407
+epoch:  69 -31575.895
+epoch:  69 0.9586623204712059 cos_sim:  0.7922403865729684
+epoch:  70 -31732.555
+epoch:  70 0.9292103716025455 cos_sim:  0.7981883333418188
+epoch:  71 -31887.428
+epoch:  71 0.968342517323069 cos_sim:  0.799147691212549
+epoch:  72 -32040.555
+epoch:  72 0.9598030205257602 cos_sim:  0.7918190810760101
+epoch:  73 -32192.012
+epoch:  73 0.9307200575706095 cos_sim:  0.7952266877171354
+epoch:  74 -32341.803
+epoch:  74 0.9626323141885055 cos_sim:  0.7964042926366164
+epoch:  75 -32490.01
+epoch:  75 0.9633360799231332 cos_sim:  0.7874607543137507
+epoch:  76 -32636.68
+epoch:  76 0.9225488857945285 cos_sim:  0.8082480905980001
+epoch:  77 -32781.805
+epoch:  77 0.97019657205024 cos_sim:  0.7825764581787631
+epoch:  78 -32925.48
+epoch:  78 0.963285890298918 cos_sim:  0.7860624080561484
+epoch:  79 -33067.7
+epoch:  79 0.9429269491747851 cos_sim:  0.7980136723731615
+epoch:  80 -33208.555
+epoch:  80 0.9511607131367411 cos_sim:  0.8085580384890076
+epoch:  81 -33348.016
+epoch:  81 0.9634198254887376 cos_sim:  0.7899162241619514
+epoch:  82 -33486.16
+epoch:  82 0.9473248915966841 cos_sim:  0.8059170309531082
+epoch:  83 -33622.992
+epoch:  83 0.9580890531681793 cos_sim:  0.8048687072969778
+epoch:  84 -33758.57
+epoch:  84 0.9659299467617198 cos_sim:  0.7931649297294752
+epoch:  85 -33892.938
+epoch:  85 0.9564436256749522 cos_sim:  0.7994787705625175
+epoch:  86 -34026.074
+epoch:  86 0.9618720079411314 cos_sim:  0.8078731757094568
+epoch:  87 -34158.047
+epoch:  87 0.9569722558807817 cos_sim:  0.7893814854929857
+epoch:  88 -34288.855
+epoch:  88 0.9489283029669383 cos_sim:  0.8050740352866285
+epoch:  89 -34418.566
+epoch:  89 0.951370786548951 cos_sim:  0.7935754007647132
+epoch:  90 -34547.184
+epoch:  90 0.9561148321093208 cos_sim:  0.7978630300022893
+epoch:  91 -34674.72
+epoch:  91 0.9501921350949157 cos_sim:  0.7886807773518525
+epoch:  92 -34801.195
+epoch:  92 0.9565295260858795 cos_sim:  0.809322852152473
+epoch:  93 -34926.668
+epoch:  93 0.9582446348001833 cos_sim:  0.8008180631396097
+epoch:  94 -35051.13
+epoch:  94 0.951665805480357 cos_sim:  0.8089830339767328
+epoch:  95 -35174.598
+epoch:  95 0.9565018700992246 cos_sim:  0.8034205685460274
+epoch:  96 -35297.164
+epoch:  96 0.9590307894788147 cos_sim:  0.7967169103977568
+epoch:  97 -35418.727
+epoch:  97 0.9535740359365654 cos_sim:  0.8044769179647286
+epoch:  98 -35539.406
+epoch:  98 0.9561601207624104 cos_sim:  0.8126723785514178
+epoch:  99 -35659.184
+epoch:  99 0.9659278764544963 cos_sim:  0.8131848172119439
+epoch:  100 -35778.098
+epoch:  100 0.9527873133332934 cos_sim:  0.8259774828059352
+epoch:  101 -35896.14
+epoch:  101 0.9668294888826962 cos_sim:  0.8159648435801972
+</pre></div>
+</div>
+<p>model test with 20 window for warmup</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span><span class="n">u</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.9652051572335757 cos_sim:  0.8357307170736874
+</pre></div>
+</div>
+<p>Plot SC and fitted SC</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">im0</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;The empirical SC&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+<span class="n">im1</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sc_fitted</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;The fitted SC&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="The empirical SC, The fitted SC" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_001.png" />
+<p>Plot the EEG</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">P_test</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Test: sourced EEG&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">eeg_test</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eeg_data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;empirical&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_002.png" />
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 37 minutes  31.815 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/96a042e39a4f43abe4e10ca8c12118f5/eg004r__fitting_JR_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg004r__fitting_JR_example.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/4cfe8afe444dc5af9ceb57ba6555b87f/eg004r__fitting_JR_example.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg004r__fitting_JR_example.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="eg003r__fitting_rww_example.html" class="btn btn-neutral float-left" title="Fitting Wong_Wang model (HCP data)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright KCNI Griffiths Lab &amp; Contributors
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

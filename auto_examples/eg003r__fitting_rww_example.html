@@ -47,6 +47,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fitting JR model (Tepit data)" href="eg004r__fitting_JR_example.html" />
     <link rel="prev" title="Fitting S_E Mean to 0.164 using default RWW Parameters" href="eg002r__multimodal_simulation.html" /> 
 </head>
 
@@ -116,6 +117,10 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fitting Wong_Wang model (HCP data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#importage">Importage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eg004r__fitting_JR_example.html">Fitting JR model (Tepit data)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eg004r__fitting_JR_example.html#importage">Importage</a></li>
 </ul>
 </li>
 </ul>
@@ -240,13 +245,13 @@ From: https://drive.google.com/uc?id=1EOwDLj5SxWpwxEk5MT7cShiMPLszemuq
 To: /home/runner/work/whobpyt/whobpyt/HCP/100307_rfMRI_REST1_LR_hpc200_clean__l2k8_sc33_ts.pkl
 
   0%|          | 0.00/804k [00:00&lt;?, ?B/s]
-100%|##########| 804k/804k [00:00&lt;00:00, 59.4MB/s]
+100%|##########| 804k/804k [00:00&lt;00:00, 8.22MB/s]
 Downloading...
 From: https://drive.google.com/uc?id=1B9U47D19DrQOnNugs8keDNFQha1GfPGv
 To: /home/runner/work/whobpyt/whobpyt/HCP/weights_100307.txt
 
   0%|          | 0.00/172k [00:00&lt;?, ?B/s]
-100%|##########| 172k/172k [00:00&lt;00:00, 30.0MB/s]
+100%|##########| 172k/172k [00:00&lt;00:00, 3.01MB/s]
 Download completed
 </pre></div>
 </div>
@@ -308,36 +313,36 @@ Download completed
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 -5.4970946
-epoch:  0 0.1812713719794974 cos_sim:  -0.0044885903744972585
-epoch:  1 -6.151215
-epoch:  1 0.2338939696889033 cos_sim:  -0.004932292459220864
-epoch:  2 -6.3077273
-epoch:  2 0.3481594986854346 cos_sim:  -0.005296232335921767
-epoch:  3 -6.5268664
-epoch:  3 0.41201944149157393 cos_sim:  -0.005126488326792139
-epoch:  4 -6.640542
-epoch:  4 0.459286987187305 cos_sim:  -0.005256265244397743
-epoch:  5 -6.809185
-epoch:  5 0.49867164044863077 cos_sim:  -0.005443272126674098
-epoch:  6 -6.9225864
-epoch:  6 0.49498419799679716 cos_sim:  -0.005423413058114664
-epoch:  7 -7.0300956
-epoch:  7 0.48576015847580256 cos_sim:  -0.005532521003647806
-epoch:  8 -7.083732
-epoch:  8 0.5192549472179568 cos_sim:  -0.004866777628328161
-epoch:  9 -7.231072
-epoch:  9 0.6035436317962133 cos_sim:  -0.0051919601799620746
-epoch:  10 -7.331163
-epoch:  10 0.5632971476927561 cos_sim:  -0.00584287749404073
-epoch:  11 -7.3776293
-epoch:  11 0.5762495442635313 cos_sim:  -0.0052012976246280105
-epoch:  12 -7.464234
-epoch:  12 0.532735123738271 cos_sim:  -0.005529878052816352
-epoch:  13 -7.56926
-epoch:  13 0.5959326030197205 cos_sim:  -0.00557199290533157
-epoch:  14 -7.60453
-epoch:  14 0.5592466905860021 cos_sim:  -0.005719402069112558
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 -5.8928084
+epoch:  0 0.18701813938635214 cos_sim:  -0.004735225221627564
+epoch:  1 -6.181667
+epoch:  1 0.16874521216483962 cos_sim:  -0.005276499058440811
+epoch:  2 -6.313645
+epoch:  2 0.3806066990320207 cos_sim:  -0.005064010981037323
+epoch:  3 -6.620662
+epoch:  3 0.42091678319437154 cos_sim:  -0.005355301548127677
+epoch:  4 -6.7444854
+epoch:  4 0.10318210732834972 cos_sim:  -0.0050186252617213985
+epoch:  5 -6.798206
+epoch:  5 0.47337233941155077 cos_sim:  -0.004431499671655609
+epoch:  6 -7.0093703
+epoch:  6 0.525377463238725 cos_sim:  -0.00617344822657413
+epoch:  7 -7.036737
+epoch:  7 0.516167688245005 cos_sim:  -0.005754520777607421
+epoch:  8 -7.0944247
+epoch:  8 0.5376378686486045 cos_sim:  -0.006074857153534782
+epoch:  9 -7.200467
+epoch:  9 0.5684713738432043 cos_sim:  -0.005185631669554223
+epoch:  10 -7.261433
+epoch:  10 0.5794885279860844 cos_sim:  -0.004791794128961293
+epoch:  11 -7.378958
+epoch:  11 0.5713684653228258 cos_sim:  -0.004924735473810812
+epoch:  12 -7.4871597
+epoch:  12 0.5767573129106138 cos_sim:  -0.004800720831426083
+epoch:  13 -7.5927305
+epoch:  13 0.5653293412266656 cos_sim:  -0.00428473935795201
+epoch:  14 -7.598732
+epoch:  14 0.5586150786471389 cos_sim:  -0.00584108269913911
 </pre></div>
 </div>
 <p>model test with 20 window for warmup</p>
@@ -345,7 +350,7 @@ epoch:  14 0.5592466905860021 cos_sim:  -0.005719402069112558
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.6139175604003703 cos_sim:  -0.004996147566367942
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5828797914552797 cos_sim:  -0.006235782528571438
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -384,7 +389,7 @@ epoch:  14 0.5592466905860021 cos_sim:  -0.005719402069112558
 </pre></div>
 </div>
 <img alt="The empirical FC, The simulated FC" class="sphx-glr-single-img" src="../_images/sphx_glr_eg003r__fitting_rww_example_003.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 20 minutes  21.745 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 25 minutes  14.992 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg003r-fitting-rww-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/6e0d2e4bec0ad2802eb3fd7a90e5faa9/eg003r__fitting_rww_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg003r__fitting_rww_example.py</span></code></a></p>
@@ -404,6 +409,8 @@ epoch:  14 0.5592466905860021 cos_sim:  -0.005719402069112558
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="eg004r__fitting_JR_example.html" class="btn btn-neutral float-right" title="Fitting JR model (Tepit data)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="eg002r__multimodal_simulation.html" class="btn btn-neutral float-left" title="Fitting S_E Mean to 0.164 using default RWW Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
