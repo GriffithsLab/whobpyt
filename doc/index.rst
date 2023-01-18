@@ -18,4 +18,6 @@ Welcome to WhoBPyT documentation!
  
    getting_started/installation
    auto_examples/eg002r__multimodal_simulation
+   auto_examples/eg003r__fitting_rww_example
+   auto_examples/eg004r__fitting_JR_example
    

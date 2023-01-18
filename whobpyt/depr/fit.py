@@ -2,7 +2,6 @@
 WhoBPyt Model Fitting Classes
 """
 
-
 class Model_fitting:
     """
     Using ADAM and AutoGrad to fit JansenRit to empirical EEG
@@ -63,7 +62,7 @@ class Model_fitting:
         state_lb = 0.5
         w_cost = 10
 
-        epoch_min = 65  # run minimum epoch # part of stop criteria
+        epoch_min = 150  # run minimum epoch # part of stop criteria
         r_lb = 0.85  # lowest pearson correlation # part of stop criteria
 
         self.u = u
@@ -133,19 +132,15 @@ class Model_fitting:
                 # Initialize the placeholder for the next state.
                 X_next = torch.zeros_like(X)
 
-                # Get the input and output noises for the module.
-                noise_in = torch.tensor(np.random.randn(self.model.node_size, self.model.hidden_size, \
-                                                        self.model.batch_size, self.model.input_size),
-                                        dtype=torch.float32)
-                noise_out = torch.tensor(np.random.randn(self.model.node_size, self.model.batch_size),
-                                         dtype=torch.float32)
+                
                 if not isinstance(self.u, int):
                     external = torch.tensor(
                         (self.u[:, :, i_batch * self.model.batch_size:(i_batch + 1) * self.model.batch_size]),
                         dtype=torch.float32)
 
                 # Use the model.forward() function to update next state and get simulated EEG in this batch.
-                next_batch, hE_new = self.model(external, noise_in, noise_out, X, hE)
+                
+                next_batch, hE_new = self.model(external, X, hE)
 
                 # Get the batch of emprical EEG signal.
                 ts_batch = torch.tensor(
@@ -155,10 +150,20 @@ class Model_fitting:
                 if self.model.model_name == 'WWD':
                     E_batch = next_batch['E_batch']
                     I_batch = next_batch['I_batch']
-                    loss_EI = 0.1 * torch.mean(
+                    f_batch = next_batch['f_batch']
+                    v_batch = next_batch['v_batch']
+                    """loss_EI = 0.1 * torch.mean(
                         torch.mean(E_batch * torch.log(E_batch) + (con_1 - E_batch) * torch.log(con_1 - E_batch) \
                                    + 0.5 * I_batch * torch.log(I_batch) + 0.5 * (con_1 - I_batch) * torch.log(
-                            con_1 - I_batch), axis=1))
+                            con_1 - I_batch), axis=1))"""
+                    loss_EI = torch.mean(self.model.E_v * (E_batch - self.model.E_m) ** 2) \
+                                          + torch.mean(-torch.log(self.model.E_v)) +\
+                              torch.mean(self.model.I_v * (I_batch - self.model.I_m) ** 2) \
+                                          + torch.mean(-torch.log(self.model.I_v)) +\
+                              torch.mean(self.model.f_v * (f_batch - self.model.f_m) ** 2) \
+                                          + torch.mean(-torch.log(self.model.f_v)) +\
+                              torch.mean(self.model.v_v * (v_batch - self.model.v_m) ** 2) \
+                                          + torch.mean(-torch.log(self.model.v_v)) 
                 else:
                     lose_EI = 0
                 loss_prior = []
@@ -180,8 +185,8 @@ class Model_fitting:
                                           + torch.sum(-torch.log(lb + m(self.model.get_parameter(dict_np['v'])))))
                 # total loss
                 if self.model.model_name == 'WWD':
-                    loss = 0.1 * w_cost * self.cost.cost_eff(next_batch['bold_batch'], ts_batch) + sum(
-                        loss_prior) + 0.5 * loss_EI
+                    loss = 0.1 * w_cost * self.cost.cost_eff(next_batch['bold_batch'], ts_batch) + 1*sum(
+                        loss_prior) + 1 * loss_EI
                 elif self.model.model_name == 'JR':
                     loss = w_cost * self.cost.cost_eff(next_batch['eeg_batch'], ts_batch) + sum(loss_prior)
 
@@ -355,3 +360,65 @@ class Model_fitting:
         for name in self.model.state_names + [self.output_sim.output_name]:
             tmp_ls = getattr(self.output_sim, name + '_test')
             setattr(self.output_sim, name + '_test', np.concatenate(tmp_ls, axis=1))
+        
+    def test_realtime(self, num_batches):
+        if self.model.model_name == 'WWD':
+            mask = np.tril_indices(self.model.node_size, -1)
+            par_WWD = ParamsJR('WWD', g=[100,0])
+            
+            tr_p = 750
+            X_np = 0.2 * np.random.uniform(0, 1, (self.model.node_size, self.model.state_size)) + np.array(
+                        [0, 0, 0, 1.0, 1.0, 1.0])
+                        
+            model_np = WWD_np(self.model.node_size, self.model.batch_size, self.model.step_size, tr_p, self.model.sc_m.detach().numpy().copy(), par_WWD)
+            par_WWD.g[0]= self.model.g.detach().numpy().copy()
+            par_WWD.std_in[0]=self.model.std_in.detach().numpy().copy()
+            par_WWD.std_out[0]=self.model.std_out.detach().numpy().copy()
+            par_WWD.g_EE[0]= self.model.g_EE.detach().numpy().copy()
+            par_WWD.g_IE[0]= self.model.g_IE.detach().numpy().copy()
+            par_WWD.g_EI[0]= self.model.g_EI.detach().numpy().copy()
+            model_np.update_param(par_WWD)
+            #model_np.sc =  F.model.sc_m.detach().numpy().copy()
+            # Create placeholders for the simulated BOLD E I x f and q of entire time series. 
+            for name in self.model.state_names + [self.output_sim.output_name]:
+                setattr(self.output_sim, name + '_test', [])
+            
+            # Perform the training in batches.
+            
+            for i_batch in range(num_batches+20):
+                
+                
+                
+                
+                noise_in_np = np.random.randn(self.model.node_size,  self.model.batch_size, int(tr_p/self.model.step_size), \
+                  2)
+        
+
+                noise_out_np = np.random.randn(self.model.node_size, self.model.batch_size)
+        
+
+
+        
+                next_batch_np = model_np.forward(X_np,noise_in_np, noise_out_np)
+                if i_batch >= 20:
+                    # Put the batch of the simulated BOLD, E I x f v q in to placeholders for entire time-series. 
+                    for name in self.model.state_names + [self.output_sim.output_name]:
+                        name_next = name + '_batch'
+                        tmp_ls = getattr(self.output_sim, name + '_test')
+                        tmp_ls.append(next_batch_np[name_next].detach().numpy())
+                        # print(name+'_train', name+'_batch', tmp_ls)
+                        setattr(self.output_sim, name + '_test', tmp_ls)
+                
+                # last update current state using next state... (no direct use X = X_next, since gradient calculation only depends on one batch no history)
+                X_np = next_batch_np['current_state']
+            tmp_ls = getattr(self.output_sim, self.output_sim.output_name + '_test')
+            ts_sim = np.concatenate(tmp_ls, axis=1)
+
+            fc_sim = np.corrcoef(ts_sim[:, 10:])
+            # print('r: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 'cos_sim: ', np.diag(cosine_similarity(ts_sim, self.ts.mean(0))).mean())
+            print(np.corrcoef(fc_sim[mask], fc[mask])[0, 1])
+            for name in self.model.state_names + [self.output_sim.output_name]:
+                tmp_ls = getattr(self.output_sim, name + '_test')
+                setattr(self.output_sim, name + '_test', np.concatenate(tmp_ls, axis=1))   
+        else:
+            print("only WWD model for the test_realtime funcion")   
