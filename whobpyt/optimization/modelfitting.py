@@ -90,8 +90,14 @@ class Model_fitting:
         self.u = u
 
         # define an optimizer(ADAM)
-        optimizer = optim.Adam(self.model.parameters(), lr=learningrate, eps=1e-7)
-
+        optimizer = optim.Adam([{'params': self.model.params_fitted['modelparameter']},
+                    {'params': self.model.params_fitted['hyperparameter'], 'lr': learningrate/4}], lr=learningrate, eps=1e-7)
+        #optimizer = optim.Adam(self.model.parameters(), lr=learningrate, eps=1e-7)
+        # add lr scheduler
+        total_steps = self.ts.shape[1]*self.num_epoches
+        schedular = optim.lr_scheduler.OneCycleLR(optimizer, [learningrate, learningrate/4], total_steps)
+        #schedular = optim.lr_scheduler.OneCycleLR(optimizer, learningrate, total_steps)
+        
         # initial state
         X = 0
         if self.model.model_name == 'RWW':
@@ -191,6 +197,9 @@ class Model_fitting:
 
                 # Optimize the model based on the gradient method in updating the model parameters.
                 optimizer.step()
+                # schedular step 
+                schedular.step()
+            
 
                 # Put the updated model parameters into the history placeholders.
                 # sc_par.append(self.model.sc[mask].copy())
@@ -220,6 +229,8 @@ class Model_fitting:
 
             print('epoch: ', i_epoch, np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 'cos_sim: ',
                   np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
+                  
+            print(schedular.get_last_lr())
 
             for name in self.model.state_names + [self.output_sim.output_name]:
                 tmp_ls = getattr(self.output_sim, name + '_train')
