@@ -23,9 +23,8 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.data.dataload import dataloader
-from whobpyt.models.jansen_rit import RNNJANSEN
+from whobpyt.models.wong_wang import ParamsRWW
 from whobpyt.models.wong_wang import RNNRWW
-from whobpyt.datatypes.modelparameters import ParamsModel
 from whobpyt.optimization.modelfitting import Model_fitting
 
 # array and pd stuff
@@ -91,8 +90,8 @@ data_mean = dataloader(ts, num_epoches, batch_size)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
-par = ParamsModel('RWW',  g=[400, 1/np.sqrt(10)], g_EE=[1.5, 1/np.sqrt(50)], g_EI =[0.8,1/np.sqrt(50)], \
-                          g_IE=[0.6,1/np.sqrt(50)], I_0 =[0.2, 0], std_in=[0.0,0], std_out=[0.00,0])
+par = ParamsRWW(g=[400, 1/np.sqrt(10)], g_EE=[1.5, 1/np.sqrt(50)], g_EI =[0.8,1/np.sqrt(50)], \
+                g_IE=[0.6,1/np.sqrt(50)], I_0 =[0.2, 0], std_in=[0.0,0], std_out=[0.00,0])
 
 # %%
 # call model want to fit

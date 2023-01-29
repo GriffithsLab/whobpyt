@@ -13,12 +13,48 @@ module for JR with forward backward and lateral connection for EEG
 Importage
 """
 import torch
-from whobpyt.datatypes.modelparameters import ParamsModel
+from whobpyt.datatypes.AbstractParams import AbstractParams
+from whobpyt.datatypes.AbstractNMM import AbstractNMM
 from whobpyt.functions.pytorch_funs import setModelParameters
 from whobpyt.functions.pytorch_funs import integration_forward
 
 
-class RNNJANSEN(torch.nn.Module):
+class ParamsJR(AbstractParams):
+
+    def __init__(self, **kwargs):
+
+        param = {
+            "A ": [3.25, 0], 
+            "a": [100, 0.], 
+            "B": [22, 0], 
+            "b": [50, 0], 
+            "g": [1000, 0],
+            
+            "c1": [135, 0.], 
+            "c2": [135 * 0.8, 0.], 
+            "c3 ": [135 * 0.25, 0.], 
+            "c4": [135 * 0.25, 0.],
+            
+            "std_in": [100, 0], 
+            "vmax": [5, 0], 
+            "v0": [6, 0], 
+            "r": [0.56, 0], 
+            "y0": [2, 0],
+            
+            "mu": [.5, 0], 
+            "k": [5, 0], 
+            "cy0": [5, 0], 
+            "ki": [1, 0]
+        }
+        
+        for var in param:
+            setattr(self, var, param[var])
+
+        for var in kwargs:
+            setattr(self, var, kwargs[var])
+
+
+class RNNJANSEN(AbstractNMM):
     """
     A module for forward model (JansenRit) to simulate a batch of EEG signals
     Attibutes
@@ -58,7 +94,7 @@ class RNNJANSEN(torch.nn.Module):
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: float, lm: float, dist: float,
-                 use_fit_gains: bool, use_fit_lfm: bool, param: ParamsModel) -> None:
+                 use_fit_gains: bool, use_fit_lfm: bool, param: ParamsJR) -> None:
         """
         Parameters
         ----------

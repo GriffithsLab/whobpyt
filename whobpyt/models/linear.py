@@ -5,12 +5,25 @@ module for linear model
 """
 
 import torch
-from whobpyt.datatypes.modelparameters import ParamsModel
+from whobpyt.datatypes.AbstractParams import AbstractParams
+from whobpyt.datatypes.AbstractNMM import AbstractNMM
 from whobpyt.functions.pytorch_funs import integration_forward
 from whobpyt.functions.pytorch_funs import setModelParameters
 
 
-class RNNLIN(torch.nn.Module):
+class ParamsLIN(AbstractParams):
+
+    def __init__(self, model_name, **kwargs):
+        param = {'g': [100, 0]}
+
+        for var in param:
+            setattr(self, var, param[var])
+
+        for var in kwargs:
+            setattr(self, var, kwargs[var])
+
+
+class RNNLIN(AbstractNMM):
     """
     A module for forward model (Linear Model with 1 population) to simulate a window of BOLD signals
     Attibutes
@@ -52,7 +65,7 @@ class RNNLIN(torch.nn.Module):
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, sampling_size: float, tr: float, sc: float, use_fit_gains: bool,
-                 param: ParamsModel, use_Laplacian=True) -> None:
+                 param: ParamsLIN, use_Laplacian=True) -> None:
         """
         Parameters
         ----------

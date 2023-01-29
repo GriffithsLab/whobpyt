@@ -23,9 +23,8 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.data.dataload import dataloader
+from whobpyt.models.jansen_rit import ParamsJR
 from whobpyt.models.jansen_rit import RNNJANSEN
-from whobpyt.models.wong_wang import RNNRWW
-from whobpyt.datatypes.modelparameters import ParamsModel
 from whobpyt.optimization.modelfitting import Model_fitting
 
 # array and pd stuff
@@ -99,12 +98,12 @@ data_mean = dataloader(eeg_data.T, num_epoches, batch_size)
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
 lm = np.zeros((output_size,200))
 lm_v = np.zeros((output_size,200))
-par = ParamsModel('JR', A = [3.25, 0], a= [100, 2], B = [22, 0], b = [50, 1], g=[40, 2], g_f=[1, 0], g_b=[1, 0],\
-                    c1 = [135, 1], c2 = [135*0.8, 1], c3 = [135*0.25, 1], c4 = [135*0.25, 1],\
-                    std_in=[1, 1/10], vmax= [5, 0], v0=[6,0], r=[0.56, 0], y0=[2 , 1/4],\
-                    mu = [1., 0.4], #k = [10, .3],
-                    #cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \
-                    cy0 = [50, 1], ki=[ki0, 0], lm=[lm, 5 * np.ones((output_size, node_size))+lm_v])
+par = ParamsJR(A = [3.25, 0], a= [100, 2], B = [22, 0], b = [50, 1], g=[40, 2], g_f=[1, 0], g_b=[1, 0],\
+               c1 = [135, 1], c2 = [135*0.8, 1], c3 = [135*0.25, 1], c4 = [135*0.25, 1],\
+               std_in=[1, 1/10], vmax= [5, 0], v0=[6,0], r=[0.56, 0], y0=[2 , 1/4],\
+               mu = [1., 0.4], #k = [10, .3],
+               #cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \
+               cy0 = [50, 1], ki=[ki0, 0], lm=[lm, 5 * np.ones((output_size, node_size))+lm_v])
 
 # %%
 # call model want to fit

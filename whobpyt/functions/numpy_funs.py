@@ -5,7 +5,7 @@ module for wong-wang model
 """
 
 import numpy as np  # for numerical operations
-from whobpyt.datatypes.modelparameters import ParamsModel
+from whobpyt.models.wong_wang import ParamsRWW
 
 
 def h_tf_np(a, b, d, z):
@@ -57,7 +57,7 @@ class WWD_np:
 
     def __init__(self, node_size: int, TRs_per_window: int, step_size: float, step_size_bold: float, tr: float,
                  sc: float, use_dynamic_boundary: bool,
-                 use_Laplacian: bool, param: ParamsModel) -> None:
+                 use_Laplacian: bool, param: ParamsRWW) -> None:
         """
         Parameters
         ----------
