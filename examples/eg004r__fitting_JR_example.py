@@ -23,8 +23,8 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.data.dataload import dataloader
-from whobpyt.models.jansen_rit import ParamsJR
-from whobpyt.models.jansen_rit import RNNJANSEN
+from whobpyt.models.JansenRit.jansen_rit import ParamsJR
+from whobpyt.models.JansenRit.jansen_rit import RNNJANSEN
 from whobpyt.optimization.modelfitting import Model_fitting
 
 # array and pd stuff

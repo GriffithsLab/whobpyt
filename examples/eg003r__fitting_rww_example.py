@@ -23,8 +23,8 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.data.dataload import dataloader
-from whobpyt.models.wong_wang import ParamsRWW
-from whobpyt.models.wong_wang import RNNRWW
+from whobpyt.models.RWW.wong_wang import ParamsRWW
+from whobpyt.models.RWW.wong_wang import RNNRWW
 from whobpyt.optimization.modelfitting import Model_fitting
 
 # array and pd stuff

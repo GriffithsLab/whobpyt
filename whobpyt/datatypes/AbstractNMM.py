@@ -7,6 +7,9 @@ class AbstractNMM(torch.nn.Module):
             
     def setModelParameters(self):
         pass
+        
+    def createIC(self, ver):
+        pass
     
     def forward(self, external, hx, hE):
         pass
