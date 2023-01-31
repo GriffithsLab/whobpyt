@@ -154,7 +154,10 @@ class RNNRWW(AbstractNMM):
         self.param = param
 
         self.output_size = node_size  # number of EEG channels
-        
+    
+    def info(self):
+        return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_name": "bold"}
+    
     def createIC(self, ver):
         # initial state
         return torch.tensor(0.2 * np.random.uniform(0, 1, (self.node_size, self.state_size)) + np.array(

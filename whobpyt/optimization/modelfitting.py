@@ -43,8 +43,7 @@ class Model_fitting:
         self.model = model
         self.num_epoches = num_epoches
         # placeholder for output(EEG and histoty of model parameters and loss)
-        self.output_sim = OutputNM(self.model.model_name, self.model.param,
-                                   self.model.use_fit_gains, self.model.use_fit_lfm)
+        self.output_sim = OutputNM(self.model)
         # self.u = u
         """if ts.shape[1] != model.node_size:
             print('ts is a matrix with the number of datapoint X the number of node')

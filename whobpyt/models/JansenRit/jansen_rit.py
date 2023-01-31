@@ -133,6 +133,9 @@ class RNNJANSEN(AbstractNMM):
         self.param = param
 
         self.output_size = lm.shape[0]  # number of EEG channels
+
+    def info(self):
+        return {"state_names": ['E', 'Ev', 'I', 'Iv', 'P', 'Pv'], "output_name": "eeg"}
     
     def createIC(self, ver):
         # initial state
