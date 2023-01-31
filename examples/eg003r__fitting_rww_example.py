@@ -26,6 +26,7 @@ from whobpyt.data.dataload import dataloader
 from whobpyt.models.RWW.wong_wang import ParamsRWW
 from whobpyt.models.RWW.wong_wang import RNNRWW
 from whobpyt.optimization.modelfitting import Model_fitting
+from whobpyt.optimization.custom_cost_RWW import CostsRWW
 
 # array and pd stuff
 import numpy as np
@@ -102,8 +103,12 @@ model = RNNRWW(node_size, batch_size, step_size, repeat_size, tr, sc, True, par)
 model.setModelParameters()
 
 # %%
+# create objective function
+ObjFun = CostsRWW()
+
+# %%
 # call model fit
-F = Model_fitting(model, data_mean, num_epoches, 2)
+F = Model_fitting(model, data_mean, num_epoches, ObjFun)
 
 # %%
 # model training

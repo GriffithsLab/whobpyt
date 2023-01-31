@@ -26,6 +26,7 @@ from whobpyt.data.dataload import dataloader
 from whobpyt.models.JansenRit.jansen_rit import ParamsJR
 from whobpyt.models.JansenRit.jansen_rit import RNNJANSEN
 from whobpyt.optimization.modelfitting import Model_fitting
+from whobpyt.optimization.custom_cost_JR import CostsJR
 
 # array and pd stuff
 import numpy as np
@@ -114,8 +115,12 @@ model = RNNJANSEN(node_size, batch_size, step_size, output_size, tr, sc, lm, dis
 model.setModelParameters()
 
 # %%
+# create objective function
+ObjFun = CostsJR()
+
+# %%
 # call model fit
-F = Model_fitting(model, data_mean, num_epoches, 0)
+F = Model_fitting(model, data_mean, num_epoches, ObjFun)
 
 # %%
 # model training

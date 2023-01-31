@@ -7,7 +7,6 @@ module for model fitting using pytorch
 import numpy as np  # for numerical operations
 import torch
 import torch.optim as optim
-from whobpyt.optimization.cost_funs import Costs
 from whobpyt.datatypes.outputs import OutputNM
 from whobpyt.models.RWW.RWW_np import RWW_np #This should be removed and made general
 import pickle
@@ -53,7 +52,7 @@ class Model_fitting:
             self.ts = ts"""
         self.ts = ts
 
-        self.cost = Costs(cost)
+        self.cost = cost
 
     def save(self, filename):
         with open(filename, 'wb') as f:
@@ -164,7 +163,7 @@ class Model_fitting:
                     sim = next_window['eeg_window']
                 elif self.model.model_name == 'LIN':
                     sim = next_window['bold_window']
-                loss = self.cost.cost_eff(sim, ts_window, self.model, next_window)
+                loss = self.cost.loss(sim, ts_window, self.model, next_window)
                 # Put the batch of the simulated EEG, E I M Ev Iv Mv in to placeholders for entire time-series.
                 for name in self.model.state_names + [self.output_sim.output_name]:
                     name_next = name + '_window'
