@@ -90,8 +90,16 @@ class Model_fitting:
         self.u = u
 
         # define an optimizer(ADAM)
-        optimizer = optim.Adam(self.model.parameters(), lr=learningrate, eps=1e-7)
-
+        #optimizer = optim.Adam([{'params': self.model.params_fitted['modelparameter']},
+        #            {'params': self.model.params_fitted['hyperparameter'], 'lr': learningrate/40}], lr=learningrate, eps=1e-7)
+        #optimizer = optim.Adam(self.model.parameters(), lr=learningrate, eps=1e-7)
+        optimizer_mp = optim.Adam(self.model.params_fitted['modelparameter'], lr=learningrate, eps=1e-7)
+        optimizer_hp = optim.Adam(self.model.params_fitted['hyperparameter'], lr=learningrate/50, eps=1e-7)
+        # add lr scheduler
+        total_steps = self.ts.shape[1]*self.num_epoches
+        #schedular = optim.lr_scheduler.OneCycleLR(optimizer, [learningrate, learningrate/40], total_steps)
+        schedular_mp = optim.lr_scheduler.OneCycleLR(optimizer_mp, learningrate, total_steps)
+        schedular_hp = optim.lr_scheduler.OneCycleLR(optimizer_hp, learningrate/50, total_steps)
         # initial state
         X = 0
         if self.model.model_name == 'RWW':
@@ -137,7 +145,7 @@ class Model_fitting:
         # define num_windows
         num_windows = self.ts.shape[1]
         for i_epoch in range(self.num_epoches):
-
+            optimizer_hp.zero_grad()
             # Create placeholders for the simulated states and outputs of entire time series.
             for name in self.model.state_names + [self.output_sim.output_name]:
                 setattr(self.output_sim, name + '_train', [])
@@ -152,7 +160,8 @@ class Model_fitting:
             for TR_i in range(num_windows):
 
                 # Reset the gradient to zeros after update model parameters.
-                optimizer.zero_grad()
+                #optimizer.zero_grad()
+                optimizer_mp.zero_grad()
 
                 # if the external not empty
                 if not isinstance(self.u, int):
@@ -190,7 +199,12 @@ class Model_fitting:
                 loss.backward(retain_graph=True)
 
                 # Optimize the model based on the gradient method in updating the model parameters.
-                optimizer.step()
+                optimizer_mp.step()
+                # schedular step 
+                schedular_mp.step()
+                optimizer_hp.step()
+                schedular_hp.step()
+            
 
                 # Put the updated model parameters into the history placeholders.
                 # sc_par.append(self.model.sc[mask].copy())
@@ -209,6 +223,8 @@ class Model_fitting:
                 hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
                 # print(hE_new.detach().numpy()[20:25,0:20])
                 # print(hE.shape)
+            
+            
             ts_emp = np.concatenate(list(self.ts[i_epoch]),1)
             fc = np.corrcoef(ts_emp)
 
@@ -220,6 +236,8 @@ class Model_fitting:
 
             print('epoch: ', i_epoch, np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 'cos_sim: ',
                   np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
+                  
+            print(schedular_mp.get_last_lr(), schedular_hp.get_last_lr())
 
             for name in self.model.state_names + [self.output_sim.output_name]:
                 tmp_ls = getattr(self.output_sim, name + '_train')
