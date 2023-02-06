@@ -204,10 +204,10 @@
 <span class="c1"># whobpyt stuff</span>
 <span class="kn">import</span> <span class="nn">whobpyt</span>
 <span class="kn">from</span> <span class="nn">whobpyt.data.dataload</span> <span class="kn">import</span> <span class="n">dataloader</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.jansen_rit</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.wong_wang</span> <span class="kn">import</span> <span class="n">RNNRWW</span>
-<span class="kn">from</span> <span class="nn">whobpyt.datatypes.modelparameters</span> <span class="kn">import</span> <span class="n">ParamsModel</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit.jansen_rit</span> <span class="kn">import</span> <span class="n">ParamsJR</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit.jansen_rit</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization.modelfitting</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization.custom_cost_JR</span> <span class="kn">import</span> <span class="n">CostsJR</span>
 
 <span class="c1"># array and pd stuff</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -278,12 +278,12 @@
 <p>get model parameters structure and define the fitted parameters by setting non-zero variance for the model</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span><span class="mi">200</span><span class="p">))</span>
 <span class="n">lm_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span><span class="mi">200</span><span class="p">))</span>
-<span class="n">par</span> <span class="o">=</span> <span class="n">ParamsModel</span><span class="p">(</span><span class="s1">&#39;JR&#39;</span><span class="p">,</span> <span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">B</span> <span class="o">=</span> <span class="p">[</span><span class="mi">22</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">g_f</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">g_b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>\
-                    <span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c4</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>\
-                    <span class="n">std_in</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">v0</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="o">=</span><span class="p">[</span><span class="mf">0.56</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y0</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span> <span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>\
-                    <span class="n">mu</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="c1">#k = [10, .3],</span>
-                    <span class="c1">#cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \</span>
-                    <span class="n">cy0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ki</span><span class="o">=</span><span class="p">[</span><span class="n">ki0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lm</span><span class="o">=</span><span class="p">[</span><span class="n">lm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span> <span class="n">node_size</span><span class="p">))</span><span class="o">+</span><span class="n">lm_v</span><span class="p">])</span>
+<span class="n">par</span> <span class="o">=</span> <span class="n">ParamsJR</span><span class="p">(</span><span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">B</span> <span class="o">=</span> <span class="p">[</span><span class="mi">22</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">g_f</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">g_b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>\
+               <span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c4</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>\
+               <span class="n">std_in</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">v0</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="o">=</span><span class="p">[</span><span class="mf">0.56</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y0</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span> <span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>\
+               <span class="n">mu</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="c1">#k = [10, .3],</span>
+               <span class="c1">#cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \</span>
+               <span class="n">cy0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ki</span><span class="o">=</span><span class="p">[</span><span class="n">ki0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lm</span><span class="o">=</span><span class="p">[</span><span class="n">lm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span> <span class="n">node_size</span><span class="p">))</span><span class="o">+</span><span class="n">lm_v</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>call model want to fit</p>
@@ -305,8 +305,12 @@ tensor([[-1., -1., -1.,  ..., -1., -1., -1.],
         [-1., -1., -1.,  ..., -1., -1., -1.]], requires_grad=True)
 </pre></div>
 </div>
+<p>create objective function</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">CostsJR</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>call model fit</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>model training</p>
@@ -316,210 +320,210 @@ tensor([[-1., -1., -1.,  ..., -1., -1., -1.],
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 5702.8467
-epoch:  0 0.2061235910561788 cos_sim:  0.020199208867725776
-epoch:  1 316.94922
-epoch:  1 0.01580105975185725 cos_sim:  0.021208058584787033
-epoch:  2 -2636.1477
-epoch:  2 0.024749382283542398 cos_sim:  0.024531752501300977
-epoch:  3 -4806.161
-epoch:  3 0.25574833827061794 cos_sim:  0.2043449553125685
-epoch:  4 -6567.668
-epoch:  4 0.7201339877995142 cos_sim:  0.36072871875336504
-epoch:  5 -8059.7725
-epoch:  5 0.588728030431463 cos_sim:  0.3311844795096852
-epoch:  6 -9355.917
-epoch:  6 0.8079440341002162 cos_sim:  0.41480202142561035
-epoch:  7 -10502.249
-epoch:  7 0.37790839226192047 cos_sim:  0.3395738640275312
-epoch:  8 -11530.053
-epoch:  8 0.7014220171286529 cos_sim:  0.39573861305683455
-epoch:  9 -12461.995
-epoch:  9 0.7482408237981726 cos_sim:  0.4437503852174336
-epoch:  10 -13314.722
-epoch:  10 0.6556396374013226 cos_sim:  0.4243063390287235
-epoch:  11 -14100.678
-epoch:  11 0.8070596581163776 cos_sim:  0.43772057742468995
-epoch:  12 -14829.972
-epoch:  12 0.7056930185340278 cos_sim:  0.49513831499440275
-epoch:  13 -15510.272
-epoch:  13 0.824930139140875 cos_sim:  0.4636672771799048
-epoch:  14 -16147.948
-epoch:  14 0.7119579345951954 cos_sim:  0.48229932915051715
-epoch:  15 -16748.064
-epoch:  15 0.780411044373235 cos_sim:  0.4752349011325246
-epoch:  16 -17315.293
-epoch:  16 0.8230943325498603 cos_sim:  0.5086217089238285
-epoch:  17 -17852.908
-epoch:  17 0.7142347725405135 cos_sim:  0.5195492846911267
-epoch:  18 -18363.812
-epoch:  18 0.8136574981106391 cos_sim:  0.5317268316232652
-epoch:  19 -18850.852
-epoch:  19 0.8563127688554617 cos_sim:  0.5602983174592083
-epoch:  20 -19316.242
-epoch:  20 0.7713529892507531 cos_sim:  0.5625890837689341
-epoch:  21 -19761.746
-epoch:  21 0.8435112574973754 cos_sim:  0.5563615163189592
-epoch:  22 -20189.277
-epoch:  22 0.8577745179439444 cos_sim:  0.583615795764387
-epoch:  23 -20600.225
-epoch:  23 0.8004927461325809 cos_sim:  0.5852107425694738
-epoch:  24 -20995.805
-epoch:  24 0.8292920512265283 cos_sim:  0.5735347918112779
-epoch:  25 -21377.312
-epoch:  25 0.8535350719749186 cos_sim:  0.6121608373722082
-epoch:  26 -21745.7
-epoch:  26 0.8012254982643686 cos_sim:  0.583785215417629
-epoch:  27 -22101.908
-epoch:  27 0.8155791995877776 cos_sim:  0.5886695495119623
-epoch:  28 -22446.824
-epoch:  28 0.8648280238469702 cos_sim:  0.6191125407001802
-epoch:  29 -22781.098
-epoch:  29 0.8141233672684789 cos_sim:  0.6235850442044679
-epoch:  30 -23105.494
-epoch:  30 0.8517356225701397 cos_sim:  0.6302143826244113
-epoch:  31 -23420.592
-epoch:  31 0.8637719416318725 cos_sim:  0.6575216551241968
-epoch:  32 -23726.896
-epoch:  32 0.8911245431257969 cos_sim:  0.6807488234818747
-epoch:  33 -24025.006
-epoch:  33 0.88185024565861 cos_sim:  0.6858924649578482
-epoch:  34 -24315.34
-epoch:  34 0.9092930162007385 cos_sim:  0.6920263391107272
-epoch:  35 -24598.305
-epoch:  35 0.8977169773110506 cos_sim:  0.7179249289161813
-epoch:  36 -24874.361
-epoch:  36 0.9153783883203752 cos_sim:  0.7130495360299908
-epoch:  37 -25143.832
-epoch:  37 0.904893189323718 cos_sim:  0.7263834404627189
-epoch:  38 -25407.037
-epoch:  38 0.930328738632371 cos_sim:  0.7374332948610778
-epoch:  39 -25664.357
-epoch:  39 0.9292437025844901 cos_sim:  0.7190167650871081
-epoch:  40 -25916.008
-epoch:  40 0.9086132161670676 cos_sim:  0.7475698603349477
-epoch:  41 -26162.297
-epoch:  41 0.9327020555574724 cos_sim:  0.7342991297402459
-epoch:  42 -26403.479
-epoch:  42 0.9356296972566873 cos_sim:  0.7282388086412437
-epoch:  43 -26639.752
-epoch:  43 0.8775725771771479 cos_sim:  0.7551604506474472
-epoch:  44 -26871.352
-epoch:  44 0.9549987957347097 cos_sim:  0.7134454619389787
-epoch:  45 -27098.492
-epoch:  45 0.9200133799568206 cos_sim:  0.7468295163178738
-epoch:  46 -27321.361
-epoch:  46 0.9230972028396274 cos_sim:  0.7321508969363419
-epoch:  47 -27540.13
-epoch:  47 0.9334994206140623 cos_sim:  0.7665403536479864
-epoch:  48 -27754.979
-epoch:  48 0.9251684284404834 cos_sim:  0.7658363512872141
-epoch:  49 -27966.053
-epoch:  49 0.9394995972132449 cos_sim:  0.7551847162229571
-epoch:  50 -28173.479
-epoch:  50 0.9152833191400734 cos_sim:  0.7704777084584825
-epoch:  51 -28377.443
-epoch:  51 0.9376176287710352 cos_sim:  0.7609402315936283
-epoch:  52 -28578.064
-epoch:  52 0.9277966588808503 cos_sim:  0.7480212534499133
-epoch:  53 -28775.465
-epoch:  53 0.932865741156116 cos_sim:  0.7562241447444225
-epoch:  54 -28969.756
-epoch:  54 0.9288789670526105 cos_sim:  0.7632002335738054
-epoch:  55 -29161.047
-epoch:  55 0.9329031536532616 cos_sim:  0.7608614024691092
-epoch:  56 -29349.465
-epoch:  56 0.9372758960047523 cos_sim:  0.777764202645449
-epoch:  57 -29535.08
-epoch:  57 0.9441449811948128 cos_sim:  0.7695553174880704
-epoch:  58 -29718.012
-epoch:  58 0.9404151442323291 cos_sim:  0.762676452712579
-epoch:  59 -29898.355
-epoch:  59 0.9340634512046333 cos_sim:  0.7629670688190342
-epoch:  60 -30076.172
-epoch:  60 0.9481109342471957 cos_sim:  0.7773793651780377
-epoch:  61 -30251.566
-epoch:  61 0.9326801188734726 cos_sim:  0.7683510978060699
-epoch:  62 -30424.6
-epoch:  62 0.9445291871091889 cos_sim:  0.7877255156296414
-epoch:  63 -30595.352
-epoch:  63 0.9438735919179279 cos_sim:  0.77136344371662
-epoch:  64 -30763.932
-epoch:  64 0.937343595263114 cos_sim:  0.7878222276543203
-epoch:  65 -30930.334
-epoch:  65 0.9441501482660152 cos_sim:  0.7750254297189769
-epoch:  66 -31094.684
-epoch:  66 0.9515830776988773 cos_sim:  0.7924714360034492
-epoch:  67 -31257.021
-epoch:  67 0.933094937406875 cos_sim:  0.7893189731355588
-epoch:  68 -31417.404
-epoch:  68 0.9540075196577874 cos_sim:  0.8027232049985407
-epoch:  69 -31575.895
-epoch:  69 0.9586623204712059 cos_sim:  0.7922403865729684
-epoch:  70 -31732.555
-epoch:  70 0.9292103716025455 cos_sim:  0.7981883333418188
-epoch:  71 -31887.428
-epoch:  71 0.968342517323069 cos_sim:  0.799147691212549
-epoch:  72 -32040.555
-epoch:  72 0.9598030205257602 cos_sim:  0.7918190810760101
-epoch:  73 -32192.012
-epoch:  73 0.9307200575706095 cos_sim:  0.7952266877171354
-epoch:  74 -32341.803
-epoch:  74 0.9626323141885055 cos_sim:  0.7964042926366164
-epoch:  75 -32490.01
-epoch:  75 0.9633360799231332 cos_sim:  0.7874607543137507
-epoch:  76 -32636.68
-epoch:  76 0.9225488857945285 cos_sim:  0.8082480905980001
-epoch:  77 -32781.805
-epoch:  77 0.97019657205024 cos_sim:  0.7825764581787631
-epoch:  78 -32925.48
-epoch:  78 0.963285890298918 cos_sim:  0.7860624080561484
-epoch:  79 -33067.7
-epoch:  79 0.9429269491747851 cos_sim:  0.7980136723731615
-epoch:  80 -33208.555
-epoch:  80 0.9511607131367411 cos_sim:  0.8085580384890076
-epoch:  81 -33348.016
-epoch:  81 0.9634198254887376 cos_sim:  0.7899162241619514
-epoch:  82 -33486.16
-epoch:  82 0.9473248915966841 cos_sim:  0.8059170309531082
-epoch:  83 -33622.992
-epoch:  83 0.9580890531681793 cos_sim:  0.8048687072969778
-epoch:  84 -33758.57
-epoch:  84 0.9659299467617198 cos_sim:  0.7931649297294752
-epoch:  85 -33892.938
-epoch:  85 0.9564436256749522 cos_sim:  0.7994787705625175
-epoch:  86 -34026.074
-epoch:  86 0.9618720079411314 cos_sim:  0.8078731757094568
-epoch:  87 -34158.047
-epoch:  87 0.9569722558807817 cos_sim:  0.7893814854929857
-epoch:  88 -34288.855
-epoch:  88 0.9489283029669383 cos_sim:  0.8050740352866285
-epoch:  89 -34418.566
-epoch:  89 0.951370786548951 cos_sim:  0.7935754007647132
-epoch:  90 -34547.184
-epoch:  90 0.9561148321093208 cos_sim:  0.7978630300022893
-epoch:  91 -34674.72
-epoch:  91 0.9501921350949157 cos_sim:  0.7886807773518525
-epoch:  92 -34801.195
-epoch:  92 0.9565295260858795 cos_sim:  0.809322852152473
-epoch:  93 -34926.668
-epoch:  93 0.9582446348001833 cos_sim:  0.8008180631396097
-epoch:  94 -35051.13
-epoch:  94 0.951665805480357 cos_sim:  0.8089830339767328
-epoch:  95 -35174.598
-epoch:  95 0.9565018700992246 cos_sim:  0.8034205685460274
-epoch:  96 -35297.164
-epoch:  96 0.9590307894788147 cos_sim:  0.7967169103977568
-epoch:  97 -35418.727
-epoch:  97 0.9535740359365654 cos_sim:  0.8044769179647286
-epoch:  98 -35539.406
-epoch:  98 0.9561601207624104 cos_sim:  0.8126723785514178
-epoch:  99 -35659.184
-epoch:  99 0.9659278764544963 cos_sim:  0.8131848172119439
-epoch:  100 -35778.098
-epoch:  100 0.9527873133332934 cos_sim:  0.8259774828059352
-epoch:  101 -35896.14
-epoch:  101 0.9668294888826962 cos_sim:  0.8159648435801972
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 5693.153
+epoch:  0 0.28229548793989007 cos_sim:  0.022619033531049312
+epoch:  1 316.4764
+epoch:  1 0.27958564857301105 cos_sim:  0.04213379420699241
+epoch:  2 -2636.662
+epoch:  2 0.22836711480687233 cos_sim:  0.018406893239419058
+epoch:  3 -4807.1484
+epoch:  3 0.2435258664892887 cos_sim:  0.06008014341310605
+epoch:  4 -6568.6626
+epoch:  4 0.5690501388471084 cos_sim:  0.19721286131464266
+epoch:  5 -8060.7964
+epoch:  5 0.4731018352459031 cos_sim:  0.25256744233060513
+epoch:  6 -9356.993
+epoch:  6 0.8686403654063691 cos_sim:  0.4300617413615479
+epoch:  7 -10503.33
+epoch:  7 0.7834265419691799 cos_sim:  0.43752265605866747
+epoch:  8 -11531.26
+epoch:  8 0.8571120716113585 cos_sim:  0.4614111599718041
+epoch:  9 -12463.217
+epoch:  9 0.5653428861576548 cos_sim:  0.4364864198159614
+epoch:  10 -13315.871
+epoch:  10 0.8654429395258865 cos_sim:  0.48715817326419547
+epoch:  11 -14101.896
+epoch:  11 0.6340933610455076 cos_sim:  0.4839615669066222
+epoch:  12 -14831.144
+epoch:  12 0.8273675954843899 cos_sim:  0.5124595744400857
+epoch:  13 -15511.456
+epoch:  13 0.8568752528777346 cos_sim:  0.5355950321198188
+epoch:  14 -16149.146
+epoch:  14 0.8294028065063132 cos_sim:  0.5325191693102926
+epoch:  15 -16749.383
+epoch:  15 0.846513943027014 cos_sim:  0.568723724845881
+epoch:  16 -17316.451
+epoch:  16 0.8755393592040229 cos_sim:  0.5447685265464035
+epoch:  17 -17853.965
+epoch:  17 0.8430137508625613 cos_sim:  0.6014216618845688
+epoch:  18 -18364.928
+epoch:  18 0.8965206362999179 cos_sim:  0.5791492387409976
+epoch:  19 -18851.965
+epoch:  19 0.8390413478535566 cos_sim:  0.6108708164069601
+epoch:  20 -19317.305
+epoch:  20 0.9054639378433188 cos_sim:  0.6144408504917814
+epoch:  21 -19762.863
+epoch:  21 0.8896779755611319 cos_sim:  0.6108121420255002
+epoch:  22 -20190.367
+epoch:  22 0.8488525007358075 cos_sim:  0.6020494533413905
+epoch:  23 -20601.256
+epoch:  23 0.8529928980731442 cos_sim:  0.6600300302264805
+epoch:  24 -20996.871
+epoch:  24 0.9044663356853607 cos_sim:  0.6298066992849081
+epoch:  25 -21378.342
+epoch:  25 0.8376856705899207 cos_sim:  0.6585203539940162
+epoch:  26 -21746.729
+epoch:  26 0.9378846699252307 cos_sim:  0.60881497860731
+epoch:  27 -22102.941
+epoch:  27 0.849449113103251 cos_sim:  0.6525650556752356
+epoch:  28 -22447.814
+epoch:  28 0.872250861092751 cos_sim:  0.6436377751685589
+epoch:  29 -22782.086
+epoch:  29 0.9155225128961455 cos_sim:  0.6463773359897746
+epoch:  30 -23106.443
+epoch:  30 0.9162852332853272 cos_sim:  0.6189069768509858
+epoch:  31 -23421.508
+epoch:  31 0.8793182271952188 cos_sim:  0.665715294582792
+epoch:  32 -23727.812
+epoch:  32 0.8793893085608792 cos_sim:  0.6438682678618819
+epoch:  33 -24025.9
+epoch:  33 0.9287661552662678 cos_sim:  0.6462025926817334
+epoch:  34 -24316.219
+epoch:  34 0.8918029268832234 cos_sim:  0.6706112491033545
+epoch:  35 -24599.193
+epoch:  35 0.9127900443486879 cos_sim:  0.673780869510179
+epoch:  36 -24875.252
+epoch:  36 0.9285786253192126 cos_sim:  0.6854182189097402
+epoch:  37 -25144.709
+epoch:  37 0.9317423517149773 cos_sim:  0.6853374737559945
+epoch:  38 -25407.928
+epoch:  38 0.9075787827865353 cos_sim:  0.6936487150625388
+epoch:  39 -25665.234
+epoch:  39 0.9230024322834709 cos_sim:  0.7049994408479131
+epoch:  40 -25916.889
+epoch:  40 0.9332276877051029 cos_sim:  0.6831901114407906
+epoch:  41 -26163.19
+epoch:  41 0.9143607907760882 cos_sim:  0.6971450438212098
+epoch:  42 -26404.354
+epoch:  42 0.9282791809709405 cos_sim:  0.712575286205372
+epoch:  43 -26640.635
+epoch:  43 0.9354400871484997 cos_sim:  0.7022536185303794
+epoch:  44 -26872.238
+epoch:  44 0.9269872230616667 cos_sim:  0.7004408858060022
+epoch:  45 -27099.385
+epoch:  45 0.9238583229170277 cos_sim:  0.7269404286846686
+epoch:  46 -27322.248
+epoch:  46 0.940261400123332 cos_sim:  0.708734794886181
+epoch:  47 -27541.021
+epoch:  47 0.9320925369827522 cos_sim:  0.6980133656244898
+epoch:  48 -27755.865
+epoch:  48 0.930140108110526 cos_sim:  0.7243511872389519
+epoch:  49 -27966.936
+epoch:  49 0.9294681196146026 cos_sim:  0.7163504261495011
+epoch:  50 -28174.377
+epoch:  50 0.9351787798821497 cos_sim:  0.6953385168764051
+epoch:  51 -28378.344
+epoch:  51 0.9209752921684787 cos_sim:  0.7417665604502269
+epoch:  52 -28578.947
+epoch:  52 0.927412285093422 cos_sim:  0.7222909267035771
+epoch:  53 -28776.357
+epoch:  53 0.9394072808078361 cos_sim:  0.7116066551235785
+epoch:  54 -28970.643
+epoch:  54 0.933922025315366 cos_sim:  0.7500938366682361
+epoch:  55 -29161.94
+epoch:  55 0.9347629305106893 cos_sim:  0.7322099387612466
+epoch:  56 -29350.355
+epoch:  56 0.9558511298951102 cos_sim:  0.7208318574655244
+epoch:  57 -29535.977
+epoch:  57 0.9261287356592182 cos_sim:  0.7458206744077783
+epoch:  58 -29718.906
+epoch:  58 0.933612200528003 cos_sim:  0.7345734875546677
+epoch:  59 -29899.246
+epoch:  59 0.9524340731554498 cos_sim:  0.718061783778424
+epoch:  60 -30077.059
+epoch:  60 0.9442740918877034 cos_sim:  0.7599618320935608
+epoch:  61 -30252.432
+epoch:  61 0.9485710406207688 cos_sim:  0.6967774132700786
+epoch:  62 -30425.365
+epoch:  62 0.9050901433410495 cos_sim:  0.4513252961127511
+epoch:  63 -30596.234
+epoch:  63 0.9242959936723895 cos_sim:  0.5687496221952401
+epoch:  64 -30764.812
+epoch:  64 0.9454563605486658 cos_sim:  0.7394440054620356
+epoch:  65 -30931.219
+epoch:  65 0.9571730787108917 cos_sim:  0.712819815538372
+epoch:  66 -31095.564
+epoch:  66 0.9451384470561156 cos_sim:  0.7418374109305383
+epoch:  67 -31257.902
+epoch:  67 0.954720429607187 cos_sim:  0.7192330842843826
+epoch:  68 -31418.281
+epoch:  68 0.9545267189146341 cos_sim:  0.7135179962185285
+epoch:  69 -31576.783
+epoch:  69 0.9639516920985022 cos_sim:  0.7209065992600925
+epoch:  70 -31733.441
+epoch:  70 0.9439100453135852 cos_sim:  0.7399912943366947
+epoch:  71 -31888.31
+epoch:  71 0.9622726704401303 cos_sim:  0.7349811281616716
+epoch:  72 -32041.451
+epoch:  72 0.9535611577746804 cos_sim:  0.7591735871584226
+epoch:  73 -32192.904
+epoch:  73 0.95996881566203 cos_sim:  0.739837587669054
+epoch:  74 -32342.7
+epoch:  74 0.9317728388703037 cos_sim:  0.7572868929037136
+epoch:  75 -32490.912
+epoch:  75 0.9572032619257901 cos_sim:  0.7446139955062485
+epoch:  76 -32637.568
+epoch:  76 0.9548548461378824 cos_sim:  0.7680592359630185
+epoch:  77 -32782.7
+epoch:  77 0.9561647624095061 cos_sim:  0.742318609779789
+epoch:  78 -32926.36
+epoch:  78 0.9404188849787364 cos_sim:  0.7478644423976011
+epoch:  79 -33068.605
+epoch:  79 0.9618129926724626 cos_sim:  0.731621553429342
+epoch:  80 -33209.445
+epoch:  80 0.9561619459250461 cos_sim:  0.7648712239299538
+epoch:  81 -33348.902
+epoch:  81 0.9522611705085899 cos_sim:  0.7416595060011661
+epoch:  82 -33487.043
+epoch:  82 0.9612861282621817 cos_sim:  0.7230694332011134
+epoch:  83 -33623.875
+epoch:  83 0.9565602625776412 cos_sim:  0.7437068655439258
+epoch:  84 -33759.48
+epoch:  84 0.9598311128080256 cos_sim:  0.7327306632014138
+epoch:  85 -33893.83
+epoch:  85 0.9503781843512488 cos_sim:  0.7543957073995309
+epoch:  86 -34026.957
+epoch:  86 0.9530883204993832 cos_sim:  0.7343725535952638
+epoch:  87 -34158.94
+epoch:  87 0.9593780104433542 cos_sim:  0.7520830196139698
+epoch:  88 -34289.734
+epoch:  88 0.9622306073574305 cos_sim:  0.7378471936260022
+epoch:  89 -34419.465
+epoch:  89 0.9559589919171196 cos_sim:  0.7699346939589242
+epoch:  90 -34548.066
+epoch:  90 0.9537631444414412 cos_sim:  0.7463194928657853
+epoch:  91 -34675.594
+epoch:  91 0.9626370507905808 cos_sim:  0.7411465423021253
+epoch:  92 -34802.086
+epoch:  92 0.9562267642902195 cos_sim:  0.7329199632034215
+epoch:  93 -34927.56
+epoch:  93 0.962671377016567 cos_sim:  0.755414173822578
+epoch:  94 -35052.03
+epoch:  94 0.9683310861861049 cos_sim:  0.7429157494056355
+epoch:  95 -35175.5
+epoch:  95 0.9584927123886283 cos_sim:  0.7641784100541941
+epoch:  96 -35298.055
+epoch:  96 0.9693497074679568 cos_sim:  0.7583797152799366
+epoch:  97 -35419.625
+epoch:  97 0.9624840607942527 cos_sim:  0.7540017742334677
+epoch:  98 -35540.312
+epoch:  98 0.9701834747367486 cos_sim:  0.7564679635085944
+epoch:  99 -35660.08
+epoch:  99 0.9537982602028695 cos_sim:  0.7486775651705533
+epoch:  100 -35778.996
+epoch:  100 0.9722433461970461 cos_sim:  0.746924645724968
+epoch:  101 -35897.04
+epoch:  101 0.9580384335213504 cos_sim:  0.7468827966992134
 </pre></div>
 </div>
 <p>model test with 20 window for warmup</p>
@@ -527,7 +531,7 @@ epoch:  101 0.9668294888826962 cos_sim:  0.8159648435801972
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.9652051572335757 cos_sim:  0.8357307170736874
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.9669014220679563 cos_sim:  0.730125615725465
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -554,7 +558,7 @@ epoch:  101 0.9668294888826962 cos_sim:  0.8159648435801972
 </pre></div>
 </div>
 <img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_002.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 37 minutes  31.815 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 21 minutes  36.865 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/96a042e39a4f43abe4e10ca8c12118f5/eg004r__fitting_JR_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg004r__fitting_JR_example.py</span></code></a></p>

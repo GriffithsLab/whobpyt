@@ -223,7 +223,7 @@
 
 <span class="c1"># Simulation Length</span>
 <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># Step Size in msecs</span>
-<span class="n">sim_len</span> <span class="o">=</span> <span class="mi">2000</span> <span class="c1"># Simulation length in msecs</span>
+<span class="n">sim_len</span> <span class="o">=</span> <span class="mi">1500</span> <span class="c1"># Simulation length in msecs</span>
 
 <span class="n">skip_trans</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">500</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
 
@@ -290,7 +290,7 @@
 </div>
 <img alt="SC of Artificial Data" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.0000)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.)
 
 Text(0.5, 1.0, &#39;SC of Artificial Data&#39;)
 </pre></div>
@@ -475,85 +475,85 @@ Also, written in such a way as to be able to track and plot indiviual components
 tensor([0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500],
        requires_grad=True))]
 0
-totalLoss =  0.45707619190216064
+totalLoss =  0.45870381593704224
 J values =  [0.24999991 0.24999991 0.24999991 0.24999991 0.24999991 0.24999991
- 0.2499999  0.24999991]
+ 0.24999991 0.24999991]
 1
-totalLoss =  0.44722333550453186
-J values =  [0.35012698 0.35013247 0.3501242  0.35012686 0.35012406 0.35012805
- 0.35013387 0.35012752]
+totalLoss =  0.44829198718070984
+J values =  [0.350118   0.35012162 0.35013086 0.35013437 0.35012746 0.35013115
+ 0.35012943 0.35013554]
 2
-totalLoss =  0.43750813603401184
-J values =  [0.45046356 0.4504786  0.45046595 0.45046222 0.45047808 0.45047545
- 0.45045924 0.4504658 ]
+totalLoss =  0.43737322092056274
+J values =  [0.45044643 0.45047116 0.45048228 0.45048353 0.4504697  0.4504866
+ 0.4504758  0.45048684]
 3
-totalLoss =  0.42805352807044983
-J values =  [0.5510983  0.5511285  0.5510994  0.55110085 0.5511203  0.5511205
- 0.5510877  0.55110294]
+totalLoss =  0.4256569743156433
+J values =  [0.55108535 0.55113876 0.5511439  0.55114675 0.55112624 0.55114204
+ 0.55113167 0.55114245]
 4
-totalLoss =  0.41496431827545166
-J values =  [0.65212536 0.65216184 0.6521245  0.6521411  0.65215546 0.6521607
- 0.6521227  0.65213996]
+totalLoss =  0.4148443341255188
+J values =  [0.6521179  0.6521953  0.6521903  0.6521926  0.652167   0.65219295
+ 0.6521922  0.65219074]
 5
-totalLoss =  0.4029141366481781
-J values =  [0.75363624 0.7536816  0.75363517 0.75366104 0.7536743  0.75368625
- 0.75364554 0.7536542 ]
+totalLoss =  0.4010317623615265
+J values =  [0.75363874 0.75373286 0.75372046 0.75371987 0.75369316 0.75373614
+ 0.75372684 0.7537241 ]
 6
-totalLoss =  0.38621458411216736
-J values =  [0.85572505 0.8557575  0.8557279  0.85575616 0.855768   0.85578686
- 0.85574275 0.85574543]
+totalLoss =  0.38592851161956787
+J values =  [0.85573626 0.85584086 0.8558211  0.85582143 0.85579246 0.85584754
+ 0.8558296  0.85582364]
 7
-totalLoss =  0.3694453239440918
-J values =  [0.95847327 0.95849603 0.958479   0.95850915 0.9585203  0.95854366
- 0.9584975  0.9584956 ]
+totalLoss =  0.370978981256485
+J values =  [0.9584901  0.9586016  0.9585769  0.95857733 0.95854735 0.95861125
+ 0.9585866  0.9585787 ]
 8
-totalLoss =  0.35166484117507935
-J values =  [1.0619541 1.0619687 1.0619632 1.0619942 1.0620054 1.0620328 1.0619831
- 1.0619786]
+totalLoss =  0.3509676456451416
+J values =  [1.0619758 1.0620928 1.0620633 1.0620642 1.0620344 1.0621057 1.0620757
+ 1.0620656]
 9
-totalLoss =  0.3316083252429962
-J values =  [1.1662313 1.166247  1.1662424 1.166272  1.1662872 1.1663175 1.1662616
- 1.1662545]
+totalLoss =  0.32990261912345886
+J values =  [1.1662499 1.1663713 1.1663383 1.1663406 1.1663095 1.1663913 1.1663572
+ 1.1663404]
 10
-totalLoss =  0.3037593364715576
-J values =  [1.2713151 1.2713126 1.2713299 1.2713248 1.2713777 1.2714076 1.2713435
- 1.2713358]
+totalLoss =  0.3037903308868408
+J values =  [1.2713385 1.2714635 1.2714272 1.271433  1.2713966 1.2714908 1.2714565
+ 1.2714298]
 11
-totalLoss =  0.27344468235969543
-J values =  [1.3771706 1.3771288 1.377191  1.3771662 1.377245  1.3772701 1.3771875
- 1.3771831]
+totalLoss =  0.27565115690231323
+J values =  [1.3772111 1.3773354 1.3773009 1.3773098 1.3772618 1.3773692 1.377329
+ 1.3773041]
 12
-totalLoss =  0.23694005608558655
-J values =  [1.4835882 1.4835253 1.4836556 1.483608  1.4837211 1.4837157 1.4836292
- 1.4836026]
+totalLoss =  0.23796828091144562
+J values =  [1.4836774 1.4838055 1.4837584 1.4838063 1.4837106 1.4838433 1.4838197
+ 1.4837818]
 13
-totalLoss =  0.19095362722873688
-J values =  [1.5900149 1.589856  1.5901111 1.5900478 1.590193  1.5901092 1.5900403
- 1.5900121]
+totalLoss =  0.19208669662475586
+J values =  [1.5901268 1.5902689 1.5901741 1.5903264 1.5900964 1.5903443 1.5903451
+ 1.5902209]
 14
-totalLoss =  0.12203123420476913
-J values =  [1.6934917 1.6931841 1.6936269 1.6934978 1.6935512 1.6935322 1.693455
- 1.6934685]
+totalLoss =  0.12404798716306686
+J values =  [1.6939565 1.6942589 1.6940631 1.6944373 1.6939443 1.6943682 1.6943487
+ 1.6942451]
 15
-totalLoss =  0.004609754309058189
-J values =  [1.7975023 1.7968534 1.7974485 1.7970104 1.797312  1.7969694 1.7969816
- 1.7869883]
+totalLoss =  0.006888899952173233
+J values =  [1.7989967 1.7996701 1.7993121 1.7997724 1.7991023 1.7997336 1.7997712
+ 1.799479 ]
 16
-totalLoss =  0.004254146944731474
-J values =  [1.8908546 1.8898996 1.8906986 1.8899884 1.8904669 1.8898616 1.8899275
- 1.871139 ]
+totalLoss =  0.00703659700229764
+J values =  [1.8930041 1.8939734 1.8934457 1.893989  1.893259  1.8941216 1.8941151
+ 1.8936718]
 17
-totalLoss =  0.007882162928581238
-J values =  [1.9747796 1.9735996 1.9745357 1.9736153 1.9741981 1.9734313 1.9734976
- 1.9469379]
+totalLoss =  0.008522287011146545
+J values =  [1.9774255 1.978622  1.9779078 1.9785397 1.9777298 1.97885   1.9787736
+ 1.9782004]
 18
-totalLoss =  0.009208699688315392
-J values =  [2.0503592 2.04897   2.0500379 2.0489302 2.0495923 2.048707  2.0487483
- 2.015297 ]
+totalLoss =  0.008777551352977753
+J values =  [2.053327  2.0547993 2.0538301 2.0545294 2.0536678 2.0550096 2.054908
+ 2.05413  ]
 19
-totalLoss =  0.01175776869058609
-J values =  [2.1184752 2.1168976 2.118076  2.1167848 2.1175435 2.1165488 2.1165805
- 2.0770268]
+totalLoss =  0.012037302367389202
+J values =  [2.1216002 2.123308  2.1221964 2.1228743 2.1219444 2.1235101 2.1233938
+ 2.12237  ]
 
 Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </pre></div>
@@ -573,7 +573,7 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7ff9355f1550&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa9c5d62b20&gt;
 </pre></div>
 </div>
 </div>
@@ -610,12 +610,12 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </div>
 <img alt="Simulated BOLD FC: After Training" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_005.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([15000, 8])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([10000, 8])
 
 &lt;AxesSubplot: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 24 minutes  54.587 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 10 minutes  19.566 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>
