@@ -12,39 +12,35 @@ import numpy as np  # for numerical operations
 class OutputNM:
     mode_all = ['train', 'test']
     stat_vars_all = ['m', 'v_inv']
-    output_name = ['bold']
 
-    def __init__(self, model_name, param, fit_weights=False, fit_lfm=False):
-        state_names = ['E']
+    def __init__(self, model):
         self.loss = np.array([])
-        if model_name == 'RWW':
-            state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-            self.output_name = "bold"
-        elif model_name == "JR":
-            state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
-            self.output_name = "eeg"
-        elif model_name == 'LIN':
-            state_names = ['E']
-            self.output_name = "bold"
+        
+        model_info = model.info()
+        self.state_names = model_info["state_names"]
+        self.output_name = model_info["output_name"]
 
-        for name in state_names + [self.output_name]:
+        for name in self.state_names + [self.output_name]:
             for m in self.mode_all:
                 setattr(self, name + '_' + m, [])
 
-        vars_name = [a for a in dir(param) if not a.startswith('__') and not callable(getattr(param, a))]
+        vars_name = [a for a in dir(model.param) if not a.startswith('__') and not callable(getattr(model.param, a))]
         for var in vars_name:
-            if np.any(getattr(param, var)[1] > 0):
+            if np.any(getattr(model.param, var)[1] > 0):
                 if var != 'std_in':
                     setattr(self, var, np.array([]))
                     for stat_var in self.stat_vars_all:
                         setattr(self, var + '_' + stat_var, [])
                 else:
                     setattr(self, var, [])
-        if fit_weights:
-            self.weights = []
+        
+        if hasattr(model, 'use_fit_gains'):        
+            if model.use_fit_gains:
+                self.weights = []
 
-        if model_name == 'JR' and fit_lfm:
-            self.leadfield = []
+        if hasattr(model, 'use_fit_lfm'):
+            if model.use_fit_lfm:
+                self.leadfield = []
 
     def save(self, filename):
         with open(filename, 'wb') as f:

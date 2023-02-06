@@ -43,7 +43,7 @@ num_channels = 6
 
 # Simulation Length
 step_size = 0.1 # Step Size in msecs
-sim_len = 2000 # Simulation length in msecs
+sim_len = 1500 # Simulation length in msecs
 
 skip_trans = int(500/step_size)
 

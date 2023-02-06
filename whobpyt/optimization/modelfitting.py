@@ -7,9 +7,8 @@ module for model fitting using pytorch
 import numpy as np  # for numerical operations
 import torch
 import torch.optim as optim
-from whobpyt.optimization.cost_funs import Costs
 from whobpyt.datatypes.outputs import OutputNM
-from whobpyt.functions.numpy_funs import WWD_np
+from whobpyt.models.RWW.RWW_np import RWW_np #This should be removed and made general
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -44,8 +43,7 @@ class Model_fitting:
         self.model = model
         self.num_epoches = num_epoches
         # placeholder for output(EEG and histoty of model parameters and loss)
-        self.output_sim = OutputNM(self.model.model_name, self.model.param,
-                                   self.model.use_fit_gains, self.model.use_fit_lfm)
+        self.output_sim = OutputNM(self.model)
         # self.u = u
         """if ts.shape[1] != model.node_size:
             print('ts is a matrix with the number of datapoint X the number of node')
@@ -53,7 +51,7 @@ class Model_fitting:
             self.ts = ts"""
         self.ts = ts
 
-        self.cost = Costs(cost)
+        self.cost = cost
 
     def save(self, filename):
         with open(filename, 'wb') as f:
@@ -93,18 +91,7 @@ class Model_fitting:
         optimizer = optim.Adam(self.model.parameters(), lr=learningrate, eps=1e-7)
 
         # initial state
-        X = 0
-        if self.model.model_name == 'RWW':
-            # initial state
-            X = torch.tensor(0.2 * np.random.uniform(0, 1, (self.model.node_size, self.model.state_size)) + np.array(
-                [0, 0, 0, 1.0, 1.0, 1.0]), dtype=torch.float32)
-        elif self.model.model_name == 'LIN':
-            # initial state
-            X = torch.tensor(0.2 * np.random.randn(self.model.node_size, self.model.state_size) + np.array(
-                [0, 0.5, 1.0, 1.0, 1.0]), dtype=torch.float32)
-        elif self.model.model_name == 'JR':
-            X = torch.tensor(np.random.uniform(state_lb, state_ub, (self.model.node_size, self.model.state_size)),
-                             dtype=torch.float32)
+        X = self.model.createIC(ver = 0)
         # initials of history of E
         hE = torch.tensor(np.random.uniform(state_lb, state_ub, (self.model.node_size, delays_max)),
                           dtype=torch.float32)
@@ -175,7 +162,7 @@ class Model_fitting:
                     sim = next_window['eeg_window']
                 elif self.model.model_name == 'LIN':
                     sim = next_window['bold_window']
-                loss = self.cost.cost_eff(sim, ts_window, self.model, next_window)
+                loss = self.cost.loss(sim, ts_window, self.model, next_window)
                 # Put the batch of the simulated EEG, E I M Ev Iv Mv in to placeholders for entire time-series.
                 for name in self.model.state_names + [self.output_sim.output_name]:
                     name_next = name + '_window'
@@ -256,18 +243,8 @@ class Model_fitting:
         self.u = u
 
         # initial state
-        X = 0
-        if self.model.model_name == 'RWW':
-            # initial state
-            X = torch.tensor(0.2 * np.random.uniform(0, 1, (self.model.node_size, self.model.state_size)) + np.array(
-                [0, 0, 0, 1.0, 1.0, 1.0]), dtype=torch.float32)
-        elif self.model.model_name == 'LIN':
-            # initial state
-            X = torch.tensor(0.2 * np.random.randn(self.model.node_size, self.model.state_size) + np.array(
-                [0, 0.5, 1.0, 1.0, 1.0]), dtype=torch.float32)
-        elif self.model.model_name == 'JR':
-            X = torch.tensor(np.random.uniform(state_lb, state_ub, (self.model.node_size, self.model.state_size)),
-                             dtype=torch.float32)
+        X = self.model.createIC(ver = 1)
+        # initials of history of E
         hE = torch.tensor(np.random.uniform(state_lb, state_ub, (self.model.node_size, 500)), dtype=torch.float32)
 
         # placeholders for model parameters
@@ -343,7 +320,7 @@ class Model_fitting:
                     value = getattr(self.model, var)
                     des[0] = value.detach().numpy().copy()
                     setattr(self.model.param, var, des)
-            model_np = WWD_np(self.model.node_size, self.model.TRs_per_window, step_size_n, step_size, tr_p,
+            model_np = RWW_np(self.model.node_size, self.model.TRs_per_window, step_size_n, step_size, tr_p,
                               self.model.sc_fitted.detach().numpy().copy(),
                               self.model.use_dynamic_boundary, self.model.use_Laplacian, self.model.param)
 
@@ -379,4 +356,4 @@ class Model_fitting:
                 tmp_ls = getattr(self.output_sim, name + '_test')
                 setattr(self.output_sim, name + '_test', np.concatenate(tmp_ls, axis=1))
         else:
-            print("only WWD model for the test_realtime function")
+            print("only RWW model for the test_realtime function")
