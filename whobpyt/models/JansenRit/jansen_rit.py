@@ -162,7 +162,8 @@ def sys2nd(A, a, u, x, v):
     return A * a * u - 2 * a * v - a ** 2 * x
 
 def setModelParameters(model):
-
+    param_reg = []
+    param_hyper = []
     # set model parameters (variables: need to calculate gradient) as Parameter others : tensor
     # set w_bb as Parameter if fit_gain is True
     if model.use_fit_gains:
@@ -172,6 +173,9 @@ def setModelParameters(model):
                                             dtype=torch.float32))
         model.w_ll = Parameter(torch.tensor(np.zeros((model.node_size, model.node_size)) + 0.05,
                                             dtype=torch.float32))
+        param_reg.append(model.w_ll)
+        param_reg.append(model.w_ff)
+        param_reg.append(model.w_bb)
     else:
         model.w_bb = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)
         model.w_ff = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)
@@ -179,6 +183,7 @@ def setModelParameters(model):
 
     if model.use_fit_lfm:
         model.lm = Parameter(torch.tensor(model.lm, dtype=torch.float32))  # leadfield matrix from sourced data to eeg
+        param_reg.append(model.lm)
     else:
         model.lm = torch.tensor(model.lm, dtype=torch.float32)  # leadfield matrix from sourced data to eeg
 
@@ -192,6 +197,7 @@ def setModelParameters(model):
                     setattr(model, var, Parameter(
                         torch.tensor(getattr(model.param, var)[0] - 1 * np.ones((size[0], size[1])),
                                      dtype=torch.float32)))
+                    param_reg.append(getattr(model, var))
                     print(getattr(model, var))
                 else:
                     size = getattr(model.param, var)[1].shape
@@ -199,11 +205,13 @@ def setModelParameters(model):
                         torch.tensor(
                             getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(size[0], size[1]),
                             dtype=torch.float32)))
+                    param_reg.append(getattr(model, var))
                     # print(getattr(self, var))
             else:
                 setattr(model, var, Parameter(
                     torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],
                                  dtype=torch.float32)))
+                param_reg.append(getattr(model, var))
             if var != 'std_in':
                 dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
 
@@ -211,8 +219,10 @@ def setModelParameters(model):
 
                 for key in dict_nv:
                     setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
+                    param_hyper.append(getattr(model, dict_np[key]))
         else:
             setattr(model, var, torch.tensor(getattr(model.param, var)[0], dtype=torch.float32))
+    model.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 
 
 def integration_forward(model, external, hx, hE):

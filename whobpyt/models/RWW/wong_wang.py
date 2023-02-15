@@ -182,33 +182,48 @@ def h_tf(a, b, d, z):
     return torch.divide(num, den)
 
 def setModelParameters(model):
-
+    
+    
+    param_reg = []
+    param_hyper = []
     if model.use_Gaussian_EI:
         model.E_m = Parameter(torch.tensor(0.16, dtype=torch.float32))
+        param_hyper.append(model.E_m)
         model.I_m = Parameter(torch.tensor(0.1, dtype=torch.float32))
+        param_hyper.append(model.I_m)
         # model.f_m = Parameter(torch.tensor(1.0, dtype=torch.float32))
         model.v_m = Parameter(torch.tensor(1.0, dtype=torch.float32))
+        param_hyper.append(model.v_m)
         # model.x_m = Parameter(torch.tensor(0.16, dtype=torch.float32))
         model.q_m = Parameter(torch.tensor(1.0, dtype=torch.float32))
+        param_hyper.append(model.q_m)
 
         model.E_v_inv = Parameter(torch.tensor(2500, dtype=torch.float32))
+        param_hyper.append(model.E_v_inv)
         model.I_v_inv = Parameter(torch.tensor(2500, dtype=torch.float32))
+        param_hyper.append(model.I_v_inv)
         # model.f_v = Parameter(torch.tensor(100, dtype=torch.float32))
         model.v_v_inv = Parameter(torch.tensor(100, dtype=torch.float32))
+        param_hyper.append(model.v_v_inv)
         # model.x_v = Parameter(torch.tensor(100, dtype=torch.float32))
         model.q_v_inv = Parameter(torch.tensor(100, dtype=torch.float32))
+        param_hyper.append(model.v_v_inv)
 
     # hyper parameters (variables: need to calculate gradient) to fit density
     # of gEI and gIE (the shape from the bifurcation analysis on an isolated node)
     if model.use_Bifurcation:
         model.sup_ca = Parameter(torch.tensor(0.5, dtype=torch.float32))
+        param_hyper.append(model.sup_ca)
         model.sup_cb = Parameter(torch.tensor(20, dtype=torch.float32))
+        param_hyper.append(model.sup_cb)
         model.sup_cc = Parameter(torch.tensor(10, dtype=torch.float32))
+        param_hyper.append(model.sup_cc)
 
     # set gains_con as Parameter if fit_gain is True
     if model.use_fit_gains:
         model.gains_con = Parameter(torch.tensor(np.zeros((model.node_size, model.node_size)) + 0.05,
                                                  dtype=torch.float32))  # connenction gain to modify empirical sc
+        param_reg.append(model.gains_con)
     else:
         model.gains_con = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)
 
@@ -218,6 +233,7 @@ def setModelParameters(model):
             setattr(model, var, Parameter(
                 torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],
                              dtype=torch.float32)))
+            param_reg.append(getattr(model, var))
             if model.use_Bifurcation:
                 if var not in ['std_in', 'g_IE', 'g_EI']:
                     dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
@@ -226,6 +242,7 @@ def setModelParameters(model):
 
                     for key in dict_nv:
                         setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
+                        param_hyper.append(getattr(model, dict_np[key]))
             else:
                 if var not in ['std_in']:
                     dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
@@ -234,8 +251,10 @@ def setModelParameters(model):
 
                     for key in dict_nv:
                         setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
+                        param_hyper.append(getattr(model, dict_np[key]))
         else:
             setattr(model, var, torch.tensor(getattr(model.param, var)[0], dtype=torch.float32))
+    model.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 
 def integration_forward(model, external, hx, hE):
 
