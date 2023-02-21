@@ -119,11 +119,13 @@ class RNNLIN(AbstractNMM):
         return integration_forward(self, external, hx, hE)
 
 def setModelParameters(model):
-
+    param_reg = []
+    param_hyper = []
     # set gains_con as Parameter if fit_gain is True
     if model.use_fit_gains:
         model.gains_con = Parameter(torch.tensor(np.zeros((model.node_size, model.node_size)) + 0.05,
                                                  dtype=torch.float32))  # connenction gain to modify empirical sc
+        param_reg.append(model.gains_con)
     else:
         model.gains_con = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)
 
@@ -133,6 +135,7 @@ def setModelParameters(model):
             setattr(model, var, Parameter(
                 torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],
                              dtype=torch.float32)))
+            param_reg.append(getattr(model, var))
 
             if var not in ['std_in']:
                 dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
@@ -141,8 +144,10 @@ def setModelParameters(model):
 
                 for key in dict_nv:
                     setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
+                    param_hyper.append(getattr(model, dict_np[key]))
         else:
             setattr(model, var, torch.tensor(getattr(model.param, var)[0], dtype=torch.float32))
+    model.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 
             
 def integration_forward(model, external, hx, hE):

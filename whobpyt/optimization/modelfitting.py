@@ -87,9 +87,18 @@ class Model_fitting:
 
         self.u = u
 
-        # define an optimizer(ADAM)
-        optimizer = optim.Adam(self.model.parameters(), lr=learningrate, eps=1e-7)
+        #Define two different optimizers for each group
+        modelparameter_optimizer = optim.Adam(self.model.params_fitted['modelparameter'], lr=learningrate, eps=1e-7)
+        hyperparameter_optimizer = optim.Adam(self.model.params_fitted['hyperparameter'], lr=learningrate/40, eps=1e-7)
 
+        # Define the learning rate schedulers for each group of parameters
+        total_steps = self.ts.shape[1]*self.num_epoches
+        hyperparameter_scheduler = optim.lr_scheduler.OneCycleLR(hyperparameter_optimizer, learningrate/40, total_steps, anneal_strategy = "cos")
+        hlrs = []
+        
+        modelparameter_scheduler = optim.lr_scheduler.OneCycleLR(modelparameter_optimizer, learningrate, total_steps, anneal_strategy = "cos")
+        mlrs = []
+        
         # initial state
         X = self.model.createIC(ver = 0)
         # initials of history of E
@@ -139,7 +148,8 @@ class Model_fitting:
             for TR_i in range(num_windows):
 
                 # Reset the gradient to zeros after update model parameters.
-                optimizer.zero_grad()
+                hyperparameter_optimizer.zero_grad()
+                modelparameter_optimizer.zero_grad()
 
                 # if the external not empty
                 if not isinstance(self.u, int):
@@ -177,7 +187,16 @@ class Model_fitting:
                 loss.backward(retain_graph=True)
 
                 # Optimize the model based on the gradient method in updating the model parameters.
-                optimizer.step()
+                hyperparameter_optimizer.step()
+                modelparameter_optimizer.step()
+                
+                #appending (needed to plot learning rate)
+                hlrs.append(hyperparameter_optimizer.param_groups[0]["lr"])
+                mlrs.append(modelparameter_optimizer.param_groups[0]["lr"])
+                
+                # schedular step 
+                hyperparameter_scheduler.step()
+                modelparameter_scheduler.step()
 
                 # Put the updated model parameters into the history placeholders.
                 # sc_par.append(self.model.sc[mask].copy())
@@ -207,6 +226,9 @@ class Model_fitting:
 
             print('epoch: ', i_epoch, np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 'cos_sim: ',
                   np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
+            print('Modelparam_lr', modelparameter_scheduler.get_last_lr()[0])
+            print('Hyperparam_lr', hyperparameter_scheduler.get_last_lr()[0])
+
 
             for name in self.model.state_names + [self.output_sim.output_name]:
                 tmp_ls = getattr(self.output_sim, name + '_train')
