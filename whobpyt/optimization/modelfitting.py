@@ -104,6 +104,9 @@ class Model_fitting:
         # initials of history of E
         hE = torch.tensor(np.random.uniform(state_lb, state_ub, (self.model.node_size, delays_max)),
                           dtype=torch.float32)
+        #if self.model.model_name == "CT":
+         #   hE = torch.tensor(np.random.uniform(state_lb, state_ub, (self.model.node_size+1, delays_max)),
+          #                dtype=torch.float32)
 
         # define masks for getting lower triangle matrix indices
         mask = np.tril_indices(self.model.node_size, -1)
@@ -168,10 +171,12 @@ class Model_fitting:
                 sim = 0
                 if self.model.model_name == 'RWW':
                     sim = next_window['bold_window']
-                elif self.model.model_name == 'JR':
+                elif self.model.model_name == 'JR' or self.model.model_name == 'CT':
                     sim = next_window['eeg_window']
                 elif self.model.model_name == 'LIN':
                     sim = next_window['bold_window']
+                    
+                print(sim, ts_window)
                 loss = self.cost.loss(sim, ts_window, self.model, next_window)
                 # Put the batch of the simulated EEG, E I M Ev Iv Mv in to placeholders for entire time-series.
                 for name in self.model.state_names + [self.output_sim.output_name]:
@@ -221,6 +226,8 @@ class Model_fitting:
             tmp_ls = getattr(self.output_sim, self.output_sim.output_name + '_train')
             ts_sim = np.concatenate(tmp_ls, axis=1)
             fc_sim = np.corrcoef(ts_sim[:, 10:])
+            
+            print(ts_sim.shape, ts_emp.shape)
 
             print('epoch: ', i_epoch, loss.detach().numpy())
 
