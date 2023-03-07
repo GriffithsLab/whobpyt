@@ -105,8 +105,6 @@ class RNNRWW(AbstractNMM):
     forward(input, external, hx, hE)
         forward model (WWD) for generating a number of BOLD signals with current model parameters
     """
-    state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-    model_name = "RWW"
     use_fit_lfm = False
     input_size = 2
 
@@ -136,6 +134,11 @@ class RNNRWW(AbstractNMM):
             define model parameters(var:0 constant var:non-zero Parameter)
         """
         super(RNNRWW, self).__init__()
+        
+        self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
+        self.output_name = "bold"
+        self.model_name = "RWW"
+        
         self.state_size = 6  # 6 states WWD model
         # self.input_size = input_size  # 1 or 2
         self.tr = tr  # tr fMRI image

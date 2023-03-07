@@ -8,6 +8,8 @@ import pickle
 
 import numpy as np  # for numerical operations
 
+import whobpyt.datatypes.parameter
+
 
 class OutputNM:
     mode_all = ['train', 'test']
@@ -26,15 +28,25 @@ class OutputNM:
 
         vars_name = [a for a in dir(model.param) if not a.startswith('__') and not callable(getattr(model.param, a))]
         for var in vars_name:
-            if np.any(getattr(model.param, var)[1] > 0):
-                if var != 'std_in':
+            if (type(getattr(model.param, var)) != whobpyt.datatypes.parameter.par):
+                if np.any(getattr(model.param, var)[1] > 0):
+                    if var != 'std_in':
+                        setattr(self, var, np.array([]))
+                        for stat_var in self.stat_vars_all:
+                            setattr(self, var + '_' + stat_var, [])
+                    else:
+                        setattr(self, var, [])
+            
+            else:
+            
+                if getattr(model.param, var).fit_par:
                     setattr(self, var, np.array([]))
+                
+                if getattr(model.param, var).fit_hyper:
                     for stat_var in self.stat_vars_all:
                         setattr(self, var + '_' + stat_var, [])
-                else:
-                    setattr(self, var, [])
-        
-        if hasattr(model, 'use_fit_gains'):        
+            
+        if hasattr(model, 'use_fit_gains'):
             if model.use_fit_gains:
                 self.weights = []
 

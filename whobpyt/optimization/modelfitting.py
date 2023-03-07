@@ -44,11 +44,7 @@ class Model_fitting:
         self.num_epoches = num_epoches
         # placeholder for output(EEG and histoty of model parameters and loss)
         self.output_sim = OutputNM(self.model)
-        # self.u = u
-        """if ts.shape[1] != model.node_size:
-            print('ts is a matrix with the number of datapoint X the number of node')
-        else:
-            self.ts = ts"""
+ 
         self.ts = ts
 
         self.cost = cost
@@ -57,7 +53,7 @@ class Model_fitting:
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
 
-    def train(self, learningrate=0.05, u=0):
+    def train(self, learningrate=0.05, u=0, epoch_min = 10, r_lb = 0.85):
         """
         Parameters
         ----------
@@ -65,25 +61,6 @@ class Model_fitting:
         u: stimulus
 
         """
-
-        delays_max = 500
-        state_ub = 2
-        state_lb = 0.5
-
-        if self.model.model_name == "RWW":
-            if not self.model.use_dynamic_boundary:
-                if self.model.use_fit_gains:
-                    epoch_min = 10  # run minimum epoch # part of stop criteria
-                    r_lb = 0.85  # lowest pearson correlation # part of stop criteria
-                else:
-                    epoch_min = 10  # run minimum epoch # part of stop criteria
-                    r_lb = 0.85  # lowest pearson correlation # part of stop criteria
-            else:
-                epoch_min = 10  # run minimum epoch # part of stop criteria
-                r_lb = 0.85  # lowest pearson correlation # part of stop criteria
-        else:
-            epoch_min = 100  # run minimum epoch # part of stop criteria
-            r_lb = 0.95
 
         self.u = u
 
@@ -102,8 +79,7 @@ class Model_fitting:
         # initial state
         X = self.model.createIC(ver = 0)
         # initials of history of E
-        hE = torch.tensor(np.random.uniform(state_lb, state_ub, (self.model.node_size, delays_max)),
-                          dtype=torch.float32)
+        hE = self.model.createDelayIC(ver = 0)
 
         # define masks for getting lower triangle matrix indices
         mask = np.tril_indices(self.model.node_size, -1)
@@ -127,8 +103,6 @@ class Model_fitting:
                 fit_param[key] = [value.detach().numpy().ravel().copy()]
 
         loss_his = []  # loss placeholder
-
-        # define constant 1 tensor
 
         # define num_windows
         num_windows = self.ts.shape[1]
@@ -158,21 +132,25 @@ class Model_fitting:
                         dtype=torch.float32)
 
                 # Use the model.forward() function to update next state and get simulated EEG in this batch.
-
                 next_window, hE_new = self.model(external, X, hE)
 
-                # Get the batch of empirical EEG signal.
+                # Get the batch of empirical signal.
                 ts_window = torch.tensor(self.ts[i_epoch, TR_i, :, :], dtype=torch.float32)
 
                 # total loss calculation
-                sim = 0
-                if self.model.model_name == 'RWW':
-                    sim = next_window['bold_window']
-                elif self.model.model_name == 'JR':
-                    sim = next_window['eeg_window']
-                elif self.model.model_name == 'LIN':
-                    sim = next_window['bold_window']
+                #sim = 0
+                #if self.model.model_name == 'RWW':
+                #    sim = next_window['bold_window']
+                #elif self.model.model_name == 'JR':
+                #    sim = next_window['eeg_window']
+                #elif self.model.model_name == 'LIN':
+                #    sim = next_window['bold_window']
+                #elif self.model.model_name == 'mmRWW2':
+                #    sim = next_window['E_window']
+                
+                sim = next_window[self.model.output_name + "_window"]
                 loss = self.cost.loss(sim, ts_window, self.model, next_window)
+                
                 # Put the batch of the simulated EEG, E I M Ev Iv Mv in to placeholders for entire time-series.
                 for name in self.model.state_names + [self.output_sim.output_name]:
                     name_next = name + '_window'
@@ -223,7 +201,6 @@ class Model_fitting:
             fc_sim = np.corrcoef(ts_sim[:, 10:])
 
             print('epoch: ', i_epoch, loss.detach().numpy())
-
             print('epoch: ', i_epoch, np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 'cos_sim: ',
                   np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
             print('Modelparam_lr', modelparameter_scheduler.get_last_lr()[0])
@@ -238,7 +215,8 @@ class Model_fitting:
 
             if i_epoch > epoch_min and np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1] > r_lb:
                 break
-
+        
+        # Writing the training statistics to the output class
         if self.model.use_fit_gains:
             self.output_sim.weights = np.array(fit_sc)
         if self.model.model_name == 'JR' and self.model.use_fit_lfm:
@@ -257,9 +235,6 @@ class Model_fitting:
         """
 
         # define some constants
-        state_lb = 0
-        state_ub = 5
-        delays_max = 500
         transient_num = 10
 
         self.u = u
@@ -267,7 +242,7 @@ class Model_fitting:
         # initial state
         X = self.model.createIC(ver = 1)
         # initials of history of E
-        hE = torch.tensor(np.random.uniform(state_lb, state_ub, (self.model.node_size, 500)), dtype=torch.float32)
+        hE = self.model.createDelayIC(ver = 1)
 
         # placeholders for model parameters
 
@@ -354,8 +329,7 @@ class Model_fitting:
 
             for TR_i in range(num_windows + 10):
 
-                noise_in_np = np.random.randn(self.model.node_size, self.model.TRs_per_window, int(tr_p / step_size_n),
-                                              2)
+                noise_in_np = np.random.randn(self.model.node_size, self.model.TRs_per_window, int(tr_p / step_size_n), 2)
 
                 noise_BOLD_np = np.random.randn(self.model.node_size, self.model.TRs_per_window)
 

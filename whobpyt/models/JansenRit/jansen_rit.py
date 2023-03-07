@@ -88,8 +88,6 @@ class RNNJANSEN(AbstractNMM):
     forward(input, noise_out, hx)
         forward model (JansenRit) for generating a number of EEG signals with current model parameters
     """
-    state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
-    model_name = "JR"
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: float, lm: float, dist: float,
@@ -118,6 +116,11 @@ class RNNJANSEN(AbstractNMM):
         param from ParamJR
         """
         super(RNNJANSEN, self).__init__()
+        
+        self.state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
+        self.output_name = "eeg"
+        self.model_name = "JR"
+        
         self.state_size = 6  # 6 states JR model
         self.tr = tr  # tr ms (integration step 0.1 ms)
         self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.1 ms
@@ -147,6 +150,17 @@ class RNNJANSEN(AbstractNMM):
             state_ub = 5
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size, self.state_size)),
                              dtype=torch.float32)
+                             
+    def createDelayIC(self, ver):
+        if (ver == 0):
+            delays_max = 500
+            state_ub = 2
+            state_lb = 0.5
+        if (ver == 1):
+            state_lb = 0
+            state_ub = 5
+            delays_max = 500
+        return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size, delays_max)), dtype=torch.float32)
     
     def setModelParameters(self):
         # set states E I f v mean and 1/sqrt(variance)
@@ -193,6 +207,7 @@ def setModelParameters(model):
             # print(type(getattr(param, var)[1]))
             if type(getattr(model.param, var)[1]) is np.ndarray:
                 if var == 'lm':
+                    # TODO: Can this be deleted? This ignores use_fit_lfm, and so in fact is a bug. If variance is provided with use_fit_lfm = False, removing this causes an error. 
                     size = getattr(model.param, var)[1].shape
                     setattr(model, var, Parameter(
                         torch.tensor(getattr(model.param, var)[0] - 1 * np.ones((size[0], size[1])),
@@ -206,7 +221,7 @@ def setModelParameters(model):
                             getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(size[0], size[1]),
                             dtype=torch.float32)))
                     param_reg.append(getattr(model, var))
-                    # print(getattr(self, var))
+                    #print(getattr(self, var))
             else:
                 setattr(model, var, Parameter(
                     torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],

@@ -29,7 +29,7 @@ class CostsJR(AbstractLoss):
             exclude_param.append('gains_con') #TODO: Is this correct?
 
         if model.use_fit_lfm:
-            exclude_param.append('lm')
+            exclude_param.append('lm') #TODO: Is this correct?
 
         loss_main = self.mainLoss.loss(sim, emp)
 

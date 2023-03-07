@@ -126,7 +126,7 @@ F = Model_fitting(model, data_mean, num_epoches, ObjFun)
 # model training
 u = np.zeros((node_size,hidden_size,time_dim))
 u[:,:,110:120]= 200
-F.train(u=u)
+F.train(u=u, epoch_min = 100, r_lb = 0.95)
 
 # %%
 # model test with 20 window for warmup
