@@ -11,6 +11,7 @@ from whobpyt.datatypes.outputs import OutputNM
 from whobpyt.models.RWW.RWW_np import RWW_np #This should be removed and made general
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
+from tqdm import trange,tqdm
 
 
 class Model_fitting:
@@ -135,7 +136,7 @@ class Model_fitting:
 
         # define num_windows
         num_windows = self.ts.shape[1]
-        for i_epoch in range(self.num_epoches):
+        for i_epoch in trange(self.num_epoches):
 
             # Create placeholders for the simulated states and outputs of entire time series.
             for name in self.model.state_names + [self.output_sim.output_name]:
@@ -176,7 +177,7 @@ class Model_fitting:
                 elif self.model.model_name == 'LIN':
                     sim = next_window['bold_window']
                     
-                print(sim, ts_window)
+                # print(sim, ts_window)
                 loss = self.cost.loss(sim, ts_window, self.model, next_window)
                 # Put the batch of the simulated EEG, E I M Ev Iv Mv in to placeholders for entire time-series.
                 for name in self.model.state_names + [self.output_sim.output_name]:
@@ -219,7 +220,6 @@ class Model_fitting:
                 X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
                 hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
                 # print(hE_new.detach().numpy()[20:25,0:20])
-                # print(hE.shape)
             ts_emp = np.concatenate(list(self.ts[i_epoch]),1)
             fc = np.corrcoef(ts_emp)
 
@@ -227,6 +227,7 @@ class Model_fitting:
             ts_sim = np.concatenate(tmp_ls, axis=1)
             fc_sim = np.corrcoef(ts_sim[:, 10:])
             
+            # printing epoch performance criteria - at the end of epoch:
             print(ts_sim.shape, ts_emp.shape)
 
             print('epoch: ', i_epoch, loss.detach().numpy())
