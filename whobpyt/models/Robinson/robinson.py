@@ -29,7 +29,8 @@ class ParamsCT(AbstractParams):
             "gamma": [100, 0], 
             "beta": [200, 0],
             "alpha": [200/4, 0.], 
-            "t0": [0.08, 0.], 
+            "t0": [0.08, 0.],
+            "g": [100, 0], 
             "nu_ee ": [0.0528/1000, 0.], 
             "nu_ii": [0.0528/1000, 0.],
             "nu_ie": [0.02/1000, 0], 
@@ -37,8 +38,8 @@ class ParamsCT(AbstractParams):
             "nu_is": [1.2/1000, 0], 
             "nu_se": [1.2/1000, 0], 
             "nu_si": [0.0, 0], 
-            "nu_ei": [-0.4/1000, 0], 
-            "nu_sr": [-0.01/1000, 0], 
+            "nu_ei": [0.4/1000, 0], 
+            "nu_sr": [0.01/1000, 0], 
             "nu_sn": [0.0, 0], 
             "nu_re": [0.1/1000, 0], 
             "nu_ri": [0.0, 0], 
@@ -46,8 +47,6 @@ class ParamsCT(AbstractParams):
             "nu_ss": [0.0, 0], 
             "nu_rr": [0.0, 0], 
             "nu_rn": [0.0, 0], 
-            
-            
             "mu": [5, 0], 
             "cy0": [5, 0], 
             "y0": [2, 0]
@@ -83,8 +82,8 @@ class RNNROBINSON(AbstractNMM):
         structural connectivity
     fit_gains: bool
         flag for fitting gains 1: fit 0: not fit
-    g, c1, c2, c3,c4: tensor with gradient on
-        model parameters to be fit
+    g: float
+        global gain parameter
     w_bb: tensor with node_size x node_size (grad on depends on fit_gains)
         connection gains
     std_in std_out: tensor with gradient on
@@ -149,11 +148,18 @@ class RNNROBINSON(AbstractNMM):
         if (ver == 0):
             state_lb = 0.5
             state_ub = 2
+            return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size+1, self.state_size)),
+                             dtype=torch.float32)
         if (ver == 1):
             state_lb = 0
             state_ub = 5
-        return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size+1, self.state_size)),
+            return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size+1, self.state_size)),
                              dtype=torch.float32)
+        if (ver == 2): # for testing the robinson corticothalamic model
+            state_lb = -1.5*1e-4
+            state_ub = 1.5*1e-4
+            return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size+1, self.state_size)),
+                             dtype=torch.float32)        
     
     def setModelParameters(self):
         # set states E I f v mean and 1/sqrt(variance)
@@ -203,7 +209,7 @@ def setModelParameters(model):
                         torch.tensor(getattr(model.param, var)[0] + 1 * np.ones((size[0], size[1])),
                                      dtype=torch.float32)))
                     param_reg.append(getattr(model, var))
-                    print(getattr(model, var))
+                    # print(getattr(model, var))
                 else:
                     size = getattr(model.param, var)[1].shape
                     setattr(model, var, Parameter(
@@ -268,9 +274,6 @@ def integration_forward(model, external, hx, hE):
     # define constant 1 tensor
     con_1 = torch.tensor(1.0, dtype=torch.float32)
     if model.sc.shape[0] > 1:
-
-        # Update the Laplacian based on the updated connection gains w_bb.
-        
         # Update the Laplacian based on the updated connection gains w_bb.
         w = torch.exp(model.w_ll) * torch.tensor(model.sc, dtype=torch.float32)
         w_n_l = (0.5 * (w + torch.transpose(w, 0, 1))) / torch.linalg.norm(
@@ -357,18 +360,26 @@ def integration_forward(model, external, hx, hE):
             ddphis = phi_s + dt * phi_s_dot
             ddVr = V_r + dt * V_r_dot 
             ddphir = phi_r + dt * phi_r_dot
-            
+
+            ones_mx = torch.ones((1,1)) # 1x1 ones matrix
+            noise_phi_e = torch.randn_like(phi_e) * 1 # noise for phi_e, stdev = 1, to be added to ddphiedot
+
             ddVedot = V_e_dot + dt *  (-(1/alpha + 1/beta) * alphaxbeta * V_e_dot -alphaxbeta*V_e + \
-                                   alphaxbeta*(nu_ee * phi_e + nu_ei * phi_i + nu_es * phi_s) +u_tms)
+                                   alphaxbeta*(m(nu_ee) * phi_e - m(nu_ei) * phi_i + m(nu_es) * phi_s) +u_tms)
             ddVidot = V_i_dot + dt * (-(1/alpha + 1/beta) * alphaxbeta * V_i_dot -alphaxbeta*V_i + \
-                                   alphaxbeta*(nu_ie * phi_e + nu_ii * phi_i + nu_is * phi_s))
-            ddVsdot = V_s_dot + dt * (-(1/alpha + 1/beta) * alphaxbeta * V_s_dot -alphaxbeta*V_s + \
-                                   alphaxbeta*(nu_se * phi_e + nu_si * phi_i + nu_ss * phi_s + \
-                                               nu_sr * phi_r+ nu_sn *0.025+ 0.001*np.random.randn(1)[0]))
+                                   alphaxbeta*(m(nu_ie) * phi_e + m(nu_ii) * phi_i + m(nu_is) * phi_s))
+            ddVsdot = V_s_dot + dt * (-(1/alpha + 1/beta) * alphaxbeta * V_s_dot - alphaxbeta * V_s + \
+                                   alphaxbeta*(m(nu_se) * torch.mean(phi_e, axis=0)*ones_mx + m(nu_si) * torch.mean(phi_i, axis=0)*ones_mx + \
+                                               m(nu_ss) * phi_s - m(nu_sr) * phi_r + m(nu_sn) * (0.025)*ones_mx + \
+                                               0.001 * torch.randn(1, 1)))
             ddVrdot = V_r_dot + dt * (-(1/alpha + 1/beta) * alphaxbeta * V_r_dot -alphaxbeta*V_r + \
-                                   alphaxbeta*(nu_re * phi_e + nu_ri * phi_i + nu_rs * phi_s))
+                                   alphaxbeta*(m(nu_re) * torch.mean(phi_e, axis=0) * ones_mx + \
+                                               m(nu_ri) * torch.mean(phi_i, axis=0) * ones_mx + \
+                                               m(nu_rs) * phi_s))
+            network_interactions = (lb * con_1 + m(model.g)) * LEd_l + \
+                                    1 * torch.matmul(dg_l, phi_e) # is implementation of global gain & SC 
             ddphiedot = phi_e_dot + dt * (-2 * gamma * phi_e_dot - gamma**2 * phi_e + \
-                                       gamma**2 * sigmoid(V_e, Q, sig_theta, sigma))
+                                       gamma**2 * sigmoid(V_e, Q, sig_theta, sigma) + network_interactions + noise_phi_e)
             ddphiidot = phi_i_dot + dt * (-2 * gamma_rs * phi_i_dot - gamma_rs**2 * phi_i + \
                                        gamma_rs**2 * sigmoid(V_i, Q, sig_theta, sigma))
             ddphisdot = phi_s_dot + dt * (-2 * gamma_rs * phi_s_dot - gamma_rs**2 * phi_s + \
