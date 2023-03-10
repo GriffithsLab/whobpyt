@@ -379,7 +379,7 @@ def integration_forward(model, external, hx, hE):
             network_interactions = (lb * con_1 + m(model.g)) * LEd_l + \
                                     1 * torch.matmul(dg_l, phi_e) # is implementation of global gain & SC 
             ddphiedot = phi_e_dot + dt * (-2 * gamma * phi_e_dot - gamma**2 * phi_e + \
-                                       gamma**2 * sigmoid(V_e, Q, sig_theta, sigma) + network_interactions + noise_phi_e)
+                                       gamma**2 * (sigmoid(V_e, Q, sig_theta, sigma) + network_interactions + noise_phi_e))
             ddphiidot = phi_i_dot + dt * (-2 * gamma_rs * phi_i_dot - gamma_rs**2 * phi_i + \
                                        gamma_rs**2 * sigmoid(V_i, Q, sig_theta, sigma))
             ddphisdot = phi_s_dot + dt * (-2 * gamma_rs * phi_s_dot - gamma_rs**2 * phi_s + \
