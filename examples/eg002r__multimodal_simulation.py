@@ -190,7 +190,7 @@ LF_Con_Mtx = LF_SC_mtx_norm
 
 model = mmRWW2(num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len)
 model.setModelParameters()
-model.J = model.J.val
+model.J = model.J.val #TODO: This line here so the variable gets tracked. Improve approach. 
 
 # %%
 # Defining the Objective Function

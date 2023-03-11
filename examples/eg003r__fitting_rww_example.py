@@ -23,6 +23,7 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.data.dataload import dataloader
+from whobpyt.datatypes.parameter import par
 from whobpyt.models.RWW.wong_wang import ParamsRWW
 from whobpyt.models.RWW.wong_wang import RNNRWW
 from whobpyt.optimization.modelfitting import Model_fitting
@@ -91,12 +92,12 @@ data_mean = dataloader(ts, num_epoches, batch_size)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
-par = ParamsRWW(g=[400, 1/np.sqrt(10)], g_EE=[1.5, 1/np.sqrt(50)], g_EI =[0.8,1/np.sqrt(50)], \
-                g_IE=[0.6,1/np.sqrt(50)], I_0 =[0.2, 0], std_in=[0.0,0], std_out=[0.00,0])
+params = ParamsRWW(g=par(400, 400, 1/np.sqrt(10), True, True), g_EE=par(1.5, 1.5, 1/np.sqrt(50), True, True), g_EI =par(0.8, 0.8, 1/np.sqrt(50), True, True), \
+                   g_IE=par(0.6, 0.6, 1/np.sqrt(50), True, True), I_0 =par(0.2), std_in=par(0.0), std_out=par(0.00))
 
 # %%
 # call model want to fit
-model = RNNRWW(node_size, batch_size, step_size, repeat_size, tr, sc, True, par)
+model = RNNRWW(node_size, batch_size, step_size, repeat_size, tr, sc, True, params)
 
 # %%
 # initial model parameters and set the fitted model parameter in Tensors

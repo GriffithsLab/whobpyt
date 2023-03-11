@@ -9,12 +9,19 @@ class par:
     # It has method to add noise to randomise initial conditoins
 
     def __init__(self, val, prior_mean = 0, prior_var = 0, fit_par = False, fit_hyper = False):
-        self.val = val
-        self.prior_mean = prior_mean
-        self.prior_var = prior_var
+        self.val = torch.tensor(val, dtype=torch.float32)
+        self.prior_mean = torch.tensor(prior_mean, dtype=torch.float32)
+        self.prior_var = torch.tensor(prior_var, dtype=torch.float32)
         self.fit_par = fit_par
         self.fit_hyper = fit_hyper
         
+        if fit_par:
+            self.val = torch.nn.parameter.Parameter(self.val)
+        
+        if fit_hyper:
+            self.prior_mean = torch.nn.parameter.Parameter(self.prior_mean)
+            self.prior_var = torch.nn.parameter.Parameter(self.prior_var)
+    
     def asNumpy():
         pass
         

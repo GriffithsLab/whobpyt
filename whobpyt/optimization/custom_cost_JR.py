@@ -6,6 +6,7 @@ module for cost calculation
 
 import numpy as np  # for numerical operations
 import torch
+from whobpyt.datatypes.parameter import par
 from whobpyt.datatypes.AbstractLoss import AbstractLoss
 from whobpyt.optimization.cost_TS import CostsTS
 
@@ -36,18 +37,16 @@ class CostsJR(AbstractLoss):
         loss_EI = 0
         loss_prior = []
 
-        variables_p = [a for a in dir(model.param) if
-                       not a.startswith('__') and not callable(getattr(model.param, a))]
+        variables_p = [a for a in dir(model.param) if (type(getattr(model.param, a)) == par)]
 
-        for var in variables_p:
-            if np.any(getattr(model.param, var)[1] > 0) and var not in ['std_in'] and \
-                    var not in exclude_param:
-                # print(var)
-                dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-                loss_prior.append(torch.sum((lb + m(model.get_parameter(dict_np['v']))) * \
-                                            (m(model.get_parameter(var)) - m(
-                                                model.get_parameter(dict_np['m']))) ** 2) \
-                                  + torch.sum(-torch.log(lb + m(model.get_parameter(dict_np['v'])))))
+        for var_name in variables_p:
+            var = getattr(model.param, var_name)
+            #TODO: This currenlty assumes there is a loss term only if the hyper_parameters are being fit. Need a better solution. 
+            if var.fit_hyper and var_name not in ['std_in'] and \
+                        var_name not in exclude_param:
+                loss_prior.append(torch.sum((lb + m(var.prior_var)) * \
+                                            (m(var.val) - m(var.prior_mean)) ** 2) \
+                                  + torch.sum(-torch.log(lb + m(var.prior_var))))
         
         # total loss
         loss = 0.1 * w_cost * loss_main + 1 * sum(loss_prior) + 1 * loss_EI

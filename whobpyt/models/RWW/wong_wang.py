@@ -6,68 +6,11 @@ module for wong-wang model
 
 import torch
 from torch.nn.parameter import Parameter
+from whobpyt.datatypes.parameter import par
+from whobpyt.models.RWW.ParamsRWW import ParamsRWW
 from whobpyt.datatypes.AbstractParams import AbstractParams
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
 import numpy as np  # for numerical operations
-
-class ParamsRWW(AbstractParams):
-    
-    def __init__(self, **kwargs):
-       
-        param = {
-
-            "std_in": [0.02, 0],  # standard deviation of the Gaussian noise
-            "std_out": [0.02, 0],  # standard deviation of the Gaussian noise
-            # Parameters for the ODEs
-            # Excitatory population
-            "W_E": [1., 0],  # scale of the external input
-            "tau_E": [100., 0],  # decay time
-            "gamma_E": [0.641 / 1000., 0],  # other dynamic parameter (?)
-
-            # Inhibitory population
-            "W_I": [0.7, 0],  # scale of the external input
-            "tau_I": [10., 0],  # decay time
-            "gamma_I": [1. / 1000., 0],  # other dynamic parameter (?)
-
-            # External input
-            "I_0": [0.32, 0],  # external input
-            "I_external": [0., 0],  # external stimulation
-
-            # Coupling parameters
-            "g": [20., 0],  # global coupling (from all nodes E_j to single node E_i)
-            "g_EE": [.1, 0],  # local self excitatory feedback (from E_i to E_i)
-            "g_IE": [.1, 0],  # local inhibitory coupling (from I_i to E_i)
-            "g_EI": [0.1, 0],  # local excitatory coupling (from E_i to I_i)
-
-            "aE": [310, 0],
-            "bE": [125, 0],
-            "dE": [0.16, 0],
-            "aI": [615, 0],
-            "bI": [177, 0],
-            "dI": [0.087, 0],
-
-            # Output (BOLD signal)
-
-            "alpha": [0.32, 0],
-            "rho": [0.34, 0],
-            "k1": [2.38, 0],
-            "k2": [2.0, 0],
-            "k3": [0.48, 0],  # adjust this number from 0.48 for BOLD fluctruate around zero
-            "V": [.02, 0],
-            "E0": [0.34, 0],
-            "tau_s": [1 / 0.65, 0],
-            "tau_f": [1 / 0.41, 0],
-            "tau_0": [0.98, 0],
-            "mu": [0.5, 0]
-
-        }
-
-        for var in param:
-            setattr(self, var, param[var])
-
-        for var in kwargs:
-            setattr(self, var, kwargs[var])
-
 
 class RNNRWW(AbstractNMM):
     """
@@ -185,8 +128,6 @@ def h_tf(a, b, d, z):
     return torch.divide(num, den)
 
 def setModelParameters(model):
-    
-    
     param_reg = []
     param_hyper = []
     if model.use_Gaussian_EI:
@@ -230,33 +171,44 @@ def setModelParameters(model):
     else:
         model.gains_con = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)
 
-    vars_name = [a for a in dir(model.param) if not a.startswith('__') and not callable(getattr(model.param, a))]
-    for var in vars_name:
-        if np.any(getattr(model.param, var)[1] > 0):
-            setattr(model, var, Parameter(
-                torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],
-                             dtype=torch.float32)))
-            param_reg.append(getattr(model, var))
-            if model.use_Bifurcation:
-                if var not in ['std_in', 'g_IE', 'g_EI']:
-                    dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
+    var_names = [a for a in dir(model.param) if not a.startswith('__')]
+    for var_name in var_names:
+        var = getattr(model.param, var_name)
+        if (type(var) == par): 
+            if (var.fit_hyper == True):
+                var.value = Parameter(var.prior_mean.detach() + var.prior_var.detach() * torch.randn(1)) #TODO: Adding randomness should be moved to some other method
+                param_hyper.append(var.prior_mean)
+                param_hyper.append(var.prior_var) #TODO: Currently this is _v_inv but should set everything to just variance unless there is a reason to keep the inverse?
+            if (var.fit_par == True):
+                param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first
+            setattr(model, var_name, var.val)
+            
+            #if np.any(getattr(model.param, var)[1] > 0):
+            #    setattr(model, var, Parameter(
+            #        torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],
+            #                     dtype=torch.float32)))
+            #    param_reg.append(getattr(model, var))
+            #    if model.use_Bifurcation:
+            #        if var not in ['std_in', 'g_IE', 'g_EI']:
+            #            dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
+            #
+            #            dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
+            #
+            #            for key in dict_nv:
+            #                setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
+            #                param_hyper.append(getattr(model, dict_np[key]))
+            #    else:
+            #        if var not in ['std_in']:
+            #            dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
+            #
+            #            dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
+            #
+            #            for key in dict_nv:
+            #                setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
+            #                param_hyper.append(getattr(model, dict_np[key]))
+            #else:
+            #    setattr(model, var, torch.tensor(getattr(model.param, var)[0], dtype=torch.float32))
 
-                    dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-
-                    for key in dict_nv:
-                        setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
-                        param_hyper.append(getattr(model, dict_np[key]))
-            else:
-                if var not in ['std_in']:
-                    dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
-
-                    dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-
-                    for key in dict_nv:
-                        setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
-                        param_hyper.append(getattr(model, dict_np[key]))
-        else:
-            setattr(model, var, torch.tensor(getattr(model.param, var)[0], dtype=torch.float32))
     model.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 
 def integration_forward(model, external, hx, hE):
