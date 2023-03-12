@@ -1,6 +1,7 @@
 import torch
 from whobpyt.datatypes.AbstractParams import AbstractParams
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.datatypes.parameter import par
 
 class RWW2(AbstractNMM):
     ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
@@ -47,7 +48,7 @@ class RWW2(AbstractNMM):
         self.output_size = num_regions
 
     def info(self):
-        return {"state_names": None, "output_name": None}
+        return {"state_names": None, "output_names": None}
             
     def setModelParameters(self):
         return setModelParameters(self)
@@ -104,12 +105,13 @@ def setModelParameters(self):
     # To make the parameters work with modelfitting.py
     param_reg = [torch.nn.Parameter(torch.tensor(1.))]
     param_hyper = [torch.nn.Parameter(torch.tensor(1.))]
-    vars_name = [a for a in dir(self.param) if not a.startswith('__') and not callable(getattr(self.param, a))]
-    for var in vars_name:
-        if (type(getattr(self, var).val) == torch.nn.parameter.Parameter):
-            param_reg.append(getattr(self, var).val)
-    self.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
-        
+    vars_names = [a for a in dir(self.param) if (type(getattr(self.param, a)) == par)]
+    for var_name in vars_names:
+        var = getattr(self, var_name)
+        if (var.fit_par):
+            param_reg.append(var.val)
+    self.params_fitted = {'modelparameter': param_reg, 'hyperparameter': param_hyper}
+
 
 def forward(self, external, hx, hE):
 

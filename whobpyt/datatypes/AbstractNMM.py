@@ -6,15 +6,15 @@ class AbstractNMM(torch.nn.Module):
         super(AbstractNMM, self).__init__()
         
         self.state_names = ["None"]
-        self.output_name = "None"
-        self.track_params = ["None"]
+        self.output_names = ["None"]
+        self.track_params = []
         
         self.use_fit_gains = False  
         self.use_fit_lfm = False
         
     def info(self):
-        return {"state_names": self.state_names , 
-                "output_name": self.output_name,
+        return {"state_names": self.state_names, 
+                "output_names": self.output_names,
                 "track_params": self.track_params}
             
     def setModelParameters(self):

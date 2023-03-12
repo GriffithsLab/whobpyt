@@ -20,9 +20,9 @@ class OutputNM:
         
         model_info = model.info()
         self.state_names = model_info["state_names"]
-        self.output_name = model_info["output_name"]
+        self.output_names = model_info["output_names"]
 
-        for name in self.state_names + [self.output_name]:
+        for name in self.state_names + self.output_names:
             for m in self.mode_all:
                 setattr(self, name + '_' + m, [])
 

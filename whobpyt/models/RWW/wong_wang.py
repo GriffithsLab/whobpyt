@@ -79,7 +79,7 @@ class RNNRWW(AbstractNMM):
         super(RNNRWW, self).__init__()
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-        self.output_name = "bold"
+        self.output_names = ["bold"]
         self.model_name = "RWW"
         
         self.state_size = 6  # 6 states WWD model
@@ -102,7 +102,7 @@ class RNNRWW(AbstractNMM):
         self.output_size = node_size  # number of EEG channels
     
     def info(self):
-        return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_name": "bold"}
+        return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold"]}
     
     def createIC(self, ver):
         # initial state
@@ -176,38 +176,12 @@ def setModelParameters(model):
         var = getattr(model.param, var_name)
         if (type(var) == par): 
             if (var.fit_hyper == True):
-                var.value = Parameter(var.prior_mean.detach() + var.prior_var.detach() * torch.randn(1)) #TODO: Adding randomness should be moved to some other method
+                var.randSet() #TODO: This should be done before giving params to model class
                 param_hyper.append(var.prior_mean)
                 param_hyper.append(var.prior_var) #TODO: Currently this is _v_inv but should set everything to just variance unless there is a reason to keep the inverse?
             if (var.fit_par == True):
                 param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first
             setattr(model, var_name, var.val)
-            
-            #if np.any(getattr(model.param, var)[1] > 0):
-            #    setattr(model, var, Parameter(
-            #        torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],
-            #                     dtype=torch.float32)))
-            #    param_reg.append(getattr(model, var))
-            #    if model.use_Bifurcation:
-            #        if var not in ['std_in', 'g_IE', 'g_EI']:
-            #            dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
-            #
-            #            dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-            #
-            #            for key in dict_nv:
-            #                setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
-            #                param_hyper.append(getattr(model, dict_np[key]))
-            #    else:
-            #        if var not in ['std_in']:
-            #            dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
-            #
-            #            dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-            #
-            #            for key in dict_nv:
-            #                setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
-            #                param_hyper.append(getattr(model, dict_np[key]))
-            #else:
-            #    setattr(model, var, torch.tensor(getattr(model.param, var)[0], dtype=torch.float32))
 
     model.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 

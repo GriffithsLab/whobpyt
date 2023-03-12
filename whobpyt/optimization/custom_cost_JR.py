@@ -41,8 +41,7 @@ class CostsJR(AbstractLoss):
 
         for var_name in variables_p:
             var = getattr(model.param, var_name)
-            #TODO: This currenlty assumes there is a loss term only if the hyper_parameters are being fit. Need a better solution. 
-            if var.fit_hyper and var_name not in ['std_in'] and \
+            if var.has_prior and var_name not in ['std_in'] and \
                         var_name not in exclude_param:
                 loss_prior.append(torch.sum((lb + m(var.prior_var)) * \
                                             (m(var.val) - m(var.prior_mean)) ** 2) \

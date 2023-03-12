@@ -83,30 +83,14 @@ class CostsRWW(AbstractLoss):
             # print(var)
             var = getattr(model.param, var_name)
             if model.use_Bifurcation:
-                #if np.any(getattr(model.param, var)[1] > 0) and var not in ['std_in', 'g_EI', 'g_IE'] and \
-                #TODO: This currenlty assumes there is a penalty only if the hyper_parameters are being fit. Need a better solution. 
-                if var.fit_hyper and var_name not in ['std_in', 'g_EI', 'g_IE'] and \
+                if var.has_prior and var_name not in ['std_in', 'g_EI', 'g_IE'] and \
                         var_name not in exclude_param:
-                    # print(var)
-                    #dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-                    #loss_prior.append(torch.sum((lb + m(model.get_parameter(dict_np['v']))) * \
-                    #                            (m(model.get_parameter(var)) - m(
-                    #                                model.get_parameter(dict_np['m']))) ** 2) \
-                    #                  + torch.sum(-torch.log(lb + m(model.get_parameter(dict_np['v'])))))
                     loss_prior.append(torch.sum((lb + m(var.prior_var)) * \
                                                 (m(var.val) - m(var.prior_mean)) ** 2) \
                                       + torch.sum(-torch.log(lb + m(var.prior_var)))) #TODO: Double check about converting _v_inv to just variance representation
             else:
-                #if np.any(getattr(model.param, var)[1] > 0) and var not in ['std_in'] and \
-                #TODO: This currenlty assumes there is a penalty only if the hyper_parameters are being fit. Need a better solution.
-                if var.fit_hyper and var_name not in ['std_in'] and \
+                if var.has_prior and var_name not in ['std_in'] and \
                         var_name not in exclude_param:
-                    # print(var)
-                    #dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-                    #loss_prior.append(torch.sum((lb + m(model.get_parameter(dict_np['v']))) * \
-                    #                            (m(model.get_parameter(var)) - m(
-                    #                                model.get_parameter(dict_np['m']))) ** 2) \
-                    #                  + torch.sum(-torch.log(lb + m(model.get_parameter(dict_np['v'])))))
                     loss_prior.append(torch.sum((lb + m(var.prior_var)) * \
                                                 (m(var.val) - m(var.prior_mean)) ** 2) \
                                       + torch.sum(-torch.log(lb + m(var.prior_var)))) #TODO: Double check about converting _v_inv to just variance representation

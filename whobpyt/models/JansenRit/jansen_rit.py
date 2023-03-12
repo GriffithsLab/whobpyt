@@ -85,7 +85,7 @@ class RNNJANSEN(AbstractNMM):
         super(RNNJANSEN, self).__init__()
         
         self.state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
-        self.output_name = "eeg"
+        self.output_names = ["eeg"]
         self.model_name = "JR"
         
         self.state_size = 6  # 6 states JR model
@@ -105,7 +105,7 @@ class RNNJANSEN(AbstractNMM):
         self.output_size = lm.shape[0]  # number of EEG channels
 
     def info(self):
-        return {"state_names": ['E', 'Ev', 'I', 'Iv', 'P', 'Pv'], "output_name": "eeg"}
+        return {"state_names": ['E', 'Ev', 'I', 'Iv', 'P', 'Pv'], "output_names": ["eeg"]}
     
     def createIC(self, ver):
         # initial state
@@ -173,42 +173,16 @@ def setModelParameters(model):
     for var_name in var_names:
         var = getattr(model.param, var_name)
         if (var.fit_hyper == True):
-            # print(type(getattr(param, var)[1]))
-            #if type(getattr(model.param, var)[1]) is np.ndarray:
-            #    if var_name == 'lm':
-            #        # TODO: Can this be deleted? This ignores use_fit_lfm, and so in fact is a bug. If variance is provided with use_fit_lfm = False, removing this causes an error. 
-            #        size = getattr(model.param, var)[1].shape
-            #        setattr(model, var, Parameter(
-            #            torch.tensor(getattr(model.param, var)[0] - 1 * np.ones((size[0], size[1])),
-            #                         dtype=torch.float32)))
-            #        param_reg.append(getattr(model, var))
-            #        print(getattr(model, var))
-            #    else:
-            #        size = getattr(model.param, var)[1].shape
-            #        setattr(model, var, Parameter(
-            #            torch.tensor(
-            #                getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(size[0], size[1]),
-            #                dtype=torch.float32)))
-            #        param_reg.append(getattr(model, var))
-            #        #print(getattr(self, var))
-                    
             if var_name == 'lm':
                 size = var.prior_var.shape
                 var.val = Parameter(var.val.detach() - 1 * torch.ones((size[0], size[1]))) # TODO: This is not consistent with what user would expect giving a variance 
                 param_hyper.append(var.prior_mean)
                 param_hyper.append(var.prior_var)
             elif (var != 'std_in'):
-                var.val = Parameter(var.prior_mean.detach() + var.prior_var.detach() * torch.randn(1))
+                var.randSet() #TODO: This should be done before giving params to model class
                 param_hyper.append(var.prior_mean)
                 param_hyper.append(var.prior_var)
-            #if var != 'std_in':
-            #    dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
-            #
-            #    dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-            #
-            #    for key in dict_nv:
-            #        setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
-            #        param_hyper.append(getattr(model, dict_np[key]))
+
         if (var.fit_par):
             param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first
         setattr(model, var_name, var.val)    

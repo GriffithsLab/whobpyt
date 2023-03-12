@@ -6,7 +6,7 @@ class AbstractMode(torch.nn.Module):
         super(AbstractMode, self).__init__()
         
     def info(self):
-        return {"state_names": None, "output_name": None}
+        return {"state_names": None, "output_names": None, "track_params": None}
             
     def setModelParameters(self):
         pass

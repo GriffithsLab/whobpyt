@@ -84,7 +84,7 @@ paramsBOLD = BOLD_Params()
 # ---------------------------------------------------
 #
 
-paramsNode.J = par(torch.nn.Parameter(0.15  * torch.ones(num_regions)), fit_par = True) #This is a parameter that will be updated during training
+paramsNode.J = par((0.15  * np.ones(num_regions)), fit_par = True, asLog = True) #This is a parameter that will be updated during training
 
 
 # %%
@@ -190,7 +190,8 @@ LF_Con_Mtx = LF_SC_mtx_norm
 
 model = mmRWW2(num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len)
 model.setModelParameters()
-model.J = model.J.val #TODO: This line here so the variable gets tracked. Improve approach. 
+model.track_params = ['J']
+#model.J = model.J.val #TODO: This line here so the variable gets tracked. Improve approach. 
 
 # %%
 # Defining the Objective Function
@@ -258,17 +259,17 @@ print(list(model.named_parameters()))
 
 #
 
-zerodata = np.random.rand(15000, 8)
+randdata = np.random.rand(15000, 8)
 num_epochs = 10
 TRperwindow = 15000
-data_zeros = dataloader(zerodata, num_epochs, TRperwindow)
+randTS = dataloader(randdata, num_epochs, TRperwindow)
 
 # call model fit
-F = Model_fitting(model, data_zeros, num_epochs, ObjFun)
+F = Model_fitting(model, randTS, num_epochs, ObjFun)
 
 # %%
 # model training
-F.train(learningrate= 0.1)
+F.train(learningrate= 0.1, lr_scheduler = False)
 
 # %%
 # model test with 20 window for warmup
@@ -323,14 +324,14 @@ plt.title("J_{i} Values Changing Over Training Epochs")
 # ---------------------------------------------------
 #
 
-#plt.figure(figsize = (16, 8))
-#plt.title("S_E and S_I")
-#for n in range(num_regions):
-#    plt.plot(node_history.detach()[:,n,0], label = "S_E Node = " + str(n))
-#    plt.plot(node_history.detach()[:,n,1], label = "S_I Node = " + str(n))
+plt.figure(figsize = (16, 8))
+plt.title("S_E and S_I")
+for n in range(num_regions):
+    plt.plot(F.output_sim.E_test[:,n], label = "S_E Node = " + str(n))
+    plt.plot(F.output_sim.I_test[:,n], label = "S_I Node = " + str(n))
 
-#plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
-#plt.legend()
+plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
+plt.legend()
 
 
 
@@ -339,16 +340,16 @@ plt.title("J_{i} Values Changing Over Training Epochs")
 # ---------------------------------------------------
 #
 
-#sampleFreqHz = 1000*(1/step_size)
-#sdAxis, sdValues = CostsPSD.calcPSD(EEG_history[skip_trans:,:,0], sampleFreqHz, minFreq = 2, maxFreq = 40)
-#sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
-#sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
+sampleFreqHz = 1000*(1/step_size)
+sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(F.output_sim.eeg_test), sampleFreqHz, minFreq = 2, maxFreq = 40)
+sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
+sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
 
-#plt.figure()
-#plt.plot(sdAxis_dS, sdValues_dS_scaled.detach())
-#plt.xlabel('Hz')
-#plt.ylabel('PSD')
-#plt.title("Simulated EEG PSD: After Training")
+plt.figure()
+plt.plot(sdAxis_dS, sdValues_dS_scaled.detach())
+plt.xlabel('Hz')
+plt.ylabel('PSD')
+plt.title("Simulated EEG PSD: After Training")
 
 
 
@@ -357,11 +358,9 @@ plt.title("J_{i} Values Changing Over Training Epochs")
 # ---------------------------------------------------
 #
 
-#print(BOLD_history[skip_trans:, :, 4].shape)
-#sim_FC = CostsFC.calcFC(BOLD_history[:, :, 4]).detach()
+sim_FC = np.corrcoef(F.output_sim.bold_test[:,skip_trans:])
 
-#plt.figure(figsize = (8, 8))
-#plt.title("Simulated BOLD FC: After Training")
-#mask = np.eye(num_regions)
-#sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
-
+plt.figure(figsize = (8, 8))
+plt.title("Simulated BOLD FC: After Training")
+mask = np.eye(num_regions)
+sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)

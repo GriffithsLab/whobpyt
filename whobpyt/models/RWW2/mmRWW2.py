@@ -29,10 +29,10 @@ class mmRWW2(RWW2):
         self.TRs_per_window = 1
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-        self.output_name = "E" #TODO: This should be made consistent with info()
+        self.output_names = ["E"] #TODO: This should be made consistent with info()
 
     def info(self):
-        return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_name": "bold"} #TODO: Update to take multiple output names
+        return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold", "eeg"]} #TODO: Update to take multiple output names
             
     def setModelParameters(self):
         return setModelParameters(self)
