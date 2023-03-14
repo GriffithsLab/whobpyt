@@ -23,6 +23,7 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.data.dataload import dataloader
+from whobpyt.datatypes.parameter import par
 from whobpyt.models.JansenRit.jansen_rit import ParamsJR
 from whobpyt.models.JansenRit.jansen_rit import RNNJANSEN
 from whobpyt.optimization.modelfitting import Model_fitting
@@ -99,16 +100,16 @@ data_mean = dataloader(eeg_data.T, num_epoches, batch_size)
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
 lm = np.zeros((output_size,200))
 lm_v = np.zeros((output_size,200))
-par = ParamsJR(A = [3.25, 0], a= [100, 2], B = [22, 0], b = [50, 1], g=[40, 2], g_f=[1, 0], g_b=[1, 0],\
-               c1 = [135, 1], c2 = [135*0.8, 1], c3 = [135*0.25, 1], c4 = [135*0.25, 1],\
-               std_in=[1, 1/10], vmax= [5, 0], v0=[6,0], r=[0.56, 0], y0=[2 , 1/4],\
-               mu = [1., 0.4], #k = [10, .3],
-               #cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \
-               cy0 = [50, 1], ki=[ki0, 0], lm=[lm, 5 * np.ones((output_size, node_size))+lm_v])
+params = ParamsJR(A = par(3.25), a= par(100,100, 2, True, True), B = par(22), b = par(50, 50, 1, True, True), g=par(40,40,2, True, True), g_f=par(1), g_b=par(1), \
+                  c1 = par(135, 135, 1, True, True), c2 = par(135*0.8, 135*0.8, 1, True, True), c3 = par(135*0.25, 135*0.25, 1, True, True), c4 = par(135*0.25, 135*0.25, 1, True, True),\
+                  std_in= par(1,1, 1/10, True, True), vmax= par(5), v0=par(6), r=par(0.56), y0=par(2, 2, 1/4, True, True),\
+                  mu = par(1., 1., 0.4, True, True), #k = [10, .3],
+                  #cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \
+                  cy0 = par(50, 50, 1, True, True), ki=par(ki0), lm=par(lm, lm, 5 * np.ones((output_size, node_size))+lm_v, True, True))
 
 # %%
 # call model want to fit
-model = RNNJANSEN(node_size, batch_size, step_size, output_size, tr, sc, lm, dist, True, False, par)
+model = RNNJANSEN(node_size, batch_size, step_size, output_size, tr, sc, lm, dist, True, False, params)
 
 # %%
 # initial model parameters and set the fitted model parameter in Tensors
@@ -126,7 +127,7 @@ F = Model_fitting(model, data_mean, num_epoches, ObjFun)
 # model training
 u = np.zeros((node_size,hidden_size,time_dim))
 u[:,:,110:120]= 200
-F.train(u=u)
+F.train(u=u, epoch_min = 100, r_lb = 0.95)
 
 # %%
 # model test with 20 window for warmup
