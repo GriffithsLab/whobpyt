@@ -110,6 +110,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#training-the-model">Training The Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-of-loss-over-training">Plots of loss over Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-of-j-values-over-training-training">Plots of J values over training Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plots-of-eeg-psd">Plots of EEG PSD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plots-of-bold-fc">Plots of BOLD FC</a></li>
@@ -204,15 +206,30 @@
 <div class="section" id="importage">
 <h2>Importage<a class="headerlink" href="#importage" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># whobpyt stuff</span>
-<span class="kn">from</span> <span class="nn">whobpyt.depr.models</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span><span class="p">,</span><span class="n">ParamsJR</span><span class="p">,</span><span class="n">RNNWWD</span><span class="p">,</span><span class="n">RWW_Layer</span><span class="p">,</span><span class="n">RWW_Params</span><span class="p">,</span><span class="n">BOLD_Layer</span><span class="p">,</span><span class="n">BOLD_Params</span><span class="p">,</span><span class="n">EEG_Layer</span><span class="p">,</span><span class="n">EEG_Params</span><span class="p">,</span><span class="n">Jansen_Layer</span>
-<span class="kn">from</span> <span class="nn">whobpyt.depr.objective</span> <span class="kn">import</span> <span class="n">meanVariableLoss</span><span class="p">,</span><span class="n">powerSpectrumLoss</span><span class="p">,</span><span class="n">functionalConnectivityLoss</span>
-<span class="kn">from</span> <span class="nn">whobpyt.depr.fit</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
+<span class="kn">import</span> <span class="nn">whobpyt</span>
+<span class="kn">from</span> <span class="nn">whobpyt.data.dataload</span> <span class="kn">import</span> <span class="n">dataloader</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.RWW2.mmRWW2</span> <span class="kn">import</span> <span class="n">mmRWW2</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.RWW2.ParamsRWW2</span> <span class="kn">import</span> <span class="n">ParamsRWW2</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.RWW2.RWW2</span> <span class="kn">import</span> <span class="n">RWW2</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.BOLD.ParamsBOLD</span> <span class="kn">import</span> <span class="n">BOLD_Params</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.BOLD.BOLD</span> <span class="kn">import</span> <span class="n">BOLD_Layer</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.EEG.ParamsEEG</span> <span class="kn">import</span> <span class="n">EEG_Params</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.EEG.EEG</span> <span class="kn">import</span> <span class="n">EEG_Layer</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization.cost_FC</span> <span class="kn">import</span> <span class="n">CostsFC</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization.cost_PSD</span> <span class="kn">import</span> <span class="n">CostsPSD</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization.cost_Mean</span> <span class="kn">import</span> <span class="n">CostsMean</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization.modelfitting</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractNMM</span> <span class="kn">import</span> <span class="n">AbstractNMM</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes.parameter</span> <span class="kn">import</span> <span class="n">par</span>
 
 <span class="c1"># general python stuff</span>
-<span class="kn">import</span> <span class="nn">torch</span><span class="o">,</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="o">,</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># viz stuff</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span><span class="o">,</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
 </div>
@@ -235,7 +252,7 @@
 <span class="n">init_state</span> <span class="o">=</span> <span class="n">init_state</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">init_state</span><span class="p">)</span><span class="o">/</span><span class="mi">30</span> <span class="c1"># Randomizing initial values</span>
 
 <span class="c1"># Create a RWW Params</span>
-<span class="n">paramsNode</span> <span class="o">=</span> <span class="n">RWW_Params</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
+<span class="n">paramsNode</span> <span class="o">=</span> <span class="n">ParamsRWW2</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
 
 <span class="c1">#Create #EEG Params</span>
 <span class="n">paramsEEG</span> <span class="o">=</span> <span class="n">EEG_Params</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_regions</span><span class="p">))</span>
@@ -244,10 +261,15 @@
 <span class="n">paramsBOLD</span> <span class="o">=</span> <span class="n">BOLD_Params</span><span class="p">()</span>
 </pre></div>
 </div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/whobpyt/whobpyt/whobpyt/datatypes/parameter.py:26: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.val = torch.tensor(val, dtype=torch.float32)
+</pre></div>
+</div>
 </div>
 <div class="section" id="further-adjusting-parameters-for-network">
 <h2>Further Adjusting Parameters for Network<a class="headerlink" href="#further-adjusting-parameters-for-network" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">paramsNode</span><span class="o">.</span><span class="n">J</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="mf">0.15</span>  <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_regions</span><span class="p">))</span> <span class="c1">#This is a parameter that will be updated during training</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">paramsNode</span><span class="o">.</span><span class="n">J</span> <span class="o">=</span> <span class="n">par</span><span class="p">((</span><span class="mf">0.15</span>  <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)),</span> <span class="n">fit_par</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">asLog</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">#This is a parameter that will be updated during training</span>
 </pre></div>
 </div>
 </div>
@@ -290,7 +312,7 @@
 </div>
 <img alt="SC of Artificial Data" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.0000)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.)
 
 Text(0.5, 1.0, &#39;SC of Artificial Data&#39;)
 </pre></div>
@@ -348,28 +370,10 @@ That is a theoretical matrix for the EEG SC to be fit to</p>
 <div class="section" id="defining-the-cnmm-model">
 <h2>Defining the CNMM Model<a class="headerlink" href="#defining-the-cnmm-model" title="Permalink to this headline">¶</a></h2>
 <p>The Multi-Modal Model</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">mmModel</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">mmModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">RWW_Layer</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">paramsNode</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">dist_mtx</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eeg</span> <span class="o">=</span> <span class="n">EEG_Layer</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">paramsEEG</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bold</span> <span class="o">=</span> <span class="n">BOLD_Layer</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">paramsBOLD</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">next_start_state</span> <span class="o">=</span> <span class="n">init_state</span>
-
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span> <span class="o">=</span> <span class="n">step_size</span> <span class="c1">#in msec</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sim_len</span> <span class="o">=</span> <span class="n">sim_len</span> <span class="c1">#in msec</span>
-
-        <span class="n">node_states</span><span class="p">,</span> <span class="n">node_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_start_state</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_len</span><span class="p">,</span> <span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span><span class="p">)</span>
-        <span class="n">EEG_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">step_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">)</span>
-        <span class="n">BOLD_states</span><span class="p">,</span> <span class="n">BOLD_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_start_state</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">])</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">next_start_state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">node_states</span><span class="p">,</span> <span class="n">BOLD_states</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">EEG_history</span><span class="p">,</span> <span class="n">BOLD_history</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">mmRWW2</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">paramsNode</span><span class="p">,</span> <span class="n">paramsEEG</span><span class="p">,</span> <span class="n">paramsBOLD</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">dist_mtx</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">setModelParameters</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">track_params</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;J&#39;</span><span class="p">]</span>
+<span class="c1">#model.J = model.J.val #TODO: This line here so the variable gets tracked. Improve approach.</span>
 </pre></div>
 </div>
 </div>
@@ -377,7 +381,7 @@ That is a theoretical matrix for the EEG SC to be fit to</p>
 <h2>Defining the Objective Function<a class="headerlink" href="#defining-the-objective-function" title="Permalink to this headline">¶</a></h2>
 <p>Written in such as way as to be able to adjust the relative importance of components that make up the objective function.
 Also, written in such a way as to be able to track and plot indiviual components losses over time.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">objectiveFunction</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">mmObjectiveFunction</span><span class="p">():</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Weights of Objective Function Components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean_weight</span> <span class="o">=</span> <span class="mi">1</span>
@@ -388,14 +392,15 @@ Also, written in such a way as to be able to track and plot indiviual components
         <span class="bp">self</span><span class="o">.</span><span class="n">BOLD_FC_weight</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Not Currently Used</span>
 
         <span class="c1"># Functions of the various Objective Function Components</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span> <span class="o">=</span> <span class="n">meanVariableLoss</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">varIdx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.164</span><span class="p">]))</span>
-        <span class="c1">#self.S_I_mean = meanVariableLoss(...) # Not Currently Used</span>
-        <span class="c1">#self.EEG_PSD = powerSpectrumLoss(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)</span>
-        <span class="c1">#self.EEG_FC = functionalConnectivityLoss(...) # Not Currently Used</span>
-        <span class="c1">#self.BOLD_PSD = powerSpectrumLoss(...) # Not Currently Used</span>
-        <span class="c1">#self.BOLD_FC = functionalConnectivityLoss(num_regions, varIdx = 4, targetValue = SC_mtx_norm)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span> <span class="o">=</span> <span class="n">CostsMean</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">varIdx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.164</span><span class="p">]))</span>
+        <span class="c1">#self.S_I_mean = CostsMean(...) # Not Currently Used</span>
+        <span class="c1">#self.EEG_PSD = CostsPSD(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)</span>
+        <span class="c1">#self.EEG_FC = CostsFC(...) # Not Currently Used</span>
+        <span class="c1">#self.BOLD_PSD = CostsPSD(...) # Not Currently Used</span>
+        <span class="c1">#self.BOLD_FC = CostsFC(num_regions, varIdx = 4, targetValue = SC_mtx_norm)</span>
 
-    <span class="k">def</span> <span class="nf">calcTotalLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">EEG_history</span><span class="p">,</span> <span class="n">BOLD_history</span><span class="p">,</span> <span class="n">returnLossComponents</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">EEG_history</span><span class="p">,</span> <span class="n">BOLD_history</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">returnLossComponents</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># sim, ts_window, self.model, next_window</span>
 
         <span class="n">S_E_mean_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span><span class="o">.</span><span class="n">calcLoss</span><span class="p">(</span><span class="n">node_history</span><span class="p">)</span>
         <span class="n">S_I_mean_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span> <span class="c1">#self.S_I_mean.calcLoss(node_history)</span>
@@ -417,8 +422,7 @@ Also, written in such a way as to be able to track and plot indiviual components
 </div>
 <div class="section" id="training-the-model">
 <h2>Training The Model<a class="headerlink" href="#training-the-model" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">mmModel</span><span class="p">()</span>
-<span class="n">TotalLossFn</span> <span class="o">=</span> <span class="n">objectiveFunction</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">mmObjectiveFunction</span><span class="p">()</span>
 
 
 <span class="c1">#</span>
@@ -428,134 +432,95 @@ Also, written in such a way as to be able to track and plot indiviual components
 
 <span class="c1">#</span>
 
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="c1">#optimizer = torch.optim.Adam(model.parameters(), lr = 0.1)</span>
 
 
 <span class="c1">#</span>
 
-<span class="n">LossComp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">randdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">15000</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">TRperwindow</span> <span class="o">=</span> <span class="mi">15000</span>
+<span class="n">randTS</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">(</span><span class="n">randdata</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TRperwindow</span><span class="p">)</span>
 
-<span class="n">J_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="c1"># call model fit</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">randTS</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[]
+</pre></div>
+</div>
+<p>model training</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">learningrate</span><span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">lr_scheduler</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: [0.4193714] FC_cor:  0.2541967312674528 cos_sim:  0.4885898281928899
+epoch:  1 loss: [0.45652354] FC_cor:  0.20993533923932967 cos_sim:  0.8393942008697828
+epoch:  2 loss: [0.45357683] FC_cor:  0.07324767155963036 cos_sim:  0.8640566467935865
+epoch:  3 loss: [0.4520895] FC_cor:  0.2626603904214858 cos_sim:  0.8658198710336111
+epoch:  4 loss: [0.45133927] FC_cor:  0.3186718114859265 cos_sim:  0.8658931985768212
+epoch:  5 loss: [0.45037013] FC_cor:  -0.046049017763857364 cos_sim:  0.8658770148461152
+epoch:  6 loss: [0.44573236] FC_cor:  0.10919380008170829 cos_sim:  0.8658888775861082
+epoch:  7 loss: [0.44256327] FC_cor:  -0.03285525610389589 cos_sim:  0.865897421774142
+epoch:  8 loss: [0.43884778] FC_cor:  0.3575415518923657 cos_sim:  0.8658960832123147
+epoch:  9 loss: [0.4351663] FC_cor:  0.21971691004062024 cos_sim:  0.865895927600474
+</pre></div>
+</div>
+<p>model test with 20 window for warmup</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="n">epochs</span> <span class="o">=</span> <span class="mi">20</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-
-    <span class="n">node_history</span><span class="p">,</span> <span class="n">EEG_history</span><span class="p">,</span> <span class="n">BOLD_history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">()</span>
-    <span class="n">totalLoss</span><span class="p">,</span> <span class="n">lossComponents</span> <span class="o">=</span> <span class="n">TotalLossFn</span><span class="o">.</span><span class="n">calcTotalLoss</span><span class="p">(</span><span class="n">node_history</span><span class="p">[</span><span class="n">skip_trans</span><span class="p">:,:,:],</span> <span class="n">EEG_history</span><span class="p">[</span><span class="n">skip_trans</span><span class="p">:,:,:],</span> <span class="n">BOLD_history</span><span class="p">[</span><span class="n">skip_trans</span><span class="p">:,:,:],</span> <span class="n">returnLossComponents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;totalLoss = &quot;</span><span class="p">,</span> <span class="n">totalLoss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-
-    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-    <span class="n">totalLoss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-
-    <span class="n">LossComp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lossComponents</span><span class="p">)</span>
-    <span class="n">J_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">J</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
-
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;J values = &quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">J</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
-
-
+<span class="c1">#LossComp = list()</span>
 <span class="c1">#</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">LossComp</span><span class="p">)</span>
+<span class="c1">#J_values = list()</span>
+<span class="c1">#</span>
+<span class="c1">#num_epochs = 20</span>
+<span class="c1">#</span>
+<span class="c1">#for i in range(epochs):</span>
+<span class="c1">#    print(i)</span>
+<span class="c1">#</span>
+<span class="c1">#    node_history, EEG_history, BOLD_history = model.forward()</span>
+<span class="c1">#    totalLoss, lossComponents = TotalLossFn.calcTotalLoss(node_history[skip_trans:,:,:], EEG_history[skip_trans:,:,:], BOLD_history[skip_trans:,:,:], returnLossComponents = True)</span>
+<span class="c1">#    print(&quot;totalLoss = &quot;, totalLoss.item())</span>
+<span class="c1">#</span>
+<span class="c1">#    optimizer.zero_grad()</span>
+<span class="c1">#    totalLoss.backward()</span>
+<span class="c1">#    optimizer.step()</span>
+<span class="c1">#</span>
+<span class="c1">#    LossComp.append(lossComponents)</span>
+<span class="c1">#    J_values.append(model.nodes.J.detach().clone().numpy())</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#    print(&quot;J values = &quot;, model.nodes.J.detach().clone().numpy())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.086780617160379 cos_sim:  0.5350293997489537
+</pre></div>
+</div>
+</div>
+<div class="section" id="plots-of-loss-over-training">
+<h2>Plots of loss over Training<a class="headerlink" href="#plots-of-loss-over-training" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Total Loss over Training Epochs&quot;</span><span class="p">)</span>
-
-
-<span class="c1">#</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">J_values</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Total Loss over Training Epochs" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_002.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Total Loss over Training Epochs&#39;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="plots-of-j-values-over-training-training">
+<h2>Plots of J values over training Training<a class="headerlink" href="#plots-of-j-values-over-training-training" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">J</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;J_</span><span class="si">{i}</span><span class="s2"> Values Changing Over Training Epochs&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="J_{i} Values Changing Over Training Epochs" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_002.png" />
+<img alt="J_{i} Values Changing Over Training Epochs" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[(&#39;nodes.J&#39;, Parameter containing:
-tensor([0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500, 0.1500],
-       requires_grad=True))]
-0
-totalLoss =  0.45882827043533325
-J values =  [0.24999991 0.24999991 0.24999991 0.24999991 0.24999991 0.24999991
- 0.24999991 0.24999991]
-1
-totalLoss =  0.4478880763053894
-J values =  [0.35013294 0.35013407 0.35013372 0.35012662 0.35013294 0.35012388
- 0.3501289  0.35013175]
-2
-totalLoss =  0.43879440426826477
-J values =  [0.45048153 0.4504784  0.4504758  0.45045877 0.450482   0.4504647
- 0.45047176 0.45047057]
-3
-totalLoss =  0.42850372195243835
-J values =  [0.55113244 0.55113006 0.5511255  0.5511139  0.55112994 0.5511004
- 0.5511127  0.5511135 ]
-4
-totalLoss =  0.41444021463394165
-J values =  [0.6521786  0.65217984 0.65216434 0.6521586  0.65217954 0.65213823
- 0.65215707 0.65215534]
-5
-totalLoss =  0.4006737470626831
-J values =  [0.75371164 0.7537101  0.7536911  0.7536914  0.7537149  0.7536631
- 0.75368977 0.75368565]
-6
-totalLoss =  0.38649609684944153
-J values =  [0.8558188  0.8558129  0.8557929  0.85579616 0.8558191  0.85576135
- 0.85578954 0.85578847]
-7
-totalLoss =  0.3693586587905884
-J values =  [0.95857996 0.9585714  0.9585512  0.958557   0.95857936 0.95851576
- 0.95854574 0.9585473 ]
-8
-totalLoss =  0.3508693277835846
-J values =  [1.0620719 1.0620602 1.0620418 1.0620481 1.0620697 1.0620018 1.0620329
- 1.0620372]
-9
-totalLoss =  0.33204036951065063
-J values =  [1.1663573 1.1663467 1.1663249 1.1663324 1.1663548 1.166285  1.1663159
- 1.1663225]
-10
-totalLoss =  0.3037306070327759
-J values =  [1.271456  1.27144   1.2714145 1.2714425 1.2714547 1.2713842 1.2714093
- 1.2714214]
-11
-totalLoss =  0.27345508337020874
-J values =  [1.3773155 1.3772885 1.3772542 1.3773005 1.3773086 1.3772327 1.3772614
- 1.3772813]
-12
-totalLoss =  0.24075192213058472
-J values =  [1.4837906 1.483757  1.4837126 1.4837711 1.4838126 1.4837168 1.4837204
- 1.4837773]
-13
-totalLoss =  0.18851710855960846
-J values =  [1.5901295 1.5901237 1.5900515 1.5901004 1.5901446 1.5901403 1.5900959
- 1.5900962]
-14
-totalLoss =  0.12054980546236038
-J values =  [1.6939416 1.693697  1.6936414 1.6937495 1.6937606 1.6937287 1.6937232
- 1.6937531]
-15
-totalLoss =  0.009564664214849472
-J values =  [1.7999182 1.7994602 1.799393  1.799577  1.7995541 1.799503  1.7995263
- 1.799598 ]
-16
-totalLoss =  0.005492859520018101
-J values =  [1.8947198 1.894133  1.8940625 1.8942611 1.8943228 1.8941255 1.8942524
- 1.8943852]
-17
-totalLoss =  0.007792022079229355
-J values =  [1.9798346 1.9791745 1.9791179 1.9793438 1.9794397 1.979189  1.9793673
- 1.9795011]
-18
-totalLoss =  0.009434010833501816
-J values =  [2.0564005 2.0556693 2.0555992 2.0558434 2.0559866 2.0557115 2.0559154
- 2.0560849]
-19
-totalLoss =  0.01147050317376852
-J values =  [2.1253202 2.1244862 2.1244278 2.1247067 2.1249266 2.124583  2.1248355
- 2.1250565]
-
-Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </pre></div>
 </div>
 </div>
@@ -564,25 +529,25 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;S_E and S_I&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_regions</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">node_history</span><span class="o">.</span><span class="n">detach</span><span class="p">()[:,</span><span class="n">n</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_E Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">node_history</span><span class="o">.</span><span class="n">detach</span><span class="p">()[:,</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_I Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">E_test</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_E Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">I_test</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_I Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time Steps (multiply by step_size to get msec), step_size = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">step_size</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_003.png" />
+<img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f37e3e554f0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fbc68b6f820&gt;
 </pre></div>
 </div>
 </div>
 <div class="section" id="plots-of-eeg-psd">
 <h2>Plots of EEG PSD<a class="headerlink" href="#plots-of-eeg-psd" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sampleFreqHz</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
-<span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span> <span class="o">=</span> <span class="n">powerSpectrumLoss</span><span class="o">.</span><span class="n">calcPSD</span><span class="p">(</span><span class="n">EEG_history</span><span class="p">[</span><span class="n">skip_trans</span><span class="p">:,:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="mi">40</span><span class="p">)</span>
-<span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span> <span class="o">=</span> <span class="n">powerSpectrumLoss</span><span class="o">.</span><span class="n">downSmoothPSD</span><span class="p">(</span><span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
-<span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span> <span class="o">=</span> <span class="n">powerSpectrumLoss</span><span class="o">.</span><span class="n">scalePSD</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span><span class="p">)</span>
+<span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">calcPSD</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">eeg_test</span><span class="p">),</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">downSmoothPSD</span><span class="p">(</span><span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">scalePSD</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
@@ -591,7 +556,7 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated EEG PSD: After Training&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="Simulated EEG PSD: After Training" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
+<img alt="Simulated EEG PSD: After Training" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_005.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Simulated EEG PSD: After Training&#39;)
 </pre></div>
@@ -599,8 +564,7 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </div>
 <div class="section" id="plots-of-bold-fc">
 <h2>Plots of BOLD FC<a class="headerlink" href="#plots-of-bold-fc" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">BOLD_history</span><span class="p">[</span><span class="n">skip_trans</span><span class="p">:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">sim_FC</span> <span class="o">=</span> <span class="n">functionalConnectivityLoss</span><span class="o">.</span><span class="n">calcFC</span><span class="p">(</span><span class="n">BOLD_history</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">])</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim_FC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">bold_test</span><span class="p">[:,</span><span class="n">skip_trans</span><span class="p">:])</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated BOLD FC: After Training&quot;</span><span class="p">)</span>
@@ -608,14 +572,12 @@ Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">sim_FC</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="Simulated BOLD FC: After Training" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_005.png" />
+<img alt="Simulated BOLD FC: After Training" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_006.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([10000, 8])
-
-&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 19 minutes  58.196 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  53.925 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>

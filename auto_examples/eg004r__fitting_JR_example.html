@@ -109,6 +109,8 @@
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-loss-over-training">Plots of loss over Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-j-values-over-training-training">Plots of J values over training Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
@@ -204,6 +206,7 @@
 <span class="c1"># whobpyt stuff</span>
 <span class="kn">import</span> <span class="nn">whobpyt</span>
 <span class="kn">from</span> <span class="nn">whobpyt.data.dataload</span> <span class="kn">import</span> <span class="n">dataloader</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes.parameter</span> <span class="kn">import</span> <span class="n">par</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit.jansen_rit</span> <span class="kn">import</span> <span class="n">ParamsJR</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit.jansen_rit</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization.modelfitting</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
@@ -278,31 +281,20 @@
 <p>get model parameters structure and define the fitted parameters by setting non-zero variance for the model</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span><span class="mi">200</span><span class="p">))</span>
 <span class="n">lm_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span><span class="mi">200</span><span class="p">))</span>
-<span class="n">par</span> <span class="o">=</span> <span class="n">ParamsJR</span><span class="p">(</span><span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">B</span> <span class="o">=</span> <span class="p">[</span><span class="mi">22</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">g_f</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">g_b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>\
-               <span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c4</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>\
-               <span class="n">std_in</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">v0</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="o">=</span><span class="p">[</span><span class="mf">0.56</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y0</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span> <span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>\
-               <span class="n">mu</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="c1">#k = [10, .3],</span>
-               <span class="c1">#cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \</span>
-               <span class="n">cy0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ki</span><span class="o">=</span><span class="p">[</span><span class="n">ki0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lm</span><span class="o">=</span><span class="p">[</span><span class="n">lm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span> <span class="n">node_size</span><span class="p">))</span><span class="o">+</span><span class="n">lm_v</span><span class="p">])</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">ParamsJR</span><span class="p">(</span><span class="n">A</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mf">3.25</span><span class="p">),</span> <span class="n">a</span><span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">B</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">22</span><span class="p">),</span> <span class="n">b</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">g</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">g_f</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">g_b</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> \
+                  <span class="n">c1</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">135</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">c3</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">c4</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>\
+                  <span class="n">std_in</span><span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">v0</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mf">0.56</span><span class="p">),</span> <span class="n">y0</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>\
+                  <span class="n">mu</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="c1">#k = [10, .3],</span>
+                  <span class="c1">#cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \</span>
+                  <span class="n">cy0</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">ki</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="n">ki0</span><span class="p">),</span> <span class="n">lm</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="n">lm</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span> <span class="n">node_size</span><span class="p">))</span><span class="o">+</span><span class="n">lm_v</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>call model want to fit</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RNNJANSEN</span><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RNNJANSEN</span><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>initial model parameters and set the fitted model parameter in Tensors</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">setModelParameters</span><span class="p">()</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Parameter containing:
-tensor([[-1., -1., -1.,  ..., -1., -1., -1.],
-        [-1., -1., -1.,  ..., -1., -1., -1.],
-        [-1., -1., -1.,  ..., -1., -1., -1.],
-        ...,
-        [-1., -1., -1.,  ..., -1., -1., -1.],
-        [-1., -1., -1.,  ..., -1., -1., -1.],
-        [-1., -1., -1.,  ..., -1., -1., -1.]], requires_grad=True)
 </pre></div>
 </div>
 <p>create objective function</p>
@@ -316,418 +308,316 @@ tensor([[-1., -1., -1.,  ..., -1., -1., -1.],
 <p>model training</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">))</span>
 <span class="n">u</span><span class="p">[:,:,</span><span class="mi">110</span><span class="p">:</span><span class="mi">120</span><span class="p">]</span><span class="o">=</span> <span class="mi">200</span>
-<span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">epoch_min</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">r_lb</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 40597.707
-epoch:  0 0.09965629077618572 cos_sim:  0.027640226441524907
-Modelparam_lr 0.0020915813002864297
-Hyperparam_lr 5.2289532507160614e-05
-epoch:  1 40268.84
-epoch:  1 0.11474412603357864 cos_sim:  0.028107317677910113
-Modelparam_lr 0.0023656262732655517
-Hyperparam_lr 5.914065683163862e-05
-epoch:  2 39900.965
-epoch:  2 0.11391048164011186 cos_sim:  0.028357039626366404
-Modelparam_lr 0.0028200434693571516
-Hyperparam_lr 7.050108673392857e-05
-epoch:  3 39475.043
-epoch:  3 0.11206725953239625 cos_sim:  0.028626485795694285
-Modelparam_lr 0.0034513648787536932
-Hyperparam_lr 8.62841219688422e-05
-epoch:  4 38977.707
-epoch:  4 0.1277043011307159 cos_sim:  0.028796981559065044
-Modelparam_lr 0.004254772398490904
-Hyperparam_lr 0.00010636930996227247
-epoch:  5 38402.14
-epoch:  5 0.17243783332084367 cos_sim:  0.028937397233026463
-Modelparam_lr 0.005224134603125666
-Hyperparam_lr 0.00013060336507814151
-epoch:  6 37748.164
-epoch:  6 0.1800027573487574 cos_sim:  0.029140779419622145
-Modelparam_lr 0.006352053538395568
-Hyperparam_lr 0.00015880133845988889
-epoch:  7 37021.496
-epoch:  7 0.23774680096728454 cos_sim:  0.029569248592497373
-Modelparam_lr 0.007629921180741454
-Hyperparam_lr 0.00019074802951853619
-epoch:  8 36232.33
-epoch:  8 0.2420406573813509 cos_sim:  0.030104802956896052
-Modelparam_lr 0.009047985131806671
-Hyperparam_lr 0.0002261996282951666
-epoch:  9 35393.633
-epoch:  9 0.3614031661381141 cos_sim:  0.031039411273537588
-Modelparam_lr 0.010595423046547231
-Hyperparam_lr 0.00026488557616368064
-epoch:  10 34519.227
-epoch:  10 0.4133534362988453 cos_sim:  0.03211110744513608
-Modelparam_lr 0.012260425226934428
-Hyperparam_lr 0.0003065106306733606
-epoch:  11 33622.49
-epoch:  11 0.5533848280609035 cos_sim:  0.034556137701314854
-Modelparam_lr 0.014030284750913287
-Hyperparam_lr 0.0003507571187728321
-epoch:  12 32715.246
-epoch:  12 0.5222964795796942 cos_sim:  0.03722537839582668
-Modelparam_lr 0.015891494448772962
-Hyperparam_lr 0.00039728736121932395
-epoch:  13 31807.441
-epoch:  13 0.5509968449212129 cos_sim:  0.043326903713392526
-Modelparam_lr 0.01782984998682713
-Hyperparam_lr 0.00044574624967067813
-epoch:  14 30907.066
-epoch:  14 0.543957632369931 cos_sim:  0.0471932944680066
-Modelparam_lr 0.01983055827169309
-Hyperparam_lr 0.0004957639567923271
-epoch:  15 30020.238
-epoch:  15 0.5426690722693106 cos_sim:  0.05353063969764915
-Modelparam_lr 0.021878350347852373
-Hyperparam_lr 0.0005469587586963092
-epoch:  16 29151.568
-epoch:  16 0.5724362251230052 cos_sim:  0.053238348844620816
-Modelparam_lr 0.023957597926884053
-Hyperparam_lr 0.0005989399481721012
-epoch:  17 28304.297
-epoch:  17 0.7427970409207636 cos_sim:  0.05619523844983211
-Modelparam_lr 0.026052432659046026
-Hyperparam_lr 0.0006513108164761506
-epoch:  18 27480.738
-epoch:  18 0.8322980903705017 cos_sim:  0.058044174710563584
-Modelparam_lr 0.02814686723695027
-Hyperparam_lr 0.0007036716809237567
-epoch:  19 26682.303
-epoch:  19 0.8173444220850452 cos_sim:  0.05931872284818422
-Modelparam_lr 0.030224917407095986
-Hyperparam_lr 0.0007556229351773996
-epoch:  20 25909.89
-epoch:  20 0.8037084238179841 cos_sim:  0.06433383433664759
-Modelparam_lr 0.032270723958096326
-Hyperparam_lr 0.0008067680989524079
-epoch:  21 25163.908
-epoch:  21 0.7538741783633194 cos_sim:  0.06242292323699429
-Modelparam_lr 0.03426867375461168
-Hyperparam_lr 0.0008567168438652918
-epoch:  22 24444.46
-epoch:  22 0.7576376841154555 cos_sim:  0.06987715670491698
-Modelparam_lr 0.03620351889328606
-Hyperparam_lr 0.0009050879723321516
-epoch:  23 23751.373
-epoch:  23 0.6151552864078105 cos_sim:  0.06045470210735786
-Modelparam_lr 0.03806049307131509
-Hyperparam_lr 0.0009515123267828771
-epoch:  24 23084.324
-epoch:  24 0.7961055054674473 cos_sim:  0.07651516615012441
-Modelparam_lr 0.039825424279546905
-Hyperparam_lr 0.0009956356069886726
-epoch:  25 22442.87
-epoch:  25 0.641275570491635 cos_sim:  0.0589086090417152
-Modelparam_lr 0.04148484296006767
-Hyperparam_lr 0.0010371210740016917
-epoch:  26 21826.447
-epoch:  26 0.8691005514647362 cos_sim:  0.07408858940243485
-Modelparam_lr 0.04302608480283726
-Hyperparam_lr 0.0010756521200709316
-epoch:  27 21234.508
-epoch:  27 0.8367605062146111 cos_sim:  0.0663730861375308
-Modelparam_lr 0.04443738739685428
-Hyperparam_lr 0.0011109346849213569
-epoch:  28 20666.426
-epoch:  28 0.9058310121557954 cos_sim:  0.07531730701081832
-Modelparam_lr 0.04570797999823058
-Hyperparam_lr 0.0011426994999557643
-epoch:  29 20121.576
-epoch:  29 0.8875979532077528 cos_sim:  0.07012379514260642
-Modelparam_lr 0.046828165730085455
-Hyperparam_lr 0.0011707041432521363
-epoch:  30 19599.33
-epoch:  30 0.9104151459665787 cos_sim:  0.07711514396674357
-Modelparam_lr 0.04778939558692847
-Hyperparam_lr 0.0011947348896732117
-epoch:  31 19099.07
-epoch:  31 0.894451141397812 cos_sim:  0.07170542147605076
-Modelparam_lr 0.04858433367874595
-Hyperparam_lr 0.0012146083419686485
-epoch:  32 18620.178
-epoch:  32 0.9249294646517409 cos_sim:  0.08051663206440911
-Modelparam_lr 0.04920691321686324
-Hyperparam_lr 0.001230172830421581
-epoch:  33 18162.07
-epoch:  33 0.8957379076005584 cos_sim:  0.07168458598821337
-Modelparam_lr 0.049652382814310975
-Hyperparam_lr 0.0012413095703577744
-epoch:  34 17724.172
-epoch:  34 0.9292151706903196 cos_sim:  0.08332285544750136
-Modelparam_lr 0.04991734274734145
-Hyperparam_lr 0.0012479335686835364
-epoch:  35 17305.914
-epoch:  35 0.8830575028094699 cos_sim:  0.07287867631555928
-Modelparam_lr 0.049999956289142014
-Hyperparam_lr 0.0012499989072285503
-epoch:  36 16906.602
-epoch:  36 0.9264662520489746 cos_sim:  0.0856076677820547
-Modelparam_lr 0.049980725983114455
-Hyperparam_lr 0.0012495181495778614
-epoch:  37 16524.84
-epoch:  37 0.8707055417380972 cos_sim:  0.07582835203960889
-Modelparam_lr 0.049926558012821295
-Hyperparam_lr 0.0012481639503205324
-epoch:  38 16159.228
-epoch:  38 0.9254190490672579 cos_sim:  0.08866769187499621
-Modelparam_lr 0.04983752813706703
-Hyperparam_lr 0.0012459382034266757
-epoch:  39 15808.55
-epoch:  39 0.8793481033466807 cos_sim:  0.0781339298932799
-Modelparam_lr 0.04971376087218328
-Hyperparam_lr 0.001242844021804582
-epoch:  40 15471.745
-epoch:  40 0.9332246735995957 cos_sim:  0.09188827802109961
-Modelparam_lr 0.0495554293178814
-Hyperparam_lr 0.001238885732947035
-epoch:  41 15147.89
-epoch:  41 0.900692457835549 cos_sim:  0.08075335191735841
-Modelparam_lr 0.049362754915156945
-Hyperparam_lr 0.0012340688728789235
-epoch:  42 14836.145
-epoch:  42 0.9452561547456745 cos_sim:  0.09421515486376257
-Modelparam_lr 0.04913600713658435
-Hyperparam_lr 0.0012284001784146088
-epoch:  43 14535.785
-epoch:  43 0.9218349495510543 cos_sim:  0.0833663977167477
-Modelparam_lr 0.048875503109435225
-Hyperparam_lr 0.0012218875777358807
-epoch:  44 14246.146
-epoch:  44 0.9579445672448909 cos_sim:  0.09522629801154928
-Modelparam_lr 0.04858160717214713
-Hyperparam_lr 0.001214540179303678
-epoch:  45 13966.651
-epoch:  45 0.9408435112712266 cos_sim:  0.08600290089462609
-Modelparam_lr 0.048254730364763375
-Hyperparam_lr 0.0012063682591190842
-epoch:  46 13696.76
-epoch:  46 0.9619836918029039 cos_sim:  0.09777088516199761
-Modelparam_lr 0.04789532985405634
-Hyperparam_lr 0.0011973832463514085
-epoch:  47 13435.999
-epoch:  47 0.9443070887304315 cos_sim:  0.08937435584842561
-Modelparam_lr 0.04750390829413839
-Hyperparam_lr 0.0011875977073534597
-epoch:  48 13183.933
-epoch:  48 0.9596780505401781 cos_sim:  0.10171647334275283
-Modelparam_lr 0.04708101312345467
-Hyperparam_lr 0.0011770253280863666
-epoch:  49 12940.164
-epoch:  49 0.9416210872441596 cos_sim:  0.09254557929136817
-Modelparam_lr 0.04662723579914091
-Hyperparam_lr 0.0011656808949785228
-epoch:  50 12704.339
-epoch:  50 0.9549964144587854 cos_sim:  0.10583932393961198
-Modelparam_lr 0.04614321096981717
-Hyperparam_lr 0.001153580274245429
-epoch:  51 12476.111
-epoch:  51 0.940710479507243 cos_sim:  0.09669838679237897
-Modelparam_lr 0.04562961558797431
-Hyperparam_lr 0.0011407403896993577
-epoch:  52 12255.206
-epoch:  52 0.9527225753881445 cos_sim:  0.10980627138436251
-Modelparam_lr 0.045087167963194806
-Hyperparam_lr 0.00112717919907987
-epoch:  53 12041.3125
-epoch:  53 0.9372403273663622 cos_sim:  0.10082506064995596
-Modelparam_lr 0.04451662675753175
-Hyperparam_lr 0.0011129156689382938
-epoch:  54 11834.197
-epoch:  54 0.9557612671488852 cos_sim:  0.113627336365468
-Modelparam_lr 0.04391878992445143
-Hyperparam_lr 0.0010979697481112857
-epoch:  55 11633.603
-epoch:  55 0.9425618705463884 cos_sim:  0.10403321815854336
-Modelparam_lr 0.043294493592823224
-Hyperparam_lr 0.0010823623398205807
-epoch:  56 11439.321
-epoch:  56 0.9600756586370282 cos_sim:  0.11822067328008229
-Modelparam_lr 0.042644610897517796
-Hyperparam_lr 0.0010661152724379449
-epoch:  57 11251.144
-epoch:  57 0.9444734534281405 cos_sim:  0.10644502583263936
-Modelparam_lr 0.04197005075824899
-Hyperparam_lr 0.0010492512689562249
-epoch:  58 11068.881
-epoch:  58 0.9608981825207279 cos_sim:  0.12324283426889843
-Modelparam_lr 0.04127175660836748
-Hyperparam_lr 0.001031793915209187
-epoch:  59 10892.354
-epoch:  59 0.9438336250303103 cos_sim:  0.10944006815144311
-Modelparam_lr 0.04055070507538386
-Hyperparam_lr 0.0010137676268845966
-epoch:  60 10721.389
-epoch:  60 0.9606579925892534 cos_sim:  0.12798871684696383
-Modelparam_lr 0.0398079046150668
-Hyperparam_lr 0.00099519761537667
-epoch:  61 10555.841
-epoch:  61 0.9471629224676134 cos_sim:  0.11484176549404214
-Modelparam_lr 0.03904439410102644
-Hyperparam_lr 0.000976109852525661
-epoch:  62 10395.562
-epoch:  62 0.9638643833240726 cos_sim:  0.13294994687214895
-Modelparam_lr 0.038261241371755746
-Hyperparam_lr 0.0009565310342938936
-epoch:  63 10240.407
-epoch:  63 0.9529189770307886 cos_sim:  0.12094483487444303
-Modelparam_lr 0.037459541737161775
-Hyperparam_lr 0.0009364885434290444
-epoch:  64 10090.253
-epoch:  64 0.9652325294277089 cos_sim:  0.13781786669043314
-Modelparam_lr 0.036640416446675754
-Hyperparam_lr 0.0009160104111668938
-epoch:  65 9944.978
-epoch:  65 0.9599136938117466 cos_sim:  0.12805798037551208
-Modelparam_lr 0.03580501112108436
-Hyperparam_lr 0.000895125278027109
-epoch:  66 9804.459
-epoch:  66 0.9675955104117362 cos_sim:  0.1409188132940024
-Modelparam_lr 0.03495449415027546
-Hyperparam_lr 0.0008738623537568865
-epoch:  67 9668.601
-epoch:  67 0.9675489614778567 cos_sim:  0.13386620195363652
-Modelparam_lr 0.0340900550591392
-Hyperparam_lr 0.00085225137647848
-epoch:  68 9537.284
-epoch:  68 0.9698934047771244 cos_sim:  0.1443421444183829
-Modelparam_lr 0.033212902843909875
-Hyperparam_lr 0.0008303225710977469
-epoch:  69 9410.419
-epoch:  69 0.9716990071926048 cos_sim:  0.13914277836398048
-Modelparam_lr 0.03232426428127542
-Hyperparam_lr 0.0008081066070318853
-epoch:  70 9287.904
-epoch:  70 0.9712097728333635 cos_sim:  0.1485410522605944
-Modelparam_lr 0.03142538221261919
-Hyperparam_lr 0.0007856345553154797
-epoch:  71 9169.66
-epoch:  71 0.9742178802400758 cos_sim:  0.14512776202486147
-Modelparam_lr 0.030517513805794035
-Hyperparam_lr 0.0007629378451448508
-epoch:  72 9055.602
-epoch:  72 0.9716948371391497 cos_sim:  0.15279865746792407
-Modelparam_lr 0.029601928796859227
-Hyperparam_lr 0.0007400482199214806
-epoch:  73 8945.631
-epoch:  73 0.97538330395516 cos_sim:  0.15105001400834153
-Modelparam_lr 0.02867990771423993
-Hyperparam_lr 0.0007169976928559982
-epoch:  74 8839.681
-epoch:  74 0.9698576184223466 cos_sim:  0.15722261227142478
-Modelparam_lr 0.027752740087792254
-Hyperparam_lr 0.0006938185021948064
-epoch:  75 8737.67
-epoch:  75 0.973592830389114 cos_sim:  0.15727012188591144
-Modelparam_lr 0.02682172264527928
-Hyperparam_lr 0.000670543066131982
-epoch:  76 8639.529
-epoch:  76 0.9657522594337891 cos_sim:  0.16123588315569443
-Modelparam_lr 0.025888157498779926
-Hyperparam_lr 0.0006472039374694981
-epoch:  77 8545.185
-epoch:  77 0.9713005945038057 cos_sim:  0.1631971178959294
-Modelparam_lr 0.02495335032356752
-Hyperparam_lr 0.000623833758089188
-epoch:  78 8454.565
-epoch:  78 0.9660035172927105 cos_sim:  0.16642735784686258
-Modelparam_lr 0.024018608532004868
-Hyperparam_lr 0.0006004652133001217
-epoch:  79 8367.612
-epoch:  79 0.969630567427677 cos_sim:  0.1684345463689524
-Modelparam_lr 0.023085239445009797
-Hyperparam_lr 0.0005771309861252449
-epoch:  80 8284.247
-epoch:  80 0.9692844374706201 cos_sim:  0.1727082783897658
-Modelparam_lr 0.02215454846364872
-Hyperparam_lr 0.000553863711591218
-epoch:  81 8204.415
-epoch:  81 0.9712589707720769 cos_sim:  0.1744568188577857
-Modelparam_lr 0.021227837243415097
-Hyperparam_lr 0.0005306959310853774
-epoch:  82 8128.046
-epoch:  82 0.9708045223942496 cos_sim:  0.17709126156964522
-Modelparam_lr 0.020306401873746653
-Hyperparam_lr 0.0005076600468436663
-epoch:  83 8055.09
-epoch:  83 0.9723967509188717 cos_sim:  0.18007539741009415
-Modelparam_lr 0.01939153106532699
-Hyperparam_lr 0.00048478827663317475
-epoch:  84 7985.4707
-epoch:  84 0.9723940736477807 cos_sim:  0.18284939509990836
-Modelparam_lr 0.018484504347707226
-Hyperparam_lr 0.00046211260869268066
-epoch:  85 7919.133
-epoch:  85 0.9731710722015516 cos_sim:  0.1856320692355268
-Modelparam_lr 0.017586590279768225
-Hyperparam_lr 0.0004396647569942057
-epoch:  86 7856.0146
-epoch:  86 0.973250225548076 cos_sim:  0.1885881550374185
-Modelparam_lr 0.016699044675526267
-Hyperparam_lr 0.0004174761168881567
-epoch:  87 7796.063
-epoch:  87 0.9735769269371987 cos_sim:  0.19104064471662716
-Modelparam_lr 0.015823108847763587
-Hyperparam_lr 0.0003955777211940898
-epoch:  88 7739.2007
-epoch:  88 0.9739223111227343 cos_sim:  0.19457558388844579
-Modelparam_lr 0.014960007871940252
-Hyperparam_lr 0.0003740001967985063
-epoch:  89 7685.3784
-epoch:  89 0.9744105142145488 cos_sim:  0.1972221453798749
-Modelparam_lr 0.014110948872815285
-Hyperparam_lr 0.00035277372182038213
-epoch:  90 7634.539
-epoch:  90 0.9748284668070569 cos_sim:  0.19944641430697746
-Modelparam_lr 0.01327711933617361
-Hyperparam_lr 0.00033192798340434026
-epoch:  91 7586.623
-epoch:  91 0.9751755972680599 cos_sim:  0.20230493847312092
-Modelparam_lr 0.012459685448019765
-Hyperparam_lr 0.00031149213620049415
-epoch:  92 7541.5547
-epoch:  92 0.9756687454923173 cos_sim:  0.20470946450498526
-Modelparam_lr 0.011659790463561305
-Hyperparam_lr 0.00029149476158903267
-epoch:  93 7499.27
-epoch:  93 0.9760960142265238 cos_sim:  0.20687972505688734
-Modelparam_lr 0.010878553108263078
-Hyperparam_lr 0.00027196382770657695
-epoch:  94 7459.721
-epoch:  94 0.9765218689586194 cos_sim:  0.20893992041366094
-Modelparam_lr 0.010117066013208437
-Hyperparam_lr 0.0002529266503302109
-epoch:  95 7422.8223
-epoch:  95 0.9767983926876743 cos_sim:  0.21065808374994743
-Modelparam_lr 0.009376394186955926
-Hyperparam_lr 0.0002344098546738981
-epoch:  96 7388.514
-epoch:  96 0.9769605949672736 cos_sim:  0.21234878997539774
-Modelparam_lr 0.008657573526028488
-Hyperparam_lr 0.00021643933815071215
-epoch:  97 7356.7236
-epoch:  97 0.9761454296778295 cos_sim:  0.214620014951589
-Modelparam_lr 0.007961609366118472
-Hyperparam_lr 0.0001990402341529618
-epoch:  98 7327.386
-epoch:  98 0.9752315938124653 cos_sim:  0.21639563185148278
-Modelparam_lr 0.00728947507603484
-Hyperparam_lr 0.000182236876900871
-epoch:  99 7300.4214
-epoch:  99 0.9741069443250508 cos_sim:  0.21860343419367448
-Modelparam_lr 0.006642110696358811
-Hyperparam_lr 0.00016605276740897025
-epoch:  100 7275.7554
-epoch:  100 0.9733815931855995 cos_sim:  0.22006171452447648
-Modelparam_lr 0.0060204216247121065
-Hyperparam_lr 0.00015051054061780266
-epoch:  101 7253.3013
-epoch:  101 0.9735756299611443 cos_sim:  0.22090836657159363
-Modelparam_lr 0.005425277349476554
-Hyperparam_lr 0.00013563193373691384
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: -20602.975 FC_cor:  0.1319080979907476 cos_sim:  0.027561704955169977
+Modelparam_lr:  0.0020915813002864297
+Hyperparam_lr:  5.2289532507160614e-05
+epoch:  1 loss: -20605.826 FC_cor:  0.13005050422399572 cos_sim:  0.02813574617740833
+Modelparam_lr:  0.0023656262732655517
+Hyperparam_lr:  5.914065683163862e-05
+epoch:  2 loss: -20609.133 FC_cor:  0.1177100879970224 cos_sim:  0.02839515494075685
+Modelparam_lr:  0.0028200434693571516
+Hyperparam_lr:  7.050108673392857e-05
+epoch:  3 loss: -20613.135 FC_cor:  0.10957616124261631 cos_sim:  0.028617540349043326
+Modelparam_lr:  0.0034513648787536932
+Hyperparam_lr:  8.62841219688422e-05
+epoch:  4 loss: -20618.037 FC_cor:  0.1168108350408004 cos_sim:  0.028775570769913224
+Modelparam_lr:  0.004254772398490904
+Hyperparam_lr:  0.00010636930996227247
+epoch:  5 loss: -20624.092 FC_cor:  0.12627172406293413 cos_sim:  0.028980496406213155
+Modelparam_lr:  0.005224134603125666
+Hyperparam_lr:  0.00013060336507814151
+epoch:  6 loss: -20631.469 FC_cor:  0.14490987415810302 cos_sim:  0.029310764509228593
+Modelparam_lr:  0.006352053538395568
+Hyperparam_lr:  0.00015880133845988889
+epoch:  7 loss: -20640.365 FC_cor:  0.13163478917607163 cos_sim:  0.0299294853928165
+Modelparam_lr:  0.007629921180741454
+Hyperparam_lr:  0.00019074802951853619
+epoch:  8 loss: -20650.979 FC_cor:  0.14749443200760548 cos_sim:  0.0309568727526853
+Modelparam_lr:  0.009047985131806671
+Hyperparam_lr:  0.0002261996282951666
+epoch:  9 loss: -20663.453 FC_cor:  0.22254602053879266 cos_sim:  0.0332274857112363
+Modelparam_lr:  0.010595423046547231
+Hyperparam_lr:  0.00026488557616368064
+epoch:  10 loss: -20677.932 FC_cor:  0.26040449862229664 cos_sim:  0.0370841366577412
+Modelparam_lr:  0.012260425226934428
+Hyperparam_lr:  0.0003065106306733606
+epoch:  11 loss: -20694.549 FC_cor:  0.33622215830226093 cos_sim:  0.0442251082076293
+Modelparam_lr:  0.014030284750913287
+Hyperparam_lr:  0.0003507571187728321
+epoch:  12 loss: -20713.404 FC_cor:  0.4149542836795136 cos_sim:  0.06118722209767247
+Modelparam_lr:  0.015891494448772962
+Hyperparam_lr:  0.00039728736121932395
+epoch:  13 loss: -20734.596 FC_cor:  0.49745079559667066 cos_sim:  0.08452762522731724
+Modelparam_lr:  0.01782984998682713
+Hyperparam_lr:  0.00044574624967067813
+epoch:  14 loss: -20758.195 FC_cor:  0.5194046845540558 cos_sim:  0.1085862603292915
+Modelparam_lr:  0.01983055827169309
+Hyperparam_lr:  0.0004957639567923271
+epoch:  15 loss: -20784.244 FC_cor:  0.6339495800016552 cos_sim:  0.13305769573856194
+Modelparam_lr:  0.021878350347852373
+Hyperparam_lr:  0.0005469587586963092
+epoch:  16 loss: -20812.773 FC_cor:  0.6511973247674395 cos_sim:  0.14389512965374693
+Modelparam_lr:  0.023957597926884053
+Hyperparam_lr:  0.0005989399481721012
+epoch:  17 loss: -20843.832 FC_cor:  0.7401924342178353 cos_sim:  0.16582257655448024
+Modelparam_lr:  0.026052432659046026
+Hyperparam_lr:  0.0006513108164761506
+epoch:  18 loss: -20877.338 FC_cor:  0.7613329521801493 cos_sim:  0.18201824961678761
+Modelparam_lr:  0.02814686723695027
+Hyperparam_lr:  0.0007036716809237567
+epoch:  19 loss: -20913.283 FC_cor:  0.6694572030242868 cos_sim:  0.15348634855713272
+Modelparam_lr:  0.030224917407095986
+Hyperparam_lr:  0.0007556229351773996
+epoch:  20 loss: -20951.602 FC_cor:  0.7991554830221179 cos_sim:  0.20349625825112277
+Modelparam_lr:  0.032270723958096326
+Hyperparam_lr:  0.0008067680989524079
+epoch:  21 loss: -20992.182 FC_cor:  0.6805463352474945 cos_sim:  0.16219668258486675
+Modelparam_lr:  0.03426867375461168
+Hyperparam_lr:  0.0008567168438652918
+epoch:  22 loss: -21034.98 FC_cor:  0.8143845887771421 cos_sim:  0.19593465185292916
+Modelparam_lr:  0.03620351889328606
+Hyperparam_lr:  0.0009050879723321516
+epoch:  23 loss: -21079.828 FC_cor:  0.7616784849717482 cos_sim:  0.1855466358808088
+Modelparam_lr:  0.03806049307131509
+Hyperparam_lr:  0.0009515123267828771
+epoch:  24 loss: -21126.617 FC_cor:  0.8532093875103594 cos_sim:  0.19969998928969657
+Modelparam_lr:  0.039825424279546905
+Hyperparam_lr:  0.0009956356069886726
+epoch:  25 loss: -21175.17 FC_cor:  0.8018445216389656 cos_sim:  0.1776355683743836
+Modelparam_lr:  0.04148484296006767
+Hyperparam_lr:  0.0010371210740016917
+epoch:  26 loss: -21225.348 FC_cor:  0.9153676606545003 cos_sim:  0.21143460583832396
+Modelparam_lr:  0.04302608480283726
+Hyperparam_lr:  0.0010756521200709316
+epoch:  27 loss: -21276.957 FC_cor:  0.7987016825364998 cos_sim:  0.15965719415877952
+Modelparam_lr:  0.04443738739685428
+Hyperparam_lr:  0.0011109346849213569
+epoch:  28 loss: -21329.8 FC_cor:  0.9100902506211137 cos_sim:  0.2073799716300307
+Modelparam_lr:  0.04570797999823058
+Hyperparam_lr:  0.0011426994999557643
+epoch:  29 loss: -21383.71 FC_cor:  0.797693351939421 cos_sim:  0.17149587102092873
+Modelparam_lr:  0.046828165730085455
+Hyperparam_lr:  0.0011707041432521363
+epoch:  30 loss: -21438.479 FC_cor:  0.8967957227584451 cos_sim:  0.20253789128694397
+Modelparam_lr:  0.04778939558692847
+Hyperparam_lr:  0.0011947348896732117
+epoch:  31 loss: -21493.883 FC_cor:  0.8514849172506874 cos_sim:  0.18130278212160222
+Modelparam_lr:  0.04858433367874595
+Hyperparam_lr:  0.0012146083419686485
+epoch:  32 loss: -21549.744 FC_cor:  0.9218591549054571 cos_sim:  0.2083816718225352
+Modelparam_lr:  0.04920691321686324
+Hyperparam_lr:  0.001230172830421581
+epoch:  33 loss: -21605.824 FC_cor:  0.8591011303288522 cos_sim:  0.17139678391938618
+Modelparam_lr:  0.049652382814310975
+Hyperparam_lr:  0.0012413095703577744
+epoch:  34 loss: -21661.955 FC_cor:  0.9275441721878515 cos_sim:  0.21293425647128933
+Modelparam_lr:  0.04991734274734145
+Hyperparam_lr:  0.0012479335686835364
+epoch:  35 loss: -21717.914 FC_cor:  0.8725442483368181 cos_sim:  0.17443425064659454
+Modelparam_lr:  0.049999956289142014
+Hyperparam_lr:  0.0012499989072285503
+epoch:  36 loss: -21773.508 FC_cor:  0.9241258984969575 cos_sim:  0.20914097655354438
+Modelparam_lr:  0.049980725983114455
+Hyperparam_lr:  0.0012495181495778614
+epoch:  37 loss: -21828.717 FC_cor:  0.9006026558550931 cos_sim:  0.1939081927764256
+Modelparam_lr:  0.049926558012821295
+Hyperparam_lr:  0.0012481639503205324
+epoch:  38 loss: -21883.49 FC_cor:  0.922343252862935 cos_sim:  0.2080233893944557
+Modelparam_lr:  0.04983752813706703
+Hyperparam_lr:  0.0012459382034266757
+epoch:  39 loss: -21937.799 FC_cor:  0.915121615308607 cos_sim:  0.20393254519202547
+Modelparam_lr:  0.04971376087218328
+Hyperparam_lr:  0.001242844021804582
+epoch:  40 loss: -21991.6 FC_cor:  0.9340307273175384 cos_sim:  0.2135777009414715
+Modelparam_lr:  0.0495554293178814
+Hyperparam_lr:  0.001238885732947035
+epoch:  41 loss: -22044.898 FC_cor:  0.922041550932785 cos_sim:  0.20883479840638902
+Modelparam_lr:  0.049362754915156945
+Hyperparam_lr:  0.0012340688728789235
+epoch:  42 loss: -22097.658 FC_cor:  0.9414966584059699 cos_sim:  0.22326425134049716
+Modelparam_lr:  0.04913600713658435
+Hyperparam_lr:  0.0012284001784146088
+epoch:  43 loss: -22149.834 FC_cor:  0.9199485512127706 cos_sim:  0.21210616843261187
+Modelparam_lr:  0.048875503109435225
+Hyperparam_lr:  0.0012218875777358807
+epoch:  44 loss: -22201.416 FC_cor:  0.9441350233546728 cos_sim:  0.2321095321263575
+Modelparam_lr:  0.04858160717214713
+Hyperparam_lr:  0.001214540179303678
+epoch:  45 loss: -22252.385 FC_cor:  0.9231524277097388 cos_sim:  0.21858201327913085
+Modelparam_lr:  0.048254730364763375
+Hyperparam_lr:  0.0012063682591190842
+epoch:  46 loss: -22302.703 FC_cor:  0.9455448068006288 cos_sim:  0.2413435443881714
+Modelparam_lr:  0.04789532985405634
+Hyperparam_lr:  0.0011973832463514085
+epoch:  47 loss: -22352.367 FC_cor:  0.9200489379090194 cos_sim:  0.22448628064429949
+Modelparam_lr:  0.04750390829413839
+Hyperparam_lr:  0.0011875977073534597
+epoch:  48 loss: -22401.328 FC_cor:  0.9482897028247085 cos_sim:  0.25755800601834816
+Modelparam_lr:  0.04708101312345467
+Hyperparam_lr:  0.0011770253280863666
+epoch:  49 loss: -22449.604 FC_cor:  0.9015167872888432 cos_sim:  0.2257427884186998
+Modelparam_lr:  0.04662723579914091
+Hyperparam_lr:  0.0011656808949785228
+epoch:  50 loss: -22497.137 FC_cor:  0.947520416993242 cos_sim:  0.27287935201220115
+Modelparam_lr:  0.04614321096981717
+Hyperparam_lr:  0.001153580274245429
+epoch:  51 loss: -22543.943 FC_cor:  0.8922995421869367 cos_sim:  0.23706132376398298
+Modelparam_lr:  0.04562961558797431
+Hyperparam_lr:  0.0011407403896993577
+epoch:  52 loss: -22589.965 FC_cor:  0.943115459166819 cos_sim:  0.2870350079364978
+Modelparam_lr:  0.045087167963194806
+Hyperparam_lr:  0.00112717919907987
+epoch:  53 loss: -22635.223 FC_cor:  0.9024744158080176 cos_sim:  0.26034959092600657
+Modelparam_lr:  0.04451662675753175
+Hyperparam_lr:  0.0011129156689382938
+epoch:  54 loss: -22679.686 FC_cor:  0.9392549664056755 cos_sim:  0.3025539295600796
+Modelparam_lr:  0.04391878992445143
+Hyperparam_lr:  0.0010979697481112857
+epoch:  55 loss: -22723.34 FC_cor:  0.9097373340771059 cos_sim:  0.2814548287895719
+Modelparam_lr:  0.043294493592823224
+Hyperparam_lr:  0.0010823623398205807
+epoch:  56 loss: -22766.17 FC_cor:  0.939699137603785 cos_sim:  0.3179028490068029
+Modelparam_lr:  0.042644610897517796
+Hyperparam_lr:  0.0010661152724379449
+epoch:  57 loss: -22808.168 FC_cor:  0.914890239403119 cos_sim:  0.3009500591388514
+Modelparam_lr:  0.04197005075824899
+Hyperparam_lr:  0.0010492512689562249
+epoch:  58 loss: -22849.293 FC_cor:  0.9381288838599972 cos_sim:  0.332210936736463
+Modelparam_lr:  0.04127175660836748
+Hyperparam_lr:  0.001031793915209187
+epoch:  59 loss: -22889.576 FC_cor:  0.9230882532215001 cos_sim:  0.32345512338285126
+Modelparam_lr:  0.04055070507538386
+Hyperparam_lr:  0.0010137676268845966
+epoch:  60 loss: -22929.004 FC_cor:  0.9300684631364484 cos_sim:  0.3426362780506963
+Modelparam_lr:  0.0398079046150668
+Hyperparam_lr:  0.00099519761537667
+epoch:  61 loss: -22967.533 FC_cor:  0.9400843161229061 cos_sim:  0.35705174031967857
+Modelparam_lr:  0.03904439410102644
+Hyperparam_lr:  0.000976109852525661
+epoch:  62 loss: -23005.176 FC_cor:  0.899438564835513 cos_sim:  0.3368260592786598
+Modelparam_lr:  0.038261241371755746
+Hyperparam_lr:  0.0009565310342938936
+epoch:  63 loss: -23041.926 FC_cor:  0.9559181572052995 cos_sim:  0.4011166007598384
+Modelparam_lr:  0.037459541737161775
+Hyperparam_lr:  0.0009364885434290444
+epoch:  64 loss: -23077.762 FC_cor:  0.8762711467398543 cos_sim:  0.3226020957801201
+Modelparam_lr:  0.036640416446675754
+Hyperparam_lr:  0.0009160104111668938
+epoch:  65 loss: -23112.703 FC_cor:  0.9289870702369004 cos_sim:  0.39867627741409617
+Modelparam_lr:  0.03580501112108436
+Hyperparam_lr:  0.000895125278027109
+epoch:  66 loss: -23146.727 FC_cor:  0.9246477959442414 cos_sim:  0.4022978324142131
+Modelparam_lr:  0.03495449415027546
+Hyperparam_lr:  0.0008738623537568865
+epoch:  67 loss: -23179.82 FC_cor:  0.936136687937411 cos_sim:  0.42972525455258026
+Modelparam_lr:  0.0340900550591392
+Hyperparam_lr:  0.00085225137647848
+epoch:  68 loss: -23211.996 FC_cor:  0.929699959685562 cos_sim:  0.4295550156717474
+Modelparam_lr:  0.033212902843909875
+Hyperparam_lr:  0.0008303225710977469
+epoch:  69 loss: -23243.254 FC_cor:  0.9388897509919287 cos_sim:  0.45550248406421706
+Modelparam_lr:  0.03232426428127542
+Hyperparam_lr:  0.0008081066070318853
+epoch:  70 loss: -23273.59 FC_cor:  0.9333319867520364 cos_sim:  0.4548360907376701
+Modelparam_lr:  0.03142538221261919
+Hyperparam_lr:  0.0007856345553154797
+epoch:  71 loss: -23302.982 FC_cor:  0.9452768987270214 cos_sim:  0.4823784924446418
+Modelparam_lr:  0.030517513805794035
+Hyperparam_lr:  0.0007629378451448508
+epoch:  72 loss: -23331.45 FC_cor:  0.9344064864716536 cos_sim:  0.4787023957889921
+Modelparam_lr:  0.029601928796859227
+Hyperparam_lr:  0.0007400482199214806
+epoch:  73 loss: -23358.996 FC_cor:  0.952302126587253 cos_sim:  0.5057169476530081
+Modelparam_lr:  0.02867990771423993
+Hyperparam_lr:  0.0007169976928559982
+epoch:  74 loss: -23385.62 FC_cor:  0.9344418476918993 cos_sim:  0.49842507239247863
+Modelparam_lr:  0.027752740087792254
+Hyperparam_lr:  0.0006938185021948064
+epoch:  75 loss: -23411.32 FC_cor:  0.9579816349336383 cos_sim:  0.5342124210037089
+Modelparam_lr:  0.02682172264527928
+Hyperparam_lr:  0.000670543066131982
+epoch:  76 loss: -23436.084 FC_cor:  0.9371064351690623 cos_sim:  0.5223376037143133
+Modelparam_lr:  0.025888157498779926
+Hyperparam_lr:  0.0006472039374694981
+epoch:  77 loss: -23459.96 FC_cor:  0.9595811445375064 cos_sim:  0.5595332497948323
+Modelparam_lr:  0.02495335032356752
+Hyperparam_lr:  0.000623833758089188
+epoch:  78 loss: -23482.912 FC_cor:  0.945875320087816 cos_sim:  0.554338379334057
+Modelparam_lr:  0.024018608532004868
+Hyperparam_lr:  0.0006004652133001217
+epoch:  79 loss: -23504.963 FC_cor:  0.9616307843638288 cos_sim:  0.584672437341135
+Modelparam_lr:  0.023085239445009797
+Hyperparam_lr:  0.0005771309861252449
+epoch:  80 loss: -23526.107 FC_cor:  0.9542683287483388 cos_sim:  0.5858815389744405
+Modelparam_lr:  0.02215454846364872
+Hyperparam_lr:  0.000553863711591218
+epoch:  81 loss: -23546.37 FC_cor:  0.9646927183929678 cos_sim:  0.6091806759708931
+Modelparam_lr:  0.021227837243415097
+Hyperparam_lr:  0.0005306959310853774
+epoch:  82 loss: -23565.75 FC_cor:  0.9602954356070849 cos_sim:  0.6133501122798488
+Modelparam_lr:  0.020306401873746653
+Hyperparam_lr:  0.0005076600468436663
+epoch:  83 loss: -23584.27 FC_cor:  0.9664584155843199 cos_sim:  0.6307834605425156
+Modelparam_lr:  0.01939153106532699
+Hyperparam_lr:  0.00048478827663317475
+epoch:  84 loss: -23601.914 FC_cor:  0.9653583872252226 cos_sim:  0.6384201049796623
+Modelparam_lr:  0.018484504347707226
+Hyperparam_lr:  0.00046211260869268066
+epoch:  85 loss: -23618.701 FC_cor:  0.9678887723396479 cos_sim:  0.6502773169971767
+Modelparam_lr:  0.017586590279768225
+Hyperparam_lr:  0.0004396647569942057
+epoch:  86 loss: -23634.674 FC_cor:  0.9683630414666554 cos_sim:  0.6591589331998159
+Modelparam_lr:  0.016699044675526267
+Hyperparam_lr:  0.0004174761168881567
+epoch:  87 loss: -23649.8 FC_cor:  0.9695737144898366 cos_sim:  0.66787646124295
+Modelparam_lr:  0.015823108847763587
+Hyperparam_lr:  0.0003955777211940898
+epoch:  88 loss: -23664.137 FC_cor:  0.9705048807552479 cos_sim:  0.6751499095650058
+Modelparam_lr:  0.014960007871940252
+Hyperparam_lr:  0.0003740001967985063
+epoch:  89 loss: -23677.646 FC_cor:  0.97148525371212 cos_sim:  0.6820417134113967
+Modelparam_lr:  0.014110948872815285
+Hyperparam_lr:  0.00035277372182038213
+epoch:  90 loss: -23690.39 FC_cor:  0.9728031237442155 cos_sim:  0.6902990770203572
+Modelparam_lr:  0.01327711933617361
+Hyperparam_lr:  0.00033192798340434026
+epoch:  91 loss: -23702.357 FC_cor:  0.9732254686937548 cos_sim:  0.6961216797546659
+Modelparam_lr:  0.012459685448019765
+Hyperparam_lr:  0.00031149213620049415
+epoch:  92 loss: -23713.588 FC_cor:  0.9740450555783555 cos_sim:  0.7023713638659889
+Modelparam_lr:  0.011659790463561305
+Hyperparam_lr:  0.00029149476158903267
+epoch:  93 loss: -23724.082 FC_cor:  0.9748969544554301 cos_sim:  0.7080517043468089
+Modelparam_lr:  0.010878553108263078
+Hyperparam_lr:  0.00027196382770657695
+epoch:  94 loss: -23733.848 FC_cor:  0.9751554266408838 cos_sim:  0.7130213490070972
+Modelparam_lr:  0.010117066013208437
+Hyperparam_lr:  0.0002529266503302109
+epoch:  95 loss: -23742.947 FC_cor:  0.9757989247933723 cos_sim:  0.7171261456342116
+Modelparam_lr:  0.009376394186955926
+Hyperparam_lr:  0.0002344098546738981
+epoch:  96 loss: -23751.346 FC_cor:  0.9761729834921749 cos_sim:  0.7215072638632636
+Modelparam_lr:  0.008657573526028488
+Hyperparam_lr:  0.00021643933815071215
+epoch:  97 loss: -23759.104 FC_cor:  0.9764319048423815 cos_sim:  0.7245055496976085
+Modelparam_lr:  0.007961609366118472
+Hyperparam_lr:  0.0001990402341529618
+epoch:  98 loss: -23766.225 FC_cor:  0.9768204197083594 cos_sim:  0.7291944185019532
+Modelparam_lr:  0.00728947507603484
+Hyperparam_lr:  0.000182236876900871
+epoch:  99 loss: -23772.73 FC_cor:  0.9771870589469374 cos_sim:  0.7314549940362765
+Modelparam_lr:  0.006642110696358811
+Hyperparam_lr:  0.00016605276740897025
+epoch:  100 loss: -23778.65 FC_cor:  0.9774628155508898 cos_sim:  0.7338181590700377
+Modelparam_lr:  0.0060204216247121065
+Hyperparam_lr:  0.00015051054061780266
+epoch:  101 loss: -23784.014 FC_cor:  0.9777655972451545 cos_sim:  0.7367899608658517
+Modelparam_lr:  0.005425277349476554
+Hyperparam_lr:  0.00013563193373691384
 </pre></div>
 </div>
 <p>model test with 20 window for warmup</p>
@@ -735,7 +625,7 @@ Hyperparam_lr 0.00013563193373691384
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.9758201945910658 cos_sim:  0.22556544121568112
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9795081751955643 cos_sim:  0.7345035763669854
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -762,7 +652,7 @@ Hyperparam_lr 0.00013563193373691384
 </pre></div>
 </div>
 <img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_002.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 41 minutes  14.632 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 23 minutes  18.965 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/96a042e39a4f43abe4e10ca8c12118f5/eg004r__fitting_JR_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg004r__fitting_JR_example.py</span></code></a></p>
