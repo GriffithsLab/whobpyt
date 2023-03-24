@@ -64,7 +64,6 @@ class Model_fitting:
         ----------
         learningrate : for machine learing speed
         u: stimulus
-
         """
 
         delays_max = 500
@@ -83,23 +82,26 @@ class Model_fitting:
                 epoch_min = 10  # run minimum epoch # part of stop criteria
                 r_lb = 0.85  # lowest pearson correlation # part of stop criteria
         else:
-            epoch_min = 100  # run minimum epoch # part of stop criteria
+            epoch_min = 200  # run minimum epoch # part of stop criteria
             r_lb = 0.95
 
         self.u = u
 
         #Define two different optimizers for each group
-        modelparameter_optimizer = optim.Adam(self.model.params_fitted['modelparameter'], lr=learningrate, eps=1e-7)
-        hyperparameter_optimizer = optim.Adam(self.model.params_fitted['hyperparameter'], lr=learningrate/40, eps=1e-7)
+        optimizer = optim.Adam([{'params': self.model.params_fitted['modelparameter']},
+                    {'params': self.model.params_fitted['hyperparameter'], 'lr': learningrate/40}], lr=learningrate, eps=1e-7)
+        """modelparameter_optimizer = optim.Adam(self.model.params_fitted['modelparameter'], lr=learningrate, eps=1e-7)
+        hyperparameter_optimizer = optim.Adam(self.model.params_fitted['hyperparameter'], lr=learningrate/40, eps=1e-7)"""
 
-        # Define the learning rate schedulers for each group of parameters
+        """# Define the learning rate schedulers for each group of parameters
         total_steps = self.ts.shape[1]*self.num_epoches
         hyperparameter_scheduler = optim.lr_scheduler.OneCycleLR(hyperparameter_optimizer, learningrate/40, total_steps, anneal_strategy = "cos")
         hlrs = []
         
         modelparameter_scheduler = optim.lr_scheduler.OneCycleLR(modelparameter_optimizer, learningrate, total_steps, anneal_strategy = "cos")
-        mlrs = []
-        
+        mlrs = []"""
+        #total_steps = self.ts.shape[1]*self.num_epoches
+        #scheduler = optim.lr_scheduler.OneCycleLR(optimizer, [learningrate,learningrate/40], total_steps, anneal_strategy = "cos")
         # initial state
         X = self.model.createIC(ver = 0)
         # initials of history of E
@@ -152,8 +154,9 @@ class Model_fitting:
             for TR_i in range(num_windows):
 
                 # Reset the gradient to zeros after update model parameters.
-                hyperparameter_optimizer.zero_grad()
-                modelparameter_optimizer.zero_grad()
+                """hyperparameter_optimizer.zero_grad()
+                modelparameter_optimizer.zero_grad()"""
+                optimizer.zero_grad()
 
                 # if the external not empty
                 if not isinstance(self.u, int):
@@ -192,17 +195,22 @@ class Model_fitting:
                 # Calculate gradient using backward (backpropagation) method of the loss function.
                 loss.backward(retain_graph=True)
 
+                
                 # Optimize the model based on the gradient method in updating the model parameters.
+                optimizer.step()
+                
+                
+                """
                 hyperparameter_optimizer.step()
                 modelparameter_optimizer.step()
-                
                 #appending (needed to plot learning rate)
                 hlrs.append(hyperparameter_optimizer.param_groups[0]["lr"])
                 mlrs.append(modelparameter_optimizer.param_groups[0]["lr"])
                 
                 # schedular step 
                 hyperparameter_scheduler.step()
-                modelparameter_scheduler.step()
+                modelparameter_scheduler.step()"""
+                #scheduler.step()
 
                 # Put the updated model parameters into the history placeholders.
                 # sc_par.append(self.model.sc[mask].copy())
@@ -234,8 +242,8 @@ class Model_fitting:
 
             print('epoch: ', i_epoch, np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 'cos_sim: ',
                   np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
-            print('Modelparam_lr', modelparameter_scheduler.get_last_lr()[0])
-            print('Hyperparam_lr', hyperparameter_scheduler.get_last_lr()[0])
+            """print('Modelparam_lr', modelparameter_scheduler.get_last_lr()[0])
+            print('Hyperparam_lr', hyperparameter_scheduler.get_last_lr()[0])"""
 
 
             for name in self.model.state_names + [self.output_sim.output_name]:
