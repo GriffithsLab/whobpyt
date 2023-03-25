@@ -14,43 +14,10 @@ Importage
 """
 import torch
 from torch.nn.parameter import Parameter
-from whobpyt.datatypes.AbstractParams import AbstractParams
+from whobpyt.datatypes.parameter import par
+from whobpyt.models.JansenRit.ParamsJR import ParamsJR
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
 import numpy as np  # for numerical operations
-
-class ParamsJR(AbstractParams):
-
-    def __init__(self, **kwargs):
-
-        param = {
-            "A ": [3.25, 0], 
-            "a": [100, 0.], 
-            "B": [22, 0], 
-            "b": [50, 0], 
-            "g": [1000, 0],
-            
-            "c1": [135, 0.], 
-            "c2": [135 * 0.8, 0.], 
-            "c3 ": [135 * 0.25, 0.], 
-            "c4": [135 * 0.25, 0.],
-            
-            "std_in": [100, 0], 
-            "vmax": [5, 0], 
-            "v0": [6, 0], 
-            "r": [0.56, 0], 
-            "y0": [2, 0],
-            
-            "mu": [.5, 0], 
-            "k": [5, 0], 
-            "cy0": [5, 0], 
-            "ki": [1, 0]
-        }
-        
-        for var in param:
-            setattr(self, var, param[var])
-
-        for var in kwargs:
-            setattr(self, var, kwargs[var])
 
 
 class RNNJANSEN(AbstractNMM):
@@ -88,8 +55,6 @@ class RNNJANSEN(AbstractNMM):
     forward(input, noise_out, hx)
         forward model (JansenRit) for generating a number of EEG signals with current model parameters
     """
-    state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
-    model_name = "JR"
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: float, lm: float, dist: float,
@@ -118,6 +83,11 @@ class RNNJANSEN(AbstractNMM):
         param from ParamJR
         """
         super(RNNJANSEN, self).__init__()
+        
+        self.state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
+        self.output_names = ["eeg"]
+        self.model_name = "JR"
+        
         self.state_size = 6  # 6 states JR model
         self.tr = tr  # tr ms (integration step 0.1 ms)
         self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.1 ms
@@ -135,7 +105,7 @@ class RNNJANSEN(AbstractNMM):
         self.output_size = lm.shape[0]  # number of EEG channels
 
     def info(self):
-        return {"state_names": ['E', 'Ev', 'I', 'Iv', 'P', 'Pv'], "output_name": "eeg"}
+        return {"state_names": ['E', 'Ev', 'I', 'Iv', 'P', 'Pv'], "output_names": ["eeg"]}
     
     def createIC(self, ver):
         # initial state
@@ -147,6 +117,17 @@ class RNNJANSEN(AbstractNMM):
             state_ub = 5
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size, self.state_size)),
                              dtype=torch.float32)
+                             
+    def createDelayIC(self, ver):
+        if (ver == 0):
+            delays_max = 500
+            state_ub = 2
+            state_lb = 0.5
+        if (ver == 1):
+            state_lb = 0
+            state_ub = 5
+            delays_max = 500
+        return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size, delays_max)), dtype=torch.float32)
     
     def setModelParameters(self):
         # set states E I f v mean and 1/sqrt(variance)
@@ -181,47 +162,31 @@ def setModelParameters(model):
         model.w_ff = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)
         model.w_ll = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)
 
+    # This gets overwritten if the lm is in the parameters object as well with a variance
     if model.use_fit_lfm:
         model.lm = Parameter(torch.tensor(model.lm, dtype=torch.float32))  # leadfield matrix from sourced data to eeg
         param_reg.append(model.lm)
     else:
         model.lm = torch.tensor(model.lm, dtype=torch.float32)  # leadfield matrix from sourced data to eeg
 
-    vars_name = [a for a in dir(model.param) if not a.startswith('__') and not callable(getattr(model.param, a))]
-    for var in vars_name:
-        if np.any(getattr(model.param, var)[1] > 0):
-            # print(type(getattr(param, var)[1]))
-            if type(getattr(model.param, var)[1]) is np.ndarray:
-                if var == 'lm':
-                    size = getattr(model.param, var)[1].shape
-                    setattr(model, var, Parameter(
-                        torch.tensor(getattr(model.param, var)[0] - 1 * np.ones((size[0], size[1])),
-                                     dtype=torch.float32)))
-                    param_reg.append(getattr(model, var))
-                    print(getattr(model, var))
-                else:
-                    size = getattr(model.param, var)[1].shape
-                    setattr(model, var, Parameter(
-                        torch.tensor(
-                            getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(size[0], size[1]),
-                            dtype=torch.float32)))
-                    param_reg.append(getattr(model, var))
-                    # print(getattr(self, var))
-            else:
-                setattr(model, var, Parameter(
-                    torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],
-                                 dtype=torch.float32)))
-                param_reg.append(getattr(model, var))
-            if var != 'std_in':
-                dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
+    var_names = [a for a in dir(model.param) if (type(getattr(model.param, a)) == par)]
+    for var_name in var_names:
+        var = getattr(model.param, var_name)
+        if (var.fit_hyper == True):
+            if var_name == 'lm':
+                size = var.prior_var.shape
+                var.val = Parameter(var.val.detach() - 1 * torch.ones((size[0], size[1]))) # TODO: This is not consistent with what user would expect giving a variance 
+                param_hyper.append(var.prior_mean)
+                param_hyper.append(var.prior_var)
+            elif (var != 'std_in'):
+                var.randSet() #TODO: This should be done before giving params to model class
+                param_hyper.append(var.prior_mean)
+                param_hyper.append(var.prior_var)
 
-                dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-
-                for key in dict_nv:
-                    setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
-                    param_hyper.append(getattr(model, dict_np[key]))
-        else:
-            setattr(model, var, torch.tensor(getattr(model.param, var)[0], dtype=torch.float32))
+        if (var.fit_par):
+            param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first
+        setattr(model, var_name, var.val)    
+            
     model.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 
 

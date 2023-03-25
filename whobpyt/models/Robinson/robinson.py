@@ -16,47 +16,9 @@ import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes.AbstractParams import AbstractParams
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.models.Robinson.ParamsCT import ParamsCT
+from whobpyt.datatypes.parameter import par
 import numpy as np  # for numerical operations
-
-class ParamsCT(AbstractParams):
-
-    def __init__(self, **kwargs):
-
-        param = {
-            "Q_max": [250, 0], 
-            "sig_theta": [15/1000, 0.], 
-            "sigma": [3.3/1000, 0], 
-            "gamma": [100, 0], 
-            "beta": [200, 0],
-            "alpha": [200/4, 0.], 
-            "t0": [0.08, 0.],
-            "g": [100, 0], 
-            "nu_ee": [np.log(0.0528/1000), 0.], 
-            "nu_ii": [np.log(0.0528/1000), 0.],
-            "nu_ie": [np.log(0.02/1000), 0], 
-            "nu_es": [np.log(1.2/1000), 0], 
-            "nu_is": [np.log(1.2/1000), 0], 
-            "nu_se": [np.log(1.2/1000), 0], 
-            "nu_si": [0.0, 0], 
-            "nu_ei": [np.log(0.4/1000), 0], 
-            "nu_sr": [np.log(0.01/1000), 0], 
-            "nu_sn": [0.0, 0], 
-            "nu_re": [np.log(0.1/1000), 0], 
-            "nu_ri": [0.0, 0], 
-            "nu_rs": [np.log(0.1/1000), 0], 
-            "nu_ss": [0.0, 0], 
-            "nu_rr": [0.0, 0], 
-            "nu_rn": [0.0, 0], 
-            "mu": [5, 0], 
-            "cy0": [5, 0], 
-            "y0": [2, 0]
-        }
-        
-        for var in param:
-            setattr(self, var, param[var])
-
-        for var in kwargs:
-            setattr(self, var, kwargs[var])
 
 
 class RNNROBINSON(AbstractNMM):
@@ -94,8 +56,6 @@ class RNNROBINSON(AbstractNMM):
     forward(input, noise_out, hx)
         forward model (Robinson) for generating a number of EEG signals with current model parameters
     """
-    state_names = ['V_e', 'V_e_dot', 'phi_e', 'phi_e_dot', 'V_i', 'V_i_dot', 'phi_i', 'phi_i_dot']
-    model_name = "CT"
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: float, lm: float, dist: float,
@@ -123,6 +83,11 @@ class RNNROBINSON(AbstractNMM):
         param from ParamCT
         """
         super(RNNROBINSON, self).__init__()
+        
+        self.state_names = ['V_e', 'V_e_dot', 'phi_e', 'phi_e_dot', 'V_i', 'V_i_dot', 'phi_i', 'phi_i_dot']
+        self.output_names = ["eeg"]
+        self.model_name = "CT"
+        
         self.state_size = 8  # 8 states CT model
         self.tr = tr  # tr ms (integration step 0.1 ms)
         self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.1 ms
@@ -140,7 +105,7 @@ class RNNROBINSON(AbstractNMM):
         self.output_size = lm.shape[0]  # number of EEG channels
 
     def info(self):
-        return {"state_names": ['V_e', 'V_e_dot', 'phi_e', 'phi_e_dot', 'V_i', 'V_i_dot', 'phi_i', 'phi_i_dot'], "output_name": "eeg"}
+        return {"state_names": ['V_e', 'V_e_dot', 'phi_e', 'phi_e_dot', 'V_i', 'V_i_dot', 'phi_i', 'phi_i_dot'], "output_names": ["eeg"]}
     
     def createIC(self, ver):
         # initial state
@@ -154,11 +119,21 @@ class RNNROBINSON(AbstractNMM):
             state_ub = 5
             return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size+1, self.state_size)),
                              dtype=torch.float32)
+                             
+        # TODO: Note Version 0 is training, Version 1 is testing, so creating version 2 is probably not what was intended. Likely createDelayIC should be updated as well.
+        
         if (ver == 2): # for testing the robinson corticothalamic model
             state_lb = -1.5*1e-4
             state_ub = 1.5*1e-4
             return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size+1, self.state_size)),
-                             dtype=torch.float32)        
+                             dtype=torch.float32)  
+
+    def createDelayIC(self, ver):
+        state_lb = 0
+        state_ub = 5
+        delays_max = 500
+        return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size, delays_max)), dtype=torch.float32)
+       
     
     def setModelParameters(self):
         # set states E I f v mean and 1/sqrt(variance)
@@ -197,41 +172,24 @@ def setModelParameters(model):
     else:
         model.lm = torch.tensor(model.lm, dtype=torch.float32)  # leadfield matrix from sourced data to eeg
 
-    vars_name = [a for a in dir(model.param) if not a.startswith('__') and not callable(getattr(model.param, a))]
-    for var in vars_name:
-        if np.any(getattr(model.param, var)[1] > 0):
-            # print(type(getattr(param, var)[1]))
-            if type(getattr(model.param, var)[1]) is np.ndarray:
-                if var == 'lm':
-                    size = getattr(model.param, var)[1].shape
-                    setattr(model, var, Parameter(
-                        torch.tensor(getattr(model.param, var)[0] -  np.ones((size[0], size[1])),
-                                     dtype=torch.float32)))
-                    param_reg.append(getattr(model, var))
-                    # print(getattr(model, var))
-                else:
-                    size = getattr(model.param, var)[1].shape
-                    setattr(model, var, Parameter(
-                        torch.tensor(
-                            getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(size[0], size[1]),
-                            dtype=torch.float32)))
-                    param_reg.append(getattr(model, var))
-                    # print(getattr(self, var))
-            else:
-                setattr(model, var, Parameter(
-                    torch.tensor(getattr(model.param, var)[0] + getattr(model.param, var)[1] * np.random.randn(1, )[0],
-                                 dtype=torch.float32)))
-                param_reg.append(getattr(model, var))
-            if var != 'std_in':
-                dict_nv = {'m': getattr(model.param, var)[0], 'v': 1 / (getattr(model.param, var)[1]) ** 2}
+    var_names = [a for a in dir(model.param) if (type(getattr(model.param, a)) == par)]
+    for var_name in var_names:
+        var = getattr(model.param, var_name)
+        if (var.fit_hyper == True):
+            if var_name == 'lm':
+                size = var.prior_var.shape
+                var.val = Parameter(var.val.detach() - 1 * torch.ones((size[0], size[1]))) # TODO: This is not consistent with what user would expect giving a variance 
+                param_hyper.append(var.prior_mean)
+                param_hyper.append(var.prior_var)
+            elif (var != 'std_in'):
+                var.randSet() #TODO: This should be done before giving params to model class
+                param_hyper.append(var.prior_mean)
+                param_hyper.append(var.prior_var)
 
-                dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
-
-                for key in dict_nv:
-                    setattr(model, dict_np[key], Parameter(torch.tensor(dict_nv[key], dtype=torch.float32)))
-                    param_hyper.append(getattr(model, dict_np[key]))
-        else:
-            setattr(model, var, torch.tensor(getattr(model.param, var)[0], dtype=torch.float32))
+        if (var.fit_par):
+            param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first
+        setattr(model, var_name, var.val)
+    
     model.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 
 
@@ -310,20 +268,20 @@ def integration_forward(model, external, hx, hE):
     alphaxbeta = model.alpha*model.beta
     gamma = model.gamma
     gamma_rs = model.gamma*1
-    nu_ee = torch.exp(model.nu_ee)
-    nu_ei = torch.exp(model.nu_ei)
-    nu_es = torch.exp(model.nu_es)
-    nu_ie = torch.exp(model.nu_ie)
-    nu_ii = torch.exp(model.nu_ii)
-    nu_is = torch.exp(model.nu_is)
-    nu_se = torch.exp(model.nu_se)
+    nu_ee = model.nu_ee #torch.exp(model.nu_ee)
+    nu_ei = model.nu_ei #torch.exp(model.nu_ei)
+    nu_es = model.nu_es #torch.exp(model.nu_es)
+    nu_ie = model.nu_ie #torch.exp(model.nu_ie)
+    nu_ii = model.nu_ii #torch.exp(model.nu_ii)
+    nu_is = model.nu_is #torch.exp(model.nu_is)
+    nu_se = model.nu_se #torch.exp(model.nu_se)
     nu_si = model.nu_si
     nu_ss = model.nu_ss
-    nu_sr = model.nu_sr
+    nu_sr = model.nu_sr #was set to log in params
     nu_sn = model.nu_sn
-    nu_re = torch.exp(model.nu_re)
+    nu_re = model.nu_re #torch.exp(model.nu_re)
     nu_ri = model.nu_ri
-    nu_rs = torch.exp(model.nu_rs)
+    nu_rs = model.nu_rs #torch.exp(model.nu_rs)
     Q = model.Q_max
     sig_theta = model.sig_theta
     sigma = model.sigma
