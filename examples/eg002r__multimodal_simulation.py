@@ -14,6 +14,7 @@ What is being modeled:
 
 """  
 
+
 # sphinx_gallery_thumbnail_number = 1
 
 # %%
@@ -23,20 +24,12 @@ What is being modeled:
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data.dataload import dataloader
-from whobpyt.models.RWW2.mmRWW2 import mmRWW2
-from whobpyt.models.RWW2.ParamsRWW2 import ParamsRWW2
-from whobpyt.models.RWW2.RWW2 import RWW2
-from whobpyt.models.BOLD.ParamsBOLD import BOLD_Params
-from whobpyt.models.BOLD.BOLD import BOLD_Layer
-from whobpyt.models.EEG.ParamsEEG import EEG_Params
-from whobpyt.models.EEG.EEG import EEG_Layer
-from whobpyt.optimization.cost_FC import CostsFC
-from whobpyt.optimization.cost_PSD import CostsPSD
-from whobpyt.optimization.cost_Mean import CostsMean
-from whobpyt.optimization.modelfitting import Model_fitting
-from whobpyt.datatypes.AbstractNMM import AbstractNMM
-from whobpyt.datatypes.parameter import par
+from whobpyt.data import dataloader
+from whobpyt.models.RWW2 import mmRWW2, RWW2, ParamsRWW2
+from whobpyt.models.BOLD import BOLD_Layer, BOLD_Params
+from whobpyt.models.EEG import EEG_Layer, EEG_Params
+from whobpyt.optimization import Model_fitting, CostsFC, CostsPSD, CostsMean
+from whobpyt.datatypes import par
 
 # general python stuff
 import torch
@@ -260,7 +253,7 @@ print(list(model.named_parameters()))
 #
 
 randdata = np.random.rand(15000, 8)
-num_epochs = 10
+num_epochs = 20
 TRperwindow = 15000
 randTS = dataloader(randdata, num_epochs, TRperwindow)
 

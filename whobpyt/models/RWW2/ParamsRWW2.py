@@ -1,6 +1,5 @@
 import torch
-from whobpyt.datatypes.AbstractParams import AbstractParams
-from whobpyt.datatypes.parameter import par
+from whobpyt.datatypes import AbstractParams, par
 
 class ParamsRWW2(AbstractParams):
     ## EQUATIONS & BIOLOGICAL VARIABLES FROM:

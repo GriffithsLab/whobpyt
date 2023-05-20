@@ -6,10 +6,8 @@ module for wong-wang model
 
 import torch
 from torch.nn.parameter import Parameter
-from whobpyt.datatypes.parameter import par
-from whobpyt.models.RWW.ParamsRWW import ParamsRWW
-from whobpyt.datatypes.AbstractParams import AbstractParams
-from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.datatypes import AbstractNMM, AbstractParams, par
+from whobpyt.models.RWW import ParamsRWW
 import numpy as np  # for numerical operations
 
 class RNNRWW(AbstractNMM):

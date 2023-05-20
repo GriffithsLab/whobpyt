@@ -1,15 +1,10 @@
 ## Multi-modal Reduce Wong Wang Neural Mass model with BOLD and EEG
 
 import torch
-from whobpyt.datatypes.AbstractParams import AbstractParams
-from whobpyt.datatypes.AbstractNMM import AbstractNMM
-from whobpyt.datatypes.AbstractMode import AbstractMode
-from whobpyt.models.RWW2.ParamsRWW2 import ParamsRWW2
-from whobpyt.models.RWW2.RWW2 import RWW2
-from whobpyt.models.BOLD.ParamsBOLD import BOLD_Params
-from whobpyt.models.BOLD.BOLD import BOLD_Layer
-from whobpyt.models.EEG.ParamsEEG import EEG_Params
-from whobpyt.models.EEG.EEG import EEG_Layer
+from whobpyt.datatypes import AbstractNMM, AbstractMode, AbstractParams
+from whobpyt.models.RWW2 import RWW2, ParamsRWW2
+from whobpyt.models.BOLD import BOLD_Layer, BOLD_Params
+from whobpyt.models.EEG import EEG_Layer, EEG_Params
 
 class mmRWW2(RWW2):
 
