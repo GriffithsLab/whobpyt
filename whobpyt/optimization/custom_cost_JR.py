@@ -37,10 +37,10 @@ class CostsJR(AbstractLoss):
         loss_EI = 0
         loss_prior = []
 
-        variables_p = [a for a in dir(model.param) if (type(getattr(model.param, a)) == par)]
+        variables_p = [a for a in dir(model.params) if (type(getattr(model.params, a)) == par)]
 
         for var_name in variables_p:
-            var = getattr(model.param, var_name)
+            var = getattr(model.params, var_name)
             if var.has_prior and var_name not in ['std_in'] and \
                         var_name not in exclude_param:
                 loss_prior.append(torch.sum((lb + m(var.prior_var)) * \

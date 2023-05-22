@@ -46,7 +46,7 @@ class par:
         else:
             return self.val
     
-    def asNumpy(self):
+    def npValue(self):
         if self.asLog:
             return numpy.exp(self.val.detach().clone().numpy())
         else:

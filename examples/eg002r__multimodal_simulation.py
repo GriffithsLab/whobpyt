@@ -25,9 +25,9 @@ What is being modeled:
 # whobpyt stuff
 import whobpyt
 from whobpyt.data import dataloader
-from whobpyt.models.RWW2 import mmRWW2, RWW2, ParamsRWW2
-from whobpyt.models.BOLD import BOLD_Layer, BOLD_Params
-from whobpyt.models.EEG import EEG_Layer, EEG_Params
+from whobpyt.models.RWW2 import mmRWW2, mmRWW2_np, RWW2, RWW2_np, ParamsRWW2
+from whobpyt.models.BOLD import BOLD_Layer, BOLD_np, BOLD_Params
+from whobpyt.models.EEG import EEG_Layer, EEG_np, EEG_Params
 from whobpyt.optimization import Model_fitting, CostsFC, CostsPSD, CostsMean
 from whobpyt.datatypes import par
 
@@ -303,7 +303,7 @@ plt.title("Total Loss over Training Epochs")
 
 
 # %%
-# Plots of J values over training Training
+# Plots of J values over Training
 # ---------------------------------------------------
 #
 
@@ -352,6 +352,66 @@ plt.title("Simulated EEG PSD: After Training")
 #
 
 sim_FC = np.corrcoef(F.output_sim.bold_test[:,skip_trans:])
+
+plt.figure(figsize = (8, 8))
+plt.title("Simulated BOLD FC: After Training")
+mask = np.eye(num_regions)
+sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
+
+
+
+# %%
+# Defining the CNMM Validation Model
+# ---------------------------------------------------
+#
+# The Multi-Modal Model
+
+val_sim_len = 20*1000 # Simulation length in msecs
+model_validate = mmRWW2_np(num_regions, num_channels, model.params, model.eeg.params, model.bold.params, Con_Mtx.detach().numpy(), dist_mtx.detach().numpy(), step_size, val_sim_len)
+
+sim_vals, hE = model_validate.forward(external = 0, hx = model_validate.createIC(ver = 0), hE = 0)
+
+
+# %%
+# Plots of S_E and S_I Validation
+# ---------------------------------------------------
+#
+
+plt.figure(figsize = (16, 8))
+plt.title("S_E and S_I")
+for n in range(num_regions):
+    plt.plot(sim_vals['E_window'], label = "S_E Node = " + str(n))
+    plt.plot(sim_vals['I_window'], label = "S_I Node = " + str(n))
+
+plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
+plt.legend()
+
+
+
+# %%
+# Plots of EEG PSD Validation
+# ---------------------------------------------------
+#
+
+sampleFreqHz = 1000*(1/step_size)
+sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(sim_vals['eeg_window']), sampleFreqHz, minFreq = 2, maxFreq = 40)
+sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
+sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
+
+plt.figure()
+plt.plot(sdAxis_dS, sdValues_dS_scaled.detach())
+plt.xlabel('Hz')
+plt.ylabel('PSD')
+plt.title("Simulated EEG PSD: After Training")
+
+
+
+# %%
+# Plots of BOLD FC Validation
+# ---------------------------------------------------
+#
+
+sim_FC = np.corrcoef(sim_vals['bold_window'][:,skip_trans:])
 
 plt.figure(figsize = (8, 8))
 plt.title("Simulated BOLD FC: After Training")

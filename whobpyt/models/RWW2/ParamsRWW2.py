@@ -48,3 +48,4 @@ class ParamsRWW2(AbstractParams):
         #############################################
         
         self.gammaI = par(1/1000) #Zheng suggested this to get oscillations
+        self.J_new = par(1)
