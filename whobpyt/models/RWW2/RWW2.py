@@ -1,6 +1,6 @@
 import torch
 from whobpyt.datatypes import AbstractNMM, AbstractParams, par
-import math
+from math import sqrt
 
 class RWW2(AbstractNMM):
     ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
@@ -231,8 +231,8 @@ def forward(self, external, hx, hE):
         dS_I = - S_I/tau_I + gammaI*r_I #+ self.sig*v_of_T[i, :] Noise now added later
             
         # UPDATE VALUES
-        S_E = S_E + self.step_size*dS_E + math.sqrt(self.step_size)*sig*Ev[i, :]
-        S_I = S_I + self.step_size*dS_I + math.sqrt(self.step_size)*sig*Iv[i, :]
+        S_E = S_E + self.step_size*dS_E + sqrt(self.step_size)*sig*Ev[i, :]
+        S_I = S_I + self.step_size*dS_I + sqrt(self.step_size)*sig*Iv[i, :]
                
         # Bound the possible values of state variables (From fit.py code for numerical stability)
         if(self.useBC):

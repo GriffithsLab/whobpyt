@@ -13,7 +13,7 @@ import numpy as np
 # https://github.com/GriffithsLab/tepfit/blob/main/tepfit/fit.py (for state variable value bound equations)
 
 import numpy
-import math
+from math import sqrt
     
 class RWW2_np():
     def __init__(self, num_regions, params, Con_Mtx, Dist_Mtx, step_size = 0.1):        
@@ -130,8 +130,8 @@ class RWW2_np():
             dS_I = - S_I/tau_I + gammaI*r_I #+ self.sig*v_of_T[i, :] Noise now added later
             
             # UPDATE VALUES
-            S_E = S_E + step_size*dS_E + math.sqrt(step_size)*sig*Ev[i, :]
-            S_I = S_I + step_size*dS_I + math.sqrt(step_size)*sig*Iv[i, :]
+            S_E = S_E + step_size*dS_E + sqrt(step_size)*sig*Ev[i, :]
+            S_I = S_I + step_size*dS_I + sqrt(step_size)*sig*Iv[i, :]
             
             state_hist[i, :, 0] = S_E
             state_hist[i, :, 1] = S_I 

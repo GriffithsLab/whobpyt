@@ -11,7 +11,6 @@ import numpy as np
 # https://github.com/GriffithsLab/tepfit/blob/main/tepfit/fit.py (for state variable value bound equations)
 
 import numpy
-import math
 
 class BOLD_np():
     def __init__(self, num_regions, params):        

@@ -1,7 +1,6 @@
 import numpy as np
 
 import numpy
-import math
 
 class EEG_np():
     def __init__(self, num_regions, params, num_channels):        

@@ -12,7 +12,6 @@ from whobpyt.datatypes import par
 # https://github.com/GriffithsLab/tepfit/blob/main/tepfit/fit.py (for state variable value bound equations)
 
 import numpy
-import math
 
 class BOLD_Params():
     def __init__(self):
@@ -28,6 +27,6 @@ class BOLD_Params():
         self.ro = par(0.34) #Resting oxygen extraction fraction
         
         self.V_0 = par(0.02)
-        self.k_1 = par(7*self.ro.value())
+        self.k_1 = par(7*self.ro.npValue())
         self.k_2 = par(2)
-        self.k_3 = par(2*self.ro.value() - 0.2)
+        self.k_3 = par(2*self.ro.npValue() - 0.2)
