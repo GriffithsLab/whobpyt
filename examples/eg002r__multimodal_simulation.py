@@ -22,15 +22,30 @@ What is being modeled:
 #
 
 # whobpyt stuff
-from whobpyt.depr.models import RNNJANSEN,ParamsJR,RNNWWD,RWW_Layer,RWW_Params,BOLD_Layer,BOLD_Params,EEG_Layer,EEG_Params,Jansen_Layer
-from whobpyt.depr.objective import meanVariableLoss,powerSpectrumLoss,functionalConnectivityLoss
-from whobpyt.depr.fit import Model_fitting
+import whobpyt
+from whobpyt.data.dataload import dataloader
+from whobpyt.models.RWW2.mmRWW2 import mmRWW2
+from whobpyt.models.RWW2.ParamsRWW2 import ParamsRWW2
+from whobpyt.models.RWW2.RWW2 import RWW2
+from whobpyt.models.BOLD.ParamsBOLD import BOLD_Params
+from whobpyt.models.BOLD.BOLD import BOLD_Layer
+from whobpyt.models.EEG.ParamsEEG import EEG_Params
+from whobpyt.models.EEG.EEG import EEG_Layer
+from whobpyt.optimization.cost_FC import CostsFC
+from whobpyt.optimization.cost_PSD import CostsPSD
+from whobpyt.optimization.cost_Mean import CostsMean
+from whobpyt.optimization.modelfitting import Model_fitting
+from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.datatypes.parameter import par
 
 # general python stuff
-import torch, numpy as np, pandas as pd
+import torch
+import numpy as np
+import pandas as pd
 
 # viz stuff
-import seaborn as sns, matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 # %%
@@ -55,7 +70,7 @@ init_state = torch.tensor([[S_E, S_I, x, f, v, q]]).repeat(num_regions, 1)
 init_state = init_state + torch.randn_like(init_state)/30 # Randomizing initial values
 
 # Create a RWW Params
-paramsNode = RWW_Params(num_regions)
+paramsNode = ParamsRWW2(num_regions)
 
 #Create #EEG Params
 paramsEEG = EEG_Params(torch.eye(num_regions))
@@ -69,7 +84,7 @@ paramsBOLD = BOLD_Params()
 # ---------------------------------------------------
 #
 
-paramsNode.J = torch.nn.Parameter(0.15  * torch.ones(num_regions)) #This is a parameter that will be updated during training
+paramsNode.J = par((0.15  * np.ones(num_regions)), fit_par = True, asLog = True) #This is a parameter that will be updated during training
 
 
 # %%
@@ -172,29 +187,11 @@ LF_Con_Mtx = LF_SC_mtx_norm
 #
 # The Multi-Modal Model
 
-class mmModel(torch.nn.Module):
-    def __init__(self):
-        super(mmModel, self).__init__()
-        
-        self.nodes = RWW_Layer(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size)
-        self.eeg = EEG_Layer(num_regions, paramsEEG, num_channels)
-        self.bold = BOLD_Layer(num_regions, paramsBOLD)
-        
-        self.next_start_state = init_state
-        
-    def forward(self, debug = False):
-        
-        self.step_size = step_size #in msec
-        self.sim_len = sim_len #in msec
-        
-        node_states, node_history = self.nodes.forward(self.next_start_state[:, 0:2], self.sim_len, debug = debug)
-        EEG_history = self.eeg.forward(self.step_size, self.sim_len, node_history)
-        BOLD_states, BOLD_history = self.bold.forward(self.next_start_state[:, 2:6], self.step_size, self.sim_len, node_history[:,:,0])
 
-        self.next_start_state = torch.cat((node_states, BOLD_states), dim=1).detach()
-        
-        return node_history, EEG_history, BOLD_history
-        
+model = mmRWW2(num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len)
+model.setModelParameters()
+model.track_params = ['J']
+#model.J = model.J.val #TODO: This line here so the variable gets tracked. Improve approach. 
 
 # %%
 # Defining the Objective Function
@@ -203,7 +200,7 @@ class mmModel(torch.nn.Module):
 # Written in such as way as to be able to adjust the relative importance of components that make up the objective function.
 # Also, written in such a way as to be able to track and plot indiviual components losses over time. 
 
-class objectiveFunction():
+class mmObjectiveFunction():
     def __init__(self):
         # Weights of Objective Function Components
         self.S_E_mean_weight = 1
@@ -214,14 +211,15 @@ class objectiveFunction():
         self.BOLD_FC_weight = 0 # Not Currently Used
         
         # Functions of the various Objective Function Components
-        self.S_E_mean = meanVariableLoss(num_regions, varIdx = 0, targetValue = torch.tensor([0.164]))
-        #self.S_I_mean = meanVariableLoss(...) # Not Currently Used
-        #self.EEG_PSD = powerSpectrumLoss(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)
-        #self.EEG_FC = functionalConnectivityLoss(...) # Not Currently Used
-        #self.BOLD_PSD = powerSpectrumLoss(...) # Not Currently Used
-        #self.BOLD_FC = functionalConnectivityLoss(num_regions, varIdx = 4, targetValue = SC_mtx_norm)
+        self.S_E_mean = CostsMean(num_regions, varIdx = 0, targetValue = torch.tensor([0.164]))
+        #self.S_I_mean = CostsMean(...) # Not Currently Used
+        #self.EEG_PSD = CostsPSD(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)
+        #self.EEG_FC = CostsFC(...) # Not Currently Used
+        #self.BOLD_PSD = CostsPSD(...) # Not Currently Used
+        #self.BOLD_FC = CostsFC(num_regions, varIdx = 4, targetValue = SC_mtx_norm)
                 
-    def calcTotalLoss(self, node_history, EEG_history, BOLD_history, returnLossComponents = False):
+    def loss(self, node_history, EEG_history, BOLD_history, temp, returnLossComponents = False):
+        # sim, ts_window, self.model, next_window
         
         S_E_mean_loss = self.S_E_mean.calcLoss(node_history) 
         S_I_mean_loss = torch.tensor([0]) #self.S_I_mean.calcLoss(node_history)
@@ -245,8 +243,8 @@ class objectiveFunction():
 # ---------------------------------------------------
 #
 
-model = mmModel()
-TotalLossFn = objectiveFunction()
+
+ObjFun = mmObjectiveFunction()
 
 
 #
@@ -256,44 +254,67 @@ print(list(model.named_parameters()))
 
 #
 
-optimizer = torch.optim.Adam(model.parameters(), lr = 0.1)
+#optimizer = torch.optim.Adam(model.parameters(), lr = 0.1)
 
 
 #
 
-LossComp = list()
+randdata = np.random.rand(15000, 8)
+num_epochs = 10
+TRperwindow = 15000
+randTS = dataloader(randdata, num_epochs, TRperwindow)
 
-J_values = list()
+# call model fit
+F = Model_fitting(model, randTS, num_epochs, ObjFun)
 
-epochs = 20
+# %%
+# model training
+F.train(learningrate= 0.1, lr_scheduler = False)
 
-for i in range(epochs):
-    print(i)
-    
-    node_history, EEG_history, BOLD_history = model.forward()
-    totalLoss, lossComponents = TotalLossFn.calcTotalLoss(node_history[skip_trans:,:,:], EEG_history[skip_trans:,:,:], BOLD_history[skip_trans:,:,:], returnLossComponents = True)
-    print("totalLoss = ", totalLoss.item())
-    
-    optimizer.zero_grad()
-    totalLoss.backward()
-    optimizer.step()
-    
-    LossComp.append(lossComponents)
-    J_values.append(model.nodes.J.detach().clone().numpy())
-
-    
-    print("J values = ", model.nodes.J.detach().clone().numpy())
+# %%
+# model test with 20 window for warmup
+F.test(0)
 
 
-# 
+#LossComp = list()
+#
+#J_values = list()
+#
+#num_epochs = 20
+#
+#for i in range(epochs):
+#    print(i)
+#    
+#    node_history, EEG_history, BOLD_history = model.forward()
+#    totalLoss, lossComponents = TotalLossFn.calcTotalLoss(node_history[skip_trans:,:,:], EEG_history[skip_trans:,:,:], BOLD_history[skip_trans:,:,:], returnLossComponents = True)
+#    print("totalLoss = ", totalLoss.item())
+#    
+#    optimizer.zero_grad()
+#    totalLoss.backward()
+#    optimizer.step()
+#    
+#    LossComp.append(lossComponents)
+#    J_values.append(model.nodes.J.detach().clone().numpy())
+#
+#    
+#    print("J values = ", model.nodes.J.detach().clone().numpy())
 
-plt.plot(LossComp)
+
+# %%
+# Plots of loss over Training
+# ---------------------------------------------------
+#
+
+plt.plot(F.output_sim.loss)
 plt.title("Total Loss over Training Epochs")
 
 
-# 
+# %%
+# Plots of J values over training Training
+# ---------------------------------------------------
+#
 
-plt.plot(J_values)
+plt.plot(F.output_sim.J)
 plt.title("J_{i} Values Changing Over Training Epochs")
 
 
@@ -306,8 +327,8 @@ plt.title("J_{i} Values Changing Over Training Epochs")
 plt.figure(figsize = (16, 8))
 plt.title("S_E and S_I")
 for n in range(num_regions):
-    plt.plot(node_history.detach()[:,n,0], label = "S_E Node = " + str(n))
-    plt.plot(node_history.detach()[:,n,1], label = "S_I Node = " + str(n))
+    plt.plot(F.output_sim.E_test[:,n], label = "S_E Node = " + str(n))
+    plt.plot(F.output_sim.I_test[:,n], label = "S_I Node = " + str(n))
 
 plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
 plt.legend()
@@ -320,9 +341,9 @@ plt.legend()
 #
 
 sampleFreqHz = 1000*(1/step_size)
-sdAxis, sdValues = powerSpectrumLoss.calcPSD(EEG_history[skip_trans:,:,0], sampleFreqHz, minFreq = 2, maxFreq = 40)
-sdAxis_dS, sdValues_dS = powerSpectrumLoss.downSmoothPSD(sdAxis, sdValues, 32)
-sdAxis_dS, sdValues_dS_scaled = powerSpectrumLoss.scalePSD(sdAxis_dS, sdValues_dS)
+sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(F.output_sim.eeg_test), sampleFreqHz, minFreq = 2, maxFreq = 40)
+sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
+sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
 
 plt.figure()
 plt.plot(sdAxis_dS, sdValues_dS_scaled.detach())
@@ -337,11 +358,9 @@ plt.title("Simulated EEG PSD: After Training")
 # ---------------------------------------------------
 #
 
-print(BOLD_history[skip_trans:, :, 4].shape)
-sim_FC = functionalConnectivityLoss.calcFC(BOLD_history[:, :, 4]).detach()
+sim_FC = np.corrcoef(F.output_sim.bold_test[:,skip_trans:])
 
 plt.figure(figsize = (8, 8))
 plt.title("Simulated BOLD FC: After Training")
 mask = np.eye(num_regions)
 sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
-
