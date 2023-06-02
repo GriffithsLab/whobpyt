@@ -8,8 +8,6 @@ Fitting Wong_Wang model (HCP data)
 
 # sphinx_gallery_thumbnail_number = 1
 
-
-
 # %%
 # Importage
 # ---------------------------------------------------
@@ -22,11 +20,10 @@ sys.path.append('..')
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data.dataload import dataloader
-from whobpyt.datatypes.parameter import par
-from whobpyt.models.RWW.wong_wang import ParamsRWW
-from whobpyt.models.RWW.wong_wang import RNNRWW
-from whobpyt.optimization.modelfitting import Model_fitting
+from whobpyt.data import dataloader
+from whobpyt.datatypes import par
+from whobpyt.models.RWW import RNNRWW, ParamsRWW
+from whobpyt.optimization import Model_fitting
 from whobpyt.optimization.custom_cost_RWW import CostsRWW
 
 # array and pd stuff

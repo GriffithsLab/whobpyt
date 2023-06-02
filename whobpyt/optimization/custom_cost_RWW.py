@@ -77,11 +77,11 @@ class CostsRWW(AbstractLoss):
 
         loss_prior = []
 
-        variables_p = [a for a in dir(model.param) if not a.startswith('__') and (type(getattr(model.param, a)) == par)]
+        variables_p = [a for a in dir(model.params) if not a.startswith('__') and (type(getattr(model.params, a)) == par)]
         # get penalty on each model parameters due to prior distribution
         for var_name in variables_p:
             # print(var)
-            var = getattr(model.param, var_name)
+            var = getattr(model.params, var_name)
             if model.use_Bifurcation:
                 if var.has_prior and var_name not in ['std_in', 'g_EI', 'g_IE'] and \
                         var_name not in exclude_param:

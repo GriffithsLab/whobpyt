@@ -14,9 +14,8 @@ Importage
 """
 import torch
 from torch.nn.parameter import Parameter
-from whobpyt.datatypes.parameter import par
-from whobpyt.models.JansenRit.ParamsJR import ParamsJR
-from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.datatypes import AbstractNMM, par
+from whobpyt.models.JansenRit import ParamsJR
 import numpy as np  # for numerical operations
 
 
@@ -58,7 +57,7 @@ class RNNJANSEN(AbstractNMM):
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: float, lm: float, dist: float,
-                 use_fit_gains: bool, use_fit_lfm: bool, param: ParamsJR) -> None:
+                 use_fit_gains: bool, use_fit_lfm: bool, params: ParamsJR) -> None:
         """
         Parameters
         ----------
@@ -100,7 +99,7 @@ class RNNJANSEN(AbstractNMM):
         self.lm = lm
         self.use_fit_gains = use_fit_gains  # flag for fitting gains
         self.use_fit_lfm = use_fit_lfm
-        self.param = param
+        self.params = params
 
         self.output_size = lm.shape[0]  # number of EEG channels
 
@@ -169,9 +168,9 @@ def setModelParameters(model):
     else:
         model.lm = torch.tensor(model.lm, dtype=torch.float32)  # leadfield matrix from sourced data to eeg
 
-    var_names = [a for a in dir(model.param) if (type(getattr(model.param, a)) == par)]
+    var_names = [a for a in dir(model.params) if (type(getattr(model.params, a)) == par)]
     for var_name in var_names:
-        var = getattr(model.param, var_name)
+        var = getattr(model.params, var_name)
         if (var.fit_hyper == True):
             if var_name == 'lm':
                 size = var.prior_var.shape

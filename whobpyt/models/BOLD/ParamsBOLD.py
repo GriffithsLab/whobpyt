@@ -1,4 +1,5 @@
 import numpy as np
+from whobpyt.datatypes import par
 
 # Multi-Modal Connectome-based Neural Mass Modelling
 
@@ -11,7 +12,6 @@ import numpy as np
 # https://github.com/GriffithsLab/tepfit/blob/main/tepfit/fit.py (for state variable value bound equations)
 
 import numpy
-import math
 
 class BOLD_Params():
     def __init__(self):
@@ -20,13 +20,13 @@ class BOLD_Params():
         #############################################
         
         #Friston 2003 - Table 1 - Priors on biophysical parameters
-        self.kappa = 0.65 # Rate of signal decay (1/s)
-        self.gammaB = 0.42 # Rate of flow-dependent elimination (1/s)
-        self.tao = 0.98 # Hemodynamic transit time (s)
-        self.alpha = 0.32 # Grubb's exponent
-        self.ro = 0.34 #Resting oxygen extraction fraction
+        self.kappa = par(0.65) # Rate of signal decay (1/s)
+        self.gammaB = par(0.42) # Rate of flow-dependent elimination (1/s)
+        self.tao = par(0.98) # Hemodynamic transit time (s)
+        self.alpha = par(0.32) # Grubb's exponent
+        self.ro = par(0.34) #Resting oxygen extraction fraction
         
-        self.V_0 = 0.02
-        self.k_1 = 7*self.ro
-        self.k_2 = 2
-        self.k_3 = 2*self.ro - 0.2
+        self.V_0 = par(0.02)
+        self.k_1 = par(7*self.ro.npValue())
+        self.k_2 = par(2)
+        self.k_3 = par(2*self.ro.npValue() - 0.2)

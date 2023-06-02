@@ -1,7 +1,6 @@
 import numpy as np
 
 import numpy
-import math
 
 class EEG_Params():
     def __init__(self, Lead_Field):

@@ -1,6 +1,5 @@
 import torch
-from whobpyt.datatypes.AbstractParams import AbstractParams
-from whobpyt.datatypes.parameter import par
+from whobpyt.datatypes import AbstractParams, par
 
 class ParamsRWW2(AbstractParams):
     ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
@@ -49,3 +48,4 @@ class ParamsRWW2(AbstractParams):
         #############################################
         
         self.gammaI = par(1/1000) #Zheng suggested this to get oscillations
+        self.J_new = par(1)

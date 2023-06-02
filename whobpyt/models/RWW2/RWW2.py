@@ -1,7 +1,6 @@
 import torch
-from whobpyt.datatypes.AbstractParams import AbstractParams
-from whobpyt.datatypes.AbstractNMM import AbstractNMM
-from whobpyt.datatypes.parameter import par
+from whobpyt.datatypes import AbstractNMM, AbstractParams, par
+from math import sqrt
 
 class RWW2(AbstractNMM):
     ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
@@ -39,7 +38,7 @@ class RWW2(AbstractNMM):
         self.buffer_idx = 0
         self.mu = torch.tensor([0]) #Connection Speed addition
         
-        self.param = params
+        self.params = params
         
         self.use_fit_gains = False  # flag for fitting gains
         self.use_fit_lfm = False
@@ -60,54 +59,15 @@ class RWW2(AbstractNMM):
         return forward(self, external, hx, hE)
 
 def setModelParameters(self):
-    #############################################
-    ## RWW Constants
-    #############################################
-    
-    #Zeroing the components which deal with a connected network
-    self.G = self.param.G
-    self.Lambda = self.param.Lambda #1 or 0 depending on using long range feed forward inhibition (FFI)
-    
-    #Excitatory Gating Variables
-    self.a_E = self.param.a_E               # nC^(-1)
-    self.b_E = self.param.b_E               # Hz
-    self.d_E = self.param.d_E              # s
-    self.tau_E = self.param.tau_E   # ms
-    self.tau_NMDA = self.param.tau_NMDA  # ms
-    self.W_E = self.param.W_E
-    
-    #Inhibitory Gating Variables
-    self.a_I = self.param.a_I               # nC^(-1)
-    self.b_I = self.param.b_I               # Hz
-    self.d_I = self.param.d_I             # s
-    self.tau_I = self.param.tau_I    # ms
-    self.tau_GABA = self.param.tau_GABA   # ms
-    self.W_I = self.param.W_I
-    
-    #Setting other variables
-    self.w_plus = self.param.w_plus # Local excitatory recurrence
-    self.J_NMDA = self.param.J_NMDA # Excitatory synaptic coupling in nA
-    self.J = self.param.J # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
-    self.gamma = self.param.gamma #a kinetic parameter in ms
-    self.sig = self.param.sig #0.01 # Noise amplitude at node in nA
-    #self.v_of_T = None #param.v_of_T # Uncorrelated standarg Gaussian noise # NOTE: Now set at time of running forward model
-    self.I_0 = self.param.I_0 # The overall effective external input in nA
-    
-    self.I_external = self.param.I_external #External input current 
-    
 
-    #############################################
-    ## Model Additions/modifications
-    #############################################
-    
-    self.gammaI = self.param.gammaI
-    
+    # NOTE: Parameters stored in self.params
+ 
     # To make the parameters work with modelfitting.py
     param_reg = [torch.nn.Parameter(torch.tensor(1.))]
     param_hyper = [torch.nn.Parameter(torch.tensor(1.))]
-    vars_names = [a for a in dir(self.param) if (type(getattr(self.param, a)) == par)]
+    vars_names = [a for a in dir(self.params) if (type(getattr(self.params, a)) == par)]
     for var_name in vars_names:
-        var = getattr(self, var_name)
+        var = getattr(self.params, var_name)
         if (var.fit_par):
             param_reg.append(var.val)
     self.params_fitted = {'modelparameter': param_reg, 'hyperparameter': param_hyper}
@@ -115,22 +75,49 @@ def setModelParameters(self):
 
 def forward(self, external, hx, hE):
 
+    # Some documentation to be written...
+
+    # Defining NMM Parameters to simplify later equations
+    G = self.params.G.value()
+    Lambda = self.params.Lambda.value()       # 1 or 0 depending on using long range feed forward inhibition (FFI)
+    a_E = self.params.a_E.value()             # nC^(-1)
+    b_E = self.params.b_E.value()             # Hz
+    d_E = self.params.d_E.value()             # s
+    tau_E = self.params.tau_E.value()         # ms
+    tau_NMDA = self.params.tau_NMDA.value()   # ms
+    W_E = self.params.W_E.value()
+    a_I = self.params.a_I.value()             # nC^(-1)
+    b_I = self.params.b_I.value()             # Hz
+    d_I = self.params.d_I.value()             # s
+    tau_I = self.params.tau_I.value()         # ms
+    tau_GABA = self.params.tau_GABA.value()   # ms
+    W_I = self.params.W_I.value()
+    w_plus = self.params.w_plus.value()       # Local excitatory recurrence
+    J_NMDA = self.params.J_NMDA.value()       # Excitatory synaptic coupling in nA
+    J = self.params.J.value()                 # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
+    gamma = self.params.gamma.value()         # a kinetic parameter in ms
+    sig = self.params.sig.value()             # 0.01 # Noise amplitude at node in nA
+    I_0 = self.params.I_0.value()             # The overall effective external input in nA
+    I_external = self.params.I_external.value() #External input current 
+    gammaI = self.params.gammaI.value()
+    J_new = self.params.J_new.value()
+
     def H_for_E_V3(I_E, update = False):
         
-        numer = torch.abs(self.a_E*I_E - self.b_E) + 1e-9*1
-        denom = torch.where((-self.d_E*(self.a_E*I_E - self.b_E) > 50), 
-                            torch.abs(1 - 1e9*(-self.d_E*(self.a_E*I_E - self.b_E))) + 1e-9*self.d_E,
-                            torch.abs(1 - torch.exp(torch.min(-self.d_E*(self.a_E*I_E - self.b_E), torch.tensor([51])))) + 1e-9*self.d_E)
+        numer = torch.abs(a_E*I_E - b_E) + 1e-9*1
+        denom = torch.where((-d_E*(a_E*I_E - b_E) > 50), 
+                            torch.abs(1 - 1e9*(-d_E*(a_E*I_E - b_E))) + 1e-9*d_E,
+                            torch.abs(1 - torch.exp(torch.min(-d_E*(a_E*I_E - b_E), torch.tensor([51])))) + 1e-9*d_E)
         r_E = numer / denom
         
         return r_E
         
     def H_for_I_V3(I_I, update = False):
         
-        numer = torch.abs(self.a_I*I_I - self.b_I) + 1e-9*1
-        denom = torch.where((-self.d_I*(self.a_I*I_I - self.b_I) > 50),
-                            torch.abs(1 - 1e5*(-self.d_I*(self.a_I*I_I - self.b_I))) + 1e-9*self.d_I,
-                            torch.abs(1 - torch.exp(torch.min(-self.d_I*(self.a_I*I_I - self.b_I), torch.tensor([51])))) + 1e-9*self.d_I)
+        numer = torch.abs(a_I*I_I - b_I) + 1e-9*1
+        denom = torch.where((-d_I*(a_I*I_I - b_I) > 50),
+                            torch.abs(1 - 1e5*(-d_I*(a_I*I_I - b_I))) + 1e-9*d_I,
+                            torch.abs(1 - torch.exp(torch.min(-d_I*(a_I*I_I - b_I), torch.tensor([51])))) + 1e-9*d_I)
         r_I = numer / denom
         
         return r_I
@@ -159,12 +146,14 @@ def forward(self, external, hx, hE):
     #
     
     if(useGPU):
-        v_of_T = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions)).cuda()
+        Ev = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions)).cuda()
+        Iv = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions)).cuda()
         state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 2).cuda()
         if(withOptVars):
             opt_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 4).cuda()
     else:
-        v_of_T = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions))
+        Ev = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions))
+        Iv = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions))
         state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 2)
         if(withOptVars):
             opt_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 4)
@@ -225,8 +214,8 @@ def forward(self, external, hx, hE):
 
 
         # Currents
-        I_E = self.W_E*self.I_0 + self.w_plus*self.J_NMDA*S_E + self.G*self.J_NMDA*Network_S_E - self.J*S_I + self.I_external
-        I_I = self.W_I*self.I_0 + self.J_NMDA*S_E - S_I + self.Lambda*self.G*self.J_NMDA*Network_S_E
+        I_E = W_E*I_0 + w_plus*J_NMDA*S_E + G*J_NMDA*Network_S_E - J*S_I + I_external
+        I_I = W_I*I_0 + J_NMDA*S_E - J_new*S_I + Lambda*G*J_NMDA*Network_S_E
         
         # Firing Rates
         # Orig
@@ -238,13 +227,13 @@ def forward(self, external, hx, hE):
         r_I = H_for_I_V3(I_I)
         
         # Average Synaptic Gating Variable
-        dS_E = - S_E/self.tau_E + (1 - S_E)*self.gamma*r_E + self.sig*v_of_T[i, :]
-        dS_I = - S_I/self.tau_I + self.gammaI*r_I + self.sig*v_of_T[i, :]
-        
+        dS_E = - S_E/tau_E + (1 - S_E)*gamma*r_E #+ self.sig*v_of_T[i, :] Noise now added later
+        dS_I = - S_I/tau_I + gammaI*r_I #+ self.sig*v_of_T[i, :] Noise now added later
+            
         # UPDATE VALUES
-        S_E = S_E + self.step_size*dS_E
-        S_I = S_I + self.step_size*dS_I
-        
+        S_E = S_E + self.step_size*dS_E + sqrt(self.step_size)*sig*Ev[i, :]
+        S_I = S_I + self.step_size*dS_I + sqrt(self.step_size)*sig*Iv[i, :]
+               
         # Bound the possible values of state variables (From fit.py code for numerical stability)
         if(self.useBC):
             S_E = torch.tanh(0.00001 + torch.nn.functional.relu(S_E - 0.00001))

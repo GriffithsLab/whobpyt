@@ -14,9 +14,7 @@ Importage
 """
 import torch
 from torch.nn.parameter import Parameter
-from whobpyt.datatypes.parameter import par
-from whobpyt.datatypes.AbstractParams import AbstractParams
-from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.datatypes import AbstractNMM, AbstractParams, par
 import numpy as np  # for numerical operations
 
 class ParamsJR(AbstractParams):

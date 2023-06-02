@@ -99,7 +99,7 @@ class Model_fitting:
 
         if(self.model.track_params):
             for par_name in self.model.track_params:
-                var = getattr(self.model.param, par_name)
+                var = getattr(self.model.params, par_name)
                 fit_param[par_name] = [var.value().detach().numpy()]
         else:
             for key, value in self.model.state_dict().items():
@@ -176,7 +176,7 @@ class Model_fitting:
                 # sc_par.append(self.model.sc[mask].copy())
                 if(self.model.track_params):
                     for par_name in self.model.track_params:
-                        var = getattr(self.model.param, par_name)
+                        var = getattr(self.model.params, par_name)
                         fit_param[par_name].append(var.value().detach().numpy())
                 else:
                     for key, value in self.model.state_dict().items():
@@ -308,19 +308,19 @@ class Model_fitting:
 
             X_np = 0.2 * np.random.uniform(0, 1, (self.model.node_size, self.model.state_size)) + np.array(
                 [0, 0, 0, 1.0, 1.0, 1.0])
-            variables_p = [a for a in dir(self.model.param) if
-                           not a.startswith('__') and not callable(getattr(self.model.param, a))]
+            variables_p = [a for a in dir(self.model.params) if
+                           not a.startswith('__') and not callable(getattr(self.model.params, a))]
             # get penalty on each model parameters due to prior distribution
             for var in variables_p:
                 # print(var)
-                if np.any(getattr(self.model.param, var)[1] > 0):
-                    des = getattr(self.model.param, var)
+                if np.any(getattr(self.model.params, var)[1] > 0):
+                    des = getattr(self.model.params, var)
                     value = getattr(self.model, var)
                     des[0] = value.detach().numpy().copy()
-                    setattr(self.model.param, var, des)
+                    setattr(self.model.params, var, des)
             model_np = RWW_np(self.model.node_size, self.model.TRs_per_window, step_size_n, step_size, tr_p,
                               self.model.sc_fitted.detach().numpy().copy(),
-                              self.model.use_dynamic_boundary, self.model.use_Laplacian, self.model.param)
+                              self.model.use_dynamic_boundary, self.model.use_Laplacian, self.model.params)
 
             # Create placeholders for the simulated BOLD E I x f and q of entire time series.
             for name in self.model.state_names + self.output_sim.output_names:

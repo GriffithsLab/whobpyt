@@ -1,5 +1,5 @@
 import torch
-from whobpyt.datatypes.AbstractMode import AbstractMode
+from whobpyt.datatypes import AbstractMode
 
 class EEG_Layer(AbstractMode):
     def __init__(self, num_regions, params, num_channels):        

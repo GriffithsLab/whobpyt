@@ -6,10 +6,8 @@ module for wong-wang model
 
 import torch
 from torch.nn.parameter import Parameter
-from whobpyt.datatypes.parameter import par
-from whobpyt.models.RWW.ParamsRWW import ParamsRWW
-from whobpyt.datatypes.AbstractParams import AbstractParams
-from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.datatypes import AbstractNMM, AbstractParams, par
+from whobpyt.models.RWW import ParamsRWW
 import numpy as np  # for numerical operations
 
 class RNNRWW(AbstractNMM):
@@ -53,7 +51,7 @@ class RNNRWW(AbstractNMM):
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, sampling_size: float, tr: float, sc: float, use_fit_gains: bool,
-                 param: ParamsRWW, use_Bifurcation=True, use_Gaussian_EI=False, use_Laplacian=True,
+                 params: ParamsRWW, use_Bifurcation=True, use_Gaussian_EI=False, use_Laplacian=True,
                  use_dynamic_boundary=True) -> None:
         """
         Parameters
@@ -97,7 +95,7 @@ class RNNRWW(AbstractNMM):
         self.use_Bifurcation = use_Bifurcation
         self.use_Gaussian_EI = use_Gaussian_EI
         self.use_dynamic_boundary = use_dynamic_boundary
-        self.param = param
+        self.params = params
 
         self.output_size = node_size  # number of EEG channels
     
@@ -171,9 +169,9 @@ def setModelParameters(model):
     else:
         model.gains_con = torch.tensor(np.zeros((model.node_size, model.node_size)), dtype=torch.float32)
 
-    var_names = [a for a in dir(model.param) if not a.startswith('__')]
+    var_names = [a for a in dir(model.params) if not a.startswith('__')]
     for var_name in var_names:
-        var = getattr(model.param, var_name)
+        var = getattr(model.params, var_name)
         if (type(var) == par): 
             if (var.fit_hyper == True):
                 var.randSet() #TODO: This should be done before giving params to model class

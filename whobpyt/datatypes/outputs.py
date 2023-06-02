@@ -26,10 +26,10 @@ class OutputNM:
             for m in self.mode_all:
                 setattr(self, name + '_' + m, [])
 
-        vars_name = [a for a in dir(model.param) if not a.startswith('__') and not callable(getattr(model.param, a))]
+        vars_name = [a for a in dir(model.params) if not a.startswith('__') and not callable(getattr(model.params, a))]
         for var in vars_name:
-            if (type(getattr(model.param, var)) != whobpyt.datatypes.parameter.par):
-                if np.any(getattr(model.param, var)[1] > 0):
+            if (type(getattr(model.params, var)) != whobpyt.datatypes.parameter.par):
+                if np.any(getattr(model.params, var)[1] > 0):
                     if var != 'std_in':
                         setattr(self, var, np.array([]))
                         for stat_var in self.stat_vars_all:
@@ -39,10 +39,10 @@ class OutputNM:
             
             else:
             
-                if getattr(model.param, var).fit_par:
+                if getattr(model.params, var).fit_par:
                     setattr(self, var, np.array([]))
                 
-                if getattr(model.param, var).fit_hyper:
+                if getattr(model.params, var).fit_hyper:
                     for stat_var in self.stat_vars_all:
                         setattr(self, var + '_' + stat_var, [])
             

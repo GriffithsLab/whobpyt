@@ -1,5 +1,5 @@
 import torch
-from whobpyt.datatypes.AbstractMode import AbstractMode
+from whobpyt.datatypes import AbstractMode
    
 class BOLD_Layer(AbstractMode):
     def __init__(self, num_regions, params, useBC = False):        
@@ -36,21 +36,7 @@ class BOLD_Layer(AbstractMode):
         return forward(self, init_state, step_size, sim_len, node_history, useGPU = False)    
 
 def setModelParameters(self):
-    #############################################
-    ## BOLD Constants
-    #############################################
-    
-    #Friston 2003 - Table 1 - Priors on biophysical parameters
-    self.kappa = self.params.kappa # Rate of signal decay (1/s)
-    self.gammaB = self.params.gammaB # Rate of flow-dependent elimination (1/s)
-    self.tao = self.params.tao # Hemodynamic transit time (s)
-    self.alpha = self.params.alpha # Grubb's exponent
-    self.ro = self.params.ro #Resting oxygen extraction fraction
-    
-    self.V_0 = self.params.V_0
-    self.k_1 = self.params.k_1
-    self.k_2 = self.params.k_2
-    self.k_3 = self.params.k_3
+    pass
     
 def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
     
@@ -71,6 +57,17 @@ def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
     #  layer_history: Tensor - [time_steps, regions, state_vars + 1 (BOLD)]
     #
     
+    # Defining parameters to simplify later equations
+    kappa = self.params.kappa.value()    # Rate of signal decay (1/s)
+    gammaB = self.params.gammaB.value()  # Rate of flow-dependent elimination (1/s)
+    tao = self.params.tao.value()        # Hemodynamic transit time (s)
+    alpha = self.params.alpha.value()    # Grubb's exponent
+    ro = self.params.ro.value()          #Resting oxygen extraction fraction
+    V_0 = self.params.V_0.value()
+    k_1 = self.params.k_1.value()
+    k_2 = self.params.k_2.value()
+    k_3 = self.params.k_3.value()
+    
     if(useGPU):
         layer_hist = torch.zeros(int(sim_len/step_size), self.num_regions, 4 + 1).cuda()
     else:
@@ -88,10 +85,10 @@ def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
         z = node_history[i,:] 
         
         #BOLD State Variables
-        dx = z - self.kappa*x - self.gammaB*(f - 1)
+        dx = z - kappa*x - gammaB*(f - 1)
         df = x
-        dv = (f - v**(1/self.alpha))/self.tao
-        dq = ((f/self.ro) * (1 - (1 - self.ro)**(1/f)) - q*v**(1/self.alpha - 1))/self.tao
+        dv = (f - v**(1/alpha))/tao
+        dq = ((f/ro) * (1 - (1 - ro)**(1/f)) - q*v**(1/alpha - 1))/tao
         
         # UPDATE VALUES
         # NOTE: bold equations are in sec so step_size will be divide by 1000
@@ -108,7 +105,7 @@ def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
             q = (1 + torch.tanh(q - 1))
         
         #BOLD Calculation
-        BOLD = self.V_0*(self.k_1*(1 - q) + self.k_2*(1 - q/v) + self.k_3*(1 - v))
+        BOLD = V_0*(k_1*(1 - q) + k_2*(1 - q/v) + k_3*(1 - v))
         
         layer_hist[i, :, 0] = x
         layer_hist[i, :, 1] = f

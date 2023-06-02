@@ -38,11 +38,11 @@ class CostsLIN:
         loss_EI = 0
         loss_prior = []
 
-        variables_p = [a for a in dir(model.param) if
-                       not a.startswith('__') and not callable(getattr(model.param, a))]
+        variables_p = [a for a in dir(model.params) if
+                       not a.startswith('__') and not callable(getattr(model.params, a))]
 
         for var in variables_p:
-            if np.any(getattr(model.param, var)[1] > 0) and var not in ['std_in'] and \
+            if np.any(getattr(model.params, var)[1] > 0) and var not in ['std_in'] and \
                     var not in exclude_param:
                 # print(var)
                 dict_np = {'m': var + '_m', 'v': var + '_v_inv'}
