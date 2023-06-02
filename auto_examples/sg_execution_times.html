@@ -95,9 +95,26 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
@@ -109,10 +126,14 @@
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-loss-over-training">Plots of loss over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-j-values-over-training-training">Plots of J values over training Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-j-values-over-training">Plots of J values over Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
@@ -188,7 +209,7 @@
             
   <div class="section" id="computation-times">
 <span id="sphx-glr-auto-examples-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this headline">¶</a></h1>
-<p><strong>45:42.100</strong> total execution time for <strong>auto_examples</strong> files:</p>
+<p><strong>93:45.043</strong> total execution time for <strong>auto_examples</strong> files:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 84%" />
@@ -197,15 +218,15 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="eg004r__fitting_JR_example.html#sphx-glr-auto-examples-eg004r-fitting-jr-example-py"><span class="std std-ref">Fitting JR model (Tepit data)</span></a> (<code class="docutils literal notranslate"><span class="pre">eg004r__fitting_JR_example.py</span></code>)</p></td>
-<td><p>23:18.965</p></td>
+<td><p>42:57.022</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="eg003r__fitting_rww_example.html#sphx-glr-auto-examples-eg003r-fitting-rww-example-py"><span class="std std-ref">Fitting Wong_Wang model (HCP data)</span></a> (<code class="docutils literal notranslate"><span class="pre">eg003r__fitting_rww_example.py</span></code>)</p></td>
-<td><p>16:29.210</p></td>
+<td><p>30:51.570</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="eg002r__multimodal_simulation.html#sphx-glr-auto-examples-eg002r-multimodal-simulation-py"><span class="std std-ref">Fitting S_E Mean to 0.164 using default RWW Parameters</span></a> (<code class="docutils literal notranslate"><span class="pre">eg002r__multimodal_simulation.py</span></code>)</p></td>
-<td><p>05:53.925</p></td>
+<td><p>19:56.451</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="eg001x__template.html#sphx-glr-auto-examples-eg001x-template-py"><span class="std std-ref">WhoBPyT Demo</span></a> (<code class="docutils literal notranslate"><span class="pre">eg001x__template.py</span></code>)</p></td>

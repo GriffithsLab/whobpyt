@@ -97,9 +97,26 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#defining-model-parameters">Defining Model Parameters</a></li>
@@ -111,10 +128,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#training-the-model">Training The Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plots-of-loss-over-training">Plots of loss over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-j-values-over-training-training">Plots of J values over training Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-of-j-values-over-training">Plots of J values over Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plots-of-eeg-psd">Plots of EEG PSD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plots-of-bold-fc">Plots of BOLD FC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
@@ -207,20 +228,12 @@
 <h2>Importage<a class="headerlink" href="#importage" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># whobpyt stuff</span>
 <span class="kn">import</span> <span class="nn">whobpyt</span>
-<span class="kn">from</span> <span class="nn">whobpyt.data.dataload</span> <span class="kn">import</span> <span class="n">dataloader</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.RWW2.mmRWW2</span> <span class="kn">import</span> <span class="n">mmRWW2</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.RWW2.ParamsRWW2</span> <span class="kn">import</span> <span class="n">ParamsRWW2</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.RWW2.RWW2</span> <span class="kn">import</span> <span class="n">RWW2</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.BOLD.ParamsBOLD</span> <span class="kn">import</span> <span class="n">BOLD_Params</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.BOLD.BOLD</span> <span class="kn">import</span> <span class="n">BOLD_Layer</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.EEG.ParamsEEG</span> <span class="kn">import</span> <span class="n">EEG_Params</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.EEG.EEG</span> <span class="kn">import</span> <span class="n">EEG_Layer</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization.cost_FC</span> <span class="kn">import</span> <span class="n">CostsFC</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization.cost_PSD</span> <span class="kn">import</span> <span class="n">CostsPSD</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization.cost_Mean</span> <span class="kn">import</span> <span class="n">CostsMean</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization.modelfitting</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
-<span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractNMM</span> <span class="kn">import</span> <span class="n">AbstractNMM</span>
-<span class="kn">from</span> <span class="nn">whobpyt.datatypes.parameter</span> <span class="kn">import</span> <span class="n">par</span>
+<span class="kn">from</span> <span class="nn">whobpyt.data</span> <span class="kn">import</span> <span class="n">dataloader</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.RWW2</span> <span class="kn">import</span> <span class="n">mmRWW2</span><span class="p">,</span> <span class="n">mmRWW2_np</span><span class="p">,</span> <span class="n">RWW2</span><span class="p">,</span> <span class="n">RWW2_np</span><span class="p">,</span> <span class="n">ParamsRWW2</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.BOLD</span> <span class="kn">import</span> <span class="n">BOLD_Layer</span><span class="p">,</span> <span class="n">BOLD_np</span><span class="p">,</span> <span class="n">BOLD_Params</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.EEG</span> <span class="kn">import</span> <span class="n">EEG_Layer</span><span class="p">,</span> <span class="n">EEG_np</span><span class="p">,</span> <span class="n">EEG_Params</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">Model_fitting</span><span class="p">,</span> <span class="n">CostsFC</span><span class="p">,</span> <span class="n">CostsPSD</span><span class="p">,</span> <span class="n">CostsMean</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">par</span>
 
 <span class="c1"># general python stuff</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -312,7 +325,7 @@
 </div>
 <img alt="SC of Artificial Data" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.0000)
 
 Text(0.5, 1.0, &#39;SC of Artificial Data&#39;)
 </pre></div>
@@ -438,7 +451,7 @@ Also, written in such a way as to be able to track and plot indiviual components
 <span class="c1">#</span>
 
 <span class="n">randdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">15000</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">TRperwindow</span> <span class="o">=</span> <span class="mi">15000</span>
 <span class="n">randTS</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">(</span><span class="n">randdata</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TRperwindow</span><span class="p">)</span>
 
@@ -455,16 +468,26 @@ Also, written in such a way as to be able to track and plot indiviual components
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: [0.4193714] FC_cor:  0.2541967312674528 cos_sim:  0.4885898281928899
-epoch:  1 loss: [0.45652354] FC_cor:  0.20993533923932967 cos_sim:  0.8393942008697828
-epoch:  2 loss: [0.45357683] FC_cor:  0.07324767155963036 cos_sim:  0.8640566467935865
-epoch:  3 loss: [0.4520895] FC_cor:  0.2626603904214858 cos_sim:  0.8658198710336111
-epoch:  4 loss: [0.45133927] FC_cor:  0.3186718114859265 cos_sim:  0.8658931985768212
-epoch:  5 loss: [0.45037013] FC_cor:  -0.046049017763857364 cos_sim:  0.8658770148461152
-epoch:  6 loss: [0.44573236] FC_cor:  0.10919380008170829 cos_sim:  0.8658888775861082
-epoch:  7 loss: [0.44256327] FC_cor:  -0.03285525610389589 cos_sim:  0.865897421774142
-epoch:  8 loss: [0.43884778] FC_cor:  0.3575415518923657 cos_sim:  0.8658960832123147
-epoch:  9 loss: [0.4351663] FC_cor:  0.21971691004062024 cos_sim:  0.865895927600474
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: [0.4284056] FC_cor:  0.22462868260653385 cos_sim:  0.31344968971941706
+epoch:  1 loss: [0.45579353] FC_cor:  0.008195470402949262 cos_sim:  0.837885636663479
+epoch:  2 loss: [0.45247477] FC_cor:  -0.17749836024151205 cos_sim:  0.8647703937825562
+epoch:  3 loss: [0.4535594] FC_cor:  -0.16806565316449099 cos_sim:  0.8665712390823748
+epoch:  4 loss: [0.44854358] FC_cor:  -0.187432828034386 cos_sim:  0.8666311587671426
+epoch:  5 loss: [0.4496751] FC_cor:  -0.24011543505005473 cos_sim:  0.8666107501655529
+epoch:  6 loss: [0.44185784] FC_cor:  -0.34616245158588915 cos_sim:  0.8666259207672552
+epoch:  7 loss: [0.44504032] FC_cor:  0.28036584850640317 cos_sim:  0.866640467307169
+epoch:  8 loss: [0.43753067] FC_cor:  -0.011528351531547904 cos_sim:  0.8666425833615201
+epoch:  9 loss: [0.43797138] FC_cor:  0.01057563599754445 cos_sim:  0.8666420265234394
+epoch:  10 loss: [0.429163] FC_cor:  0.02476553116629818 cos_sim:  0.8666422468038978
+epoch:  11 loss: [0.42487952] FC_cor:  0.02866738253521576 cos_sim:  0.8666414123934847
+epoch:  12 loss: [0.4179313] FC_cor:  -0.1554298267674941 cos_sim:  0.8666412088641571
+epoch:  13 loss: [0.41222876] FC_cor:  0.16478231177260302 cos_sim:  0.8666413357525768
+epoch:  14 loss: [0.40464526] FC_cor:  0.4354071715434254 cos_sim:  0.8666407456049978
+epoch:  15 loss: [0.3958624] FC_cor:  -0.12459301364556676 cos_sim:  0.8666414803901534
+epoch:  16 loss: [0.38589665] FC_cor:  0.09601476837202828 cos_sim:  0.8666416105525991
+epoch:  17 loss: [0.3687085] FC_cor:  0.08940181098590383 cos_sim:  0.8666409513206176
+epoch:  18 loss: [0.34385467] FC_cor:  0.07112821044848924 cos_sim:  0.8666379306523583
+epoch:  19 loss: [0.3149557] FC_cor:  -0.12720640102468478 cos_sim:  0.8666348073560657
 </pre></div>
 </div>
 <p>model test with 20 window for warmup</p>
@@ -496,7 +519,7 @@ epoch:  9 loss: [0.4351663] FC_cor:  0.21971691004062024 cos_sim:  0.86589592760
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.086780617160379 cos_sim:  0.5350293997489537
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  -0.0931213399980747 cos_sim:  0.4187903986463951
 </pre></div>
 </div>
 </div>
@@ -512,8 +535,8 @@ epoch:  9 loss: [0.4351663] FC_cor:  0.21971691004062024 cos_sim:  0.86589592760
 </pre></div>
 </div>
 </div>
-<div class="section" id="plots-of-j-values-over-training-training">
-<h2>Plots of J values over training Training<a class="headerlink" href="#plots-of-j-values-over-training-training" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="plots-of-j-values-over-training">
+<h2>Plots of J values over Training<a class="headerlink" href="#plots-of-j-values-over-training" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">J</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;J_</span><span class="si">{i}</span><span class="s2"> Values Changing Over Training Epochs&quot;</span><span class="p">)</span>
 </pre></div>
@@ -538,7 +561,7 @@ epoch:  9 loss: [0.4351663] FC_cor:  0.21971691004062024 cos_sim:  0.86589592760
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fbc68b6f820&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f1c50a64610&gt;
 </pre></div>
 </div>
 </div>
@@ -577,7 +600,71 @@ epoch:  9 loss: [0.4351663] FC_cor:  0.21971691004062024 cos_sim:  0.86589592760
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  53.925 seconds)</p>
+</div>
+<div class="section" id="defining-the-cnmm-validation-model">
+<h2>Defining the CNMM Validation Model<a class="headerlink" href="#defining-the-cnmm-validation-model" title="Permalink to this headline">¶</a></h2>
+<p>The Multi-Modal Model</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val_sim_len</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="mi">1000</span> <span class="c1"># Simulation length in msecs</span>
+<span class="n">model_validate</span> <span class="o">=</span> <span class="n">mmRWW2_np</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dist_mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">val_sim_len</span><span class="p">)</span>
+
+<span class="n">sim_vals</span><span class="p">,</span> <span class="n">hE</span> <span class="o">=</span> <span class="n">model_validate</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">external</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hx</span> <span class="o">=</span> <span class="n">model_validate</span><span class="o">.</span><span class="n">createIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">),</span> <span class="n">hE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plots-of-s-e-and-s-i-validation">
+<h2>Plots of S_E and S_I Validation<a class="headerlink" href="#plots-of-s-e-and-s-i-validation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;S_E and S_I&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_regions</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">[</span><span class="s1">&#39;E_window&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_E Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">[</span><span class="s1">&#39;I_window&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_I Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time Steps (multiply by step_size to get msec), step_size = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">step_size</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_007.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f1c52f161c0&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="plots-of-eeg-psd-validation">
+<h2>Plots of EEG PSD Validation<a class="headerlink" href="#plots-of-eeg-psd-validation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sampleFreqHz</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
+<span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">calcPSD</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">[</span><span class="s1">&#39;eeg_window&#39;</span><span class="p">]),</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">downSmoothPSD</span><span class="p">(</span><span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">scalePSD</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Hz&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PSD&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated EEG PSD: After Training&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Simulated EEG PSD: After Training" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_008.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Simulated EEG PSD: After Training&#39;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="plots-of-bold-fc-validation">
+<h2>Plots of BOLD FC Validation<a class="headerlink" href="#plots-of-bold-fc-validation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim_FC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">[</span><span class="s1">&#39;bold_window&#39;</span><span class="p">][:,</span><span class="n">skip_trans</span><span class="p">:])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated BOLD FC: After Training&quot;</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">sim_FC</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Simulated BOLD FC: After Training" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_009.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 19 minutes  56.451 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>

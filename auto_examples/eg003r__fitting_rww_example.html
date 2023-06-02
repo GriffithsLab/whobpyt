@@ -97,9 +97,26 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
@@ -111,10 +128,14 @@
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-loss-over-training">Plots of loss over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-j-values-over-training-training">Plots of J values over training Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-j-values-over-training">Plots of J values over Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fitting Wong_Wang model (HCP data)</a><ul>
@@ -206,11 +227,10 @@
 
 <span class="c1"># whobpyt stuff</span>
 <span class="kn">import</span> <span class="nn">whobpyt</span>
-<span class="kn">from</span> <span class="nn">whobpyt.data.dataload</span> <span class="kn">import</span> <span class="n">dataloader</span>
-<span class="kn">from</span> <span class="nn">whobpyt.datatypes.parameter</span> <span class="kn">import</span> <span class="n">par</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.RWW.wong_wang</span> <span class="kn">import</span> <span class="n">ParamsRWW</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.RWW.wong_wang</span> <span class="kn">import</span> <span class="n">RNNRWW</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization.modelfitting</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
+<span class="kn">from</span> <span class="nn">whobpyt.data</span> <span class="kn">import</span> <span class="n">dataloader</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">par</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.RWW</span> <span class="kn">import</span> <span class="n">RNNRWW</span><span class="p">,</span> <span class="n">ParamsRWW</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization.custom_cost_RWW</span> <span class="kn">import</span> <span class="n">CostsRWW</span>
 
 <span class="c1"># array and pd stuff</span>
@@ -248,13 +268,14 @@ From: https://drive.google.com/uc?id=1EOwDLj5SxWpwxEk5MT7cShiMPLszemuq
 To: /home/runner/work/whobpyt/whobpyt/HCP/100307_rfMRI_REST1_LR_hpc200_clean__l2k8_sc33_ts.pkl
 
   0%|          | 0.00/804k [00:00&lt;?, ?B/s]
-100%|##########| 804k/804k [00:00&lt;00:00, 18.4MB/s]
+ 65%|######5   | 524k/804k [00:00&lt;00:00, 4.23MB/s]
+100%|##########| 804k/804k [00:00&lt;00:00, 5.80MB/s]
 Downloading...
 From: https://drive.google.com/uc?id=1B9U47D19DrQOnNugs8keDNFQha1GfPGv
 To: /home/runner/work/whobpyt/whobpyt/HCP/weights_100307.txt
 
   0%|          | 0.00/172k [00:00&lt;?, ?B/s]
-100%|##########| 172k/172k [00:00&lt;00:00, 6.95MB/s]
+100%|##########| 172k/172k [00:00&lt;00:00, 2.32MB/s]
 Download completed
 </pre></div>
 </div>
@@ -320,49 +341,49 @@ Download completed
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: 10.666609 FC_cor:  0.17704334224915816 cos_sim:  -0.004415802738546131
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: 10.404478 FC_cor:  0.17972364049405157 cos_sim:  -0.004473835170888595
 Modelparam_lr:  0.007655032447569557
 Hyperparam_lr:  0.00019137581118923875
-epoch:  1 loss: 9.688369 FC_cor:  0.17616017004390314 cos_sim:  -0.005288720775827914
+epoch:  1 loss: 9.371397 FC_cor:  0.22035516612424358 cos_sim:  -0.005323943981904872
 Modelparam_lr:  0.02195518045835616
 Hyperparam_lr:  0.0005488795114589039
-epoch:  2 loss: 9.737023 FC_cor:  0.2504437105764319 cos_sim:  -0.005155489276610613
+epoch:  2 loss: 8.614997 FC_cor:  0.22031682391650703 cos_sim:  -0.005380109384616002
 Modelparam_lr:  0.038161460615189394
 Hyperparam_lr:  0.0009540365153797347
-epoch:  3 loss: 9.111483 FC_cor:  0.24967294879026738 cos_sim:  -0.005267825354012579
+epoch:  3 loss: 8.158909 FC_cor:  0.28839878428759036 cos_sim:  -0.005058715622610027
 Modelparam_lr:  0.048636619572961344
 Hyperparam_lr:  0.0012159154893240335
-epoch:  4 loss: 8.626262 FC_cor:  0.2181342166478336 cos_sim:  -0.005187955836350061
+epoch:  4 loss: 8.69396 FC_cor:  0.2773958371019888 cos_sim:  -0.005378404818428762
 Modelparam_lr:  0.049701884004331155
 Hyperparam_lr:  0.001242547100108279
-epoch:  5 loss: 8.100285 FC_cor:  0.46687572379904446 cos_sim:  -0.004982241849392214
+epoch:  5 loss: 8.447809 FC_cor:  0.4374307075590026 cos_sim:  -0.0056857698660042035
 Modelparam_lr:  0.04746986127807455
 Hyperparam_lr:  0.0011867465319518637
-epoch:  6 loss: 8.054404 FC_cor:  0.5395235549386855 cos_sim:  -0.004878231191551533
+epoch:  6 loss: 7.769639 FC_cor:  0.47494152248345173 cos_sim:  -0.005950136175745966
 Modelparam_lr:  0.043241301655337794
 Hyperparam_lr:  0.0010810325413834448
-epoch:  7 loss: 8.184902 FC_cor:  0.4576944100473836 cos_sim:  -0.005416642465711676
+epoch:  7 loss: 7.768631 FC_cor:  0.5507714040984013 cos_sim:  -0.005553161157835876
 Modelparam_lr:  0.03739193121532931
 Hyperparam_lr:  0.0009347982803832328
-epoch:  8 loss: 6.8678026 FC_cor:  0.5233539700129162 cos_sim:  -0.0055547577383212665
+epoch:  8 loss: 7.461197 FC_cor:  0.5487314781462671 cos_sim:  -0.0052275561486369365
 Modelparam_lr:  0.030441492191183233
 Hyperparam_lr:  0.0007610373047795808
-epoch:  9 loss: 6.722725 FC_cor:  0.5338265448244836 cos_sim:  -0.005449595075092362
+epoch:  9 loss: 7.1383715 FC_cor:  0.5195415480075372 cos_sim:  -0.005772141486365631
 Modelparam_lr:  0.023007561591694203
 Hyperparam_lr:  0.0005751890397923551
-epoch:  10 loss: 7.046655 FC_cor:  0.5571484064755704 cos_sim:  -0.0053035248906957485
+epoch:  10 loss: 7.712036 FC_cor:  0.5314473291978169 cos_sim:  -0.0048569953734565185
 Modelparam_lr:  0.015750676773893926
 Hyperparam_lr:  0.0003937669193473482
-epoch:  11 loss: 7.190094 FC_cor:  0.5705470053216327 cos_sim:  -0.005660025617486311
+epoch:  11 loss: 7.3894095 FC_cor:  0.5921488216637754 cos_sim:  -0.004566299038420601
 Modelparam_lr:  0.00931564380015844
 Hyperparam_lr:  0.00023289109500396096
-epoch:  12 loss: 7.1891975 FC_cor:  0.581185094904823 cos_sim:  -0.005380100766925954
+epoch:  12 loss: 7.608646 FC_cor:  0.5808476887654604 cos_sim:  -0.005010246151479782
 Modelparam_lr:  0.004274243589881215
 Hyperparam_lr:  0.00010685608974703037
-epoch:  13 loss: 8.152268 FC_cor:  0.5557589212884758 cos_sim:  -0.005366676103314105
+epoch:  13 loss: 6.90924 FC_cor:  0.584173220755531 cos_sim:  -0.0048333763933202
 Modelparam_lr:  0.0010744266755658026
 Hyperparam_lr:  2.6860666889145066e-05
-epoch:  14 loss: 7.21759 FC_cor:  0.5654827581107669 cos_sim:  -0.005407965314072682
+epoch:  14 loss: 6.5568976 FC_cor:  0.567574938797611 cos_sim:  -0.005067742111586261
 Modelparam_lr:  5.108322143696103e-07
 Hyperparam_lr:  1.2770805359240257e-08
 </pre></div>
@@ -372,7 +393,7 @@ Hyperparam_lr:  1.2770805359240257e-08
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.5260337061403692 cos_sim:  -0.004911377526568477
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.5557140851580328 cos_sim:  -0.00504675855101811
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -411,7 +432,7 @@ Hyperparam_lr:  1.2770805359240257e-08
 </pre></div>
 </div>
 <img alt="The empirical FC, The simulated FC" class="sphx-glr-single-img" src="../_images/sphx_glr_eg003r__fitting_rww_example_003.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 16 minutes  29.210 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 30 minutes  51.570 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg003r-fitting-rww-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/6e0d2e4bec0ad2802eb3fd7a90e5faa9/eg003r__fitting_rww_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg003r__fitting_rww_example.py</span></code></a></p>

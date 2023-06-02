@@ -96,9 +96,26 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
@@ -110,10 +127,14 @@
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-loss-over-training">Plots of loss over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-j-values-over-training-training">Plots of J values over training Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-j-values-over-training">Plots of J values over Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
@@ -205,11 +226,10 @@
 
 <span class="c1"># whobpyt stuff</span>
 <span class="kn">import</span> <span class="nn">whobpyt</span>
-<span class="kn">from</span> <span class="nn">whobpyt.data.dataload</span> <span class="kn">import</span> <span class="n">dataloader</span>
-<span class="kn">from</span> <span class="nn">whobpyt.datatypes.parameter</span> <span class="kn">import</span> <span class="n">par</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit.jansen_rit</span> <span class="kn">import</span> <span class="n">ParamsJR</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit.jansen_rit</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization.modelfitting</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
+<span class="kn">from</span> <span class="nn">whobpyt.data</span> <span class="kn">import</span> <span class="n">dataloader</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">par</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">ParamsJR</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization.custom_cost_JR</span> <span class="kn">import</span> <span class="n">CostsJR</span>
 
 <span class="c1"># array and pd stuff</span>
@@ -312,310 +332,310 @@
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: -20602.975 FC_cor:  0.1319080979907476 cos_sim:  0.027561704955169977
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: -20602.975 FC_cor:  0.2167317150422572 cos_sim:  0.027485796605547765
 Modelparam_lr:  0.0020915813002864297
 Hyperparam_lr:  5.2289532507160614e-05
-epoch:  1 loss: -20605.826 FC_cor:  0.13005050422399572 cos_sim:  0.02813574617740833
+epoch:  1 loss: -20605.826 FC_cor:  0.10392359739892168 cos_sim:  0.028064378764249737
 Modelparam_lr:  0.0023656262732655517
 Hyperparam_lr:  5.914065683163862e-05
-epoch:  2 loss: -20609.133 FC_cor:  0.1177100879970224 cos_sim:  0.02839515494075685
+epoch:  2 loss: -20609.133 FC_cor:  0.10473020161636556 cos_sim:  0.028350936536491723
 Modelparam_lr:  0.0028200434693571516
 Hyperparam_lr:  7.050108673392857e-05
-epoch:  3 loss: -20613.135 FC_cor:  0.10957616124261631 cos_sim:  0.028617540349043326
+epoch:  3 loss: -20613.135 FC_cor:  0.11582068073358032 cos_sim:  0.028603555150081263
 Modelparam_lr:  0.0034513648787536932
 Hyperparam_lr:  8.62841219688422e-05
-epoch:  4 loss: -20618.037 FC_cor:  0.1168108350408004 cos_sim:  0.028775570769913224
+epoch:  4 loss: -20618.037 FC_cor:  0.11707211548653243 cos_sim:  0.028797968584550554
 Modelparam_lr:  0.004254772398490904
 Hyperparam_lr:  0.00010636930996227247
-epoch:  5 loss: -20624.092 FC_cor:  0.12627172406293413 cos_sim:  0.028980496406213155
+epoch:  5 loss: -20624.092 FC_cor:  0.1233610937859729 cos_sim:  0.028971460257524083
 Modelparam_lr:  0.005224134603125666
 Hyperparam_lr:  0.00013060336507814151
-epoch:  6 loss: -20631.469 FC_cor:  0.14490987415810302 cos_sim:  0.029310764509228593
+epoch:  6 loss: -20631.469 FC_cor:  0.13257368089256338 cos_sim:  0.029349398081868254
 Modelparam_lr:  0.006352053538395568
 Hyperparam_lr:  0.00015880133845988889
-epoch:  7 loss: -20640.365 FC_cor:  0.13163478917607163 cos_sim:  0.0299294853928165
+epoch:  7 loss: -20640.365 FC_cor:  0.16084256260658134 cos_sim:  0.02988349088880492
 Modelparam_lr:  0.007629921180741454
 Hyperparam_lr:  0.00019074802951853619
-epoch:  8 loss: -20650.979 FC_cor:  0.14749443200760548 cos_sim:  0.0309568727526853
+epoch:  8 loss: -20650.979 FC_cor:  0.13078472721777076 cos_sim:  0.0310137463896403
 Modelparam_lr:  0.009047985131806671
 Hyperparam_lr:  0.0002261996282951666
-epoch:  9 loss: -20663.453 FC_cor:  0.22254602053879266 cos_sim:  0.0332274857112363
+epoch:  9 loss: -20663.453 FC_cor:  0.2027275347619427 cos_sim:  0.03315811366151954
 Modelparam_lr:  0.010595423046547231
 Hyperparam_lr:  0.00026488557616368064
-epoch:  10 loss: -20677.932 FC_cor:  0.26040449862229664 cos_sim:  0.0370841366577412
+epoch:  10 loss: -20677.932 FC_cor:  0.299538537938068 cos_sim:  0.0366506506591747
 Modelparam_lr:  0.012260425226934428
 Hyperparam_lr:  0.0003065106306733606
-epoch:  11 loss: -20694.549 FC_cor:  0.33622215830226093 cos_sim:  0.0442251082076293
+epoch:  11 loss: -20694.549 FC_cor:  0.3695956742022148 cos_sim:  0.04408440105409099
 Modelparam_lr:  0.014030284750913287
 Hyperparam_lr:  0.0003507571187728321
-epoch:  12 loss: -20713.404 FC_cor:  0.4149542836795136 cos_sim:  0.06118722209767247
+epoch:  12 loss: -20713.404 FC_cor:  0.3472537757023484 cos_sim:  0.060700477889001674
 Modelparam_lr:  0.015891494448772962
 Hyperparam_lr:  0.00039728736121932395
-epoch:  13 loss: -20734.596 FC_cor:  0.49745079559667066 cos_sim:  0.08452762522731724
+epoch:  13 loss: -20734.592 FC_cor:  0.5357636863849948 cos_sim:  0.08090916374340917
 Modelparam_lr:  0.01782984998682713
 Hyperparam_lr:  0.00044574624967067813
-epoch:  14 loss: -20758.195 FC_cor:  0.5194046845540558 cos_sim:  0.1085862603292915
+epoch:  14 loss: -20758.193 FC_cor:  0.6151754984708295 cos_sim:  0.11665808961940394
 Modelparam_lr:  0.01983055827169309
 Hyperparam_lr:  0.0004957639567923271
-epoch:  15 loss: -20784.244 FC_cor:  0.6339495800016552 cos_sim:  0.13305769573856194
+epoch:  15 loss: -20784.238 FC_cor:  0.5753106028104623 cos_sim:  0.11894040166372352
 Modelparam_lr:  0.021878350347852373
 Hyperparam_lr:  0.0005469587586963092
-epoch:  16 loss: -20812.773 FC_cor:  0.6511973247674395 cos_sim:  0.14389512965374693
+epoch:  16 loss: -20812.775 FC_cor:  0.7304245129159563 cos_sim:  0.1525157403590952
 Modelparam_lr:  0.023957597926884053
 Hyperparam_lr:  0.0005989399481721012
-epoch:  17 loss: -20843.832 FC_cor:  0.7401924342178353 cos_sim:  0.16582257655448024
+epoch:  17 loss: -20843.828 FC_cor:  0.7597240618564924 cos_sim:  0.15891930857948167
 Modelparam_lr:  0.026052432659046026
 Hyperparam_lr:  0.0006513108164761506
-epoch:  18 loss: -20877.338 FC_cor:  0.7613329521801493 cos_sim:  0.18201824961678761
+epoch:  18 loss: -20877.334 FC_cor:  0.7537063847816227 cos_sim:  0.17933200501222848
 Modelparam_lr:  0.02814686723695027
 Hyperparam_lr:  0.0007036716809237567
-epoch:  19 loss: -20913.283 FC_cor:  0.6694572030242868 cos_sim:  0.15348634855713272
+epoch:  19 loss: -20913.277 FC_cor:  0.793608749725413 cos_sim:  0.1816150326943961
 Modelparam_lr:  0.030224917407095986
 Hyperparam_lr:  0.0007556229351773996
-epoch:  20 loss: -20951.602 FC_cor:  0.7991554830221179 cos_sim:  0.20349625825112277
+epoch:  20 loss: -20951.582 FC_cor:  0.7565655415398024 cos_sim:  0.17217167882512102
 Modelparam_lr:  0.032270723958096326
 Hyperparam_lr:  0.0008067680989524079
-epoch:  21 loss: -20992.182 FC_cor:  0.6805463352474945 cos_sim:  0.16219668258486675
+epoch:  21 loss: -20992.197 FC_cor:  0.8656478824710675 cos_sim:  0.22138773231457903
 Modelparam_lr:  0.03426867375461168
 Hyperparam_lr:  0.0008567168438652918
-epoch:  22 loss: -21034.98 FC_cor:  0.8143845887771421 cos_sim:  0.19593465185292916
+epoch:  22 loss: -21034.979 FC_cor:  0.630514270518642 cos_sim:  0.1382762577265654
 Modelparam_lr:  0.03620351889328606
 Hyperparam_lr:  0.0009050879723321516
-epoch:  23 loss: -21079.828 FC_cor:  0.7616784849717482 cos_sim:  0.1855466358808088
+epoch:  23 loss: -21079.842 FC_cor:  0.8076406104413906 cos_sim:  0.18767814256144533
 Modelparam_lr:  0.03806049307131509
 Hyperparam_lr:  0.0009515123267828771
-epoch:  24 loss: -21126.617 FC_cor:  0.8532093875103594 cos_sim:  0.19969998928969657
+epoch:  24 loss: -21126.615 FC_cor:  0.8043946190694674 cos_sim:  0.19028837319031833
 Modelparam_lr:  0.039825424279546905
 Hyperparam_lr:  0.0009956356069886726
-epoch:  25 loss: -21175.17 FC_cor:  0.8018445216389656 cos_sim:  0.1776355683743836
+epoch:  25 loss: -21175.176 FC_cor:  0.8737905372590687 cos_sim:  0.1949601578779977
 Modelparam_lr:  0.04148484296006767
 Hyperparam_lr:  0.0010371210740016917
-epoch:  26 loss: -21225.348 FC_cor:  0.9153676606545003 cos_sim:  0.21143460583832396
+epoch:  26 loss: -21225.348 FC_cor:  0.85490494704811 cos_sim:  0.18869666962115972
 Modelparam_lr:  0.04302608480283726
 Hyperparam_lr:  0.0010756521200709316
-epoch:  27 loss: -21276.957 FC_cor:  0.7987016825364998 cos_sim:  0.15965719415877952
+epoch:  27 loss: -21276.945 FC_cor:  0.8883721994307568 cos_sim:  0.20455832532313456
 Modelparam_lr:  0.04443738739685428
 Hyperparam_lr:  0.0011109346849213569
-epoch:  28 loss: -21329.8 FC_cor:  0.9100902506211137 cos_sim:  0.2073799716300307
+epoch:  28 loss: -21329.816 FC_cor:  0.8246197537675014 cos_sim:  0.17429173459133845
 Modelparam_lr:  0.04570797999823058
 Hyperparam_lr:  0.0011426994999557643
-epoch:  29 loss: -21383.71 FC_cor:  0.797693351939421 cos_sim:  0.17149587102092873
+epoch:  29 loss: -21383.713 FC_cor:  0.9099794999251672 cos_sim:  0.21268361404340574
 Modelparam_lr:  0.046828165730085455
 Hyperparam_lr:  0.0011707041432521363
-epoch:  30 loss: -21438.479 FC_cor:  0.8967957227584451 cos_sim:  0.20253789128694397
+epoch:  30 loss: -21438.475 FC_cor:  0.8258693633148988 cos_sim:  0.16374133955704417
 Modelparam_lr:  0.04778939558692847
 Hyperparam_lr:  0.0011947348896732117
-epoch:  31 loss: -21493.883 FC_cor:  0.8514849172506874 cos_sim:  0.18130278212160222
+epoch:  31 loss: -21493.877 FC_cor:  0.9083582792561895 cos_sim:  0.20680471133756803
 Modelparam_lr:  0.04858433367874595
 Hyperparam_lr:  0.0012146083419686485
-epoch:  32 loss: -21549.744 FC_cor:  0.9218591549054571 cos_sim:  0.2083816718225352
+epoch:  32 loss: -21549.742 FC_cor:  0.8476819814843666 cos_sim:  0.17569405124242604
 Modelparam_lr:  0.04920691321686324
 Hyperparam_lr:  0.001230172830421581
-epoch:  33 loss: -21605.824 FC_cor:  0.8591011303288522 cos_sim:  0.17139678391938618
+epoch:  33 loss: -21605.832 FC_cor:  0.9183312838724245 cos_sim:  0.20412634869975618
 Modelparam_lr:  0.049652382814310975
 Hyperparam_lr:  0.0012413095703577744
-epoch:  34 loss: -21661.955 FC_cor:  0.9275441721878515 cos_sim:  0.21293425647128933
+epoch:  34 loss: -21661.955 FC_cor:  0.8778869194972792 cos_sim:  0.18863307380382366
 Modelparam_lr:  0.04991734274734145
 Hyperparam_lr:  0.0012479335686835364
-epoch:  35 loss: -21717.914 FC_cor:  0.8725442483368181 cos_sim:  0.17443425064659454
+epoch:  35 loss: -21717.914 FC_cor:  0.9251718715445691 cos_sim:  0.20474778598234894
 Modelparam_lr:  0.049999956289142014
 Hyperparam_lr:  0.0012499989072285503
-epoch:  36 loss: -21773.508 FC_cor:  0.9241258984969575 cos_sim:  0.20914097655354438
+epoch:  36 loss: -21773.508 FC_cor:  0.8972846314396814 cos_sim:  0.19689934435283896
 Modelparam_lr:  0.049980725983114455
 Hyperparam_lr:  0.0012495181495778614
-epoch:  37 loss: -21828.717 FC_cor:  0.9006026558550931 cos_sim:  0.1939081927764256
+epoch:  37 loss: -21828.717 FC_cor:  0.9430547763828044 cos_sim:  0.21418688838037547
 Modelparam_lr:  0.049926558012821295
 Hyperparam_lr:  0.0012481639503205324
-epoch:  38 loss: -21883.49 FC_cor:  0.922343252862935 cos_sim:  0.2080233893944557
+epoch:  38 loss: -21883.492 FC_cor:  0.8786105819449872 cos_sim:  0.18865015986726769
 Modelparam_lr:  0.04983752813706703
 Hyperparam_lr:  0.0012459382034266757
-epoch:  39 loss: -21937.799 FC_cor:  0.915121615308607 cos_sim:  0.20393254519202547
+epoch:  39 loss: -21937.797 FC_cor:  0.9474609943373645 cos_sim:  0.21877929668912502
 Modelparam_lr:  0.04971376087218328
 Hyperparam_lr:  0.001242844021804582
-epoch:  40 loss: -21991.6 FC_cor:  0.9340307273175384 cos_sim:  0.2135777009414715
+epoch:  40 loss: -21991.6 FC_cor:  0.8934005994040718 cos_sim:  0.19334507292610575
 Modelparam_lr:  0.0495554293178814
 Hyperparam_lr:  0.001238885732947035
-epoch:  41 loss: -22044.898 FC_cor:  0.922041550932785 cos_sim:  0.20883479840638902
+epoch:  41 loss: -22044.895 FC_cor:  0.9441349052176045 cos_sim:  0.2210162314746072
 Modelparam_lr:  0.049362754915156945
 Hyperparam_lr:  0.0012340688728789235
-epoch:  42 loss: -22097.658 FC_cor:  0.9414966584059699 cos_sim:  0.22326425134049716
+epoch:  42 loss: -22097.658 FC_cor:  0.9185846635884741 cos_sim:  0.20830306919017183
 Modelparam_lr:  0.04913600713658435
 Hyperparam_lr:  0.0012284001784146088
-epoch:  43 loss: -22149.834 FC_cor:  0.9199485512127706 cos_sim:  0.21210616843261187
+epoch:  43 loss: -22149.832 FC_cor:  0.9291515414045224 cos_sim:  0.21603701637360567
 Modelparam_lr:  0.048875503109435225
 Hyperparam_lr:  0.0012218875777358807
-epoch:  44 loss: -22201.416 FC_cor:  0.9441350233546728 cos_sim:  0.2321095321263575
+epoch:  44 loss: -22201.418 FC_cor:  0.9460282394014852 cos_sim:  0.2405493339752503
 Modelparam_lr:  0.04858160717214713
 Hyperparam_lr:  0.001214540179303678
-epoch:  45 loss: -22252.385 FC_cor:  0.9231524277097388 cos_sim:  0.21858201327913085
+epoch:  45 loss: -22252.385 FC_cor:  0.9098970603000329 cos_sim:  0.19699741068737137
 Modelparam_lr:  0.048254730364763375
 Hyperparam_lr:  0.0012063682591190842
-epoch:  46 loss: -22302.703 FC_cor:  0.9455448068006288 cos_sim:  0.2413435443881714
+epoch:  46 loss: -22302.707 FC_cor:  0.9483234050642693 cos_sim:  0.24523899607841598
 Modelparam_lr:  0.04789532985405634
 Hyperparam_lr:  0.0011973832463514085
-epoch:  47 loss: -22352.367 FC_cor:  0.9200489379090194 cos_sim:  0.22448628064429949
+epoch:  47 loss: -22352.365 FC_cor:  0.9305981891680071 cos_sim:  0.21768843354934064
 Modelparam_lr:  0.04750390829413839
 Hyperparam_lr:  0.0011875977073534597
-epoch:  48 loss: -22401.328 FC_cor:  0.9482897028247085 cos_sim:  0.25755800601834816
+epoch:  48 loss: -22401.33 FC_cor:  0.9399196837457938 cos_sim:  0.25276968650519077
 Modelparam_lr:  0.04708101312345467
 Hyperparam_lr:  0.0011770253280863666
-epoch:  49 loss: -22449.604 FC_cor:  0.9015167872888432 cos_sim:  0.2257427884186998
+epoch:  49 loss: -22449.604 FC_cor:  0.9361572832612215 cos_sim:  0.2374644948666299
 Modelparam_lr:  0.04662723579914091
 Hyperparam_lr:  0.0011656808949785228
-epoch:  50 loss: -22497.137 FC_cor:  0.947520416993242 cos_sim:  0.27287935201220115
+epoch:  50 loss: -22497.13 FC_cor:  0.9463998206396217 cos_sim:  0.2679943766766987
 Modelparam_lr:  0.04614321096981717
 Hyperparam_lr:  0.001153580274245429
-epoch:  51 loss: -22543.943 FC_cor:  0.8922995421869367 cos_sim:  0.23706132376398298
+epoch:  51 loss: -22543.943 FC_cor:  0.9245110395864785 cos_sim:  0.23528142371146274
 Modelparam_lr:  0.04562961558797431
 Hyperparam_lr:  0.0011407403896993577
-epoch:  52 loss: -22589.965 FC_cor:  0.943115459166819 cos_sim:  0.2870350079364978
+epoch:  52 loss: -22589.965 FC_cor:  0.9419462934603172 cos_sim:  0.2883557016554958
 Modelparam_lr:  0.045087167963194806
 Hyperparam_lr:  0.00112717919907987
-epoch:  53 loss: -22635.223 FC_cor:  0.9024744158080176 cos_sim:  0.26034959092600657
+epoch:  53 loss: -22635.223 FC_cor:  0.9198645182174803 cos_sim:  0.24820241403118695
 Modelparam_lr:  0.04451662675753175
 Hyperparam_lr:  0.0011129156689382938
-epoch:  54 loss: -22679.686 FC_cor:  0.9392549664056755 cos_sim:  0.3025539295600796
+epoch:  54 loss: -22679.686 FC_cor:  0.9377352877938563 cos_sim:  0.29570767206426296
 Modelparam_lr:  0.04391878992445143
 Hyperparam_lr:  0.0010979697481112857
-epoch:  55 loss: -22723.34 FC_cor:  0.9097373340771059 cos_sim:  0.2814548287895719
+epoch:  55 loss: -22723.338 FC_cor:  0.9044265372110832 cos_sim:  0.2735354914514791
 Modelparam_lr:  0.043294493592823224
 Hyperparam_lr:  0.0010823623398205807
-epoch:  56 loss: -22766.17 FC_cor:  0.939699137603785 cos_sim:  0.3179028490068029
+epoch:  56 loss: -22766.17 FC_cor:  0.9264371327858479 cos_sim:  0.3162015002689184
 Modelparam_lr:  0.042644610897517796
 Hyperparam_lr:  0.0010661152724379449
-epoch:  57 loss: -22808.168 FC_cor:  0.914890239403119 cos_sim:  0.3009500591388514
+epoch:  57 loss: -22808.168 FC_cor:  0.9094711321714697 cos_sim:  0.29897216001796767
 Modelparam_lr:  0.04197005075824899
 Hyperparam_lr:  0.0010492512689562249
-epoch:  58 loss: -22849.293 FC_cor:  0.9381288838599972 cos_sim:  0.332210936736463
+epoch:  58 loss: -22849.287 FC_cor:  0.9363105612019232 cos_sim:  0.33278250673735493
 Modelparam_lr:  0.04127175660836748
 Hyperparam_lr:  0.001031793915209187
-epoch:  59 loss: -22889.576 FC_cor:  0.9230882532215001 cos_sim:  0.32345512338285126
+epoch:  59 loss: -22889.574 FC_cor:  0.9007542717827351 cos_sim:  0.3132845114425178
 Modelparam_lr:  0.04055070507538386
 Hyperparam_lr:  0.0010137676268845966
-epoch:  60 loss: -22929.004 FC_cor:  0.9300684631364484 cos_sim:  0.3426362780506963
+epoch:  60 loss: -22929.0 FC_cor:  0.9518502758097024 cos_sim:  0.3552932915660542
 Modelparam_lr:  0.0398079046150668
 Hyperparam_lr:  0.00099519761537667
-epoch:  61 loss: -22967.533 FC_cor:  0.9400843161229061 cos_sim:  0.35705174031967857
+epoch:  61 loss: -22967.523 FC_cor:  0.8916780298767275 cos_sim:  0.30833427150992676
 Modelparam_lr:  0.03904439410102644
 Hyperparam_lr:  0.000976109852525661
-epoch:  62 loss: -23005.176 FC_cor:  0.899438564835513 cos_sim:  0.3368260592786598
+epoch:  62 loss: -23005.176 FC_cor:  0.9333942784355317 cos_sim:  0.36351855538571787
 Modelparam_lr:  0.038261241371755746
 Hyperparam_lr:  0.0009565310342938936
-epoch:  63 loss: -23041.926 FC_cor:  0.9559181572052995 cos_sim:  0.4011166007598384
+epoch:  63 loss: -23041.926 FC_cor:  0.9193892905390687 cos_sim:  0.3448313332001902
 Modelparam_lr:  0.037459541737161775
 Hyperparam_lr:  0.0009364885434290444
-epoch:  64 loss: -23077.762 FC_cor:  0.8762711467398543 cos_sim:  0.3226020957801201
+epoch:  64 loss: -23077.762 FC_cor:  0.9443049496484955 cos_sim:  0.38985523075148754
 Modelparam_lr:  0.036640416446675754
 Hyperparam_lr:  0.0009160104111668938
-epoch:  65 loss: -23112.703 FC_cor:  0.9289870702369004 cos_sim:  0.39867627741409617
+epoch:  65 loss: -23112.703 FC_cor:  0.9142856595846547 cos_sim:  0.3756609749595189
 Modelparam_lr:  0.03580501112108436
 Hyperparam_lr:  0.000895125278027109
-epoch:  66 loss: -23146.727 FC_cor:  0.9246477959442414 cos_sim:  0.4022978324142131
+epoch:  66 loss: -23146.729 FC_cor:  0.9274424305727984 cos_sim:  0.4199138063763056
 Modelparam_lr:  0.03495449415027546
 Hyperparam_lr:  0.0008738623537568865
-epoch:  67 loss: -23179.82 FC_cor:  0.936136687937411 cos_sim:  0.42972525455258026
+epoch:  67 loss: -23179.822 FC_cor:  0.951039837949356 cos_sim:  0.42155950040714374
 Modelparam_lr:  0.0340900550591392
 Hyperparam_lr:  0.00085225137647848
-epoch:  68 loss: -23211.996 FC_cor:  0.929699959685562 cos_sim:  0.4295550156717474
+epoch:  68 loss: -23211.994 FC_cor:  0.9004875849800519 cos_sim:  0.40739956328172855
 Modelparam_lr:  0.033212902843909875
 Hyperparam_lr:  0.0008303225710977469
-epoch:  69 loss: -23243.254 FC_cor:  0.9388897509919287 cos_sim:  0.45550248406421706
+epoch:  69 loss: -23243.244 FC_cor:  0.9460543594612341 cos_sim:  0.4506982494784656
 Modelparam_lr:  0.03232426428127542
 Hyperparam_lr:  0.0008081066070318853
-epoch:  70 loss: -23273.59 FC_cor:  0.9333319867520364 cos_sim:  0.4548360907376701
+epoch:  70 loss: -23273.582 FC_cor:  0.9382118006839396 cos_sim:  0.43329916364538357
 Modelparam_lr:  0.03142538221261919
 Hyperparam_lr:  0.0007856345553154797
-epoch:  71 loss: -23302.982 FC_cor:  0.9452768987270214 cos_sim:  0.4823784924446418
+epoch:  71 loss: -23302.98 FC_cor:  0.9430209942007165 cos_sim:  0.46433460684296657
 Modelparam_lr:  0.030517513805794035
 Hyperparam_lr:  0.0007629378451448508
-epoch:  72 loss: -23331.45 FC_cor:  0.9344064864716536 cos_sim:  0.4787023957889921
+epoch:  72 loss: -23331.441 FC_cor:  0.9538933475330003 cos_sim:  0.5079710734859235
 Modelparam_lr:  0.029601928796859227
 Hyperparam_lr:  0.0007400482199214806
-epoch:  73 loss: -23358.996 FC_cor:  0.952302126587253 cos_sim:  0.5057169476530081
+epoch:  73 loss: -23359.006 FC_cor:  0.9377489669158761 cos_sim:  0.47658095663913413
 Modelparam_lr:  0.02867990771423993
 Hyperparam_lr:  0.0007169976928559982
-epoch:  74 loss: -23385.62 FC_cor:  0.9344418476918993 cos_sim:  0.49842507239247863
+epoch:  74 loss: -23385.615 FC_cor:  0.947593105765742 cos_sim:  0.5141326127283026
 Modelparam_lr:  0.027752740087792254
 Hyperparam_lr:  0.0006938185021948064
-epoch:  75 loss: -23411.32 FC_cor:  0.9579816349336383 cos_sim:  0.5342124210037089
+epoch:  75 loss: -23411.318 FC_cor:  0.9594022747907587 cos_sim:  0.5181470750405612
 Modelparam_lr:  0.02682172264527928
 Hyperparam_lr:  0.000670543066131982
-epoch:  76 loss: -23436.084 FC_cor:  0.9371064351690623 cos_sim:  0.5223376037143133
+epoch:  76 loss: -23436.094 FC_cor:  0.9515491546504344 cos_sim:  0.5341340261474953
 Modelparam_lr:  0.025888157498779926
 Hyperparam_lr:  0.0006472039374694981
-epoch:  77 loss: -23459.96 FC_cor:  0.9595811445375064 cos_sim:  0.5595332497948323
+epoch:  77 loss: -23459.959 FC_cor:  0.9581685257282267 cos_sim:  0.5506272690611612
 Modelparam_lr:  0.02495335032356752
 Hyperparam_lr:  0.000623833758089188
-epoch:  78 loss: -23482.912 FC_cor:  0.945875320087816 cos_sim:  0.554338379334057
+epoch:  78 loss: -23482.918 FC_cor:  0.9519105653635378 cos_sim:  0.5600312969525876
 Modelparam_lr:  0.024018608532004868
 Hyperparam_lr:  0.0006004652133001217
-epoch:  79 loss: -23504.963 FC_cor:  0.9616307843638288 cos_sim:  0.584672437341135
+epoch:  79 loss: -23504.97 FC_cor:  0.9635907994440219 cos_sim:  0.5790736094762824
 Modelparam_lr:  0.023085239445009797
 Hyperparam_lr:  0.0005771309861252449
-epoch:  80 loss: -23526.107 FC_cor:  0.9542683287483388 cos_sim:  0.5858815389744405
+epoch:  80 loss: -23526.111 FC_cor:  0.9576272028146414 cos_sim:  0.5898821969278016
 Modelparam_lr:  0.02215454846364872
 Hyperparam_lr:  0.000553863711591218
-epoch:  81 loss: -23546.37 FC_cor:  0.9646927183929678 cos_sim:  0.6091806759708931
+epoch:  81 loss: -23546.371 FC_cor:  0.9661604855335925 cos_sim:  0.6008011296521445
 Modelparam_lr:  0.021227837243415097
 Hyperparam_lr:  0.0005306959310853774
-epoch:  82 loss: -23565.75 FC_cor:  0.9602954356070849 cos_sim:  0.6133501122798488
+epoch:  82 loss: -23565.75 FC_cor:  0.9590559800174547 cos_sim:  0.597136940132431
 Modelparam_lr:  0.020306401873746653
 Hyperparam_lr:  0.0005076600468436663
-epoch:  83 loss: -23584.27 FC_cor:  0.9664584155843199 cos_sim:  0.6307834605425156
+epoch:  83 loss: -23584.273 FC_cor:  0.9691827186723359 cos_sim:  0.6216227599085025
 Modelparam_lr:  0.01939153106532699
 Hyperparam_lr:  0.00048478827663317475
-epoch:  84 loss: -23601.914 FC_cor:  0.9653583872252226 cos_sim:  0.6384201049796623
+epoch:  84 loss: -23601.91 FC_cor:  0.9539311743551919 cos_sim:  0.6303737028291305
 Modelparam_lr:  0.018484504347707226
 Hyperparam_lr:  0.00046211260869268066
-epoch:  85 loss: -23618.701 FC_cor:  0.9678887723396479 cos_sim:  0.6502773169971767
+epoch:  85 loss: -23618.701 FC_cor:  0.9700818826539064 cos_sim:  0.6339217802172175
 Modelparam_lr:  0.017586590279768225
 Hyperparam_lr:  0.0004396647569942057
-epoch:  86 loss: -23634.674 FC_cor:  0.9683630414666554 cos_sim:  0.6591589331998159
+epoch:  86 loss: -23634.676 FC_cor:  0.9628430706404432 cos_sim:  0.6391797578277665
 Modelparam_lr:  0.016699044675526267
 Hyperparam_lr:  0.0004174761168881567
-epoch:  87 loss: -23649.8 FC_cor:  0.9695737144898366 cos_sim:  0.66787646124295
+epoch:  87 loss: -23649.812 FC_cor:  0.9652891655554738 cos_sim:  0.6571238870824199
 Modelparam_lr:  0.015823108847763587
 Hyperparam_lr:  0.0003955777211940898
-epoch:  88 loss: -23664.137 FC_cor:  0.9705048807552479 cos_sim:  0.6751499095650058
+epoch:  88 loss: -23664.139 FC_cor:  0.9703548128808509 cos_sim:  0.6676502568151685
 Modelparam_lr:  0.014960007871940252
 Hyperparam_lr:  0.0003740001967985063
-epoch:  89 loss: -23677.646 FC_cor:  0.97148525371212 cos_sim:  0.6820417134113967
+epoch:  89 loss: -23677.645 FC_cor:  0.9695574599924093 cos_sim:  0.6787096453116739
 Modelparam_lr:  0.014110948872815285
 Hyperparam_lr:  0.00035277372182038213
-epoch:  90 loss: -23690.39 FC_cor:  0.9728031237442155 cos_sim:  0.6902990770203572
+epoch:  90 loss: -23690.398 FC_cor:  0.966623079401563 cos_sim:  0.6749883233796261
 Modelparam_lr:  0.01327711933617361
 Hyperparam_lr:  0.00033192798340434026
-epoch:  91 loss: -23702.357 FC_cor:  0.9732254686937548 cos_sim:  0.6961216797546659
+epoch:  91 loss: -23702.363 FC_cor:  0.9713031026779863 cos_sim:  0.6898190024772783
 Modelparam_lr:  0.012459685448019765
 Hyperparam_lr:  0.00031149213620049415
-epoch:  92 loss: -23713.588 FC_cor:  0.9740450555783555 cos_sim:  0.7023713638659889
+epoch:  92 loss: -23713.578 FC_cor:  0.9734120366357756 cos_sim:  0.6841097813449442
 Modelparam_lr:  0.011659790463561305
 Hyperparam_lr:  0.00029149476158903267
-epoch:  93 loss: -23724.082 FC_cor:  0.9748969544554301 cos_sim:  0.7080517043468089
+epoch:  93 loss: -23724.088 FC_cor:  0.9694277903322319 cos_sim:  0.6929594907650637
 Modelparam_lr:  0.010878553108263078
 Hyperparam_lr:  0.00027196382770657695
-epoch:  94 loss: -23733.848 FC_cor:  0.9751554266408838 cos_sim:  0.7130213490070972
+epoch:  94 loss: -23733.85 FC_cor:  0.9721136800904278 cos_sim:  0.7067403882284602
 Modelparam_lr:  0.010117066013208437
 Hyperparam_lr:  0.0002529266503302109
-epoch:  95 loss: -23742.947 FC_cor:  0.9757989247933723 cos_sim:  0.7171261456342116
+epoch:  95 loss: -23742.95 FC_cor:  0.9715677091736861 cos_sim:  0.702572310139663
 Modelparam_lr:  0.009376394186955926
 Hyperparam_lr:  0.0002344098546738981
-epoch:  96 loss: -23751.346 FC_cor:  0.9761729834921749 cos_sim:  0.7215072638632636
+epoch:  96 loss: -23751.342 FC_cor:  0.9749302553684748 cos_sim:  0.7026869691108941
 Modelparam_lr:  0.008657573526028488
 Hyperparam_lr:  0.00021643933815071215
-epoch:  97 loss: -23759.104 FC_cor:  0.9764319048423815 cos_sim:  0.7245055496976085
+epoch:  97 loss: -23759.107 FC_cor:  0.9739980230742448 cos_sim:  0.7081217281267546
 Modelparam_lr:  0.007961609366118472
 Hyperparam_lr:  0.0001990402341529618
-epoch:  98 loss: -23766.225 FC_cor:  0.9768204197083594 cos_sim:  0.7291944185019532
+epoch:  98 loss: -23766.227 FC_cor:  0.9745218999829317 cos_sim:  0.715251324514036
 Modelparam_lr:  0.00728947507603484
 Hyperparam_lr:  0.000182236876900871
-epoch:  99 loss: -23772.73 FC_cor:  0.9771870589469374 cos_sim:  0.7314549940362765
+epoch:  99 loss: -23772.732 FC_cor:  0.975470791372046 cos_sim:  0.7200793561495882
 Modelparam_lr:  0.006642110696358811
 Hyperparam_lr:  0.00016605276740897025
-epoch:  100 loss: -23778.65 FC_cor:  0.9774628155508898 cos_sim:  0.7338181590700377
+epoch:  100 loss: -23778.65 FC_cor:  0.975349110648153 cos_sim:  0.7178640601046103
 Modelparam_lr:  0.0060204216247121065
 Hyperparam_lr:  0.00015051054061780266
-epoch:  101 loss: -23784.014 FC_cor:  0.9777655972451545 cos_sim:  0.7367899608658517
+epoch:  101 loss: -23784.006 FC_cor:  0.9773407438373041 cos_sim:  0.7163996156571635
 Modelparam_lr:  0.005425277349476554
 Hyperparam_lr:  0.00013563193373691384
 </pre></div>
@@ -625,7 +645,7 @@ Hyperparam_lr:  0.00013563193373691384
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9795081751955643 cos_sim:  0.7345035763669854
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9780873889552911 cos_sim:  0.7216228283103087
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -652,7 +672,7 @@ Hyperparam_lr:  0.00013563193373691384
 </pre></div>
 </div>
 <img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_002.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 23 minutes  18.965 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 42 minutes  57.022 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/96a042e39a4f43abe4e10ca8c12118f5/eg004r__fitting_JR_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg004r__fitting_JR_example.py</span></code></a></p>
