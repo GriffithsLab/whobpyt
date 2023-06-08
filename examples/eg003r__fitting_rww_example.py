@@ -60,7 +60,7 @@ sub = '100307'
 # define options for wong-wang model
 node_size = 83
 mask = np.tril_indices(node_size, -1)
-num_epoches = 15
+num_epoches = 5
 batch_size = 20
 step_size = 0.05
 input_size = 2
@@ -120,10 +120,10 @@ F.test(20)
 # Plot SC and fitted SC
 
 fig, ax = plt.subplots(1, 2, figsize=(5, 4))
-im0 = ax[0].imshow(sc, cmap='bwr')
+im0 = ax[0].imshow(sc, cmap='bwr', vmin = 0.0, vmax = 0.05)
 ax[0].set_title('The empirical SC')
 fig.colorbar(im0, ax=ax[0], fraction=0.046, pad=0.04)
-im1 = ax[1].imshow(F.model.sc_fitted.detach().numpy(), cmap='bwr')
+im1 = ax[1].imshow(F.model.sc_fitted.detach().numpy(), cmap='bwr', vmin = 0.0, vmax = 0.05)
 ax[1].set_title('The fitted SC')
 fig.colorbar(im1, ax=ax[1], fraction=0.046, pad=0.04)
 plt.show()

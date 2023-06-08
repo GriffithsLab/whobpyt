@@ -253,7 +253,7 @@ print(list(model.named_parameters()))
 #
 
 randdata = np.random.rand(15000, 8)
-num_epochs = 20
+num_epochs = 5
 TRperwindow = 15000
 randTS = dataloader(randdata, num_epochs, TRperwindow)
 
