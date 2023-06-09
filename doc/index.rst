@@ -17,7 +17,15 @@ Welcome to WhoBPyT documentation!
    :glob:
  
    getting_started/installation
-   
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API
+   :glob:
+
+   API/models
+   API/optimization
+
 .. toctree::
    :maxdepth: 1
    :caption: Examples
