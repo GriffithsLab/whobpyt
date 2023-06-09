@@ -20,7 +20,7 @@ sys.path.append('..')
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data import dataloader
+from whobpyt.data import recordings
 from whobpyt.datatypes import par
 from whobpyt.models.RWW import RNNRWW, ParamsRWW
 from whobpyt.optimization import Model_fitting
@@ -83,9 +83,12 @@ ts = ts_pd.values
 ts = ts / np.max(ts)
 fc_emp = np.corrcoef(ts.T)
 
+
 # %%
 # prepare data structure of the model
-data_mean = dataloader(ts, num_epoches, batch_size)
+print(ts.shape)
+fMRIstep = 1 #TODO: Update
+data_mean = recordings(ts, fMRIstep) #dataloader(ts, num_epoches, batch_size)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
@@ -106,7 +109,7 @@ ObjFun = CostsRWW()
 
 # %%
 # call model fit
-F = Model_fitting(model, data_mean, num_epoches, ObjFun)
+F = Model_fitting(model, data_mean.windowedTensor(batch_size, num_epoches), num_epoches, ObjFun)
 
 # %%
 # model training
@@ -114,7 +117,7 @@ F.train(learningrate= 0.05)
 
 # %%
 # model test with 20 window for warmup
-F.test(20)
+F.evaluate(20)
 
 # %%
 # Plot SC and fitted SC

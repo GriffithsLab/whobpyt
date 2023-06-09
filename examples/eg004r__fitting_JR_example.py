@@ -22,7 +22,7 @@ sys.path.append('..')
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data import dataloader
+from whobpyt.data import recordings
 from whobpyt.datatypes import par
 from whobpyt.models.JansenRit import RNNJANSEN, ParamsJR
 from whobpyt.optimization import Model_fitting
@@ -93,7 +93,9 @@ hidden_size = int(tr/step_size)
 
 # %%
 # prepare data structure of the model
-data_mean = dataloader(eeg_data.T, num_epoches, batch_size)
+print(eeg_data.T.shape)
+EEGstep = 1 #TODO: Update
+data_mean = recordings(eeg_data.T, EEGstep) #dataloader(eeg_data.T, num_epoches, batch_size)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
@@ -120,7 +122,7 @@ ObjFun = CostsJR()
 
 # %%
 # call model fit
-F = Model_fitting(model, data_mean, num_epoches, ObjFun)
+F = Model_fitting(model, data_mean.windowedTensor(batch_size, num_epoches), num_epoches, ObjFun)
 
 # %%
 # model training
@@ -130,7 +132,7 @@ F.train(u=u, epoch_min = 100, r_lb = 0.95)
 
 # %%
 # model test with 20 window for warmup
-F.test(200, u =u)
+F.evaluate(200, u =u)
 
 # %%
 # Plot SC and fitted SC

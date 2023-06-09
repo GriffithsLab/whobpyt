@@ -226,7 +226,7 @@ class Model_fitting:
         for key, value in fit_param.items():
             setattr(self.output_sim, key, np.array(value))
 
-    def test(self, base_window_num, u=0):
+    def evaluate(self, base_window_num, u=0):
         """
         Parameters
         ----------

@@ -10,7 +10,7 @@ class par:
     # It has method to set a random val using based on priors
     # It has functionality to represent val as log(val) so that during training val will be constrained to be positive
 
-    def __init__(self, val, prior_mean = None, prior_var = None, fit_par = False, fit_hyper = False, asLog = False):
+    def __init__(self, val, prior_mean = None, prior_var = None, fit_par = False, fit_hyper = False, asLog = False, isPlastic = False):
         
         if numpy.all(prior_mean != None) & numpy.all(prior_var != None) & (asLog == False):
             self.has_prior = True
@@ -32,6 +32,8 @@ class par:
         self.prior_var = torch.tensor(prior_var, dtype=torch.float32)
         self.fit_par = fit_par
         self.fit_hyper = fit_hyper
+        
+        self.isPlastic = isPlastic #Custom functionality, may not be compatible with other features
         
         if fit_par:
             self.val = torch.nn.parameter.Parameter(self.val)

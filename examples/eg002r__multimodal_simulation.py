@@ -24,7 +24,7 @@ What is being modeled:
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data import dataloader
+from whobpyt.data import recordings
 from whobpyt.models.RWW2 import mmRWW2, mmRWW2_np, RWW2, RWW2_np, ParamsRWW2
 from whobpyt.models.BOLD import BOLD_Layer, BOLD_np, BOLD_Params
 from whobpyt.models.EEG import EEG_Layer, EEG_np, EEG_Params
@@ -254,11 +254,14 @@ print(list(model.named_parameters()))
 
 randdata = np.random.rand(15000, 8)
 num_epochs = 5
-TRperwindow = 15000
-randTS = dataloader(randdata, num_epochs, TRperwindow)
+num_recordings = 5
+TPperWindow = 15000
+
+print(randdata.shape)
+randTS = recordings(randdata, step_size) #dataloader(randdata, num_epochs, TRperwindow)
 
 # call model fit
-F = Model_fitting(model, randTS, num_epochs, ObjFun)
+F = Model_fitting(model, randTS.windowedTensor(TPperWindow, num_recordings), num_epochs, ObjFun)
 
 # %%
 # model training
@@ -266,7 +269,7 @@ F.train(learningrate= 0.1, lr_scheduler = False)
 
 # %%
 # model test with 20 window for warmup
-F.test(0)
+F.evaluate(0)
 
 
 #LossComp = list()
