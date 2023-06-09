@@ -1,0 +1,637 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>whobpyt.models.JansenRit.jansen_rit &mdash; WhoBPyT 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/sphinx_tabs/tabs.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_override.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script src="../../../../_static/sphinx_tabs/tabs.js"></script>
+        <script src="../../../../_static/clipboard.min.js"></script>
+        <script src="../../../../_static/copybutton.js"></script>
+        <script src="../../../../_static/debug.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> WhoBPyT
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/optimization.html">Optimization</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-loss-over-training">Plots of loss over Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-j-values-over-training">Plots of J values over Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg003r__fitting_rww_example.html#importage">Importage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/eg004r__fitting_JR_example.html">Fitting JR model (Tepit data)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">WhoBPyT</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>whobpyt.models.JansenRit.jansen_rit</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for whobpyt.models.JansenRit.jansen_rit</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather</span>
+<span class="sd">Neural Mass Model fitting</span>
+<span class="sd">module for JR with forward backward and lateral connection for EEG</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># @title new function PyTepFit</span>
+
+<span class="c1"># Pytorch stuff</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Importage</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.nn.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">AbstractNMM</span><span class="p">,</span> <span class="n">par</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit</span> <span class="kn">import</span> <span class="n">ParamsJR</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># for numerical operations</span>
+
+
+<div class="viewcode-block" id="RNNJANSEN"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.JansenRit.RNNJANSEN">[docs]</a><span class="k">class</span> <span class="nc">RNNJANSEN</span><span class="p">(</span><span class="n">AbstractNMM</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A module for forward model (JansenRit) to simulate a batch of EEG signals</span>
+<span class="sd">    Attibutes</span>
+<span class="sd">    ---------</span>
+<span class="sd">    state_size : int</span>
+<span class="sd">        the number of states in the JansenRit model</span>
+<span class="sd">    input_size : int</span>
+<span class="sd">        the number of states with noise as input</span>
+<span class="sd">    tr : float</span>
+<span class="sd">        tr of image</span>
+<span class="sd">    step_size: float</span>
+<span class="sd">        Integration step for forward model</span>
+<span class="sd">    hidden_size: int</span>
+<span class="sd">        the number of step_size in a tr</span>
+<span class="sd">    TRs_per_window: int</span>
+<span class="sd">        the number of EEG signals to simulate</span>
+<span class="sd">    node_size: int</span>
+<span class="sd">        the number of ROIs</span>
+<span class="sd">    sc: float node_size x node_size array</span>
+<span class="sd">        structural connectivity</span>
+<span class="sd">    fit_gains: bool</span>
+<span class="sd">        flag for fitting gains 1: fit 0: not fit</span>
+<span class="sd">    g, c1, c2, c3,c4: tensor with gradient on</span>
+<span class="sd">        model parameters to be fit</span>
+<span class="sd">    w_bb: tensor with node_size x node_size (grad on depends on fit_gains)</span>
+<span class="sd">        connection gains</span>
+<span class="sd">    std_in std_out: tensor with gradient on</span>
+<span class="sd">        std for state noise and output noise</span>
+<span class="sd">    hyper parameters for prior distribution of model parameters</span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    forward(input, noise_out, hx)</span>
+<span class="sd">        forward model (JansenRit) for generating a number of EEG signals with current model parameters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">TRs_per_window</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">output_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lm</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dist</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">use_fit_gains</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">use_fit_lfm</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ParamsJR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        tr : float</span>
+<span class="sd">            tr of image</span>
+<span class="sd">        step_size: float</span>
+<span class="sd">            Integration step for forward model</span>
+<span class="sd">        </span>
+<span class="sd">        TRs_per_window: int</span>
+<span class="sd">            the number of EEG signals to simulate</span>
+<span class="sd">        node_size: int</span>
+<span class="sd">            the number of ROIs</span>
+<span class="sd">        output_size: int</span>
+<span class="sd">            the number of channels EEG</span>
+<span class="sd">        sc: float node_size x node_size array</span>
+<span class="sd">            structural connectivity</span>
+<span class="sd">        use_fit_gains: bool</span>
+<span class="sd">            flag for fitting gains 1: fit 0: not fit</span>
+<span class="sd">        use_fit_lfm: bool</span>
+<span class="sd">            flag for fitting gains 1: fit 0: not fit</span>
+<span class="sd">        param from ParamJR</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RNNJANSEN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;Ev&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;Iv&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;Pv&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;eeg&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;JR&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_size</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># 6 states JR model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tr</span> <span class="o">=</span> <span class="n">tr</span>  <span class="c1"># tr ms (integration step 0.1 ms)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">step_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># integration step 0.1 ms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">steps_per_TR</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tr</span> <span class="o">/</span> <span class="n">step_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TRs_per_window</span> <span class="o">=</span> <span class="n">TRs_per_window</span>  <span class="c1"># size of the batch used at each step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_size</span> <span class="o">=</span> <span class="n">node_size</span>  <span class="c1"># num of ROI</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>  <span class="c1"># num of EEG channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sc</span> <span class="o">=</span> <span class="n">sc</span>  <span class="c1"># matrix node_size x node_size structure connectivity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lm</span> <span class="o">=</span> <span class="n">lm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_fit_gains</span> <span class="o">=</span> <span class="n">use_fit_gains</span>  <span class="c1"># flag for fitting gains</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_fit_lfm</span> <span class="o">=</span> <span class="n">use_fit_lfm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># number of EEG channels</span>
+
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;state_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;Ev&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;Iv&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;Pv&#39;</span><span class="p">],</span> <span class="s2">&quot;output_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;eeg&quot;</span><span class="p">]}</span>
+    
+    <span class="k">def</span> <span class="nf">createIC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ver</span><span class="p">):</span>
+        <span class="c1"># initial state</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ver</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">state_lb</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">state_ub</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ver</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">state_lb</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">state_ub</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">state_lb</span><span class="p">,</span> <span class="n">state_ub</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_size</span><span class="p">)),</span>
+                             <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                             
+    <span class="k">def</span> <span class="nf">createDelayIC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ver</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ver</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">delays_max</span> <span class="o">=</span> <span class="mi">500</span>
+            <span class="n">state_ub</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">state_lb</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ver</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">state_lb</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">state_ub</span> <span class="o">=</span> <span class="mi">5</span>
+            <span class="n">delays_max</span> <span class="o">=</span> <span class="mi">500</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">state_lb</span><span class="p">,</span> <span class="n">state_ub</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">delays_max</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># set states E I f v mean and 1/sqrt(variance)</span>
+        <span class="k">return</span> <span class="n">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RNNJANSEN.forward"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.JansenRit.RNNJANSEN.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external</span><span class="p">,</span> <span class="n">hx</span><span class="p">,</span> <span class="n">hE</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">integration_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external</span><span class="p">,</span> <span class="n">hx</span><span class="p">,</span> <span class="n">hE</span><span class="p">)</span></div></div>
+
+<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">vmax</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="p">(</span><span class="n">v0</span> <span class="o">-</span> <span class="n">x</span><span class="p">)))</span>
+    
+<span class="k">def</span> <span class="nf">sys2nd</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">u</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">v</span> <span class="o">-</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span>
+
+<span class="k">def</span> <span class="nf">setModelParameters</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="n">param_reg</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">param_hyper</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># set model parameters (variables: need to calculate gradient) as Parameter others : tensor</span>
+    <span class="c1"># set w_bb as Parameter if fit_gain is True</span>
+    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">use_fit_gains</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">w_bb</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">,</span>
+                                            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>  <span class="c1"># connenction gain to modify empirical sc</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">w_ff</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">,</span>
+                                            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">w_ll</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">,</span>
+                                            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+        <span class="n">param_reg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">w_ll</span><span class="p">)</span>
+        <span class="n">param_reg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">w_ff</span><span class="p">)</span>
+        <span class="n">param_reg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">w_bb</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">w_bb</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">w_ff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">w_ll</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="c1"># This gets overwritten if the lm is in the parameters object as well with a variance</span>
+    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">use_fit_lfm</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">lm</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">lm</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>  <span class="c1"># leadfield matrix from sourced data to eeg</span>
+        <span class="n">param_reg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">lm</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">lm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">lm</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># leadfield matrix from sourced data to eeg</span>
+
+    <span class="n">var_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span> <span class="o">==</span> <span class="n">par</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">var_names</span><span class="p">:</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">fit_hyper</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s1">&#39;lm&#39;</span><span class="p">:</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">prior_var</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">var</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span> <span class="c1"># TODO: This is not consistent with what user would expect giving a variance </span>
+                <span class="n">param_hyper</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">)</span>
+                <span class="n">param_hyper</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">prior_var</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">var</span> <span class="o">!=</span> <span class="s1">&#39;std_in&#39;</span><span class="p">):</span>
+                <span class="n">var</span><span class="o">.</span><span class="n">randSet</span><span class="p">()</span> <span class="c1">#TODO: This should be done before giving params to model class</span>
+                <span class="n">param_hyper</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">)</span>
+                <span class="n">param_hyper</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">prior_var</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">fit_par</span><span class="p">):</span>
+            <span class="n">param_reg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">val</span><span class="p">)</span> <span class="c1">#TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">var</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>    
+            
+    <span class="n">model</span><span class="o">.</span><span class="n">params_fitted</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;modelparameter&#39;</span><span class="p">:</span> <span class="n">param_reg</span><span class="p">,</span><span class="s1">&#39;hyperparameter&#39;</span><span class="p">:</span> <span class="n">param_hyper</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">integration_forward</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">external</span><span class="p">,</span> <span class="n">hx</span><span class="p">,</span> <span class="n">hE</span><span class="p">):</span>
+
+    <span class="c1"># define some constants</span>
+    <span class="n">conduct_lb</span> <span class="o">=</span> <span class="mf">1.5</span>  <span class="c1"># lower bound for conduct velocity</span>
+    <span class="n">u_2ndsys_ub</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># the bound of the input for second order system</span>
+    <span class="n">noise_std_lb</span> <span class="o">=</span> <span class="mi">150</span>  <span class="c1"># lower bound of std of noise</span>
+    <span class="n">lb</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># lower bound of local gains</span>
+    <span class="n">s2o_coef</span> <span class="o">=</span> <span class="mf">0.0001</span>  <span class="c1"># coefficient from states (source EEG) to EEG</span>
+    <span class="n">k_lb</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># lower bound of coefficient of external inputs</span>
+
+    <span class="n">next_state</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="n">hx</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># current of main population</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">hx</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># current of excitory population</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">hx</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># current of inhibitory population</span>
+
+    <span class="n">Mv</span> <span class="o">=</span> <span class="n">hx</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>  <span class="c1"># voltage of main population</span>
+    <span class="n">Ev</span> <span class="o">=</span> <span class="n">hx</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>  <span class="c1"># voltage of exictory population</span>
+    <span class="n">Iv</span> <span class="o">=</span> <span class="n">hx</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>  <span class="c1"># voltage of inhibitory population</span>
+
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">step_size</span>
+    <span class="c1"># Generate the ReLU module for model parameters gEE gEI and gIE</span>
+
+    <span class="n">m</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+    <span class="c1"># define constant 1 tensor</span>
+    <span class="n">con_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+
+        <span class="c1"># Update the Laplacian based on the updated connection gains w_bb.</span>
+        <span class="n">w_b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">w_bb</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">sc</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">w_n_b</span> <span class="o">=</span> <span class="n">w_b</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w_b</span><span class="p">)</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">sc_m_b</span> <span class="o">=</span> <span class="n">w_n_b</span>
+        <span class="n">dg_b</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_n_b</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Update the Laplacian based on the updated connection gains w_bb.</span>
+        <span class="n">w_f</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">w_ff</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">sc</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">w_n_f</span> <span class="o">=</span> <span class="n">w_f</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w_f</span><span class="p">)</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">sc_m_f</span> <span class="o">=</span> <span class="n">w_n_f</span>
+        <span class="n">dg_f</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_n_f</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Update the Laplacian based on the updated connection gains w_bb.</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">w_ll</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">sc</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">w_n_l</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span>
+            <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">sc_fitted</span> <span class="o">=</span> <span class="n">w_n_l</span>
+        <span class="n">dg_l</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_n_l</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">l_s</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">dg_l</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">dg_b</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">dg_f</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">w_n_l</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">w_n_b</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">w_n_f</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">delays</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">dist</span> <span class="o">/</span> <span class="p">(</span><span class="n">conduct_lb</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">mu</span><span class="p">)))</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="c1"># print(torch.max(model.delays), model.delays.shape)</span>
+
+    <span class="c1"># placeholder for the updated current state</span>
+    <span class="n">current_state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">hx</span><span class="p">)</span>
+
+    <span class="c1"># placeholders for output BOLD, history of E I x f v and q</span>
+    <span class="n">eeg_window</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">E_window</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">I_window</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">M_window</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Ev_window</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Iv_window</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Mv_window</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Use the forward model to get EEG signal at ith element in the window.</span>
+    <span class="k">for</span> <span class="n">i_window</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">step_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">steps_per_TR</span><span class="p">):</span>
+            <span class="n">Ed</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># delayed E</span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;for ind in range(model.node_size):</span>
+<span class="sd">                #print(ind, hE[ind,:].shape, model.delays[ind,:].shape)</span>
+<span class="sd">                Ed[ind] = torch.index_select(hE[ind,:], 0, model.delays[ind,:])&quot;&quot;&quot;</span>
+            <span class="n">hE_new</span> <span class="o">=</span> <span class="n">hE</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+            <span class="n">Ed</span> <span class="o">=</span> <span class="n">hE_new</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">delays</span><span class="p">)</span>  <span class="c1"># delayed E</span>
+
+            <span class="n">LEd_b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_n_b</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Ed</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span>
+                                  <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># weights on delayed E</span>
+            <span class="n">LEd_f</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_n_f</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Ed</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span>
+                                  <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># weights on delayed E</span>
+            <span class="n">LEd_l</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_n_l</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Ed</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span>
+                                  <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># weights on delayed E</span>
+            <span class="c1"># Input noise for M.</span>
+
+            <span class="n">u_tms</span> <span class="o">=</span> <span class="n">external</span><span class="p">[:,</span> <span class="n">step_i</span><span class="p">:</span><span class="n">step_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i_window</span><span class="p">]</span>
+            <span class="c1">#u_aud = external[:, i_hidden:i_hidden + 1, i_window, 1]</span>
+            <span class="c1">#u_0 = external[:, i_hidden:i_hidden + 1, i_window, 2]</span>
+
+            <span class="c1"># LEd+torch.matmul(dg,E): Laplacian on delayed E</span>
+
+            <span class="n">rM</span> <span class="o">=</span> <span class="p">(</span><span class="n">k_lb</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">k</span><span class="p">))</span> <span class="o">*</span> <span class="n">model</span><span class="o">.</span><span class="n">ki</span> <span class="o">*</span> <span class="n">u_tms</span> <span class="o">+</span> \
+                 <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">std_in</span><span class="p">))</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+                 <span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">lb</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">g</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span>
+                         <span class="n">LEd_l</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">dg_l</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span> <span class="o">+</span> \
+                 <span class="n">sigmoid</span><span class="p">(</span><span class="n">E</span> <span class="o">-</span> <span class="n">I</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">vmax</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>  <span class="c1"># firing rate for Main population</span>
+            <span class="n">rE</span> <span class="o">=</span> <span class="p">(</span><span class="mf">.1</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">std_in</span><span class="p">))</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+                 <span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">lb</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">g_f</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">LEd_f</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">dg_f</span><span class="p">,</span> <span class="n">E</span> <span class="o">-</span> <span class="n">I</span><span class="p">))</span> <span class="o">+</span> \
+                 <span class="p">(</span><span class="n">lb</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">c2</span><span class="p">))</span> <span class="o">*</span> <span class="n">sigmoid</span><span class="p">((</span><span class="n">lb</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">c1</span><span class="p">))</span> <span class="o">*</span> <span class="n">M</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">vmax</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span>
+                                                      <span class="n">model</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>  <span class="c1"># firing rate for Excitory population</span>
+            <span class="n">rI</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">std_in</span><span class="p">))</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+                 <span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">lb</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">g_b</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">LEd_b</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">dg_b</span><span class="p">,</span> <span class="n">E</span> <span class="o">-</span> <span class="n">I</span><span class="p">))</span> <span class="o">+</span> \
+                 <span class="p">(</span><span class="n">lb</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">c4</span><span class="p">))</span> <span class="o">*</span> <span class="n">sigmoid</span><span class="p">((</span><span class="n">lb</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">c3</span><span class="p">))</span> <span class="o">*</span> <span class="n">M</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">vmax</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span>
+                                                      <span class="n">model</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>  <span class="c1"># firing rate for Inhibitory population</span>
+
+            <span class="c1"># Update the states by step-size.</span>
+            <span class="n">ddM</span> <span class="o">=</span> <span class="n">M</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">Mv</span>
+            <span class="n">ddE</span> <span class="o">=</span> <span class="n">E</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">Ev</span>
+            <span class="n">ddI</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">Iv</span>
+            <span class="n">ddMv</span> <span class="o">=</span> <span class="n">Mv</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">sys2nd</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">A</span><span class="p">),</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span>
+                                    <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">a</span><span class="p">),</span>
+                                    <span class="n">u_2ndsys_ub</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">rM</span> <span class="o">/</span> <span class="n">u_2ndsys_ub</span><span class="p">),</span> <span class="n">M</span><span class="p">,</span> <span class="n">Mv</span><span class="p">)</span>
+
+            <span class="n">ddEv</span> <span class="o">=</span> <span class="n">Ev</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">sys2nd</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">A</span><span class="p">),</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span>
+                                    <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">a</span><span class="p">),</span>
+                                    <span class="n">u_2ndsys_ub</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">rE</span> <span class="o">/</span> <span class="n">u_2ndsys_ub</span><span class="p">),</span> <span class="n">E</span><span class="p">,</span> <span class="n">Ev</span><span class="p">)</span>
+
+            <span class="n">ddIv</span> <span class="o">=</span> <span class="n">Iv</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">sys2nd</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">B</span><span class="p">),</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">con_1</span> <span class="o">+</span> <span class="n">m</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">b</span><span class="p">),</span>
+                                    <span class="n">u_2ndsys_ub</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">rI</span> <span class="o">/</span> <span class="n">u_2ndsys_ub</span><span class="p">),</span> <span class="n">I</span><span class="p">,</span> <span class="n">Iv</span><span class="p">)</span>
+
+            <span class="c1"># Calculate the saturation for model states (for stability and gradient calculation).</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="n">ddE</span>  <span class="c1"># 1000*torch.tanh(ddE/1000)#torch.tanh(0.00001+torch.nn.functional.relu(ddE))</span>
+            <span class="n">I</span> <span class="o">=</span> <span class="n">ddI</span>  <span class="c1"># 1000*torch.tanh(ddI/1000)#torch.tanh(0.00001+torch.nn.functional.relu(ddI))</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">ddM</span>  <span class="c1"># 1000*torch.tanh(ddM/1000)</span>
+            <span class="n">Ev</span> <span class="o">=</span> <span class="n">ddEv</span>  <span class="c1"># 1000*torch.tanh(ddEv/1000)#(con_1 + torch.tanh(df - con_1))</span>
+            <span class="n">Iv</span> <span class="o">=</span> <span class="n">ddIv</span>  <span class="c1"># 1000*torch.tanh(ddIv/1000)#(con_1 + torch.tanh(dv - con_1))</span>
+            <span class="n">Mv</span> <span class="o">=</span> <span class="n">ddMv</span>  <span class="c1"># 1000*torch.tanh(ddMv/1000)#(con_1 + torch.tanh(dq - con_1))</span>
+
+            <span class="c1"># update placeholders for E buffer</span>
+            <span class="n">hE</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># hE = torch.cat([M, hE[:, :-1]], axis=1)</span>
+
+        <span class="c1"># Put M E I Mv Ev and Iv at every tr to the placeholders for checking them visually.</span>
+        <span class="n">M_window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">I_window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+        <span class="n">E_window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+        <span class="n">Mv_window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Mv</span><span class="p">)</span>
+        <span class="n">Iv_window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Iv</span><span class="p">)</span>
+        <span class="n">Ev_window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Ev</span><span class="p">)</span>
+        <span class="n">hE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">M</span><span class="p">,</span> <span class="n">hE</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># update placeholders for E buffer</span>
+
+        <span class="c1"># Put the EEG signal each tr to the placeholder being used in the cost calculation.</span>
+        <span class="n">lm_t</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">lm</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">lm</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">lm_t</span> <span class="o">=</span> <span class="p">(</span><span class="n">lm_t</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">model</span><span class="o">.</span><span class="n">output_size</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">output_size</span><span class="p">)),</span>
+                                                                  <span class="n">lm_t</span><span class="p">))</span>  <span class="c1"># s2o_coef *</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cy0</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">lm_t</span><span class="p">,</span> <span class="n">M</span><span class="p">[:</span><span class="mi">200</span><span class="p">,</span> <span class="p">:])</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">model</span><span class="o">.</span><span class="n">y0</span>
+        <span class="n">eeg_window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>  <span class="c1"># torch.abs(E) - torch.abs(I) + 0.0*noiseEEG)</span>
+
+    <span class="c1"># Update the current state.</span>
+    <span class="n">current_state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">M</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">Mv</span><span class="p">,</span> <span class="n">Ev</span><span class="p">,</span> <span class="n">Iv</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">next_state</span><span class="p">[</span><span class="s1">&#39;current_state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_state</span>
+    <span class="n">next_state</span><span class="p">[</span><span class="s1">&#39;eeg_window&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">eeg_window</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">next_state</span><span class="p">[</span><span class="s1">&#39;E_window&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">E_window</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">next_state</span><span class="p">[</span><span class="s1">&#39;I_window&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">I_window</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">next_state</span><span class="p">[</span><span class="s1">&#39;P_window&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">M_window</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">next_state</span><span class="p">[</span><span class="s1">&#39;Ev_window&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">Ev_window</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">next_state</span><span class="p">[</span><span class="s1">&#39;Iv_window&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">Iv_window</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">next_state</span><span class="p">[</span><span class="s1">&#39;Pv_window&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">Mv_window</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">next_state</span><span class="p">,</span> <span class="n">hE</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright KCNI Griffiths Lab &amp; Contributors
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

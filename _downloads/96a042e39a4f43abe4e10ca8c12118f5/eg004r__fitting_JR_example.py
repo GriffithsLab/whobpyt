@@ -80,7 +80,7 @@ node_size = sc.shape[0]
 output_size = eeg_data.shape[0]
 batch_size = 20
 step_size = 0.0001
-num_epoches = 120
+num_epoches = 20
 tr = 0.001
 state_size = 6
 base_batch_num = 200
@@ -136,10 +136,10 @@ F.test(200, u =u)
 # Plot SC and fitted SC
 
 fig, ax = plt.subplots(1, 2, figsize=(5, 4))
-im0 = ax[0].imshow(sc, cmap='bwr')
+im0 = ax[0].imshow(sc, cmap='bwr', vmin = 0.0, vmax = 0.02)
 ax[0].set_title('The empirical SC')
 fig.colorbar(im0, ax=ax[0], fraction=0.046, pad=0.04)
-im1 = ax[1].imshow(F.model.sc_fitted.detach().numpy(), cmap='bwr')
+im1 = ax[1].imshow(F.model.sc_fitted.detach().numpy(), cmap='bwr', vmin = 0.0, vmax = 0.02)
 ax[1].set_title('The fitted SC')
 fig.colorbar(im1, ax=ax[1], fraction=0.046, pad=0.04)
 plt.show()
