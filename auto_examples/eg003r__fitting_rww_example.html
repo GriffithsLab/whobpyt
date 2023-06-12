@@ -234,7 +234,7 @@
 <span class="kn">import</span> <span class="nn">whobpyt</span>
 <span class="kn">from</span> <span class="nn">whobpyt.data</span> <span class="kn">import</span> <span class="n">dataloader</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">par</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.RWW</span> <span class="kn">import</span> <span class="n">RNNRWW</span><span class="p">,</span> <span class="n">ParamsRWW</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.RWW</span> <span class="kn">import</span> <a href="../API/models.html#whobpyt.models.RWW.RNNRWW" title="whobpyt.models.RWW.RNNRWW" class="sphx-glr-backref-module-whobpyt-models-RWW sphx-glr-backref-type-py-class"><span class="n">RNNRWW</span></a><span class="p">,</span> <span class="n">ParamsRWW</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization.custom_cost_RWW</span> <span class="kn">import</span> <span class="n">CostsRWW</span>
 
@@ -273,13 +273,13 @@ From: https://drive.google.com/uc?id=1EOwDLj5SxWpwxEk5MT7cShiMPLszemuq
 To: /home/runner/work/whobpyt/whobpyt/HCP/100307_rfMRI_REST1_LR_hpc200_clean__l2k8_sc33_ts.pkl
 
   0%|          | 0.00/804k [00:00&lt;?, ?B/s]
-100%|##########| 804k/804k [00:00&lt;00:00, 22.2MB/s]
+100%|##########| 804k/804k [00:00&lt;00:00, 26.3MB/s]
 Downloading...
 From: https://drive.google.com/uc?id=1B9U47D19DrQOnNugs8keDNFQha1GfPGv
 To: /home/runner/work/whobpyt/whobpyt/HCP/weights_100307.txt
 
   0%|          | 0.00/172k [00:00&lt;?, ?B/s]
-100%|##########| 172k/172k [00:00&lt;00:00, 8.55MB/s]
+100%|##########| 172k/172k [00:00&lt;00:00, 9.21MB/s]
 Download completed
 </pre></div>
 </div>
@@ -325,11 +325,11 @@ Download completed
 </pre></div>
 </div>
 <p>call model want to fit</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RNNRWW</span><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">repeat_size</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/models.html#whobpyt.models.RWW.RNNRWW" title="whobpyt.models.RWW.RNNRWW" class="sphx-glr-backref-module-whobpyt-models-RWW sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <a href="../API/models.html#whobpyt.models.RWW.RNNRWW" title="whobpyt.models.RWW.RNNRWW" class="sphx-glr-backref-module-whobpyt-models-RWW sphx-glr-backref-type-py-class"><span class="n">RNNRWW</span></a><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">repeat_size</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>initial model parameters and set the fitted model parameter in Tensors</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">setModelParameters</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/models.html#whobpyt.models.RWW.RNNRWW.setModelParameters" title="whobpyt.models.RWW.RNNRWW.setModelParameters" class="sphx-glr-backref-module-whobpyt-models-RWW sphx-glr-backref-type-py-method"><span class="n">model</span><span class="o">.</span><span class="n">setModelParameters</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <p>create objective function</p>
@@ -337,7 +337,7 @@ Download completed
 </pre></div>
 </div>
 <p>call model fit</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><a href="../API/models.html#whobpyt.models.RWW.RNNRWW" title="whobpyt.models.RWW.RNNRWW" class="sphx-glr-backref-module-whobpyt-models-RWW sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>model training</p>
@@ -345,19 +345,19 @@ Download completed
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: 9.820977 FC_cor:  0.17943726708530408 cos_sim:  -0.004552196088284021
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: 10.268009 FC_cor:  0.224097487340033 cos_sim:  -0.004839231491533783
 Modelparam_lr:  0.03848574676666117
 Hyperparam_lr:  0.0009621436691665292
-epoch:  1 loss: 9.354221 FC_cor:  0.1931210442760491 cos_sim:  -0.005145700059220562
+epoch:  1 loss: 9.317715 FC_cor:  0.21508138848956312 cos_sim:  -0.005406829037163519
 Modelparam_lr:  0.04735944575391766
 Hyperparam_lr:  0.0011839861438479413
-epoch:  2 loss: 8.536776 FC_cor:  0.3230702494286887 cos_sim:  -0.005423780789253509
+epoch:  2 loss: 8.92634 FC_cor:  0.3155073131158455 cos_sim:  -0.004877041743726667
 Modelparam_lr:  0.0301978714792749
 Hyperparam_lr:  0.0007549467869818724
-epoch:  3 loss: 8.419705 FC_cor:  0.36972865625086815 cos_sim:  -0.005375399363904192
+epoch:  3 loss: 8.492505 FC_cor:  0.34817328610742365 cos_sim:  -0.005279825735632914
 Modelparam_lr:  0.009122269265522516
 Hyperparam_lr:  0.00022805673163806288
-epoch:  4 loss: 8.562735 FC_cor:  0.42358851774482725 cos_sim:  -0.005163436092281726
+epoch:  4 loss: 8.547456 FC_cor:  0.3179180674787076 cos_sim:  -0.005322582162377944
 Modelparam_lr:  2.9974435533452017e-06
 Hyperparam_lr:  7.493608883363003e-08
 </pre></div>
@@ -367,7 +367,7 @@ Hyperparam_lr:  7.493608883363003e-08
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.3933808630413842 cos_sim:  -0.00477156391186675
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.3536823453153663 cos_sim:  -0.005329336665908644
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -375,7 +375,7 @@ Hyperparam_lr:  7.493608883363003e-08
 <span class="n">im0</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;The empirical SC&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
-<span class="n">im1</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sc_fitted</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">im1</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><a href="../API/models.html#whobpyt.models.RWW.RNNRWW" title="whobpyt.models.RWW.RNNRWW" class="sphx-glr-backref-module-whobpyt-models-RWW sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">.</span><span class="n">sc_fitted</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;The fitted SC&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -406,7 +406,7 @@ Hyperparam_lr:  7.493608883363003e-08
 </pre></div>
 </div>
 <img alt="The empirical FC, The simulated FC" class="sphx-glr-single-img" src="../_images/sphx_glr_eg003r__fitting_rww_example_003.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  3.475 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  52.306 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg003r-fitting-rww-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/6e0d2e4bec0ad2802eb3fd7a90e5faa9/eg003r__fitting_rww_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg003r__fitting_rww_example.py</span></code></a></p>

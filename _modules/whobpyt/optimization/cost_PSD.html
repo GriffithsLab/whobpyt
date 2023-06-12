@@ -220,7 +220,7 @@
 
 <div class="viewcode-block" id="CostsPSD"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD">[docs]</a><span class="k">class</span> <span class="nc">CostsPSD</span><span class="p">():</span>
     <span class="c1"># TODO: Deal with num_region vs. num_channels vs. num_parcels conflict with variable naming</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">varIdx</span><span class="p">,</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">empiricalData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsPSD.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">varIdx</span><span class="p">,</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">empiricalData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span> <span class="o">=</span> <span class="n">num_regions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">varIdx</span> <span class="o">=</span> <span class="n">varIdx</span>  <span class="c1"># This is the index in the data simulation to extract variable time series from</span>
         
@@ -233,7 +233,7 @@
             <span class="c1"># In the future, if given empiricalData then will calculate the target value in this initialization function. </span>
             <span class="c1"># That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify</span>
             <span class="c1"># which one to fit to.</span>
-            <span class="k">pass</span>
+            <span class="k">pass</span></div>
     
 <div class="viewcode-block" id="CostsPSD.calcPSD"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD.calcPSD">[docs]</a>    <span class="k">def</span> <span class="nf">calcPSD</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axMethod</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
         <span class="c1"># signal assumed to be in the form of [time_steps, regions or channels]</span>
