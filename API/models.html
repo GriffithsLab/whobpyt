@@ -219,44 +219,28 @@
 <dl class="py class">
 <dt id="whobpyt.models.JansenRit.RNNJANSEN">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.JansenRit.</span></code><code class="sig-name descname"><span class="pre">RNNJANSEN</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">node_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">TRs_per_window:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">step_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">output_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">tr:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sc:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">lm:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">dist:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">use_fit_gains:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">use_fit_lfm:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">params:</span> <span class="pre">&lt;module</span> <span class="pre">'whobpyt.models.JansenRit.ParamsJR'</span> <span class="pre">from</span> <span class="pre">'/home/runner/work/whobpyt/whobpyt/whobpyt/models/JansenRit/ParamsJR.py'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN" title="Permalink to this definition">¶</a></dt>
-<dd><p>A module for forward model (JansenRit) to simulate a batch of EEG signals
-Attibutes
-———
-state_size : int</p>
-<blockquote>
-<div><p>the number of states in the JansenRit model</p>
-</div></blockquote>
-<dl class="simple">
-<dt>input_size<span class="classifier">int</span></dt><dd><p>the number of states with noise as input</p>
-</dd>
-<dt>tr<span class="classifier">float</span></dt><dd><p>tr of image</p>
-</dd>
-<dt>step_size: float</dt><dd><p>Integration step for forward model</p>
-</dd>
-<dt>hidden_size: int</dt><dd><p>the number of step_size in a tr</p>
-</dd>
-<dt>TRs_per_window: int</dt><dd><p>the number of EEG signals to simulate</p>
-</dd>
-<dt>node_size: int</dt><dd><p>the number of ROIs</p>
-</dd>
-<dt>sc: float node_size x node_size array</dt><dd><p>structural connectivity</p>
-</dd>
-<dt>fit_gains: bool</dt><dd><p>flag for fitting gains 1: fit 0: not fit</p>
-</dd>
-<dt>g, c1, c2, c3,c4: tensor with gradient on</dt><dd><p>model parameters to be fit</p>
-</dd>
-<dt>w_bb: tensor with node_size x node_size (grad on depends on fit_gains)</dt><dd><p>connection gains</p>
-</dd>
-<dt>std_in std_out: tensor with gradient on</dt><dd><p>std for state noise and output noise</p>
-</dd>
-</dl>
-<p>hyper parameters for prior distribution of model parameters
-Methods
-——-
-forward(input, noise_out, hx)</p>
-<blockquote>
-<div><p>forward model (JansenRit) for generating a number of EEG signals with current model parameters</p>
-</div></blockquote>
+<dd><p>A module for forward model (JansenRit) to simulate EEG signals</p>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 71%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>createIC(self, ver):</strong></p></td>
+<td><p>Creates the initial conditions for the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>createDelayIC(self, ver):</strong></p></td>
+<td><p>Creates the initial conditions for the delays.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>setModelParameters(self):</strong></p></td>
+<td><p>Sets the parameters of the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>forward(input, noise_out, hx)</strong></p></td>
+<td><p>Forward pass for generating a number of EEG signals with current model parameters</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py method">
 <dt id="whobpyt.models.JansenRit.RNNJANSEN.add_module">
 <code class="sig-name descname"><span class="pre">add_module</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN.add_module" title="Permalink to this definition">¶</a></dt>
@@ -372,6 +356,46 @@ are direct members of this module.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="whobpyt.models.JansenRit.RNNJANSEN.createDelayIC">
+<code class="sig-name descname"><span class="pre">createDelayIC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN.createDelayIC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN.createDelayIC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the initial conditions for the delays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ver</strong><span class="classifier">int</span></dt><dd><p>Initial condition version. (in the JR model, the version is not used. It is just for consistency with other models)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>torch.Tensor</dt><dd><p>Tensor of shape (node_size, delays_max) with random values between <cite>state_lb</cite> and <cite>state_ub</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.JansenRit.RNNJANSEN.createIC">
+<code class="sig-name descname"><span class="pre">createIC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN.createIC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN.createIC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the initial conditions for the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ver</strong><span class="classifier">int # TODO: ADD MORE DESCRIPTION</span></dt><dd><p>Initial condition version. (in the JR model, the version is not used. It is just for consistency with other models)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>torch.Tensor</dt><dd><p>Tensor of shape (node_size, state_size) with random values between <cite>state_lb</cite> and <cite>state_ub</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="whobpyt.models.JansenRit.RNNJANSEN.cuda">
 <code class="sig-name descname"><span class="pre">cuda</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">torch.device</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">T</span><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN.cuda" title="Permalink to this definition">¶</a></dt>
 <dd><p>Moves all model parameters and buffers to the GPU.</p>
@@ -450,15 +474,31 @@ strings are acceptable.</p>
 <dl class="py method">
 <dt id="whobpyt.models.JansenRit.RNNJANSEN.forward">
 <code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
+<dd><p>This function carries out the forward Euler integration method for the JR neural mass model,
+with time delays, connection gains, and external inputs considered. Each population (pyramidal,
+excitatory, inhibitory) in the network is modeled as a non-linear second order system. The function
+updates the state of each neural population and computes the EEG signals at each time step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>external</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor of shape (batch_size, num_ROIs) representing the input to the model.</p>
+</dd>
+<dt><strong>hx</strong><span class="classifier">Optional[torch.Tensor]</span></dt><dd><p>Optional tensor of shape (batch_size, state_size, num_ROIs) representing the initial hidden state.</p>
+</dd>
+<dt><strong>hE</strong><span class="classifier">Optional[torch.Tensor]</span></dt><dd><p>Optional tensor of shape (batch_size, num_ROIs, delays_max) representing the initial delays.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>next_state</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the updated current state, EEG signals, and the history of
+each population’s current and voltage at each time step.</p>
+</dd>
+<dt><strong>hE</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Tensor representing the updated history of the pyramidal population’s current.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -588,6 +628,19 @@ fully-qualified string.)</p>
 </div>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.JansenRit.RNNJANSEN.info">
+<code class="sig-name descname"><span class="pre">info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary with the names of the states and the output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Dict[str, List[str]]</dt><dd></dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1125,6 +1178,12 @@ or training parts of a model individually (e.g., GAN training).</p>
 <dt>Returns:</dt><dd><p>Module: self</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.JansenRit.RNNJANSEN.setModelParameters">
+<code class="sig-name descname"><span class="pre">setModelParameters</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN.setModelParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN.setModelParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the parameters of the model.</p>
 </dd></dl>
 
 <dl class="py method">
