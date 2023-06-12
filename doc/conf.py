@@ -173,10 +173,10 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 numpydoc_show_class_members = False
 
 # Set to generate sphinx docs for class members (methods)
-autodoc_default_options = {
-    'members': None,
-    'inherited-members': None,
-}
+#autodoc_default_options = {
+#    'members': None,
+#    'inherited-members': None,
+#} **NOTE: This is commented out as it was causing PyTorch inherited functions to be included in the website**
 
 # generate autosummary even if no references
 autosummary_generate = True
