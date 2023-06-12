@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Sorenza Bastiaens, Parsa Oveisi
 Neural Mass Model fitting
 module for JR with forward backward and lateral connection for EEG
 """
@@ -18,9 +18,39 @@ from whobpyt.datatypes import AbstractNMM, AbstractParams, par
 import numpy as np  # for numerical operations
 
 class ParamsJR(AbstractParams):
+    """
+    A class for setting the parameters of a neural mass model for EEG data fitting.
 
+    Attributes:
+        A (par): The amplitude of the EPSP (excitatory post synaptic potential).
+        a (par): A metric of the rate constant for the EPSP.
+        B (par): The amplitude of the IPSP (inhibitory post synaptic potential).
+        b (par): A metric of the rate constant for the IPSP.
+        g (par): The gain of ???.
+        c1 (par): The connectivity parameter from the pyramidal to excitatory interneurons.
+        c2 (par): The connectivity parameter from the excitatory interneurons to the pyramidal cells.
+        c3 (par): The connectivity parameter from the pyramidal to inhibitory interneurons.
+        c4 (par): The connectivity parameter from the inhibitory interneurons to the pyramidal cells.
+        std_in (par): The standard deviation of the input noise.
+        vmax (par): The maximum value of the sigmoid function.
+        v0 (par): The midpoint of the sigmoid function.
+        r (par): The slope of the sigmoid function.
+        y0 (par): ???.
+        mu (par): The mean of the input.
+        k (par): ???.
+        cy0 (par): ???.
+        ki (par): ???.
+    """
     def __init__(self, **kwargs):
+        """
+        Initializes the ParamsJR object.
 
+        Args:
+            **kwargs: Keyword arguments for the model parameters.
+
+        Returns:
+            None
+        """
         param = {
             "A ": par(3.25), 
             "a": par(100), 
