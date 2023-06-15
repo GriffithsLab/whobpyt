@@ -7,7 +7,7 @@ module for model fitting using pytorch
 import numpy as np  # for numerical operations
 import torch
 import torch.optim as optim
-from whobpyt.data import Recording
+from whobpyt.datatypes import Recording
 from whobpyt.datatypes.outputs import OutputNM
 from whobpyt.models.RWW.RWW_np import RWW_np #This should be removed and made general
 import pickle

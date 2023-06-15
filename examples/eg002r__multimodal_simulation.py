@@ -24,12 +24,12 @@ What is being modeled:
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data import Recording
+from whobpyt.datatypes import par, Recording
 from whobpyt.models.RWW2 import mmRWW2, mmRWW2_np, RWW2, RWW2_np, ParamsRWW2
 from whobpyt.models.BOLD import BOLD_Layer, BOLD_np, BOLD_Params
 from whobpyt.models.EEG import EEG_Layer, EEG_np, EEG_Params
-from whobpyt.optimization import Model_fitting, CostsFC, CostsPSD, CostsMean
-from whobpyt.datatypes import par
+from whobpyt.optimization import CostsFC, CostsPSD, CostsMean
+from whobpyt.run import Model_fitting
 
 # general python stuff
 import torch

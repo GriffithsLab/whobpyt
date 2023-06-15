@@ -20,11 +20,10 @@ sys.path.append('..')
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data import Recording
-from whobpyt.datatypes import par
+from whobpyt.datatypes import par, Recording
 from whobpyt.models.RWW import RNNRWW, ParamsRWW
-from whobpyt.optimization import Model_fitting
 from whobpyt.optimization.custom_cost_RWW import CostsRWW
+from whobpyt.run import Model_fitting
 
 # array and pd stuff
 import numpy as np
