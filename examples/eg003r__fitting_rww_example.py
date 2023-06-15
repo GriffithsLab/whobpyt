@@ -20,7 +20,7 @@ sys.path.append('..')
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data import recordings
+from whobpyt.data import Recording
 from whobpyt.datatypes import par
 from whobpyt.models.RWW import RNNRWW, ParamsRWW
 from whobpyt.optimization import Model_fitting
@@ -61,7 +61,7 @@ sub = '100307'
 node_size = 83
 mask = np.tril_indices(node_size, -1)
 num_epoches = 5
-batch_size = 20
+TPperWindow = 20
 step_size = 0.05
 input_size = 2
 tr = 0.75
@@ -86,9 +86,9 @@ fc_emp = np.corrcoef(ts.T)
 
 # %%
 # prepare data structure of the model
-print(ts.shape)
+print(ts.T.shape)
 fMRIstep = 1 #TODO: Update
-data_mean = recordings(ts, fMRIstep) #dataloader(ts, num_epoches, batch_size)
+data_mean = Recording(ts.T, fMRIstep) #dataloader(ts, num_epoches, TPperWindow)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
@@ -97,7 +97,7 @@ params = ParamsRWW(g=par(400, 400, 1/np.sqrt(10), True, True), g_EE=par(1.5, 1.5
 
 # %%
 # call model want to fit
-model = RNNRWW(node_size, batch_size, step_size, repeat_size, tr, sc, True, params)
+model = RNNRWW(node_size, TPperWindow, step_size, repeat_size, tr, sc, True, params)
 
 # %%
 # initial model parameters and set the fitted model parameter in Tensors
@@ -109,7 +109,7 @@ ObjFun = CostsRWW()
 
 # %%
 # call model fit
-F = Model_fitting(model, data_mean.windowedTensor(batch_size, num_epoches), num_epoches, ObjFun)
+F = Model_fitting(model, [data_mean.windowedTensor(TPperWindow)], num_epoches, ObjFun)
 
 # %%
 # model training
@@ -134,11 +134,11 @@ plt.show()
 # %%
 # Plot E I and simulated BOLD
 fig, ax = plt.subplots(1, 3, figsize=(12, 8))
-ax[0].plot(F.output_sim.E_test.T)
+ax[0].plot(F.lastRec['E'].npTS().T)
 ax[0].set_title('Test: E')
-ax[1].plot(F.output_sim.I_test.T)
+ax[1].plot(F.lastRec['I'].npTS().T)
 ax[1].set_title('Test: I')
-ax[2].plot(F.output_sim.bold_test.T)
+ax[2].plot(F.lastRec['bold'].npTS().T)
 ax[2].set_title('Test: BOLD')
 plt.show()
 
@@ -148,7 +148,7 @@ fig, ax = plt.subplots(1, 2, figsize=(5, 4))
 im0 = ax[0].imshow(fc_emp, cmap='bwr')
 ax[0].set_title('The empirical FC')
 fig.colorbar(im0, ax=ax[0], fraction=0.046, pad=0.04)
-im1 = ax[1].imshow(np.corrcoef(F.output_sim.bold_test), cmap='bwr')
+im1 = ax[1].imshow(np.corrcoef(F.lastRec['bold'].npTS()), cmap='bwr')
 ax[1].set_title('The simulated FC')
 fig.colorbar(im1, ax=ax[1], fraction=0.046, pad=0.04)
 plt.show()

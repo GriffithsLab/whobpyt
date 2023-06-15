@@ -96,10 +96,10 @@ class BOLD_np():
         
         sim_vals = {}
         sim_vals["BOLD_state"] = state_vals
-        sim_vals["x_window"] = layer_hist[:,:,0]
-        sim_vals["f_window"] = layer_hist[:,:,1]
-        sim_vals["v_window"] = layer_hist[:,:,2]
-        sim_vals["q_window"] = layer_hist[:,:,3]
-        sim_vals["bold_window"] = np.transpose(layer_hist[:,:,4]) #TODO: Make dimensions consistent later
+        sim_vals["x"] = layer_hist[:,:,0]
+        sim_vals["f"] = layer_hist[:,:,1]
+        sim_vals["v"] = layer_hist[:,:,2]
+        sim_vals["q"] = layer_hist[:,:,3]
+        sim_vals["bold"] = layer_hist[:,:,4]
         
         return sim_vals, hE #state_vals, layer_hist

@@ -24,7 +24,7 @@ class mmRWW2(RWW2):
         self.TRs_per_window = 1
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-        self.output_names = ["E"] #TODO: This should be made consistent with info()
+        self.output_names = ["bold", "eeg"]
 
     def info(self):
         return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold", "eeg"]} #TODO: Update to take multiple output names
@@ -56,8 +56,8 @@ def createIC(self, ver):
 def forward(self, external, hx, hE):
     
     NMM_vals, hE = super(mmRWW2, self).forward(external, self.next_start_state[:, 0:2], hE) #TODO: Fix the hx in the future
-    EEG_vals, hE = self.eeg.forward(self.step_size, self.sim_len, NMM_vals["E_window"])
-    BOLD_vals, hE = self.bold.forward(self.next_start_state[:, 2:6], self.step_size, self.sim_len, NMM_vals["E_window"])
+    EEG_vals, hE = self.eeg.forward(self.step_size, self.sim_len, NMM_vals["E"].T)
+    BOLD_vals, hE = self.bold.forward(self.next_start_state[:, 2:6], self.step_size, self.sim_len, NMM_vals["E"].T)
     
     self.next_start_state = torch.cat((NMM_vals["NMM_state"], BOLD_vals["BOLD_state"]), dim=1).detach()
     

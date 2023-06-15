@@ -22,7 +22,7 @@ sys.path.append('..')
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data import recordings
+from whobpyt.data import Recording
 from whobpyt.datatypes import par
 from whobpyt.models.JansenRit import RNNJANSEN, ParamsJR
 from whobpyt.optimization import Model_fitting
@@ -78,7 +78,7 @@ sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 node_size = sc.shape[0]
 
 output_size = eeg_data.shape[0]
-batch_size = 20
+TPperWindow = 20
 step_size = 0.0001
 num_epoches = 20
 tr = 0.001
@@ -93,9 +93,9 @@ hidden_size = int(tr/step_size)
 
 # %%
 # prepare data structure of the model
-print(eeg_data.T.shape)
+print(eeg_data.shape)
 EEGstep = 1 #TODO: Update
-data_mean = recordings(eeg_data.T, EEGstep) #dataloader(eeg_data.T, num_epoches, batch_size)
+data_mean = Recording(eeg_data, EEGstep) #dataloader(eeg_data.T, num_epoches, batch_size)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
@@ -110,7 +110,7 @@ params = ParamsJR(A = par(3.25), a= par(100,100, 2, True, True), B = par(22), b 
 
 # %%
 # call model want to fit
-model = RNNJANSEN(node_size, batch_size, step_size, output_size, tr, sc, lm, dist, True, False, params)
+model = RNNJANSEN(node_size, TPperWindow, step_size, output_size, tr, sc, lm, dist, True, False, params)
 
 # %%
 # initial model parameters and set the fitted model parameter in Tensors
@@ -122,7 +122,7 @@ ObjFun = CostsJR()
 
 # %%
 # call model fit
-F = Model_fitting(model, data_mean.windowedTensor(batch_size, num_epoches), num_epoches, ObjFun)
+F = Model_fitting(model, [data_mean.windowedTensor(TPperWindow)], num_epoches, ObjFun)
 
 # %%
 # model training
@@ -150,9 +150,9 @@ plt.show()
 # %%
 # Plot the EEG
 fig, ax = plt.subplots(1,3, figsize=(12,8))
-ax[0].plot(F.output_sim.P_test.T)
+ax[0].plot(F.lastRec['P'].npTS().T)
 ax[0].set_title('Test: sourced EEG')
-ax[1].plot(F.output_sim.eeg_test.T)
+ax[1].plot(F.lastRec["eeg"].npTS().T)
 ax[1].set_title('Test')
 ax[2].plot(eeg_data.T)
 ax[2].set_title('empirical')

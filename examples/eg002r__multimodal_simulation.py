@@ -24,7 +24,7 @@ What is being modeled:
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data import recordings
+from whobpyt.data import Recording
 from whobpyt.models.RWW2 import mmRWW2, mmRWW2_np, RWW2, RWW2_np, ParamsRWW2
 from whobpyt.models.BOLD import BOLD_Layer, BOLD_np, BOLD_Params
 from whobpyt.models.EEG import EEG_Layer, EEG_np, EEG_Params
@@ -252,16 +252,18 @@ print(list(model.named_parameters()))
 
 #
 
-randdata = np.random.rand(15000, 8)
-num_epochs = 5
-num_recordings = 5
+randData1 = np.random.rand(8, 15000)
+randData2 = np.random.rand(8, 15000)
+num_epochs = 3
+num_recordings = 2
 TPperWindow = 15000
 
-print(randdata.shape)
-randTS = recordings(randdata, step_size) #dataloader(randdata, num_epochs, TRperwindow)
+print(randData1.shape)
+randTS1 = Recording(randData1, step_size)
+randTS2 = Recording(randData2, step_size)
 
 # call model fit
-F = Model_fitting(model, randTS.windowedTensor(TPperWindow, num_recordings), num_epochs, ObjFun)
+F = Model_fitting(model, [randTS1.windowedTensor(TPperWindow), randTS2.windowedTensor(TPperWindow)], num_epochs, ObjFun)
 
 # %%
 # model training
@@ -301,8 +303,8 @@ F.evaluate(0)
 # ---------------------------------------------------
 #
 
-plt.plot(F.output_sim.loss)
-plt.title("Total Loss over Training Epochs")
+plt.plot(F.trainingStats.loss)
+plt.title("Total Loss over Training Windows")
 
 
 # %%
@@ -310,8 +312,8 @@ plt.title("Total Loss over Training Epochs")
 # ---------------------------------------------------
 #
 
-plt.plot(F.output_sim.J)
-plt.title("J_{i} Values Changing Over Training Epochs")
+plt.plot(F.trainingStats.J)
+plt.title("J_{i} Values Changing Over Training Windows")
 
 
 
@@ -323,8 +325,8 @@ plt.title("J_{i} Values Changing Over Training Epochs")
 plt.figure(figsize = (16, 8))
 plt.title("S_E and S_I")
 for n in range(num_regions):
-    plt.plot(F.output_sim.E_test[:,n], label = "S_E Node = " + str(n))
-    plt.plot(F.output_sim.I_test[:,n], label = "S_I Node = " + str(n))
+    plt.plot(F.lastRec['E'].npTS()[n,:], label = "S_E Node = " + str(n))
+    plt.plot(F.lastRec['I'].npTS()[n,:], label = "S_I Node = " + str(n))
 
 plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
 plt.legend()
@@ -337,7 +339,7 @@ plt.legend()
 #
 
 sampleFreqHz = 1000*(1/step_size)
-sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(F.output_sim.eeg_test), sampleFreqHz, minFreq = 2, maxFreq = 40)
+sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(F.lastRec['eeg'].npTS().T), sampleFreqHz, minFreq = 2, maxFreq = 40)
 sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
 sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
 
@@ -354,7 +356,7 @@ plt.title("Simulated EEG PSD: After Training")
 # ---------------------------------------------------
 #
 
-sim_FC = np.corrcoef(F.output_sim.bold_test[:,skip_trans:])
+sim_FC = np.corrcoef(F.lastRec['bold'].npTS()[:,skip_trans:])
 
 plt.figure(figsize = (8, 8))
 plt.title("Simulated BOLD FC: After Training")
@@ -383,8 +385,8 @@ sim_vals, hE = model_validate.forward(external = 0, hx = model_validate.createIC
 plt.figure(figsize = (16, 8))
 plt.title("S_E and S_I")
 for n in range(num_regions):
-    plt.plot(sim_vals['E_window'], label = "S_E Node = " + str(n))
-    plt.plot(sim_vals['I_window'], label = "S_I Node = " + str(n))
+    plt.plot(sim_vals['E'], label = "S_E Node = " + str(n))
+    plt.plot(sim_vals['I'], label = "S_I Node = " + str(n))
 
 plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
 plt.legend()
@@ -397,7 +399,7 @@ plt.legend()
 #
 
 sampleFreqHz = 1000*(1/step_size)
-sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(sim_vals['eeg_window']), sampleFreqHz, minFreq = 2, maxFreq = 40)
+sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(sim_vals['eeg']), sampleFreqHz, minFreq = 2, maxFreq = 40)
 sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
 sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
 
@@ -414,7 +416,7 @@ plt.title("Simulated EEG PSD: After Training")
 # ---------------------------------------------------
 #
 
-sim_FC = np.corrcoef(sim_vals['bold_window'][:,skip_trans:])
+sim_FC = np.corrcoef((sim_vals['bold'].T)[:,skip_trans:])
 
 plt.figure(figsize = (8, 8))
 plt.title("Simulated BOLD FC: After Training")

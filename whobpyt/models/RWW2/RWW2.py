@@ -45,9 +45,13 @@ class RWW2(AbstractNMM):
         self.useBC = False
         
         self.output_size = num_regions
+        
+        self.state_names = ['E', 'I']
+        self.output_names = ['E']
+
 
     def info(self):
-        return {"state_names": None, "output_names": None}
+        return {"state_names": ['E', 'I'], "output_names": ['E']}
             
     def setModelParameters(self):
         return setModelParameters(self)
@@ -269,8 +273,8 @@ def forward(self, external, hx, hE):
     
     sim_vals = {}
     sim_vals["NMM_state"] = state_vals
-    sim_vals["E_window"] = layer_hist[:,:,0]
-    sim_vals["I_window"] = layer_hist[:,:,1]
+    sim_vals["E"] = layer_hist[:,:,0].T
+    sim_vals["I"] = layer_hist[:,:,1].T
     
     return sim_vals, hE
-        
+    

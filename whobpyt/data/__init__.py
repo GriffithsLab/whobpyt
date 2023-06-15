@@ -1,1 +1,1 @@
-from .data import recordings
+from .timeseries import Recording

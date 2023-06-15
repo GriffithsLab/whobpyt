@@ -7,6 +7,7 @@ module for model fitting using pytorch
 import numpy as np  # for numerical operations
 import torch
 import torch.optim as optim
+from whobpyt.data import Recording
 from whobpyt.datatypes.outputs import OutputNM
 from whobpyt.models.RWW.RWW_np import RWW_np #This should be removed and made general
 import pickle
@@ -15,7 +16,14 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 class Model_fitting:
     """
-    Using ADAM and AutoGrad to fit JansenRit to empirical EEG
+    
+    This Model_fitting class is able to fit resting state data or evoked potential data 
+    for which the input training data is empty or some stimulus to one or more NMM nodes,
+    and the label is an associated empirical neuroimaging recording.
+    
+    Studies which consider different kinds of input, such as if SC or some other variable
+    is associated with an empirical recording, must use a different fitting class. 
+    
     Attributes
     ----------
     model: instance of class RNNJANSEN
@@ -26,6 +34,7 @@ class Model_fitting:
         the times for repeating trainning
     cost: choice of the cost function
     """
+    
     u = 0  # external input
 
     def __init__(self, model, ts, num_epoches, cost):
@@ -40,11 +49,17 @@ class Model_fitting:
             the times for repeating trainning
         """
         self.model = model
-        self.num_epoches = num_epoches
+
+        self.u = None #This is the ML "Training Input"                
+        self.trainData = ts #This is the ML "Training Labels" - A list
+        
+        self.lastRec = None #A dictionary or Recordings of the last simulation preformed (either training or evaluation)
+        
+        self.num_epoches = num_epoches                
+        self.num_windows = self.trainData[0].shape[0] # define num_windows - assumes all recordings are of the same length
+        
         # placeholder for output(EEG and histoty of model parameters and loss)
-        self.output_sim = OutputNM(self.model)
- 
-        self.ts = ts
+        self.trainingStats = OutputNM(self.model)
 
         self.cost = cost
 
@@ -61,7 +76,7 @@ class Model_fitting:
 
         """
 
-        self.u = u
+        self.u = u #This is the ML "Training Data"
 
         #Define two different optimizers for each group
         modelparameter_optimizer = optim.Adam(self.model.params_fitted['modelparameter'], lr=learningrate, eps=1e-7)
@@ -69,7 +84,7 @@ class Model_fitting:
 
         # Define the learning rate schedulers for each group of parameters
         if lr_scheduler:
-            total_steps = self.ts.shape[1]*self.num_epoches
+            total_steps = self.num_windows*self.num_epoches
             hyperparameter_scheduler = optim.lr_scheduler.OneCycleLR(hyperparameter_optimizer, lr_hyper, total_steps, anneal_strategy = "cos")
             hlrs = []
             modelparameter_scheduler = optim.lr_scheduler.OneCycleLR(modelparameter_optimizer, learningrate, total_steps, anneal_strategy = "cos")
@@ -107,124 +122,128 @@ class Model_fitting:
                     fit_param[key] = [value.detach().numpy().ravel().copy()]
 
         loss_his = []  # loss placeholder
-
-        # define num_windows
-        num_windows = self.ts.shape[1]
+        
+        # LOOP 1/4: Number of Training Epochs
         for i_epoch in range(self.num_epoches):
+        
+            print("Epoch: ", i_epoch)
+                   
+            # LOOP 2/4: Number of Recordings in the Training Dataset
+            for windowedTS in self.trainData: 
 
-            # Create placeholders for the simulated states and outputs of entire time series.
-            for name in self.model.state_names + self.output_sim.output_names:
-                setattr(self.output_sim, name + '_train', [])
-
-            # initial the external inputs
-            external = torch.tensor(
-                np.zeros([self.model.node_size, self.model.steps_per_TR, self.model.TRs_per_window]),
-                dtype=torch.float32)
-
-            # Perform the training in windows.
-
-            for TR_i in range(num_windows):
-
-                # Reset the gradient to zeros after update model parameters.
-                hyperparameter_optimizer.zero_grad()
-                modelparameter_optimizer.zero_grad()
-
-                # if the external not empty
-                if not isinstance(self.u, int):
-                    external = torch.tensor(
-                        (self.u[:, :, TR_i * self.model.TRs_per_window:(TR_i + 1) * self.model.TRs_per_window]),
-                        dtype=torch.float32)
-
-                # Use the model.forward() function to update next state and get simulated EEG in this batch.
-                next_window, hE_new = self.model(external, X, hE)
-
-                # Get the batch of empirical signal.
-                ts_window = torch.tensor(self.ts[i_epoch, TR_i, :, :], dtype=torch.float32)
-
-                # calculating loss
+                # TIME SERIES: Create placeholders for the simulated states and outputs of entire time series corresponding to one recording
+                windListDict = {} # A Dictionary with a List of windowed time series
+                for name in self.model.state_names + self.model.output_names:
+                    windListDict[name] = []
                 
-                sim = next_window[self.model.output_names[0] + "_window"]
-                loss = self.cost.loss(sim, ts_window, self.model, next_window)
-                
-                # Put the batch of the simulated EEG, E I M Ev Iv Mv in to placeholders for entire time-series.
-                for name in self.model.state_names + self.output_sim.output_names:
-                    name_next = name + '_window'
-                    tmp_ls = getattr(self.output_sim, name + '_train')
-                    tmp_ls.append(next_window[name_next].detach().numpy())
+                # initial the external inputs
+                external = torch.tensor(
+                    np.zeros([self.model.node_size, self.model.steps_per_TR, self.model.TRs_per_window]),
+                    dtype=torch.float32)
 
-                    setattr(self.output_sim, name + '_train', tmp_ls)
+                # LOOP 3/4: Number of windowed segments for the recording
+                for win_idx in range(self.num_windows):
 
-                loss_his.append(loss.detach().numpy())
+                    # Reset the gradient to zeros after update model parameters.
+                    hyperparameter_optimizer.zero_grad()
+                    modelparameter_optimizer.zero_grad()
 
-                # Calculate gradient using backward (backpropagation) method of the loss function.
-                loss.backward(retain_graph=True)
+                    # if the external not empty
+                    if not isinstance(self.u, int):
+                        external = torch.tensor(
+                            (self.u[:, :, win_idx * self.model.TRs_per_window:(win_idx + 1) * self.model.TRs_per_window]),
+                            dtype=torch.float32)
 
-                # Optimize the model based on the gradient method in updating the model parameters.
-                hyperparameter_optimizer.step()
-                modelparameter_optimizer.step()
-                
-                if lr_scheduler:
-                    #appending (needed to plot learning rate)
-                    hlrs.append(hyperparameter_optimizer.param_groups[0]["lr"])
-                    mlrs.append(modelparameter_optimizer.param_groups[0]["lr"])
+                    # LOOP 4/4: The loop within the forward model (numerical solver), which is number of time points per windowed segment
+                    next_window, hE_new = self.model(external, X, hE)
+
+                    # Get the batch of empirical signal.
+                    ts_window = torch.tensor(windowedTS[win_idx, :, :], dtype=torch.float32)
+
+                    # calculating loss
                     
-                    # schedular step 
-                    hyperparameter_scheduler.step()
-                    modelparameter_scheduler.step()
+                    sim = next_window[self.model.output_names[0]]
+                    loss = self.cost.loss(sim, ts_window, self.model, next_window)
+                    
+                    # TIME SERIES: Put the window of simulated forward model.
+                    for name in self.model.state_names + self.model.output_names:
+                        windListDict[name].append(next_window[name].detach().numpy())
 
-                # Put the updated model parameters into the history placeholders.
-                # sc_par.append(self.model.sc[mask].copy())
-                if(self.model.track_params):
-                    for par_name in self.model.track_params:
-                        var = getattr(self.model.params, par_name)
-                        fit_param[par_name].append(var.value().detach().numpy())
-                else:
-                    for key, value in self.model.state_dict().items():
-                        if key not in exclude_param:
-                            fit_param[key].append(value.detach().numpy().ravel().copy())
+                    loss_his.append(loss.detach().numpy())
 
-                if self.model.use_fit_gains:
-                    fit_sc.append(self.model.sc_fitted.detach().numpy()[mask].copy())
-                if self.model.use_fit_lfm:
-                    fit_lm.append(self.model.lm.detach().numpy().ravel().copy())
+                    # Calculate gradient using backward (backpropagation) method of the loss function.
+                    loss.backward(retain_graph=True)
 
-                # last update current state using next state...
-                # (no direct use X = X_next, since gradient calculation only depends on one batch no history)
-                X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
-                hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
+                    # Optimize the model based on the gradient method in updating the model parameters.
+                    hyperparameter_optimizer.step()
+                    modelparameter_optimizer.step()
+                    
+                    if lr_scheduler:
+                        #appending (needed to plot learning rate)
+                        hlrs.append(hyperparameter_optimizer.param_groups[0]["lr"])
+                        mlrs.append(modelparameter_optimizer.param_groups[0]["lr"])
+                        
+                        # schedular step 
+                        hyperparameter_scheduler.step()
+                        modelparameter_scheduler.step()
 
-            ts_emp = np.concatenate(list(self.ts[i_epoch]),1)
-            fc = np.corrcoef(ts_emp)
+                    # Put the updated model parameters into the history placeholders.
+                    # sc_par.append(self.model.sc[mask].copy())
+                    if(self.model.track_params):
+                        for par_name in self.model.track_params:
+                            var = getattr(self.model.params, par_name)
+                            fit_param[par_name].append(var.value().detach().numpy())
+                    else:
+                        for key, value in self.model.state_dict().items():
+                            if key not in exclude_param:
+                                fit_param[key].append(value.detach().numpy().ravel().copy())
 
-            tmp_ls = getattr(self.output_sim, self.output_sim.output_names[0] + '_train')
-            ts_sim = np.concatenate(tmp_ls, axis=1)
-            fc_sim = np.corrcoef(ts_sim[:, 10:])
+                    if self.model.use_fit_gains:
+                        fit_sc.append(self.model.sc_fitted.detach().numpy()[mask].copy())
+                    if self.model.use_fit_lfm:
+                        fit_lm.append(self.model.lm.detach().numpy().ravel().copy())
 
-            print('epoch: ', i_epoch, 
-                  'loss:', loss.detach().numpy(),
-                  'FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 
-                  'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
-                  
-            if lr_scheduler:
-                print('Modelparam_lr: ', modelparameter_scheduler.get_last_lr()[0])
-                print('Hyperparam_lr: ', hyperparameter_scheduler.get_last_lr()[0])
+                    # last update current state using next state...
+                    # (no direct use X = X_next, since gradient calculation only depends on one batch no history)
+                    X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
+                    hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
 
-            for name in self.model.state_names + self.output_sim.output_names:
-                tmp_ls = getattr(self.output_sim, name + '_train')
-                setattr(self.output_sim, name + '_train', np.concatenate(tmp_ls, axis=1))
+                ts_emp = np.concatenate(list(windowedTS),1) #TODO: Check this code
+                fc = np.corrcoef(ts_emp)
 
-            self.output_sim.loss = np.array(loss_his)
+                # TIME SERIES: Concatenate all windows together to get one recording
+                for name in self.model.state_names + self.model.output_names:
+                        windListDict[name] = np.concatenate(windListDict[name], axis=1)
 
-            if i_epoch > epoch_min and np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1] > r_lb:
-                break
+                ts_sim = windListDict[self.model.output_names[0]]
+                fc_sim = np.corrcoef(ts_sim[:, 10:])
+
+                print('epoch: ', i_epoch, 
+                      'loss:', loss.detach().numpy(),
+                      'FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 
+                      'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
+                      
+                if lr_scheduler:
+                    print('Modelparam_lr: ', modelparameter_scheduler.get_last_lr()[0])
+                    print('Hyperparam_lr: ', hyperparameter_scheduler.get_last_lr()[0])
+
+                self.trainingStats.loss = np.array(loss_his)
+
+                if i_epoch > epoch_min and np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1] > r_lb:
+                    break
+        
+        # Saving the last recording of training as a Model_fitting attribute
+        self.lastRec = {}
+        for name in self.model.state_names + self.model.output_names:
+            self.lastRec[name] = Recording(windListDict[name], step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
         
         # Writing the training statistics to the output class
         if self.model.use_fit_gains:
-            self.output_sim.weights = np.array(fit_sc)
+            self.trainingStats.weights = np.array(fit_sc)
         if self.model.use_fit_lfm:
-            self.output_sim.leadfield = np.array(fit_lm)
+            self.trainingStats.leadfield = np.array(fit_lm)
         for key, value in fit_param.items():
-            setattr(self.output_sim, key, np.array(value))
+            setattr(self.trainingStats, key, np.array(value))
 
     def evaluate(self, base_window_num, u=0):
         """
@@ -251,58 +270,62 @@ class Model_fitting:
         # define mask for getting lower triangle matrix
         mask = np.tril_indices(self.model.node_size, -1)
         mask_e = np.tril_indices(self.model.output_size, -1)
-
-        # define num_windows
-        num_windows = self.ts.shape[1]
-        # Create placeholders for the simulated BOLD E I x f and q of entire time series.
-        for name in self.model.state_names + self.output_sim.output_names:
-            setattr(self.output_sim, name + '_test', [])
+        
+        # Create placeholders for the simulated states and outputs of entire time series corresponding to one recording
+        windListDict = {} # A Dictionary with a List of windowed time series
+        for name in self.model.state_names + self.model.output_names:
+            windListDict[name] = []
 
         u_hat = np.zeros(
             (self.model.node_size,self.model.steps_per_TR,
-             base_window_num *self.model.TRs_per_window + self.ts.shape[1]*self.ts.shape[3]))
+             base_window_num*self.model.TRs_per_window + self.num_windows*self.model.TRs_per_window))
         u_hat[:, :, base_window_num * self.model.TRs_per_window:] = self.u
 
-        # Perform the training in batches.
-
-        for TR_i in range(num_windows + base_window_num):
+        # LOOP 1/2: The number of windows in a recording
+        for win_idx in range(self.num_windows + base_window_num):
 
             # Get the input and output noises for the module.
-
             external = torch.tensor(
-                (u_hat[:, :, TR_i * self.model.TRs_per_window:(TR_i + 1) * self.model.TRs_per_window]),
+                (u_hat[:, :, win_idx * self.model.TRs_per_window:(win_idx + 1) * self.model.TRs_per_window]),
                 dtype=torch.float32)
 
-            # Use the model.forward() function to update next state and get simulated EEG in this batch.
+            # LOOP 2/2: The loop within the forward model (numerical solver), which is number of time points per windowed segment
             next_window, hE_new = self.model(external, X, hE)
 
-            if TR_i > base_window_num - 1:
-                for name in self.model.state_names + self.output_sim.output_names:
-                    name_next = name + '_window'
-                    tmp_ls = getattr(self.output_sim, name + '_test')
-                    tmp_ls.append(next_window[name_next].detach().numpy())
-
-                    setattr(self.output_sim, name + '_test', tmp_ls)
+            # TIME SERIES: Put the window of simulated forward model.
+            if win_idx > base_window_num - 1:
+                for name in self.model.state_names + self.model.output_names:
+                    windListDict[name].append(next_window[name].detach().numpy())
 
             # last update current state using next state...
             # (no direct use X = X_next, since gradient calculation only depends on one batch no history)
             X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
             hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
         
-        ts_emp = np.concatenate(list(self.ts[-1]),1)
+        windowedTS = self.trainData[0] # TODO: This should be an input to the method. For now take the first training data.
+        ts_emp = np.concatenate(list(windowedTS),1) #TODO: Check this code
         fc = np.corrcoef(ts_emp)
-        tmp_ls = getattr(self.output_sim, self.output_sim.output_names[0] + '_test')
-        ts_sim = np.concatenate(tmp_ls, axis=1)
-
+        
+        # TIME SERIES: Concatenate all windows together to get one recording
+        for name in self.model.state_names + self.model.output_names:
+            windListDict[name] = np.concatenate(windListDict[name], axis=1)
+        
+        ts_sim = windListDict[self.model.output_names[0]]
         fc_sim = np.corrcoef(ts_sim[:, transient_num:])
+        
         print('FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 
               'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
-              
-        for name in self.model.state_names + self.output_sim.output_names:
-            tmp_ls = getattr(self.output_sim, name + '_test')
-            setattr(self.output_sim, name + '_test', np.concatenate(tmp_ls, axis=1))
+        
+        # Saving the last recording of training as a Model_fitting attribute
+        self.lastRec = {}
+        for name in self.model.state_names + self.model.output_names:
+            self.lastRec[name] = Recording(windListDict[name], step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
+
 
     def test_realtime(self, tr_p, step_size_n, step_size, num_windows):
+    
+        # TODO: This function is outdated and needs to be completely rewritten
+    
         if self.model.model_name == 'RWW':
             mask = np.tril_indices(self.model.node_size, -1)
 
