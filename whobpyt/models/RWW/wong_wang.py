@@ -13,38 +13,82 @@ import numpy as np  # for numerical operations
 class RNNRWW(AbstractNMM):
     """
     A module for forward model (WWD) to simulate a window of BOLD signals
-    Attibutes
+    
+    Note that the BOLD signal is not done in the standard way, 
+    and there are other customizations to the neural mass model that may 
+    deviate from standard differential equation simulation. Thus, the
+    parameter should be tested on a validation model after fitting. 
+ 
+ 
+    Attributes
     ---------
+    
+    state_names: list
+        A list of model state variable names
+    output_names: list
+        A list of model output variable names
+    model_name: string
+        The name of the model itself
     state_size : int
-        the number of states in the WWD model
-    input_size : int
-        the number of states with noise as input
+        The number of states in the WWD model
     tr : float
-        tr of fMRI image
+        tr of fMRI image. That is, the spacing betweeen images in the time series. 
     step_size: float
         Integration step for forward model
     steps_per_TR: int
-        the number of step_size in a tr
+        The number of step_size in a tr. This is calculated automatically as int(tr / step_size).
     TRs_per_window: int
-        the number of BOLD signals to simulate
+        The number of BOLD TRs to simulate in one forward call
     node_size: int
-        the number of ROIs
+        The number of ROIs
+    sampling_size: int
+        This is related to an averaging of NMM values before inputing into hemodynamic equaitons. This is non-standard.        
     sc: float node_size x node_size array
-        structural connectivity
-    fit_gains: bool
-        flag for fitting gains 1: fit 0: not fit
-    g, g_EE, gIE, gEI: tensor with gradient on
-        model parameters to be fit
-    gains_con: tensor with node_size x node_size (grad on depends on fit_gains)
-        connection gains exp(gains_con)*sc
-    std_in std_out: tensor with gradient on
-        std for state noise and output noise
-    g_m g_v f_EE_m g_EE_v sup_ca sup_cb sup_cc: tensor with gradient on
-        hyper parameters for prior distribution of g gEE gIE and gEI
+        The structural connectivity matrix
+    sc_fitted: bool
+        The fitted structural connectivity
+    use_fit_gains: tensor with node_size x node_size (grad on depends on fit_gains)
+        Whether to fit the structural connectivity, will fit via connection gains: exp(gains_con)*sc
+    use_Laplacian: bool
+        Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
+    use_Bifurcation: bool
+        Use a custom objective function component
+    use_Gaussian_EI: bool
+        Use a custom objective function component
+    use_dynamic_boundary: bool
+        Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size. 
+    params: ParamsRWW
+        A object that contains the parameters for the RWW nodes
+    params_fitted: dictionary
+        A dictionary containg fitted parameters and fitted hyper_parameters
+    output_size: int
+        Number of ROIs
+  
     Methods
     -------
+    
     forward(input, external, hx, hE)
         forward model (WWD) for generating a number of BOLD signals with current model parameters
+    info(self)
+        A function that returns a dictionary with model information.
+    createIC(self, ver)
+        A function to return an initial state tensor for the model.
+    setModelParameters(self)
+        A function that assigns model parameters as model attributes and also to assign parameters and hyperparameters for fitting, 
+        so that the inherited Torch functionality can be used. 
+        This practice may be replaced soon.  
+   
+    Other
+    -------
+        g_m g_v f_EE_m g_EE_v sup_ca sup_cb sup_cc: tensor with gradient on
+        hyper parameters for prior distribution of g gEE gIE and gEI
+        
+        g, g_EE, gIE, gEI: tensor with gradient on
+        model parameters to be fit
+        
+        std_in std_out: tensor with gradient on
+        std for state noise and output noise
+
     """
     use_fit_lfm = False
     input_size = 2
@@ -53,27 +97,37 @@ class RNNRWW(AbstractNMM):
                  TRs_per_window: int, step_size: float, sampling_size: float, tr: float, sc: float, use_fit_gains: bool,
                  params: ParamsRWW, use_Bifurcation=True, use_Gaussian_EI=False, use_Laplacian=True,
                  use_dynamic_boundary=True) -> None:
+        
         """
         Parameters
         ----------
-
-        tr : float
-            tr of fMRI image
+            
+        node_size: int
+            The number of ROIs
+        TRs_per_window: int
+            The number of BOLD TRs to simulate in one forward call    
         step_size: float
             Integration step for forward model
-        TRs_per_window: int
-            the number of BOLD signals to simulate
-        node_size: int
-            the number of ROIs
+        sampling_size:
+            This is related to an averaging of NMM values before inputing into hemodynamic equaitons. This is non-standard. 
+        tr : float
+            tr of fMRI image. That is, the spacing betweeen images in the time series. 
         sc: float node_size x node_size array
-            structural connectivity
+            The structural connectivity matrix
         use_fit_gains: bool
-            flag for fitting gains 1: fit 0: not fit
+            Whether to fit the structural connectivity, will fit via connection gains: exp(gains_con)*sc
+        params: ParamsRWW
+            A object that contains the parameters for the RWW nodes
+        use_Bifurcation: bool
+            Use a custom objective function component
+        use_Gaussian_EI: bool
+            Use a custom objective function component
         use_Laplacian: bool
-            using Laplacian or not
-        param: ParamsModel
-            define model parameters(var:0 constant var:non-zero Parameter)
+            Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
+        use_dynamic_boundary: bool
+            Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size.
         """
+        
         super(RNNRWW, self).__init__()
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
@@ -96,22 +150,107 @@ class RNNRWW(AbstractNMM):
         self.use_Gaussian_EI = use_Gaussian_EI
         self.use_dynamic_boundary = use_dynamic_boundary
         self.params = params
+        self.params_fitted = {}
 
-        self.output_size = node_size  # number of EEG channels
+        self.output_size = node_size
     
     def info(self):
+        """
+        
+        A function that returns a dictionary with model information.
+        
+        Parameters
+        ----------
+        
+        None
+        
+        
+        Returns
+        ----------
+        
+        Dictionary of Lists
+            The List contain State Names and Output Names 
+        
+        
+        """
+    
         return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold"]}
     
     def createIC(self, ver):
+        """
+        
+            A function to return an initial state tensor for the model.    
+        
+        Parameters
+        ----------
+        
+        ver: int
+            Ignored Parameter
+        
+        
+        Returns
+        ----------
+        
+        Tensor
+            Random Initial Conditions for RWW & BOLD 
+        
+        
+        """
+        
         # initial state
         return torch.tensor(0.2 * np.random.uniform(0, 1, (self.node_size, self.state_size)) + np.array(
                 [0, 0, 0, 1.0, 1.0, 1.0]), dtype=torch.float32)
 
     def setModelParameters(self):
+        """
+        
+        A function that assigns model parameters as model attributes and also to assign parameters and hyperparameters for fitting, 
+        so that the inherited Torch functionality can be used. 
+        This practice may be replaced soon. 
+
+        
+        Parameters
+        ----------
+        
+        None
+        
+        
+        Returns
+        ----------
+        
+        Dictionary of Lists
+            Keys are State Names and Output Names (with _window appended to the name)
+            Contents are the time series from model simulation
+        
+        """    
+    
+    
         # set states E I f v mean and 1/sqrt(variance)
         return setModelParameters(self)
 
     def forward(self, external, hx, hE):
+        """
+        
+        Forward step in simulating the BOLD signal.
+        
+        Parameters
+        ----------
+        external: tensor with node_size x steps_per_TR x TRs_per_window x input_size
+            noise for states
+        
+        hx: tensor with node_size x state_size
+            states of WWD model
+        
+        Returns
+        -------
+        next_state: dictionary with Tensors
+            Tensor dimension [Num_Time_Points, Num_Regions]
+        
+        with keys: 'current_state''bold_window''E_window''I_window''x_window''f_window''v_window''q_window'
+            record new states and BOLD
+            
+        """
+        
         return integration_forward(self, external, hx, hE)
 
 def h_tf(a, b, d, z):
@@ -126,8 +265,9 @@ def h_tf(a, b, d, z):
     return torch.divide(num, den)
 
 def setModelParameters(model):
-    param_reg = []
-    param_hyper = []
+    param_reg = [] #NMM Equation Parameters
+    param_hyper = [] #Mean and Variance of NMM Equation Parameters, and others
+    
     if model.use_Gaussian_EI:
         model.E_m = Parameter(torch.tensor(0.16, dtype=torch.float32))
         param_hyper.append(model.E_m)
@@ -185,21 +325,6 @@ def setModelParameters(model):
 
 def integration_forward(model, external, hx, hE):
 
-    """
-    Forward step in simulating the BOLD signal.
-    Parameters
-    ----------
-    external: tensor with node_size x steps_per_TR x TRs_per_window x input_size
-        noise for states
-
-    hx: tensor with node_size x state_size
-        states of WWD model
-    Outputs
-    -------
-    next_state: dictionary with keys:
-    'current_state''bold_window''E_window''I_window''x_window''f_window''v_window''q_window'
-        record new states and BOLD
-    """
     next_state = {}
 
     # hx is current state (6) 0: E 1:I (neural activities) 2:x 3:f 4:v 5:f (BOLD)
@@ -407,12 +532,12 @@ def integration_forward(model, external, hx, hE):
     # print(E_m.shape)
     current_state = torch.cat([E_mean, I_mean, x, f, v, q], dim=1)
     next_state['current_state'] = current_state
-    next_state['bold_window'] = bold_window
-    next_state['E_window'] = E_hist.reshape((model.node_size, -1))
-    next_state['I_window'] = I_hist.reshape((model.node_size, -1))
-    next_state['x_window'] = x_window
-    next_state['f_window'] = f_window
-    next_state['v_window'] = v_window
-    next_state['q_window'] = q_window
+    next_state['bold'] = bold_window
+    next_state['E'] = E_hist.reshape((model.node_size, -1))
+    next_state['I'] = I_hist.reshape((model.node_size, -1))
+    next_state['x'] = x_window
+    next_state['f'] = f_window
+    next_state['v'] = v_window
+    next_state['q'] = q_window
 
     return next_state, hE

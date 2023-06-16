@@ -20,10 +20,10 @@ class CostsMean():
             pass
         
     def calcLoss(self, simData):
-        # simData assumed to be in the form [time_steps, regions]
+        # simData assumed to be in the form [regions, time_steps]
         # Returns the sum of the MSE of each regions mean value to target value of each reagion
         
-        meanVar = torch.mean(simData[:,:], 0)
+        meanVar = torch.mean(simData[:,:], 1)
         
         return torch.nn.functional.mse_loss(meanVar, self.targetValue)
         

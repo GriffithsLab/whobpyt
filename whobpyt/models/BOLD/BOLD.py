@@ -117,11 +117,11 @@ def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
     
     sim_vals = {}
     sim_vals["BOLD_state"] = state_vals
-    sim_vals["x_window"] = layer_hist[:,:,0]
-    sim_vals["f_window"] = layer_hist[:,:,1]
-    sim_vals["v_window"] = layer_hist[:,:,2]
-    sim_vals["q_window"] = layer_hist[:,:,3]
-    sim_vals["bold_window"] = torch.transpose(layer_hist[:,:,4], 0, 1) #TODO: Make dimensions consistent later
+    sim_vals["x"] = layer_hist[:,:,0].T
+    sim_vals["f"] = layer_hist[:,:,1].T
+    sim_vals["v"] = layer_hist[:,:,2].T
+    sim_vals["q"] = layer_hist[:,:,3].T
+    sim_vals["bold"] = layer_hist[:,:,4].T
     
     return sim_vals, hE
 

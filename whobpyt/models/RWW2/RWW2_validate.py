@@ -151,8 +151,8 @@ class RWW2_np():
         
         sim_vals = {}
         sim_vals["NMM_state"] = state_vals
-        sim_vals["E_window"] = layer_hist[:,:,0]
-        sim_vals["I_window"] = layer_hist[:,:,1]
+        sim_vals["E"] = layer_hist[:,:,0]
+        sim_vals["I"] = layer_hist[:,:,1]
         
         return sim_vals, hE #state_vals, layer_hist
         

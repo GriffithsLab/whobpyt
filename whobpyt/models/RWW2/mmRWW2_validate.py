@@ -56,8 +56,8 @@ def createIC(self, ver):
 def forward(self, external, hx, hE):
     
     NMM_vals, hE = super(mmRWW2_np, self).forward(external, self.next_start_state[:, 0:2], hE) #TODO: Fix the hx in the future
-    EEG_vals, hE = self.eeg.forward(self.step_size, self.sim_len, NMM_vals["E_window"])
-    BOLD_vals, hE = self.bold.forward(self.next_start_state[:, 2:6], self.step_size, self.sim_len, NMM_vals["E_window"])
+    EEG_vals, hE = self.eeg.forward(self.step_size, self.sim_len, NMM_vals["E"])
+    BOLD_vals, hE = self.bold.forward(self.next_start_state[:, 2:6], self.step_size, self.sim_len, NMM_vals["E"])
     
     self.next_start_state = np.concatenate((NMM_vals["NMM_state"], BOLD_vals["BOLD_state"]), axis=1)
     
