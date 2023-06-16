@@ -408,13 +408,13 @@ class RNNJANSEN(AbstractNMM):
         # Update the current state.
         current_state = torch.cat([M, E, I, Mv, Ev, Iv], dim=1)
         next_state['current_state'] = current_state
-        next_state['eeg_window'] = torch.cat(eeg_window, dim=1)
-        next_state['E_window'] = torch.cat(E_window, dim=1)
-        next_state['I_window'] = torch.cat(I_window, dim=1)
-        next_state['P_window'] = torch.cat(M_window, dim=1)
-        next_state['Ev_window'] = torch.cat(Ev_window, dim=1)
-        next_state['Iv_window'] = torch.cat(Iv_window, dim=1)
-        next_state['Pv_window'] = torch.cat(Mv_window, dim=1)
+        next_state['eeg'] = torch.cat(eeg_window, dim=1)
+        next_state['E'] = torch.cat(E_window, dim=1)
+        next_state['I'] = torch.cat(I_window, dim=1)
+        next_state['P'] = torch.cat(M_window, dim=1)
+        next_state['Ev'] = torch.cat(Ev_window, dim=1)
+        next_state['Iv'] = torch.cat(Iv_window, dim=1)
+        next_state['Pv'] = torch.cat(Mv_window, dim=1)
 
         return next_state, hE
 

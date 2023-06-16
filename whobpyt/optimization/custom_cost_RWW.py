@@ -32,12 +32,12 @@ class CostsRWW(AbstractLoss):
 
         loss_EI = 0
 
-        E_window = state_vals['E_window']
-        I_window = state_vals['I_window']
-        f_window = state_vals['f_window']
-        v_window = state_vals['v_window']
-        x_window = state_vals['x_window']
-        q_window = state_vals['q_window']
+        E_window = state_vals['E']
+        I_window = state_vals['I']
+        f_window = state_vals['f']
+        v_window = state_vals['v']
+        x_window = state_vals['x']
+        q_window = state_vals['q']
         if model.use_Gaussian_EI and model.use_Bifurcation:
             loss_EI = torch.mean(model.E_v_inv * (E_window - model.E_m) ** 2) \
                       + torch.mean(-torch.log(model.E_v_inv)) + \

@@ -532,12 +532,12 @@ def integration_forward(model, external, hx, hE):
     # print(E_m.shape)
     current_state = torch.cat([E_mean, I_mean, x, f, v, q], dim=1)
     next_state['current_state'] = current_state
-    next_state['bold_window'] = bold_window
-    next_state['E_window'] = E_hist.reshape((model.node_size, -1))
-    next_state['I_window'] = I_hist.reshape((model.node_size, -1))
-    next_state['x_window'] = x_window
-    next_state['f_window'] = f_window
-    next_state['v_window'] = v_window
-    next_state['q_window'] = q_window
+    next_state['bold'] = bold_window
+    next_state['E'] = E_hist.reshape((model.node_size, -1))
+    next_state['I'] = I_hist.reshape((model.node_size, -1))
+    next_state['x'] = x_window
+    next_state['f'] = f_window
+    next_state['v'] = v_window
+    next_state['q'] = q_window
 
     return next_state, hE
