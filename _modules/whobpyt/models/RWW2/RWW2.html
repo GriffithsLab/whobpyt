@@ -261,10 +261,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">use_fit_lfm</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">useBC</span> <span class="o">=</span> <span class="kc">False</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">num_regions</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">num_regions</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">]</span></div>
+
 
 <div class="viewcode-block" id="RWW2.info"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;state_names&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;output_names&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span></div>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;state_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">],</span> <span class="s2">&quot;output_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">]}</span></div>
             
 <div class="viewcode-block" id="RWW2.setModelParameters"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.setModelParameters">[docs]</a>    <span class="k">def</span> <span class="nf">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
@@ -486,11 +490,11 @@
     
     <span class="n">sim_vals</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">sim_vals</span><span class="p">[</span><span class="s2">&quot;NMM_state&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state_vals</span>
-    <span class="n">sim_vals</span><span class="p">[</span><span class="s2">&quot;E_window&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer_hist</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">sim_vals</span><span class="p">[</span><span class="s2">&quot;I_window&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer_hist</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">sim_vals</span><span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer_hist</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">sim_vals</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer_hist</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
     
     <span class="k">return</span> <span class="n">sim_vals</span><span class="p">,</span> <span class="n">hE</span>
-        
+    
 </pre></div>
 
            </div>

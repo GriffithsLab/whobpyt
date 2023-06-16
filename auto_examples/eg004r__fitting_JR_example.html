@@ -231,11 +231,10 @@
 
 <span class="c1"># whobpyt stuff</span>
 <span class="kn">import</span> <span class="nn">whobpyt</span>
-<span class="kn">from</span> <span class="nn">whobpyt.data</span> <span class="kn">import</span> <span class="n">dataloader</span>
-<span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">par</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">par</span><span class="p">,</span> <span class="n">Recording</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit</span> <span class="kn">import</span> <a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class"><span class="n">RNNJANSEN</span></a><span class="p">,</span> <span class="n">ParamsJR</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization.custom_cost_JR</span> <span class="kn">import</span> <span class="n">CostsJR</span>
+<span class="kn">from</span> <span class="nn">whobpyt.run</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
 
 <span class="c1"># array and pd stuff</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -287,7 +286,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">node_size</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="n">output_size</span> <span class="o">=</span> <span class="n">eeg_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">TPperWindow</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span>
 <span class="n">num_epoches</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">tr</span> <span class="o">=</span> <span class="mf">0.001</span>
@@ -300,7 +299,13 @@
 </pre></div>
 </div>
 <p>prepare data structure of the model</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_mean</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">(</span><span class="n">eeg_data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">eeg_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">EEGstep</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#TODO: Update</span>
+<span class="n">data_mean</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">eeg_data</span><span class="p">,</span> <span class="n">EEGstep</span><span class="p">)</span> <span class="c1">#dataloader(eeg_data.T, num_epoches, batch_size)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(64, 400)
 </pre></div>
 </div>
 <p>get model parameters structure and define the fitted parameters by setting non-zero variance for the model</p>
@@ -315,7 +320,7 @@
 </pre></div>
 </div>
 <p>call model want to fit</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class"><span class="n">RNNJANSEN</span></a><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class"><span class="n">RNNJANSEN</span></a><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>initial model parameters and set the fitted model parameter in Tensors</p>
@@ -327,7 +332,7 @@
 </pre></div>
 </div>
 <p>call model fit</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <span class="p">[</span><span class="n">data_mean</span><span class="o">.</span><span class="n">windowedTensor</span><span class="p">(</span><span class="n">TPperWindow</span><span class="p">)],</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>model training</p>
@@ -337,74 +342,94 @@
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>epoch:  0 loss: -20604.004 FC_cor:  0.22829853602985414 cos_sim:  0.027875804782208392
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
+epoch:  0 loss: -20604.004 FC_cor:  0.25072752147699345 cos_sim:  0.02782934938502375
 Modelparam_lr:  0.005268391209094017
 Hyperparam_lr:  0.0001317097802273502
-epoch:  1 loss: -20614.752 FC_cor:  0.1573158631375954 cos_sim:  0.0281321380482276
+Epoch:  1
+epoch:  1 loss: -20614.752 FC_cor:  0.07060341369884632 cos_sim:  0.027860442012898327
 Modelparam_lr:  0.014183366411735794
 Hyperparam_lr:  0.0003545841602933947
-epoch:  2 loss: -20638.986 FC_cor:  0.1580191024407891 cos_sim:  0.02790740680719249
+Epoch:  2
+epoch:  2 loss: -20638.984 FC_cor:  0.10830327339110635 cos_sim:  0.027310954629799048
 Modelparam_lr:  0.026316790059458216
 Hyperparam_lr:  0.0006579197514864553
-epoch:  3 loss: -20679.416 FC_cor:  0.25729190582602063 cos_sim:  0.029727663898614497
+Epoch:  3
+epoch:  3 loss: -20679.416 FC_cor:  0.2785455156205206 cos_sim:  0.02873822586551376
 Modelparam_lr:  0.03836393088672551
 Hyperparam_lr:  0.0009590982721681377
-epoch:  4 loss: -20733.258 FC_cor:  0.39117208215172083 cos_sim:  0.04285987248578701
+Epoch:  4
+epoch:  4 loss: -20733.271 FC_cor:  0.2442526374904868 cos_sim:  0.035512877441891244
 Modelparam_lr:  0.04704355812899117
 Hyperparam_lr:  0.001176088953224779
-epoch:  5 loss: -20794.752 FC_cor:  0.3707920943568654 cos_sim:  0.04380403157849314
+Epoch:  5
+epoch:  5 loss: -20794.76 FC_cor:  0.36683896122613824 cos_sim:  0.0631470061857294
 Modelparam_lr:  0.04999842642516184
 Hyperparam_lr:  0.001249960660629046
-epoch:  6 loss: -20856.973 FC_cor:  0.5299042900263347 cos_sim:  0.11890040785020692
+Epoch:  6
+epoch:  6 loss: -20857.076 FC_cor:  0.4415591869050836 cos_sim:  0.08493690498040773
 Modelparam_lr:  0.04930925077294988
 Hyperparam_lr:  0.0012327312693237468
-epoch:  7 loss: -20917.348 FC_cor:  0.7865803601003524 cos_sim:  0.11658555189855063
+Epoch:  7
+epoch:  7 loss: -20917.39 FC_cor:  0.8422494796169023 cos_sim:  0.10257048871060662
 Modelparam_lr:  0.047401112794808534
 Hyperparam_lr:  0.0011850278198702133
-epoch:  8 loss: -20974.287 FC_cor:  0.9150544095439761 cos_sim:  0.14972536560210029
+Epoch:  8
+epoch:  8 loss: -20974.293 FC_cor:  0.8953082359453636 cos_sim:  0.12177364204782531
 Modelparam_lr:  0.04436969449665212
 Hyperparam_lr:  0.001109242362416303
-epoch:  9 loss: -21026.57 FC_cor:  0.9604312922943379 cos_sim:  0.12049663189769533
+Epoch:  9
+epoch:  9 loss: -21026.541 FC_cor:  0.8910879901093542 cos_sim:  0.13696657030345372
 Modelparam_lr:  0.04036700385005066
 Hyperparam_lr:  0.0010091750962512665
-epoch:  10 loss: -21073.283 FC_cor:  0.9422904598175235 cos_sim:  0.18666873553912486
+Epoch:  10
+epoch:  10 loss: -21073.293 FC_cor:  0.9256805024799442 cos_sim:  0.12959771761221167
 Modelparam_lr:  0.03559375247780531
 Hyperparam_lr:  0.0008898438119451327
-epoch:  11 loss: -21113.701 FC_cor:  0.9388688075510243 cos_sim:  0.07605605496029878
+Epoch:  11
+epoch:  11 loss: -21113.695 FC_cor:  0.9531845767873505 cos_sim:  0.10490453930194797
 Modelparam_lr:  0.030289291135082407
 Hyperparam_lr:  0.0007572322783770602
-epoch:  12 loss: -21147.396 FC_cor:  0.9530002315755973 cos_sim:  0.14743123976573136
+Epoch:  12
+epoch:  12 loss: -21147.38 FC_cor:  0.9283171024726095 cos_sim:  0.09242259715589698
 Modelparam_lr:  0.02471960766310769
 Hyperparam_lr:  0.0006179901915776922
-epoch:  13 loss: -21174.242 FC_cor:  0.8440851970241553 cos_sim:  0.13374755338025535
+Epoch:  13
+epoch:  13 loss: -21174.244 FC_cor:  0.943923262839854 cos_sim:  0.12633198206042318
 Modelparam_lr:  0.01916398924813876
 Hyperparam_lr:  0.000479099731203469
-epoch:  14 loss: -21194.541 FC_cor:  0.9621919712393312 cos_sim:  0.12249620804257041
+Epoch:  14
+epoch:  14 loss: -21194.518 FC_cor:  0.9412616936148726 cos_sim:  0.11272671078421442
 Modelparam_lr:  0.013901017795744356
 Hyperparam_lr:  0.0003475254448936089
-epoch:  15 loss: -21208.725 FC_cor:  0.897048710222886 cos_sim:  0.1414609495093032
+Epoch:  15
+epoch:  15 loss: -21208.742 FC_cor:  0.9342070599188693 cos_sim:  0.13358438897994085
 Modelparam_lr:  0.009194600670802466
 Hyperparam_lr:  0.00022986501677006163
-epoch:  16 loss: -21217.67 FC_cor:  0.9404452862133255 cos_sim:  0.1624794501566673
+Epoch:  16
+epoch:  16 loss: -21217.688 FC_cor:  0.9122017974364066 cos_sim:  0.16072286611685968
 Modelparam_lr:  0.005280737280244115
 Hyperparam_lr:  0.0001320184320061029
-epoch:  17 loss: -21222.41 FC_cor:  0.8673468006315106 cos_sim:  0.11101565646725188
+Epoch:  17
+epoch:  17 loss: -21222.426 FC_cor:  0.9008823086240053 cos_sim:  0.12715198782431683
 Modelparam_lr:  0.002355685077342152
 Hyperparam_lr:  5.889212693355379e-05
-epoch:  18 loss: -21224.23 FC_cor:  0.8886598630239192 cos_sim:  0.14101486784346456
+Epoch:  18
+epoch:  18 loss: -21224.203 FC_cor:  0.8816493014469401 cos_sim:  0.13760035903464013
 Modelparam_lr:  0.0005661183935043931
 Hyperparam_lr:  1.4152959837609827e-05
-epoch:  19 loss: -21224.484 FC_cor:  0.9170836395513543 cos_sim:  0.11786388766149561
+Epoch:  19
+epoch:  19 loss: -21224.477 FC_cor:  0.9454716124082297 cos_sim:  0.12233922417446375
 Modelparam_lr:  1.7735748381612052e-06
 Hyperparam_lr:  4.433937095403013e-08
 </pre></div>
 </div>
 <p>model test with 20 window for warmup</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span><span class="n">u</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span><span class="n">u</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9258871782174953 cos_sim:  0.09299269926541424
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9077203308720688 cos_sim:  0.11616929428145481
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -421,9 +446,9 @@ Hyperparam_lr:  4.433937095403013e-08
 <img alt="The empirical SC, The fitted SC" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_001.png" />
 <p>Plot the EEG</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">P_test</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Test: sourced EEG&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">eeg_test</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s2">&quot;eeg&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eeg_data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;empirical&#39;</span><span class="p">)</span>
@@ -431,7 +456,7 @@ Hyperparam_lr:  4.433937095403013e-08
 </pre></div>
 </div>
 <img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_002.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 6 minutes  14.178 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 6 minutes  38.453 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/96a042e39a4f43abe4e10ca8c12118f5/eg004r__fitting_JR_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg004r__fitting_JR_example.py</span></code></a></p>
