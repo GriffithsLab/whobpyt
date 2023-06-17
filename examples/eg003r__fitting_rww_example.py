@@ -59,7 +59,7 @@ sub = '100307'
 # define options for wong-wang model
 node_size = 83
 mask = np.tril_indices(node_size, -1)
-num_epoches = 5
+num_epochs = 5
 TPperWindow = 20
 step_size = 0.05
 input_size = 2
@@ -86,7 +86,7 @@ fc_emp = np.corrcoef(ts.T)
 # %%
 # prepare data structure of the model
 print(ts.T.shape)
-fMRIstep = 1 #TODO: Update
+fMRIstep = tr
 data_mean = Recording(ts.T, fMRIstep) #dataloader(ts, num_epoches, TPperWindow)
 
 # %%
@@ -108,15 +108,15 @@ ObjFun = CostsRWW()
 
 # %%
 # call model fit
-F = Model_fitting(model, [data_mean.windowedTensor(TPperWindow)], num_epoches, ObjFun)
+F = Model_fitting(model, ObjFun, TPperWindow, num_epochs)
 
 # %%
 # model training
-F.train(learningrate= 0.05)
+F.train(u = 0, empRecs = [data_mean], learningrate = 0.05)
 
 # %%
 # model test with 20 window for warmup
-F.evaluate(20)
+F.evaluate(u = 0, empRec = data_mean, base_window_num = 20)
 
 # %%
 # Plot SC and fitted SC

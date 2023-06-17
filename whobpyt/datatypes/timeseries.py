@@ -23,12 +23,22 @@ class Recording():
         self.data = data
         self.step_size = step_size
         self.modality = modality
+        self.length = self.data.shape[1]
     
     def pyTS(self):
         return self.data
     
     def npTS(self):
         return self.data.numpy()
+        
+    def npNodeByTime(self):
+        return self.data.numpy()
+        
+    def npTimeByNodes(self):
+        return self.data.numpy().T
+        
+    def length(self):
+        return self.length
         
     def npResample(self):
         #This outputs resampled data used for Figures

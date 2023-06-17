@@ -93,7 +93,7 @@ hidden_size = int(tr/step_size)
 # %%
 # prepare data structure of the model
 print(eeg_data.shape)
-EEGstep = 1 #TODO: Update
+EEGstep = tr
 data_mean = Recording(eeg_data, EEGstep) #dataloader(eeg_data.T, num_epoches, batch_size)
 
 # %%
@@ -121,17 +121,17 @@ ObjFun = CostsJR()
 
 # %%
 # call model fit
-F = Model_fitting(model, [data_mean.windowedTensor(TPperWindow)], num_epoches, ObjFun)
+F = Model_fitting(model, ObjFun, TPperWindow, num_epoches)
 
 # %%
 # model training
 u = np.zeros((node_size,hidden_size,time_dim))
 u[:,:,110:120]= 200
-F.train(u=u, epoch_min = 100, r_lb = 0.95)
+F.train(u = u, empRecs = [data_mean])
 
 # %%
 # model test with 20 window for warmup
-F.evaluate(200, u =u)
+F.evaluate(u = u, empRec = data_mean,  base_window_num = 20)
 
 # %%
 # Plot SC and fitted SC

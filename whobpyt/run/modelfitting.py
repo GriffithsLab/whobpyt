@@ -34,57 +34,63 @@ class Model_fitting:
         the times for repeating trainning
     cost: choice of the cost function
     """
-    
-    u = 0  # external input
 
-    def __init__(self, model, ts, num_epoches, cost):
+    def __init__(self, model, cost, TPperWindow, num_epoches = 1):
         """
         Parameters
         ----------
         model: instance of class RNNJANSEN
             forward model JansenRit
-        ts: array with num_tr x node_size
-            empirical EEG time-series
         num_epoches: int
             the times for repeating trainning
         """
+        
         self.model = model
+        self.cost = cost
+        
+        #self.u = None #This is the ML "Training Input"                
+        #self.empTS = ts #This is the ML "Training Labels" - A list
 
-        self.u = None #This is the ML "Training Input"                
-        self.trainData = ts #This is the ML "Training Labels" - A list
-        
-        self.lastRec = None #A dictionary or Recordings of the last simulation preformed (either training or evaluation)
-        
+        self.TPperWindow = TPperWindow 
         self.num_epoches = num_epoches                
-        self.num_windows = self.trainData[0].shape[0] # define num_windows - assumes all recordings are of the same length
+
+        self.lastRec = None #A dictionary or Recordings of the last simulation preformed (either training or evaluation)
         
         # placeholder for output(EEG and histoty of model parameters and loss)
         self.trainingStats = OutputNM(self.model)
 
-        self.cost = cost
+
 
     def save(self, filename):
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
 
-    def train(self, learningrate=0.05, u=0, epoch_min = 10, r_lb = 0.85, lr_hyper = 0.05/40, lr_scheduler = True):
+    def train(self, u, empRecs, learningrate = 0.05, lr_2ndLevel = 0.05, lr_scheduler = False):
         """
+        
         Parameters
         ----------
-        learningrate : for machine learing speed
-        u: stimulus
+        u: type
+           This stimulus is the ML "Training Input" 
+        empRec: List of Recording
+            This is the ML "Training Labels"
+        learningrate : double
+            rate of gradient descent
 
         """
-
-        self.u = u #This is the ML "Training Data"
 
         #Define two different optimizers for each group
         modelparameter_optimizer = optim.Adam(self.model.params_fitted['modelparameter'], lr=learningrate, eps=1e-7)
-        hyperparameter_optimizer = optim.Adam(self.model.params_fitted['hyperparameter'], lr=lr_hyper, eps=1e-7)
+        hyperparameter_optimizer = optim.Adam(self.model.params_fitted['hyperparameter'], lr=lr_2ndLevel, eps=1e-7)
 
         # Define the learning rate schedulers for each group of parameters
+
         if lr_scheduler:
-            total_steps = self.num_windows*self.num_epoches
+            total_steps = 0
+            for empRec in empRecs:
+                total_steps += int(empRec.length/self.TPperWindow)*self.num_epoches
+        
+            #total_steps = self.num_windows*self.num_epoches
             hyperparameter_scheduler = optim.lr_scheduler.OneCycleLR(hyperparameter_optimizer, lr_hyper, total_steps, anneal_strategy = "cos")
             hlrs = []
             modelparameter_scheduler = optim.lr_scheduler.OneCycleLR(modelparameter_optimizer, learningrate, total_steps, anneal_strategy = "cos")
@@ -129,7 +135,8 @@ class Model_fitting:
             print("Epoch: ", i_epoch)
                    
             # LOOP 2/4: Number of Recordings in the Training Dataset
-            for windowedTS in self.trainData: 
+            for empRec in empRecs: 
+                windowedTS = empRec.windowedTensor(self.TPperWindow)
 
                 # TIME SERIES: Create placeholders for the simulated states and outputs of entire time series corresponding to one recording
                 windListDict = {} # A Dictionary with a List of windowed time series
@@ -142,16 +149,16 @@ class Model_fitting:
                     dtype=torch.float32)
 
                 # LOOP 3/4: Number of windowed segments for the recording
-                for win_idx in range(self.num_windows):
+                for win_idx in range(windowedTS.shape[0]):
 
                     # Reset the gradient to zeros after update model parameters.
                     hyperparameter_optimizer.zero_grad()
                     modelparameter_optimizer.zero_grad()
 
                     # if the external not empty
-                    if not isinstance(self.u, int):
+                    if not isinstance(u, int):
                         external = torch.tensor(
-                            (self.u[:, :, win_idx * self.model.TRs_per_window:(win_idx + 1) * self.model.TRs_per_window]),
+                            (u[:, :, win_idx * self.model.TRs_per_window:(win_idx + 1) * self.model.TRs_per_window]), 
                             dtype=torch.float32)
 
                     # LOOP 4/4: The loop within the forward model (numerical solver), which is number of time points per windowed segment
@@ -162,7 +169,7 @@ class Model_fitting:
 
                     # calculating loss
                     
-                    sim = next_window[self.model.output_names[0]]
+                    sim = next_window[self.cost.varKey]
                     loss = self.cost.loss(sim, ts_window, self.model, next_window)
                     
                     # TIME SERIES: Put the window of simulated forward model.
@@ -228,9 +235,6 @@ class Model_fitting:
                     print('Hyperparam_lr: ', hyperparameter_scheduler.get_last_lr()[0])
 
                 self.trainingStats.loss = np.array(loss_his)
-
-                if i_epoch > epoch_min and np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1] > r_lb:
-                    break
         
         # Saving the last recording of training as a Model_fitting attribute
         self.lastRec = {}
@@ -245,7 +249,7 @@ class Model_fitting:
         for key, value in fit_param.items():
             setattr(self.trainingStats, key, np.array(value))
 
-    def evaluate(self, base_window_num, u=0):
+    def evaluate(self, u, empRec, base_window_num = 0):
         """
         Parameters
         ----------
@@ -257,8 +261,6 @@ class Model_fitting:
 
         # define some constants
         transient_num = 10
-
-        self.u = u
 
         # initial state
         X = self.model.createIC(ver = 1)
@@ -276,13 +278,14 @@ class Model_fitting:
         for name in self.model.state_names + self.model.output_names:
             windListDict[name] = []
 
+        num_windows = int(empRec.length/self.TPperWindow)
         u_hat = np.zeros(
             (self.model.node_size,self.model.steps_per_TR,
-             base_window_num*self.model.TRs_per_window + self.num_windows*self.model.TRs_per_window))
-        u_hat[:, :, base_window_num * self.model.TRs_per_window:] = self.u
+             base_window_num*self.model.TRs_per_window + num_windows*self.model.TRs_per_window))
+        u_hat[:, :, base_window_num * self.model.TRs_per_window:] = u
 
         # LOOP 1/2: The number of windows in a recording
-        for win_idx in range(self.num_windows + base_window_num):
+        for win_idx in range(num_windows + base_window_num):
 
             # Get the input and output noises for the module.
             external = torch.tensor(
@@ -302,7 +305,7 @@ class Model_fitting:
             X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
             hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
         
-        windowedTS = self.trainData[0] # TODO: This should be an input to the method. For now take the first training data.
+        windowedTS = empRec.windowedTensor(self.TPperWindow)
         ts_emp = np.concatenate(list(windowedTS),1) #TODO: Check this code
         fc = np.corrcoef(ts_emp)
         
@@ -320,60 +323,3 @@ class Model_fitting:
         self.lastRec = {}
         for name in self.model.state_names + self.model.output_names:
             self.lastRec[name] = Recording(windListDict[name], step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
-
-
-    def test_realtime(self, tr_p, step_size_n, step_size, num_windows):
-    
-        # TODO: This function is outdated and needs to be completely rewritten
-    
-        if self.model.model_name == 'RWW':
-            mask = np.tril_indices(self.model.node_size, -1)
-
-            X_np = 0.2 * np.random.uniform(0, 1, (self.model.node_size, self.model.state_size)) + np.array(
-                [0, 0, 0, 1.0, 1.0, 1.0])
-            variables_p = [a for a in dir(self.model.params) if
-                           not a.startswith('__') and not callable(getattr(self.model.params, a))]
-            # get penalty on each model parameters due to prior distribution
-            for var in variables_p:
-                # print(var)
-                if np.any(getattr(self.model.params, var)[1] > 0):
-                    des = getattr(self.model.params, var)
-                    value = getattr(self.model, var)
-                    des[0] = value.detach().numpy().copy()
-                    setattr(self.model.params, var, des)
-            model_np = RWW_np(self.model.node_size, self.model.TRs_per_window, step_size_n, step_size, tr_p,
-                              self.model.sc_fitted.detach().numpy().copy(),
-                              self.model.use_dynamic_boundary, self.model.use_Laplacian, self.model.params)
-
-            # Create placeholders for the simulated BOLD E I x f and q of entire time series.
-            for name in self.model.state_names + self.output_sim.output_names:
-                setattr(self.output_sim, name + '_test', [])
-
-            # Perform the training in batches.
-
-            for TR_i in range(num_windows + 10):
-
-                noise_in_np = np.random.randn(self.model.node_size, self.model.TRs_per_window, int(tr_p / step_size_n), 2)
-
-                noise_BOLD_np = np.random.randn(self.model.node_size, self.model.TRs_per_window)
-
-                next_window_np = model_np.forward(X_np, noise_in_np, noise_BOLD_np)
-                if TR_i >= 10:
-                    # Put the batch of the simulated BOLD, E I x f v q in to placeholders for entire time-series.
-                    for name in self.model.state_names + self.output_sim.output_names:
-                        name_next = name + '_window'
-                        tmp_ls = getattr(self.output_sim, name + '_test')
-                        tmp_ls.append(next_window_np[name_next])
-
-                        setattr(self.output_sim, name + '_test', tmp_ls)
-
-                # last update current state using next state...
-                # (no direct use X = X_next, since gradient calculation only depends on one batch no history)
-                X_np = next_window_np['current_state']
-            tmp_ls = getattr(self.output_sim, self.output_sim.output_names[0] + '_test')
-
-            for name in self.model.state_names + self.output_sim.output_names:
-                tmp_ls = getattr(self.output_sim, name + '_test')
-                setattr(self.output_sim, name + '_test', np.concatenate(tmp_ls, axis=1))
-        else:
-            print("only RWW model for the test_realtime function")

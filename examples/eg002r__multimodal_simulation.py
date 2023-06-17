@@ -195,6 +195,8 @@ model.track_params = ['J']
 
 class mmObjectiveFunction():
     def __init__(self):
+        self.varKey = "E"
+    
         # Weights of Objective Function Components
         self.S_E_mean_weight = 1
         self.S_I_mean_weight = 0 # Not Currently Used
@@ -204,7 +206,7 @@ class mmObjectiveFunction():
         self.BOLD_FC_weight = 0 # Not Currently Used
         
         # Functions of the various Objective Function Components
-        self.S_E_mean = CostsMean(num_regions, varIdx = 0, targetValue = torch.tensor([0.164]))
+        self.S_E_mean = CostsMean(num_regions, varKey = "E", targetValue = torch.tensor([0.164]))
         #self.S_I_mean = CostsMean(...) # Not Currently Used
         #self.EEG_PSD = CostsPSD(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)
         #self.EEG_FC = CostsFC(...) # Not Currently Used
@@ -263,15 +265,15 @@ randTS1 = Recording(randData1, step_size)
 randTS2 = Recording(randData2, step_size)
 
 # call model fit
-F = Model_fitting(model, [randTS1.windowedTensor(TPperWindow), randTS2.windowedTensor(TPperWindow)], num_epochs, ObjFun)
+F = Model_fitting(model, ObjFun, TPperWindow, num_epochs)
 
 # %%
 # model training
-F.train(learningrate= 0.1, lr_scheduler = False)
+F.train(u = 0, empRecs = [randTS1, randTS2], learningrate = 0.1)
 
 # %%
-# model test with 20 window for warmup
-F.evaluate(0)
+# model evaluate
+F.evaluate(u = 0, empRec = randTS1)
 
 
 #LossComp = list()
