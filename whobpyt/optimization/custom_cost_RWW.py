@@ -49,8 +49,8 @@ class CostsRWW(AbstractLoss):
                       torch.mean(model.v_v_inv * (v_window - model.v_m) ** 2) \
                       + torch.mean(-torch.log(model.v_v_inv)) \
                       + 5.0 * (m(model.sup_ca) * m(model.g_IE) ** 2
-                               - m(model.sup_cb) * m(model.g_IE)
-                               + m(model.sup_cc) - m(model.g_EI)) ** 2
+                               - m(model.sup_cb) * m(model.params.g_IE.value())
+                               + m(model.sup_cc) - m(model.params.g_EI.value())) ** 2
         if model.use_Gaussian_EI and not model.use_Bifurcation:
             loss_EI = torch.mean(model.E_v_inv * (E_window - model.E_m) ** 2) \
                       + torch.mean(-torch.log(model.E_v_inv)) + \
@@ -66,9 +66,9 @@ class CostsRWW(AbstractLoss):
                 torch.mean(E_window * torch.log(E_window) + (1 - E_window) * torch.log(1 - E_window) \
                            + 0.5 * I_window * torch.log(I_window) + 0.5 * (1 - I_window) * torch.log(
                     1 - I_window), dim=1)) + \
-                      + 5.0 * (m(model.sup_ca) * m(model.g_IE) ** 2
-                               - m(model.sup_cb) * m(model.g_IE)
-                               + m(model.sup_cc) - m(model.g_EI)) ** 2
+                      + 5.0 * (m(model.sup_ca) * m(model.params.g_IE.value()) ** 2
+                               - m(model.sup_cb) * m(model.params.g_IE.value())
+                               + m(model.sup_cc) - m(model.params.g_EI.value())) ** 2
 
         if not model.use_Gaussian_EI and not model.use_Bifurcation:
             loss_EI = .1 * torch.mean(

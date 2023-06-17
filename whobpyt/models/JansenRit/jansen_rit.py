@@ -236,9 +236,11 @@ class RNNJANSEN(AbstractNMM):
                     param_hyper.append(var.prior_var)
 
             if (var.fit_par):
-                param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first
-            setattr(self, var_name, var.val)    
-                
+                param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first 
+            
+            if var_name == 'lm':
+                setattr(self, var_name, var.val)
+            
         self.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 
 
@@ -267,6 +269,29 @@ class RNNJANSEN(AbstractNMM):
         hE : torch.Tensor
             Tensor representing the updated history of the pyramidal population's current.
         """
+
+        # Defining NMM Parameters to simplify later equations
+        A = self.params.A.value() 
+        a = self.params.a.value()
+        B = self.params.B.value()
+        b = self.params.b.value()
+        g = self.params.g.value()
+        c1 = self.params.c1.value()
+        c2 = self.params.c2.value()
+        c3 = self.params.c3.value()
+        c4 = self.params.c4.value()
+        std_in = self.params.std_in.value()
+        vmax = self.params.vmax.value()
+        v0 = self.params.v0.value()
+        r = self.params.r.value()
+        y0 = self.params.y0.value()
+        mu = self.params.mu.value()
+        k = self.params.k.value()
+        cy0 = self.params.cy0.value()
+        ki = self.params.ki.value()
+        
+        g_f = self.params.g_f.value()
+        g_b = self.params.g_b.value()
 
         # Define some constants
         conduct_lb = 1.5  # lower bound for conduct velocity
@@ -321,7 +346,7 @@ class RNNJANSEN(AbstractNMM):
             w_n_b = 0
             w_n_f = 0
 
-        self.delays = (self.dist / (conduct_lb * con_1 + m(self.mu))).type(torch.int64)
+        self.delays = (self.dist / (conduct_lb * con_1 + m(mu))).type(torch.int64)
 
         # Placeholder for the updated current state
         current_state = torch.zeros_like(hx)
@@ -350,33 +375,30 @@ class RNNJANSEN(AbstractNMM):
                 
                 # TMS (or external) input
                 u_tms = external[:, step_i:step_i + 1, i_window]
-                rM = (k_lb * con_1 + m(self.k)) * self.ki * u_tms + \
-                    (noise_std_lb * con_1 + m(self.std_in)) * torch.randn(self.node_size, 1) + \
-                    1 * (lb * con_1 + m(self.g)) * (
-                            LEd_l + 1 * torch.matmul(dg_l, M)) + \
-                    sigmoid(E - I, self.vmax, self.v0, self.r)  # firing rate for pyramidal population
-                rE = (noise_std_lb * con_1 + m(self.std_in)) * torch.randn(self.node_size, 1) + \
-                    1 * (lb * con_1 + m(self.g_f)) * (LEd_f + 1 * torch.matmul(dg_f, E - I)) + \
-                    (lb * con_1 + m(self.c2)) * sigmoid((lb * con_1 + m(self.c1)) * M, self.vmax, self.v0,
-                                                        self.r)  # firing rate for excitatory population
-                rI = (noise_std_lb * con_1 + m(self.std_in)) * torch.randn(self.node_size, 1) + \
-                    1 * (lb * con_1 + m(self.g_b)) * (-LEd_b - 1 * torch.matmul(dg_b, E - I)) + \
-                    (lb * con_1 + m(self.c4)) * sigmoid((lb * con_1 + m(self.c3)) * M, self.vmax, self.v0,
-                                                        self.r)  # firing rate for inhibitory population
+                rM = (k_lb * con_1 + m(k)) * ki * u_tms + \
+                    (noise_std_lb * con_1 + m(std_in)) * torch.randn(self.node_size, 1) + \
+                    1 * (lb * con_1 + m(g)) * (LEd_l + 1 * torch.matmul(dg_l, M)) + \
+                    sigmoid(E - I, vmax, v0, r)  # firing rate for pyramidal population
+                rE = (noise_std_lb * con_1 + m(std_in)) * torch.randn(self.node_size, 1) + \
+                    1 * (lb * con_1 + m(g_f)) * (LEd_f + 1 * torch.matmul(dg_f, E - I)) + \
+                    (lb * con_1 + m(c2)) * sigmoid((lb * con_1 + m(c1)) * M, vmax, v0,
+                                                        r)  # firing rate for excitatory population
+                rI = (noise_std_lb * con_1 + m(std_in)) * torch.randn(self.node_size, 1) + \
+                    1 * (lb * con_1 + m(g_b)) * (-LEd_b - 1 * torch.matmul(dg_b, E - I)) + \
+                    (lb * con_1 + m(c4)) * sigmoid((lb * con_1 + m(c3)) * M, vmax, v0,
+                                                        r)  # firing rate for inhibitory population
 
                 # Update the states with every step size.
                 ddM = M + dt * Mv
                 ddE = E + dt * Ev
                 ddI = I + dt * Iv
-                ddMv = Mv + dt * sys2nd(0 * con_1 + m(self.A), 1 * con_1 +
-                                        m(self.a),
+                ddMv = Mv + dt * sys2nd(0 * con_1 + m(A), 1 * con_1 + m(a),
                                         u_2ndsys_ub * torch.tanh(rM / u_2ndsys_ub), M, Mv)
 
-                ddEv = Ev + dt * sys2nd(0 * con_1 + m(self.A), 1 * con_1 +
-                                        m(self.a),
+                ddEv = Ev + dt * sys2nd(0 * con_1 + m(A), 1 * con_1 + m(a),
                                         u_2ndsys_ub * torch.tanh(rE / u_2ndsys_ub), E, Ev)
 
-                ddIv = Iv + dt * sys2nd(0 * con_1 + m(self.B), 1 * con_1 + m(self.b),
+                ddIv = Iv + dt * sys2nd(0 * con_1 + m(B), 1 * con_1 + m(b),
                                         u_2ndsys_ub * torch.tanh(rI / u_2ndsys_ub), I, Iv)
 
                 # Calculate the saturation for model states (for stability and gradient calculation).
@@ -402,7 +424,7 @@ class RNNJANSEN(AbstractNMM):
             # Capture the states at every tr in the placeholders which is then used in the cost calculation.
             lm_t = (self.lm.T / torch.sqrt(self.lm ** 2).sum(1)).T
             self.lm_t = (lm_t - 1 / self.output_size * torch.matmul(torch.ones((1, self.output_size)), lm_t))
-            temp = self.cy0 * torch.matmul(self.lm_t, M[:200, :]) - 1 * self.y0
+            temp = cy0 * torch.matmul(self.lm_t, M[:200, :]) - 1 * y0
             eeg_window.append(temp)
 
         # Update the current state.
