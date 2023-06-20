@@ -132,8 +132,9 @@ class RNNRWW(AbstractNMM):
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
         self.output_names = ["bold"]
-        self.model_name = "RWW"
+        self.track_params = [] #Is populated during setModelParameters()
         
+        self.model_name = "RWW"
         self.state_size = 6  # 6 states WWD model
         # self.input_size = input_size  # 1 or 2
         self.tr = tr  # tr fMRI image
@@ -153,6 +154,8 @@ class RNNRWW(AbstractNMM):
         self.params_fitted = {}
 
         self.output_size = node_size
+        
+        self.setModelParameters()
     
     def info(self):
         """
@@ -317,13 +320,63 @@ def setModelParameters(model):
                 var.randSet() #TODO: This should be done before giving params to model class
                 param_hyper.append(var.prior_mean)
                 param_hyper.append(var.prior_var) #TODO: Currently this is _v_inv but should set everything to just variance unless there is a reason to keep the inverse?
+                
             if (var.fit_par == True):
-                param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first
-            setattr(model, var_name, var.val)
+                param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first                
+                model.track_params.append(var_name)
+            
+            if (var.fit_par | var.fit_hyper):
+                model.track_params.append(var_name) #NMM Parameters
 
     model.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 
 def integration_forward(model, external, hx, hE):
+
+    # Defining NMM Parameters to simplify later equations
+    std_in = model.params.std_in.value()  # standard deviation of the Gaussian noise
+    std_out = model.params.std_out.value()  # standard deviation of the Gaussian noise
+    
+    # Parameters for the ODEs
+    # Excitatory population
+    W_E = model.params.W_E.value()  # scale of the external input
+    tau_E = model.params.tau_E.value()  # decay time
+    gamma_E = model.params.gamma_E.value()  # other dynamic parameter (?)
+
+    # Inhibitory population
+    W_I = model.params.W_I.value()  # scale of the external input
+    tau_I = model.params.tau_I.value()  # decay time
+    gamma_I = model.params.gamma_I.value()  # other dynamic parameter (?)
+
+    # External input
+    I_0 = model.params.I_0.value()  # external input
+    I_external = model.params.I_external.value()  # external stimulation
+
+    # Coupling parameters
+    g = model.params.g.value()  # global coupling (from all nodes E_j to single node E_i)
+    g_EE = model.params.g_EE.value()  # local self excitatory feedback (from E_i to E_i)
+    g_IE = model.params.g_IE.value()  # local inhibitory coupling (from I_i to E_i)
+    g_EI = model.params.g_EI.value()  # local excitatory coupling (from E_i to I_i)
+
+    aE = model.params.aE.value()
+    bE = model.params.bE.value()
+    dE = model.params.dE.value()
+    aI = model.params.aI.value()
+    bI = model.params.bI.value()
+    dI = model.params.dI.value()
+
+    # Output (BOLD signal)
+    alpha = model.params.alpha.value()
+    rho = model.params.rho.value()
+    k1 = model.params.k1.value()
+    k2 = model.params.k2.value()
+    k3 = model.params.k3.value()  # adjust this number from 0.48 for BOLD fluctruate around zero
+    V = model.params.V.value()
+    E0 = model.params.E0.value()
+    tau_s = model.params.tau_s.value()
+    tau_f = model.params.tau_f.value()
+    tau_0 = model.params.tau_0.value()
+    mu = model.params.mu.value()
+
 
     next_state = {}
 
@@ -390,21 +443,21 @@ def integration_forward(model, external, hx, hE):
                     I[:, sample_i] = I_mean[:, 0] + 0.001 * torch.randn(model.node_size)
 
                 # Calculate the input recurrent.
-                IE = torch.tanh(m(model.W_E * model.I_0 + (0.001 + m(model.g_EE)) * E
-                                  + model.g * torch.matmul(lap_adj, E) - (
-                                          0.001 + m(model.g_IE)) * I))  # input currents for E
-                II = torch.tanh(m(model.W_I * model.I_0 + (0.001 + m(model.g_EI)) * E - I))  # input currents for I
+                IE = torch.tanh(m(W_E * I_0 + (0.001 + m(g_EE)) * E
+                                  + g * torch.matmul(lap_adj, E) - (
+                                          0.001 + m(g_IE)) * I))  # input currents for E
+                II = torch.tanh(m(W_I * I_0 + (0.001 + m(g_EI)) * E - I))  # input currents for I
 
                 # Calculate the firing rates.
-                rE = h_tf(model.aE, model.bE, model.dE, IE)  # firing rate for E
-                rI = h_tf(model.aI, model.bI, model.dI, II)  # firing rate for I
+                rE = h_tf(aE, bE, dE, IE)  # firing rate for E
+                rI = h_tf(aI, bI, dI, II)  # firing rate for I
                 # Update the states by step-size 0.05.
-                E_next = E + dt * (-E * torch.reciprocal(model.tau_E) + model.gamma_E * (1. - E) * rE) \
+                E_next = E + dt * (-E * torch.reciprocal(tau_E) + gamma_E * (1. - E) * rE) \
                          + torch.sqrt(dt) * torch.randn(model.node_size, model.sampling_size) * (0.02 + m(
-                    model.std_in))  ### equlibrim point at E=(tau_E*gamma_E*rE)/(1+tau_E*gamma_E*rE)
-                I_next = I + dt * (-I * torch.reciprocal(model.tau_I) + model.gamma_I * rI) \
+                    std_in))  ### equlibrim point at E=(tau_E*gamma_E*rE)/(1+tau_E*gamma_E*rE)
+                I_next = I + dt * (-I * torch.reciprocal(tau_I) + gamma_I * rI) \
                          + torch.sqrt(dt) * torch.randn(model.node_size, model.sampling_size) * (
-                                 0.02 + m(model.std_in))
+                                 0.02 + m(std_in))
 
                 # Calculate the saturation for model states (for stability and gradient calculation).
 
@@ -424,14 +477,13 @@ def integration_forward(model, external, hx, hE):
 
             for step_i in range(model.steps_per_TR):
                 x_next = x + 1 * dt * (1 * E_hist[:, TR_i, step_i][:, np.newaxis] - torch.reciprocal(
-                    model.tau_s) * x - torch.reciprocal(model.tau_f) * (f - 1))
+                    tau_s) * x - torch.reciprocal(tau_f) * (f - 1))
                 f_next = f + 1 * dt * x
-                v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(model.alpha))) * torch.reciprocal(
-                    model.tau_0)
+                v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(alpha))) * torch.reciprocal(tau_0)
                 q_next = q + 1 * dt * (
-                        f * (1 - torch.pow(1 - model.rho, torch.reciprocal(f))) * torch.reciprocal(
-                    model.rho) - q * torch.pow(v, torch.reciprocal(model.alpha)) * torch.reciprocal(v)) \
-                         * torch.reciprocal(model.tau_0)
+                        f * (1 - torch.pow(1 - rho, torch.reciprocal(f))) * torch.reciprocal(
+                    rho) - q * torch.pow(v, torch.reciprocal(alpha)) * torch.reciprocal(v)) \
+                         * torch.reciprocal(tau_0)
 
                 x = torch.tanh(x_next)
                 f = (1 + torch.tanh(f_next - 1))
@@ -445,9 +497,9 @@ def integration_forward(model, external, hx, hE):
 
             # Put the BOLD signal each tr to the placeholder being used in the cost calculation.
 
-            bold_window[:, TR_i] = ((0.00 + m(model.std_out)) * torch.randn(model.node_size, 1) +
-                                    100.0 * model.V * torch.reciprocal(model.E0) *
-                                    (model.k1 * (1 - q) + model.k2 * (1 - q * torch.reciprocal(v)) + model.k3 * (
+            bold_window[:, TR_i] = ((0.00 + m(std_out)) * torch.randn(model.node_size, 1) +
+                                    100.0 * V * torch.reciprocal(E0) *
+                                    (k1 * (1 - q) + k2 * (1 - q * torch.reciprocal(v)) + k3 * (
                                             1 - v)))[:, 0]
     else:
 
@@ -464,22 +516,22 @@ def integration_forward(model, external, hx, hE):
                     I[:, sample_i] = I_mean[:, 0] + 0.001 * torch.randn(model.node_size)
 
                 # Calculate the input recurrent.
-                IE = 1 * torch.tanh(m(model.W_E * model.I_0 + (0.001 + m(model.g_EE)) * E \
-                                      + model.g * torch.matmul(lap_adj, E) - (
-                                              0.001 + m(model.g_IE)) * I))  # input currents for E
+                IE = 1 * torch.tanh(m(W_E * I_0 + (0.001 + m(g_EE)) * E \
+                                      + g * torch.matmul(lap_adj, E) - (
+                                              0.001 + m(g_IE)) * I))  # input currents for E
                 II = 1 * torch.tanh(
-                    m(model.W_I * model.I_0 + (0.001 + m(model.g_EI)) * E - I))  # input currents for I
+                    m(W_I * I_0 + (0.001 + m(g_EI)) * E - I))  # input currents for I
 
                 # Calculate the firing rates.
-                rE = h_tf(model.aE, model.bE, model.dE, IE)  # firing rate for E
-                rI = h_tf(model.aI, model.bI, model.dI, II)  # firing rate for I
+                rE = h_tf(aE, bE, dE, IE)  # firing rate for E
+                rI = h_tf(aI, bI, dI, II)  # firing rate for I
                 # Update the states by step-size 0.05.
-                E_next = E + dt * (-E * torch.reciprocal(model.tau_E) + model.gamma_E * (1. - E) * rE) \
+                E_next = E + dt * (-E * torch.reciprocal(tau_E) + gamma_E * (1. - E) * rE) \
                          + torch.sqrt(dt) * torch.randn(model.node_size, model.sampling_size) * (0.02 + m(
-                    model.std_in))  ### equlibrim point at E=(tau_E*gamma_E*rE)/(1+tau_E*gamma_E*rE)
-                I_next = I + dt * (-I * torch.reciprocal(model.tau_I) + model.gamma_I * rI) \
+                    std_in))  ### equlibrim point at E=(tau_E*gamma_E*rE)/(1+tau_E*gamma_E*rE)
+                I_next = I + dt * (-I * torch.reciprocal(tau_I) + gamma_I * rI) \
                          + torch.sqrt(dt) * torch.randn(model.node_size, model.sampling_size) * (
-                                 0.02 + m(model.std_in))
+                                 0.02 + m(std_in))
 
                 # Calculate the saturation for model states (for stability and gradient calculation).
                 E_next[E_next < 0.00001] = 0.00001
@@ -500,14 +552,13 @@ def integration_forward(model, external, hx, hE):
 
             for step_i in range(model.steps_per_TR):
                 x_next = x + 1 * dt * (1 * E_hist[:, TR_i, step_i][:, np.newaxis] - torch.reciprocal(
-                    model.tau_s) * x - torch.reciprocal(model.tau_f) * (f - 1))
+                    tau_s) * x - torch.reciprocal(tau_f) * (f - 1))
                 f_next = f + 1 * dt * x
-                v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(model.alpha))) * torch.reciprocal(
-                    model.tau_0)
+                v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(alpha))) * torch.reciprocal(tau_0)
                 q_next = q + 1 * dt * (
-                        f * (1 - torch.pow(1 - model.rho, torch.reciprocal(f))) * torch.reciprocal(
-                    model.rho) - q * torch.pow(v, torch.reciprocal(model.alpha)) * torch.reciprocal(v)) \
-                         * torch.reciprocal(model.tau_0)
+                        f * (1 - torch.pow(1 - rho, torch.reciprocal(f))) * torch.reciprocal(
+                    rho) - q * torch.pow(v, torch.reciprocal(alpha)) * torch.reciprocal(v)) \
+                         * torch.reciprocal(tau_0)
 
                 f_next[f_next < 0.001] = 0.001
                 v_next[v_next < 0.001] = 0.001
@@ -523,10 +574,10 @@ def integration_forward(model, external, hx, hE):
             q_window[:, TR_i] = q[:, 0]
             # Put the BOLD signal each tr to the placeholder being used in the cost calculation.
 
-            bold_window[:, TR_i] = ((0.00 + m(model.std_out)) * torch.randn(model.node_size, 1) +
-                                    100.0 * model.V * torch.reciprocal(
-                        model.E0) * (model.k1 * (1 - q) + model.k2 * (
-                            1 - q * torch.reciprocal(v)) + model.k3 * (1 - v)))[:, 0]
+            bold_window[:, TR_i] = ((0.00 + m(std_out)) * torch.randn(model.node_size, 1) +
+                                    100.0 * V * torch.reciprocal(
+                        E0) * (k1 * (1 - q) + k2 * (
+                            1 - q * torch.reciprocal(v)) + k3 * (1 - v)))[:, 0]
 
     # Update the current state.
     # print(E_m.shape)

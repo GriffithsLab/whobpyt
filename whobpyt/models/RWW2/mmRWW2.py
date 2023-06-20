@@ -11,9 +11,10 @@ class mmRWW2(RWW2):
     model_name = "mmRWW2"
     
     def __init__(self, num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len):
-        super(mmRWW2, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False)
+
         self.eeg = EEG_Layer(num_regions, paramsEEG, num_channels)
         self.bold = BOLD_Layer(num_regions, paramsBOLD)
+        super(mmRWW2, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False)
         
         self.node_size = num_regions
         self.step_size = step_size
@@ -25,6 +26,9 @@ class mmRWW2(RWW2):
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
         self.output_names = ["bold", "eeg"]
+        self.track_params = []  #Is populated during setModelParameters()
+        
+        self.setModelParameters()
 
     def info(self):
         return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold", "eeg"]} #TODO: Update to take multiple output names
