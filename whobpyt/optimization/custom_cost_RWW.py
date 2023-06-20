@@ -14,7 +14,7 @@ class CostsRWW(AbstractLoss):
     def __init__(self):
         super(CostsRWW, self).__init__()
         self.mainLoss = CostsFC("bold")
-        self.varKey = "bold"
+        self.simKey = "bold"
 
     def loss(self, sim, emp, model: torch.nn.Module, state_vals):
         # define some constants

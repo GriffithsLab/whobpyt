@@ -2,7 +2,14 @@ import torch
 import numpy as np
 
 class Recording():
-    '''
+    """    
+        This class is responsible for holding timeseries of simulated data within NMM and Modals and as input to the Objective Function
+            - Info about step size, length, modailty, dimension
+            - The time series of model state variables
+            - The time series of modality variables (EEG, fMRI)
+                
+        time series stored dict of: num_regions x time_points (May want to change this later)
+     
     This is the class to load in and store one neuroimaing recording or simulated data. 
         - Part of the input and output of model_fitting and model_simulation[future]. 
         - It is the format expected by the visualization function of whobpyt. 
@@ -11,10 +18,10 @@ class Recording():
     
     Input(NumPy or PyTorch): num_regions x ts_length
 
-    This format is more efficient for plotting and comparison in an objective function.
-    Numerical simulation don't use this data structure and are more efficient as the transpose: ts_length x num_regions.
+    Numerical simulation internals don't necessarily use this data structure, as 
+    calculations may be more efficient as the transpose: ts_length x num_regions.
     
-    '''
+    """
     
     def __init__(self, data, step_size, modality = ""):
         if not(torch.is_tensor(data)):
@@ -23,6 +30,7 @@ class Recording():
         self.data = data
         self.step_size = step_size
         self.modality = modality
+        self.numNodes = self.data.shape[0]
         self.length = self.data.shape[1]
     
     def pyTS(self):

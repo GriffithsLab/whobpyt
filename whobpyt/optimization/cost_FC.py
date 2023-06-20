@@ -10,9 +10,9 @@ from whobpyt.datatypes.AbstractLoss import AbstractLoss
 
 
 class CostsFC(AbstractLoss):
-    def __init__(self, varKey):
+    def __init__(self, simKey):
         super(CostsFC, self).__init__()
-        self.varKey = varKey
+        self.simKey = simKey
 
     def loss(self, sim, emp, model: torch.nn.Module = None, state_vals = None):
         logits_series_tf = sim

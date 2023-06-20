@@ -79,7 +79,7 @@ node_size = sc.shape[0]
 output_size = eeg_data.shape[0]
 TPperWindow = 20
 step_size = 0.0001
-num_epoches = 20
+num_epochs = 20
 tr = 0.001
 state_size = 6
 base_batch_num = 200
@@ -89,12 +89,11 @@ base_batch_num = 20
 hidden_size = int(tr/step_size)
 
 
-
 # %%
 # prepare data structure of the model
 print(eeg_data.shape)
 EEGstep = tr
-data_mean = Recording(eeg_data, EEGstep) #dataloader(eeg_data.T, num_epoches, batch_size)
+data_mean = Recording(eeg_data, EEGstep) #dataloader(eeg_data.T, num_epochs, batch_size)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
@@ -112,30 +111,45 @@ params = ParamsJR(A = par(3.25), a= par(100,100, 2, True, True), B = par(22), b 
 model = RNNJANSEN(node_size, TPperWindow, step_size, output_size, tr, sc, lm, dist, True, False, params)
 
 # %%
-# initial model parameters and set the fitted model parameter in Tensors
-model.setModelParameters()
-
-# %%
 # create objective function
 ObjFun = CostsJR()
 
 # %%
 # call model fit
-F = Model_fitting(model, ObjFun, TPperWindow, num_epoches)
+F = Model_fitting(model, ObjFun)
 
 # %%
-# model training
+# Model Training
+# ---------------------------------------------------
+#
 u = np.zeros((node_size,hidden_size,time_dim))
 u[:,:,110:120]= 200
-F.train(u = u, empRecs = [data_mean])
+F.train(u = u, empRecs = [data_mean], num_epochs = num_epochs, TPperWindow = TPperWindow)
 
 # %%
-# model test with 20 window for warmup
-F.evaluate(u = u, empRec = data_mean,  base_window_num = 20)
+# Plots of loss over Training
+plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
+plt.title("Total Loss over Training Epochs")
+
+# %%
+# Plots of parameter values over Training
+plt.plot(F.trainingStats.fit_params['a'], label = "a")
+plt.plot(F.trainingStats.fit_params['b'], label = "b")
+plt.plot(F.trainingStats.fit_params['c1'], label = "c1")
+plt.plot(F.trainingStats.fit_params['c2'], label = "c2")
+plt.plot(F.trainingStats.fit_params['c3'], label = "c3")
+plt.plot(F.trainingStats.fit_params['c4'], label = "c4")
+plt.legend()
+plt.title("Select Variables Changing Over Training Epochs")
+
+# %%
+# Model Evaluation (with 20 window for warmup)
+# ---------------------------------------------------
+#
+F.evaluate(u = u, empRec = data_mean, TPperWindow = TPperWindow, base_window_num = 20)
 
 # %%
 # Plot SC and fitted SC
-
 fig, ax = plt.subplots(1, 2, figsize=(5, 4))
 im0 = ax[0].imshow(sc, cmap='bwr', vmin = 0.0, vmax = 0.02)
 ax[0].set_title('The empirical SC')
@@ -144,7 +158,6 @@ im1 = ax[1].imshow(F.model.sc_fitted.detach().numpy(), cmap='bwr', vmin = 0.0, v
 ax[1].set_title('The fitted SC')
 fig.colorbar(im1, ax=ax[1], fraction=0.046, pad=0.04)
 plt.show()
-
 
 # %%
 # Plot the EEG

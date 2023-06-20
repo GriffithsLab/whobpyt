@@ -2,10 +2,10 @@ import torch
 
 
 class CostsMean():
-    def __init__(self, num_regions, varKey, targetValue = None, empiricalData = None):
+    def __init__(self, num_regions, simKey, targetValue = None, empiricalData = None):
         
         self.num_regions = num_regions
-        self.varKey = varKey # This is the key from the numerical simulation used to select the time series
+        self.simKey = simKey # This is the key from the numerical simulation used to select the time series
         
         # Target can be specific to each region, or can have a single number that is repeated for each region
         if torch.numel(targetValue) == 1:

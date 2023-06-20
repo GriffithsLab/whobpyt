@@ -3,9 +3,9 @@ import torch
 
 class CostsPSD():
     # TODO: Deal with num_region vs. num_channels vs. num_parcels conflict with variable naming
-    def __init__(self, num_regions, varKey, sampleFreqHz, targetValue = None, empiricalData = None):
+    def __init__(self, num_regions, simKey, sampleFreqHz, targetValue = None, empiricalData = None):
         self.num_regions = num_regions
-        self.varKey = varKey  # This is the index in the data simulation to extract variable time series from
+        self.simKey = simKey  # This is the index in the data simulation to extract variable time series from
         
         self.sampleFreqHz = sampleFreqHz
         
@@ -78,7 +78,7 @@ class CostsPSD():
         # simData assumed to be in the form [time_steps, regions or channels, one or more variables]
         # Returns the MSE of the difference between the simulated and target power spectrum
         
-        sdAxis, sdValues = powerSpectrumLoss.calcPSD(simData[:, :, self.varKey], sampleFreqHz = self.sampleFreqHz, minFreq = 2, maxFreq = 40)
+        sdAxis, sdValues = powerSpectrumLoss.calcPSD(simData[:, :, self.simKey], sampleFreqHz = self.sampleFreqHz, minFreq = 2, maxFreq = 40)
         sdAxis_dS, sdValues_dS = powerSpectrumLoss.downSmoothPSD(sdAxis, sdValues, numPoints = 32)
         sdAxis_dS, sdValues_dS_scaled = powerSpectrumLoss.scalePSD(sdAxis_dS, sdValues_dS)
 

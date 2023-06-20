@@ -10,9 +10,9 @@ from whobpyt.datatypes.AbstractLoss import AbstractLoss
 
 
 class CostsTS(AbstractLoss):
-    def __init__(self, varKey):
+    def __init__(self, simKey):
         super(CostsTS, self).__init__()
-        self.varKey = varKey
+        self.simKey = simKey
 
     def loss(self, sim, emp, model: torch.nn.Module = None, state_vals = None):
         """

@@ -120,6 +120,8 @@ class RNNJANSEN(AbstractNMM):
         super(RNNJANSEN, self).__init__()
         self.state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
         self.output_names = ["eeg"]
+        self.track_params = [] #Is populated during setModelParameters()
+        
         self.model_name = "JR"
         self.state_size = 6  # 6 states JR model
         self.tr = tr  # tr ms (integration step 0.1 ms)
@@ -135,6 +137,8 @@ class RNNJANSEN(AbstractNMM):
         self.use_fit_lfm = use_fit_lfm
         self.params = params
         self.output_size = lm.shape[0]  # number of EEG channels
+        
+        self.setModelParameters()
 
     def info(self):
         # TODO: Make sure this method is useful
@@ -224,7 +228,7 @@ class RNNJANSEN(AbstractNMM):
         var_names = [a for a in dir(self.params) if (type(getattr(self.params, a)) == par)]
         for var_name in var_names:
             var = getattr(self.params, var_name)
-            if (var.fit_hyper == True):
+            if (var.fit_hyper):
                 if var_name == 'lm':
                     size = var.prior_var.shape
                     var.val = Parameter(var.val.detach() - 1 * torch.ones((size[0], size[1]))) # TODO: This is not consistent with what user would expect giving a variance 
@@ -237,6 +241,9 @@ class RNNJANSEN(AbstractNMM):
 
             if (var.fit_par):
                 param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first 
+                
+            if (var.fit_par | var.fit_hyper):
+                self.track_params.append(var_name) #NMM Parameters
             
             if var_name == 'lm':
                 setattr(self, var_name, var.val)

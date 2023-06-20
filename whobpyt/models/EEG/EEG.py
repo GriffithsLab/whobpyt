@@ -15,6 +15,8 @@ class EEG_Layer(AbstractMode):
         self.num_channels = num_channels
         
         self.params = params
+        
+        self.setModelParameters()
     
     def info(self):
         return {"state_names": ["None"], "output_name": "eeg"}

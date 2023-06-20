@@ -132,8 +132,9 @@ class RNNRWW(AbstractNMM):
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
         self.output_names = ["bold"]
-        self.model_name = "RWW"
+        self.track_params = [] #Is populated during setModelParameters()
         
+        self.model_name = "RWW"
         self.state_size = 6  # 6 states WWD model
         # self.input_size = input_size  # 1 or 2
         self.tr = tr  # tr fMRI image
@@ -153,6 +154,8 @@ class RNNRWW(AbstractNMM):
         self.params_fitted = {}
 
         self.output_size = node_size
+        
+        self.setModelParameters()
     
     def info(self):
         """
@@ -317,9 +320,13 @@ def setModelParameters(model):
                 var.randSet() #TODO: This should be done before giving params to model class
                 param_hyper.append(var.prior_mean)
                 param_hyper.append(var.prior_var) #TODO: Currently this is _v_inv but should set everything to just variance unless there is a reason to keep the inverse?
+                
             if (var.fit_par == True):
-                param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first
-            #setattr(model, var_name, var.val)
+                param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first                
+                model.track_params.append(var_name)
+            
+            if (var.fit_par | var.fit_hyper):
+                model.track_params.append(var_name) #NMM Parameters
 
     model.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
 
