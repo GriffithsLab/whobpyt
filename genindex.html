@@ -117,6 +117,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="API/optimization.html">Optimization</a></li>
 </ul>
@@ -132,23 +133,20 @@
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#plots-of-loss-over-training">Plots of loss over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#plots-of-j-values-over-training">Plots of J values over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#model-simulation">Model Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#cnmm-validation-model">CNMM Validation Model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg003r__fitting_rww_example.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg003r__fitting_rww_example.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg003r__fitting_rww_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/eg004r__fitting_JR_example.html">Fitting JR model (Tepit data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 </ul>
@@ -221,9 +219,11 @@
  <a href="#_"><strong>_</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -244,6 +244,8 @@
         <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.__init__">(whobpyt.optimization.CostsPSD method)</a>
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsTS.__init__">(whobpyt.optimization.CostsTS method)</a>
+</li>
+        <li><a href="API/run.html#whobpyt.run.Model_fitting.__init__">(whobpyt.run.Model_fitting method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -281,6 +283,14 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.downSmoothPSD">downSmoothPSD() (whobpyt.optimization.CostsPSD method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/run.html#whobpyt.run.Model_fitting.evaluate">evaluate() (whobpyt.run.Model_fitting method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -325,6 +335,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/run.html#whobpyt.run.Model_fitting">Model_fitting (class in whobpyt.run)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -342,8 +360,12 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/run.html#whobpyt.run.Model_fitting.save">save() (whobpyt.run.Model_fitting method)</a>
+</li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.scalePSD">scalePSD() (whobpyt.optimization.CostsPSD method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.setModelParameters">setModelParameters() (whobpyt.models.JansenRit.RNNJANSEN method)</a>
 
       <ul>
@@ -358,12 +380,8 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/optimization.html#whobpyt.optimization.CostsFC.training">training (whobpyt.optimization.CostsFC attribute)</a>
-
-      <ul>
-        <li><a href="API/optimization.html#whobpyt.optimization.CostsTS.training">(whobpyt.optimization.CostsTS attribute)</a>
+      <li><a href="API/run.html#whobpyt.run.Model_fitting.train">train() (whobpyt.run.Model_fitting method)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 

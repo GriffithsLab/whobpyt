@@ -117,6 +117,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Optimization</a></li>
 </ul>
@@ -132,23 +133,20 @@
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#plots-of-loss-over-training">Plots of loss over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#plots-of-j-values-over-training">Plots of J values over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#model-simulation">Model Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#cnmm-validation-model">CNMM Validation Model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg003r__fitting_rww_example.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg003r__fitting_rww_example.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg003r__fitting_rww_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/eg004r__fitting_JR_example.html">Fitting JR model (Tepit data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 </ul>
@@ -218,11 +216,11 @@
 <h1>Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="whobpyt.optimization.CostsTS">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></code><code class="sig-name descname"><span class="pre">CostsTS</span></code><a class="reference internal" href="../_modules/whobpyt/optimization/cost_TS.html#CostsTS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsTS" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></code><code class="sig-name descname"><span class="pre">CostsTS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_TS.html#CostsTS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsTS" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt id="whobpyt.optimization.CostsTS.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_TS.html#CostsTS.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsTS.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_TS.html#CostsTS.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsTS.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -242,20 +240,15 @@ sim: tensor with node_size X datapoint</p>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt id="whobpyt.optimization.CostsTS.training">
-<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#whobpyt.optimization.CostsTS.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt id="whobpyt.optimization.CostsFC">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></code><code class="sig-name descname"><span class="pre">CostsFC</span></code><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></code><code class="sig-name descname"><span class="pre">CostsFC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt id="whobpyt.optimization.CostsFC.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -263,19 +256,14 @@ sim: tensor with node_size X datapoint</p>
 <code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_vals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC.loss" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt id="whobpyt.optimization.CostsFC.training">
-<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#whobpyt.optimization.CostsFC.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt id="whobpyt.optimization.CostsPSD">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></code><code class="sig-name descname"><span class="pre">CostsPSD</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varIdx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsPSD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsPSD" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></code><code class="sig-name descname"><span class="pre">CostsPSD</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsPSD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsPSD" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt id="whobpyt.optimization.CostsPSD.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varIdx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsPSD.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsPSD.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsPSD.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsPSD.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 

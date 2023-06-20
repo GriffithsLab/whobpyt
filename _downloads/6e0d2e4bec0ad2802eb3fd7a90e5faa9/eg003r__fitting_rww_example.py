@@ -59,7 +59,7 @@ sub = '100307'
 # define options for wong-wang model
 node_size = 83
 mask = np.tril_indices(node_size, -1)
-num_epoches = 5
+num_epochs = 5
 TPperWindow = 20
 step_size = 0.05
 input_size = 2
@@ -86,7 +86,7 @@ fc_emp = np.corrcoef(ts.T)
 # %%
 # prepare data structure of the model
 print(ts.T.shape)
-fMRIstep = 1 #TODO: Update
+fMRIstep = tr
 data_mean = Recording(ts.T, fMRIstep) #dataloader(ts, num_epoches, TPperWindow)
 
 # %%
@@ -99,24 +99,37 @@ params = ParamsRWW(g=par(400, 400, 1/np.sqrt(10), True, True), g_EE=par(1.5, 1.5
 model = RNNRWW(node_size, TPperWindow, step_size, repeat_size, tr, sc, True, params)
 
 # %%
-# initial model parameters and set the fitted model parameter in Tensors
-model.setModelParameters()
-
-# %%
 # create objective function
 ObjFun = CostsRWW()
 
 # %%
 # call model fit
-F = Model_fitting(model, [data_mean.windowedTensor(TPperWindow)], num_epoches, ObjFun)
+F = Model_fitting(model, ObjFun)
 
 # %%
-# model training
-F.train(learningrate= 0.05)
+# Model Training
+# ---------------------------------------------------
+#
+F.train(u = 0, empRecs = [data_mean], num_epochs = num_epochs, TPperWindow = TPperWindow, learningrate = 0.05)
 
 # %%
-# model test with 20 window for warmup
-F.evaluate(20)
+# Plots of loss over Training
+plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
+plt.title("Total Loss over Training Epochs")
+
+# %%
+# Plots of parameters values over Training
+plt.plot(F.trainingStats.fit_params['g_EE'], label = "g_EE")
+plt.plot(F.trainingStats.fit_params['g_EI'], label = "g_EI")
+plt.plot(F.trainingStats.fit_params['g_IE'], label = "g_IE")
+plt.legend()
+plt.title("Local Coupling Variables Changing Over Training Epochs")
+
+# %%
+# Model Evaluation (with 20 window for warmup)
+# ---------------------------------------------------
+#
+F.evaluate(u = 0, empRec = data_mean, TPperWindow = TPperWindow, base_window_num = 20)
 
 # %%
 # Plot SC and fitted SC

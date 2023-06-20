@@ -117,6 +117,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/optimization.html">Optimization</a></li>
 </ul>
@@ -132,23 +133,20 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-loss-over-training">Plots of loss over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-j-values-over-training">Plots of J values over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#model-simulation">Model Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#cnmm-validation-model">CNMM Validation Model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg003r__fitting_rww_example.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg003r__fitting_rww_example.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg003r__fitting_rww_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html">Fitting JR model (Tepit data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 </ul>
@@ -227,8 +225,9 @@
 
 
 <div class="viewcode-block" id="CostsTS"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS">[docs]</a><span class="k">class</span> <span class="nc">CostsTS</span><span class="p">(</span><span class="n">AbstractLoss</span><span class="p">):</span>
-<div class="viewcode-block" id="CostsTS.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CostsTS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+<div class="viewcode-block" id="CostsTS.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simKey</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CostsTS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span></div>
 
 <div class="viewcode-block" id="CostsTS.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">emp</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">state_vals</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

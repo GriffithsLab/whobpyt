@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Running whobpyt in google colab &mdash; WhoBPyT 0.0.0 documentation</title>
+  <title>Run &mdash; WhoBPyT 0.0.0 documentation</title>
   
 
   
@@ -46,7 +46,9 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Models" href="models.html" />
+    <link rel="prev" title="Installation" href="../getting_started/installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -111,13 +113,13 @@
 </ul>
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -193,7 +195,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Running whobpyt in google colab</li>
+      <li>Run</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -210,25 +212,107 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="running-whobpyt-in-google-colab">
-<h1>Running whobpyt in google colab<a class="headerlink" href="#running-whobpyt-in-google-colab" title="Permalink to this headline">¶</a></h1>
-<p>Google colab is an increasingly convenient and useful scientific omputing environment.</p>
-<p>WhoBPyT can be used in google colab with some minimal additional steps.</p>
-<p>First, in a browser tab, navigate to <a class="reference external" href="https://colab.research.google.com/github/GriffithsLab/whobpyt">https://colab.research.google.com/github/GriffithsLab/whobpyt</a> ,
-selecting organization GriffithsLab, repository whobpyt, and branch gh-pages.</p>
-<p>You should then see a drop-down list of .ipynb files, corresponding to each of the examples in the sphinx-gallery docs.</p>
-<p>Select one of these, and approve the ‘run anyway’ option.</p>
-<p>Then, insert and run the following in a cell at the top:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">time</span>
-<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf whobpyt&#39;</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;git clone https://github.com/griffithslab/whobpyt&#39;</span><span class="p">)</span>
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;whobpyt&#39;</span><span class="p">)</span>
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;python install_colab.py&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Now you should be good to continue with the rest of the example code in the notebook, and experiment with new ideas.</p>
+  <div class="section" id="run">
+<h1>Run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="whobpyt.run.Model_fitting">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></code><code class="sig-name descname"><span class="pre">Model_fitting</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting" title="Permalink to this definition">¶</a></dt>
+<dd><p>This Model_fitting class is able to fit resting state data or evoked potential data 
+for which the input training data is empty or some stimulus to one or more NMM nodes,
+and the label is an associated empirical neuroimaging recording.</p>
+<p>Studies which consider different kinds of input, such as if SC or some other variable
+is associated with an empirical recording, must use a different fitting class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model: AbstractNMM</strong></dt><dd><p>Whole Brain Model to Simulate</p>
+</dd>
+<dt><strong>cost: AbstractLoss</strong></dt><dd><p>A particular objective function which the model will be optimized for.</p>
+</dd>
+<dt><strong>trainingStats: TrainingStats</strong></dt><dd><p>Information about objective function loss and parameter values over training windows/epochs</p>
+</dd>
+<dt><strong>lastRec: Recording</strong></dt><dd><p>The last simulation of fitting(), evaluation(), or simulation()</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="whobpyt.run.Model_fitting.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model: AbstractNMM</strong></dt><dd><p>Whole Brain Model to Simulate</p>
+</dd>
+<dt><strong>cost: AbstractLoss</strong></dt><dd><p>A particular objective function which the model will be optimized for.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.run.Model_fitting.evaluate">
+<code class="sig-name descname"><span class="pre">evaluate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_window_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transient_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>u</strong><span class="classifier">int or Tensor</span></dt><dd><p>external or stimulus</p>
+</dd>
+<dt><strong>num_windows</strong><span class="classifier">int</span></dt><dd><p>Number of time windows to simulate</p>
+</dd>
+<dt><strong>TPperWindow: int</strong></dt><dd><p>Number of Empirical Time Points per window. model.forward does one window at a time.</p>
+</dd>
+<dt><strong>base_window_num</strong><span class="classifier">int</span></dt><dd><p>length of num_windows for resting</p>
+</dd>
+<dt><strong>transient_num</strong><span class="classifier">int</span></dt><dd><p>The number of initial time points to exclude from some metrics</p>
+</dd>
+<dt><strong>———–</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.run.Model_fitting.save">
+<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.save" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename: String</strong></dt><dd><p>filename to use when saving object to file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.run.Model_fitting.train">
+<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_2ndLevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_scheduler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.train" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>u: type</strong></dt><dd><p>This stimulus is the ML “Training Input”</p>
+</dd>
+<dt><strong>empRec: List of Recording</strong></dt><dd><p>This is the ML “Training Labels”</p>
+</dd>
+<dt><strong>num_epochs: int</strong></dt><dd><p>the number of times to go through the entire training data set</p>
+</dd>
+<dt><strong>TPperWindow: int</strong></dt><dd><p>Number of Empirical Time Points per window. model.forward does one window at a time.</p>
+</dd>
+<dt><strong>learningrate</strong><span class="classifier">double</span></dt><dd><p>rate of gradient descent</p>
+</dd>
+<dt><strong>lr_2ndLevel :</strong></dt><dd><p>learning rate for priors of model parameters, and possibly others</p>
+</dd>
+<dt><strong>lr_scheduler</strong><span class="classifier">Bool</span></dt><dd><p>Whether to use the learning rate scheduler</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -236,6 +320,15 @@ selecting organization GriffithsLab, repository whobpyt, and branch gh-pages.</p
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../getting_started/installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

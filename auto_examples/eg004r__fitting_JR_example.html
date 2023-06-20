@@ -116,6 +116,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
 </ul>
@@ -131,23 +132,20 @@
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-loss-over-training">Plots of loss over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-j-values-over-training">Plots of J values over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd">Plots of EEG PSD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc">Plots of BOLD FC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#model-simulation">Model Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#cnmm-validation-model">CNMM Validation Model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="eg003r__fitting_rww_example.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg003r__fitting_rww_example.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg003r__fitting_rww_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fitting JR model (Tepit data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 </ul>
@@ -234,7 +232,7 @@
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">par</span><span class="p">,</span> <span class="n">Recording</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit</span> <span class="kn">import</span> <a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class"><span class="n">RNNJANSEN</span></a><span class="p">,</span> <span class="n">ParamsJR</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization.custom_cost_JR</span> <span class="kn">import</span> <span class="n">CostsJR</span>
-<span class="kn">from</span> <span class="nn">whobpyt.run</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
+<span class="kn">from</span> <span class="nn">whobpyt.run</span> <span class="kn">import</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class"><span class="n">Model_fitting</span></a>
 
 <span class="c1"># array and pd stuff</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -288,7 +286,7 @@
 <span class="n">output_size</span> <span class="o">=</span> <span class="n">eeg_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">TPperWindow</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span>
-<span class="n">num_epoches</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">tr</span> <span class="o">=</span> <span class="mf">0.001</span>
 <span class="n">state_size</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="n">base_batch_num</span> <span class="o">=</span> <span class="mi">200</span>
@@ -300,8 +298,8 @@
 </div>
 <p>prepare data structure of the model</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">eeg_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">EEGstep</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#TODO: Update</span>
-<span class="n">data_mean</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">eeg_data</span><span class="p">,</span> <span class="n">EEGstep</span><span class="p">)</span> <span class="c1">#dataloader(eeg_data.T, num_epoches, batch_size)</span>
+<span class="n">EEGstep</span> <span class="o">=</span> <span class="n">tr</span>
+<span class="n">data_mean</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">eeg_data</span><span class="p">,</span> <span class="n">EEGstep</span><span class="p">)</span> <span class="c1">#dataloader(eeg_data.T, num_epochs, batch_size)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
@@ -323,113 +321,99 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class"><span class="n">RNNJANSEN</span></a><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>initial model parameters and set the fitted model parameter in Tensors</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN.setModelParameters" title="whobpyt.models.JansenRit.RNNJANSEN.setModelParameters" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-method"><span class="n">model</span><span class="o">.</span><span class="n">setModelParameters</span></a><span class="p">()</span>
-</pre></div>
-</div>
 <p>create objective function</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">CostsJR</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>call model fit</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <span class="p">[</span><span class="n">data_mean</span><span class="o">.</span><span class="n">windowedTensor</span><span class="p">(</span><span class="n">TPperWindow</span><span class="p">)],</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a> <span class="o">=</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class"><span class="n">Model_fitting</span></a><span class="p">(</span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>model training</p>
+</div>
+<div class="section" id="model-training">
+<h2>Model Training<a class="headerlink" href="#model-training" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">))</span>
 <span class="n">u</span><span class="p">[:,:,</span><span class="mi">110</span><span class="p">:</span><span class="mi">120</span><span class="p">]</span><span class="o">=</span> <span class="mi">200</span>
-<span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">epoch_min</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">r_lb</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">)</span>
+<a href="../API/run.html#whobpyt.run.Model_fitting.train" title="whobpyt.run.Model_fitting.train" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-method"><span class="n">F</span><span class="o">.</span><span class="n">train</span></a><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_mean</span><span class="p">],</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: -20604.004 FC_cor:  0.25072752147699345 cos_sim:  0.02782934938502375
-Modelparam_lr:  0.005268391209094017
-Hyperparam_lr:  0.0001317097802273502
+epoch:  0 loss: -22813.469 Pseudo FC_cor:  0.2317323390534859 cos_sim:  0.02468988879577956
 Epoch:  1
-epoch:  1 loss: -20614.752 FC_cor:  0.07060341369884632 cos_sim:  0.027860442012898327
-Modelparam_lr:  0.014183366411735794
-Hyperparam_lr:  0.0003545841602933947
+epoch:  1 loss: -24701.752 Pseudo FC_cor:  0.1783031349275564 cos_sim:  0.02653132427214935
 Epoch:  2
-epoch:  2 loss: -20638.984 FC_cor:  0.10830327339110635 cos_sim:  0.027310954629799048
-Modelparam_lr:  0.026316790059458216
-Hyperparam_lr:  0.0006579197514864553
+epoch:  2 loss: -26248.553 Pseudo FC_cor:  0.3671258013272999 cos_sim:  -0.010231702980417994
 Epoch:  3
-epoch:  3 loss: -20679.416 FC_cor:  0.2785455156205206 cos_sim:  0.02873822586551376
-Modelparam_lr:  0.03836393088672551
-Hyperparam_lr:  0.0009590982721681377
+epoch:  3 loss: -27553.191 Pseudo FC_cor:  0.4156280039642322 cos_sim:  0.1763430188217881
 Epoch:  4
-epoch:  4 loss: -20733.271 FC_cor:  0.2442526374904868 cos_sim:  0.035512877441891244
-Modelparam_lr:  0.04704355812899117
-Hyperparam_lr:  0.001176088953224779
+epoch:  4 loss: -28682.645 Pseudo FC_cor:  0.8861708288112776 cos_sim:  0.2204339061347112
 Epoch:  5
-epoch:  5 loss: -20794.76 FC_cor:  0.36683896122613824 cos_sim:  0.0631470061857294
-Modelparam_lr:  0.04999842642516184
-Hyperparam_lr:  0.001249960660629046
+epoch:  5 loss: -29680.256 Pseudo FC_cor:  0.9244231116003399 cos_sim:  0.3020087977411879
 Epoch:  6
-epoch:  6 loss: -20857.076 FC_cor:  0.4415591869050836 cos_sim:  0.08493690498040773
-Modelparam_lr:  0.04930925077294988
-Hyperparam_lr:  0.0012327312693237468
+epoch:  6 loss: -30574.744 Pseudo FC_cor:  0.875866363973109 cos_sim:  0.2402849975327543
 Epoch:  7
-epoch:  7 loss: -20917.39 FC_cor:  0.8422494796169023 cos_sim:  0.10257048871060662
-Modelparam_lr:  0.047401112794808534
-Hyperparam_lr:  0.0011850278198702133
+epoch:  7 loss: -31386.441 Pseudo FC_cor:  0.8351205049724686 cos_sim:  0.26774015341853635
 Epoch:  8
-epoch:  8 loss: -20974.293 FC_cor:  0.8953082359453636 cos_sim:  0.12177364204782531
-Modelparam_lr:  0.04436969449665212
-Hyperparam_lr:  0.001109242362416303
+epoch:  8 loss: -32129.893 Pseudo FC_cor:  0.8277373258925411 cos_sim:  0.3633741421612381
 Epoch:  9
-epoch:  9 loss: -21026.541 FC_cor:  0.8910879901093542 cos_sim:  0.13696657030345372
-Modelparam_lr:  0.04036700385005066
-Hyperparam_lr:  0.0010091750962512665
+epoch:  9 loss: -32816.215 Pseudo FC_cor:  0.9248876355109971 cos_sim:  0.42632965280654167
 Epoch:  10
-epoch:  10 loss: -21073.293 FC_cor:  0.9256805024799442 cos_sim:  0.12959771761221167
-Modelparam_lr:  0.03559375247780531
-Hyperparam_lr:  0.0008898438119451327
+epoch:  10 loss: -33453.957 Pseudo FC_cor:  0.8572831842432039 cos_sim:  0.2886711450364658
 Epoch:  11
-epoch:  11 loss: -21113.695 FC_cor:  0.9531845767873505 cos_sim:  0.10490453930194797
-Modelparam_lr:  0.030289291135082407
-Hyperparam_lr:  0.0007572322783770602
+epoch:  11 loss: -34049.777 Pseudo FC_cor:  0.7828152588071638 cos_sim:  0.32195320885957923
 Epoch:  12
-epoch:  12 loss: -21147.38 FC_cor:  0.9283171024726095 cos_sim:  0.09242259715589698
-Modelparam_lr:  0.02471960766310769
-Hyperparam_lr:  0.0006179901915776922
+epoch:  12 loss: -34609.14 Pseudo FC_cor:  0.8848841212258393 cos_sim:  0.5235798230820599
 Epoch:  13
-epoch:  13 loss: -21174.244 FC_cor:  0.943923262839854 cos_sim:  0.12633198206042318
-Modelparam_lr:  0.01916398924813876
-Hyperparam_lr:  0.000479099731203469
+epoch:  13 loss: -35136.44 Pseudo FC_cor:  0.9233313161157108 cos_sim:  0.3586851087175237
 Epoch:  14
-epoch:  14 loss: -21194.518 FC_cor:  0.9412616936148726 cos_sim:  0.11272671078421442
-Modelparam_lr:  0.013901017795744356
-Hyperparam_lr:  0.0003475254448936089
+epoch:  14 loss: -35635.246 Pseudo FC_cor:  0.9026070852112272 cos_sim:  0.39044404021657864
 Epoch:  15
-epoch:  15 loss: -21208.742 FC_cor:  0.9342070599188693 cos_sim:  0.13358438897994085
-Modelparam_lr:  0.009194600670802466
-Hyperparam_lr:  0.00022986501677006163
+epoch:  15 loss: -36108.703 Pseudo FC_cor:  0.880936946029248 cos_sim:  0.38366745970441507
 Epoch:  16
-epoch:  16 loss: -21217.688 FC_cor:  0.9122017974364066 cos_sim:  0.16072286611685968
-Modelparam_lr:  0.005280737280244115
-Hyperparam_lr:  0.0001320184320061029
+epoch:  16 loss: -36559.43 Pseudo FC_cor:  0.8483853290155898 cos_sim:  0.42040264184292087
 Epoch:  17
-epoch:  17 loss: -21222.426 FC_cor:  0.9008823086240053 cos_sim:  0.12715198782431683
-Modelparam_lr:  0.002355685077342152
-Hyperparam_lr:  5.889212693355379e-05
+epoch:  17 loss: -36989.492 Pseudo FC_cor:  0.935202829772503 cos_sim:  0.46804171966916475
 Epoch:  18
-epoch:  18 loss: -21224.203 FC_cor:  0.8816493014469401 cos_sim:  0.13760035903464013
-Modelparam_lr:  0.0005661183935043931
-Hyperparam_lr:  1.4152959837609827e-05
+epoch:  18 loss: -37400.87 Pseudo FC_cor:  0.8502934248673369 cos_sim:  0.3825550751136326
 Epoch:  19
-epoch:  19 loss: -21224.477 FC_cor:  0.9454716124082297 cos_sim:  0.12233922417446375
-Modelparam_lr:  1.7735748381612052e-06
-Hyperparam_lr:  4.433937095403013e-08
+epoch:  19 loss: -37795.28 Pseudo FC_cor:  0.9243076959392384 cos_sim:  0.3966989006419581
 </pre></div>
 </div>
-<p>model test with 20 window for warmup</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span><span class="n">u</span><span class="p">)</span>
+<p>Plots of loss over Training</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Total Loss over Training Epochs&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Total Loss over Training Epochs" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Total Loss over Training Epochs&#39;)
+</pre></div>
+</div>
+<p>Plots of parameter values over Training</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;c1&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;c1&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;c2&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;c2&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;c3&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;c3&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;c4&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;c4&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Select Variables Changing Over Training Epochs&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Select Variables Changing Over Training Epochs" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_002.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Select Variables Changing Over Training Epochs&#39;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="model-evaluation-with-20-window-for-warmup">
+<h2>Model Evaluation (with 20 window for warmup)<a class="headerlink" href="#model-evaluation-with-20-window-for-warmup" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/run.html#whobpyt.run.Model_fitting.evaluate" title="whobpyt.run.Model_fitting.evaluate" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-method"><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span></a><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9077203308720688 cos_sim:  0.11616929428145481
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.8533578036184364 cos_sim:  0.3622757351095912
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -437,26 +421,26 @@ Hyperparam_lr:  4.433937095403013e-08
 <span class="n">im0</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;The empirical SC&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
-<span class="n">im1</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">.</span><span class="n">sc_fitted</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">)</span>
+<span class="n">im1</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">.</span><span class="n">sc_fitted</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;The fitted SC&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="The empirical SC, The fitted SC" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_001.png" />
+<img alt="The empirical SC, The fitted SC" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_003.png" />
 <p>Plot the EEG</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Test: sourced EEG&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s2">&quot;eeg&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s2">&quot;eeg&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eeg_data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;empirical&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_002.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 6 minutes  38.453 seconds)</p>
+<img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_004.png" />
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  9.304 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/96a042e39a4f43abe4e10ca8c12118f5/eg004r__fitting_JR_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg004r__fitting_JR_example.py</span></code></a></p>

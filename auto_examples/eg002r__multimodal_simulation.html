@@ -117,6 +117,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
 </ul>
@@ -132,23 +133,20 @@
 <li class="toctree-l2"><a class="reference internal" href="#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#training-the-model">Training The Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-loss-over-training">Plots of loss over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-j-values-over-training">Plots of J values over Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-s-e-and-s-i-after-training">Plots of S_E and S_I After Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-eeg-psd">Plots of EEG PSD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-bold-fc">Plots of BOLD FC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#defining-the-cnmm-validation-model">Defining the CNMM Validation Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-s-e-and-s-i-validation">Plots of S_E and S_I Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-eeg-psd-validation">Plots of EEG PSD Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots-of-bold-fc-validation">Plots of BOLD FC Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-simulation">Model Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cnmm-validation-model">CNMM Validation Model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eg003r__fitting_rww_example.html">Fitting Wong_Wang model (HCP data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="eg003r__fitting_rww_example.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg003r__fitting_rww_example.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg003r__fitting_rww_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eg004r__fitting_JR_example.html">Fitting JR model (Tepit data)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="eg004r__fitting_JR_example.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 </li>
 </ul>
@@ -238,7 +236,7 @@
 <span class="kn">from</span> <span class="nn">whobpyt.models.BOLD</span> <span class="kn">import</span> <span class="n">BOLD_Layer</span><span class="p">,</span> <span class="n">BOLD_np</span><span class="p">,</span> <span class="n">BOLD_Params</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.EEG</span> <span class="kn">import</span> <span class="n">EEG_Layer</span><span class="p">,</span> <span class="n">EEG_np</span><span class="p">,</span> <span class="n">EEG_Params</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">CostsFC</span><span class="p">,</span> <span class="n">CostsPSD</span><span class="p">,</span> <span class="n">CostsMean</span>
-<span class="kn">from</span> <span class="nn">whobpyt.run</span> <span class="kn">import</span> <span class="n">Model_fitting</span>
+<span class="kn">from</span> <span class="nn">whobpyt.run</span> <span class="kn">import</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class"><span class="n">Model_fitting</span></a>
 
 <span class="c1"># general python stuff</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -389,9 +387,7 @@ That is a theoretical matrix for the EEG SC to be fit to</p>
 <h2>Defining the CNMM Model<a class="headerlink" href="#defining-the-cnmm-model" title="Permalink to this headline">¶</a></h2>
 <p>The Multi-Modal Model</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <a href="../API/models.html#whobpyt.models.RWW2.RWW2" title="whobpyt.models.RWW2.RWW2" class="sphx-glr-backref-module-whobpyt-models-RWW2 sphx-glr-backref-type-py-class"><span class="n">mmRWW2</span></a><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">paramsNode</span><span class="p">,</span> <span class="n">paramsEEG</span><span class="p">,</span> <span class="n">paramsBOLD</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">dist_mtx</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">)</span>
-<a href="../API/models.html#whobpyt.models.RWW2.RWW2.setModelParameters" title="whobpyt.models.RWW2.RWW2.setModelParameters" class="sphx-glr-backref-module-whobpyt-models-RWW2 sphx-glr-backref-type-py-method"><span class="n">model</span><span class="o">.</span><span class="n">setModelParameters</span></a><span class="p">()</span>
-<span class="n">model</span><span class="o">.</span><span class="n">track_params</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;J&#39;</span><span class="p">]</span>
-<span class="c1">#model.J = model.J.val #TODO: This line here so the variable gets tracked. Improve approach.</span>
+<span class="c1">#model.track_params = [&#39;J&#39;]</span>
 </pre></div>
 </div>
 </div>
@@ -401,6 +397,8 @@ That is a theoretical matrix for the EEG SC to be fit to</p>
 Also, written in such a way as to be able to track and plot indiviual components losses over time.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">mmObjectiveFunction</span><span class="p">():</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span>
+
         <span class="c1"># Weights of Objective Function Components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean_weight</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">S_I_mean_weight</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Not Currently Used</span>
@@ -410,7 +408,7 @@ Also, written in such a way as to be able to track and plot indiviual components
         <span class="bp">self</span><span class="o">.</span><span class="n">BOLD_FC_weight</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Not Currently Used</span>
 
         <span class="c1"># Functions of the various Objective Function Components</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span> <span class="o">=</span> <span class="n">CostsMean</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">varIdx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.164</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span> <span class="o">=</span> <span class="n">CostsMean</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.164</span><span class="p">]))</span>
         <span class="c1">#self.S_I_mean = CostsMean(...) # Not Currently Used</span>
         <span class="c1">#self.EEG_PSD = CostsPSD(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)</span>
         <span class="c1">#self.EEG_FC = CostsFC(...) # Not Currently Used</span>
@@ -443,18 +441,6 @@ Also, written in such a way as to be able to track and plot indiviual components
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">mmObjectiveFunction</span><span class="p">()</span>
 
 
-<span class="c1">#</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">()))</span>
-
-
-<span class="c1">#</span>
-
-<span class="c1">#optimizer = torch.optim.Adam(model.parameters(), lr = 0.1)</span>
-
-
-<span class="c1">#</span>
-
 <span class="n">randData1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15000</span><span class="p">)</span>
 <span class="n">randData2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15000</span><span class="p">)</span>
 <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">3</span>
@@ -466,94 +452,61 @@ Also, written in such a way as to be able to track and plot indiviual components
 <span class="n">randTS2</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">randData2</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
 
 <span class="c1"># call model fit</span>
-<span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">[</span><span class="n">randTS1</span><span class="o">.</span><span class="n">windowedTensor</span><span class="p">(</span><span class="n">TPperWindow</span><span class="p">),</span> <span class="n">randTS2</span><span class="o">.</span><span class="n">windowedTensor</span><span class="p">(</span><span class="n">TPperWindow</span><span class="p">)],</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
+<a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a> <span class="o">=</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class"><span class="n">Model_fitting</span></a><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[]
-(8, 15000)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(8, 15000)
 </pre></div>
 </div>
 <p>model training</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">learningrate</span><span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">lr_scheduler</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/run.html#whobpyt.run.Model_fitting.train" title="whobpyt.run.Model_fitting.train" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-method"><span class="n">F</span><span class="o">.</span><span class="n">train</span></a><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">empRecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">randTS1</span><span class="p">,</span> <span class="n">randTS2</span><span class="p">],</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">learningrate</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: [0.02548946] FC_cor:  0.4455135176444385 cos_sim:  0.53133571182561
-epoch:  0 loss: [0.01962858] FC_cor:  -0.052321670612248836 cos_sim:  0.8374156317925654
+epoch:  0 loss: [0.4057215] Pseudo FC_cor:  0.2659690395073499 cos_sim:  0.46290286231348765
+epoch:  0 loss: [0.45590252] Pseudo FC_cor:  0.2948168423308384 cos_sim:  0.8397030069532805
 Epoch:  1
-epoch:  1 loss: [0.01558708] FC_cor:  0.023137921720173545 cos_sim:  0.8644956569692068
-epoch:  1 loss: [0.01435309] FC_cor:  0.231180185296275 cos_sim:  0.8659290933814228
+epoch:  1 loss: [0.45406052] Pseudo FC_cor:  0.0788447666843895 cos_sim:  0.8646198095585327
+epoch:  1 loss: [0.44837075] Pseudo FC_cor:  -0.03216625065128536 cos_sim:  0.8660468049981026
 Epoch:  2
-epoch:  2 loss: [0.01422095] FC_cor:  -0.1901258885973065 cos_sim:  0.8666824181026329
-epoch:  2 loss: [0.01444685] FC_cor:  0.01855041334841539 cos_sim:  0.8660189360354786
+epoch:  2 loss: [0.4476616] Pseudo FC_cor:  0.4525017566090931 cos_sim:  0.8663497404542964
+epoch:  2 loss: [0.44755462] Pseudo FC_cor:  -0.008711084938890664 cos_sim:  0.8660854733213219
 </pre></div>
 </div>
-<p>model test with 20 window for warmup</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-
-<span class="c1">#LossComp = list()</span>
-<span class="c1">#</span>
-<span class="c1">#J_values = list()</span>
-<span class="c1">#</span>
-<span class="c1">#num_epochs = 20</span>
-<span class="c1">#</span>
-<span class="c1">#for i in range(epochs):</span>
-<span class="c1">#    print(i)</span>
-<span class="c1">#</span>
-<span class="c1">#    node_history, EEG_history, BOLD_history = model.forward()</span>
-<span class="c1">#    totalLoss, lossComponents = TotalLossFn.calcTotalLoss(node_history[skip_trans:,:,:], EEG_history[skip_trans:,:,:], BOLD_history[skip_trans:,:,:], returnLossComponents = True)</span>
-<span class="c1">#    print(&quot;totalLoss = &quot;, totalLoss.item())</span>
-<span class="c1">#</span>
-<span class="c1">#    optimizer.zero_grad()</span>
-<span class="c1">#    totalLoss.backward()</span>
-<span class="c1">#    optimizer.step()</span>
-<span class="c1">#</span>
-<span class="c1">#    LossComp.append(lossComponents)</span>
-<span class="c1">#    J_values.append(model.nodes.J.detach().clone().numpy())</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#    print(&quot;J values = &quot;, model.nodes.J.detach().clone().numpy())</span>
+<p>Plots of loss over Training</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Total Loss over Training Epochs&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="Total Loss over Training Epochs" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_002.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.40787513788797636 cos_sim:  0.5084742490801999
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Total Loss over Training Epochs&#39;)
 </pre></div>
 </div>
-</div>
-<div class="section" id="plots-of-loss-over-training">
-<h2>Plots of loss over Training<a class="headerlink" href="#plots-of-loss-over-training" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Total Loss over Training Windows&quot;</span><span class="p">)</span>
+<p>Plots of J values over Training</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;J&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;J_</span><span class="si">{i}</span><span class="s2"> Values Changing Over Training Epochs&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="Total Loss over Training Windows" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_002.png" />
+<img alt="J_{i} Values Changing Over Training Epochs" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Total Loss over Training Windows&#39;)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Epochs&#39;)
 </pre></div>
 </div>
 </div>
-<div class="section" id="plots-of-j-values-over-training">
-<h2>Plots of J values over Training<a class="headerlink" href="#plots-of-j-values-over-training" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">J</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;J_</span><span class="si">{i}</span><span class="s2"> Values Changing Over Training Windows&quot;</span><span class="p">)</span>
+<div class="section" id="model-simulation">
+<h2>Model Simulation<a class="headerlink" href="#model-simulation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">numTP</span> <span class="o">=</span> <span class="n">randTS1</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="J_{i} Values Changing Over Training Windows" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_003.png" />
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;J_{i} Values Changing Over Training Windows&#39;)
-</pre></div>
-</div>
-</div>
-<div class="section" id="plots-of-s-e-and-s-i-after-training">
-<h2>Plots of S_E and S_I After Training<a class="headerlink" href="#plots-of-s-e-and-s-i-after-training" title="Permalink to this headline">¶</a></h2>
+<p>Plots of S_E and S_I</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;S_E and S_I&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_regions</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[</span><span class="n">n</span><span class="p">,:],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_E Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;I&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[</span><span class="n">n</span><span class="p">,:],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_I Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[</span><span class="n">n</span><span class="p">,:],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_E Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;I&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[</span><span class="n">n</span><span class="p">,:],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;S_I Node = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time Steps (multiply by step_size to get msec), step_size = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">step_size</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
@@ -561,14 +514,12 @@ epoch:  2 loss: [0.01444685] FC_cor:  0.01855041334841539 cos_sim:  0.8660189360
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fad63b7c2e0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fc3055571f0&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="plots-of-eeg-psd">
-<h2>Plots of EEG PSD<a class="headerlink" href="#plots-of-eeg-psd" title="Permalink to this headline">¶</a></h2>
+<p>Plots of EEG PSD</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sampleFreqHz</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
-<span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsPSD.calcPSD" title="whobpyt.optimization.CostsPSD.calcPSD" class="sphx-glr-backref-module-whobpyt-optimization-CostsPSD sphx-glr-backref-type-py-method"><span class="n">CostsPSD</span><span class="o">.</span><span class="n">calcPSD</span></a><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;eeg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsPSD.calcPSD" title="whobpyt.optimization.CostsPSD.calcPSD" class="sphx-glr-backref-module-whobpyt-optimization-CostsPSD sphx-glr-backref-type-py-method"><span class="n">CostsPSD</span><span class="o">.</span><span class="n">calcPSD</span></a><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;eeg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="mi">40</span><span class="p">)</span>
 <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsPSD.downSmoothPSD" title="whobpyt.optimization.CostsPSD.downSmoothPSD" class="sphx-glr-backref-module-whobpyt-optimization-CostsPSD sphx-glr-backref-type-py-method"><span class="n">CostsPSD</span><span class="o">.</span><span class="n">downSmoothPSD</span></a><span class="p">(</span><span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
 <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsPSD.scalePSD" title="whobpyt.optimization.CostsPSD.scalePSD" class="sphx-glr-backref-module-whobpyt-optimization-CostsPSD sphx-glr-backref-type-py-method"><span class="n">CostsPSD</span><span class="o">.</span><span class="n">scalePSD</span></a><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span><span class="p">)</span>
 
@@ -584,10 +535,8 @@ epoch:  2 loss: [0.01444685] FC_cor:  0.01855041334841539 cos_sim:  0.8660189360
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Simulated EEG PSD: After Training&#39;)
 </pre></div>
 </div>
-</div>
-<div class="section" id="plots-of-bold-fc">
-<h2>Plots of BOLD FC<a class="headerlink" href="#plots-of-bold-fc" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim_FC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;bold&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[:,</span><span class="n">skip_trans</span><span class="p">:])</span>
+<p>Plots of BOLD FC</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim_FC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="s1">&#39;bold&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[:,</span><span class="n">skip_trans</span><span class="p">:])</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated BOLD FC: After Training&quot;</span><span class="p">)</span>
@@ -601,8 +550,8 @@ epoch:  2 loss: [0.01444685] FC_cor:  0.01855041334841539 cos_sim:  0.8660189360
 </pre></div>
 </div>
 </div>
-<div class="section" id="defining-the-cnmm-validation-model">
-<h2>Defining the CNMM Validation Model<a class="headerlink" href="#defining-the-cnmm-validation-model" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cnmm-validation-model">
+<h2>CNMM Validation Model<a class="headerlink" href="#cnmm-validation-model" title="Permalink to this headline">¶</a></h2>
 <p>The Multi-Modal Model</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val_sim_len</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="mi">1000</span> <span class="c1"># Simulation length in msecs</span>
 <span class="n">model_validate</span> <span class="o">=</span> <span class="n">mmRWW2_np</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dist_mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">val_sim_len</span><span class="p">)</span>
@@ -610,9 +559,7 @@ epoch:  2 loss: [0.01444685] FC_cor:  0.01855041334841539 cos_sim:  0.8660189360
 <span class="n">sim_vals</span><span class="p">,</span> <span class="n">hE</span> <span class="o">=</span> <span class="n">model_validate</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">external</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hx</span> <span class="o">=</span> <span class="n">model_validate</span><span class="o">.</span><span class="n">createIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">),</span> <span class="n">hE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="plots-of-s-e-and-s-i-validation">
-<h2>Plots of S_E and S_I Validation<a class="headerlink" href="#plots-of-s-e-and-s-i-validation" title="Permalink to this headline">¶</a></h2>
+<p>Plots of S_E and S_I Validation</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;S_E and S_I&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_regions</span><span class="p">):</span>
@@ -625,12 +572,10 @@ epoch:  2 loss: [0.01444685] FC_cor:  0.01855041334841539 cos_sim:  0.8660189360
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fad61474220&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fc2fe303190&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="plots-of-eeg-psd-validation">
-<h2>Plots of EEG PSD Validation<a class="headerlink" href="#plots-of-eeg-psd-validation" title="Permalink to this headline">¶</a></h2>
+<p>Plots of EEG PSD Validation</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sampleFreqHz</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
 <span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsPSD.calcPSD" title="whobpyt.optimization.CostsPSD.calcPSD" class="sphx-glr-backref-module-whobpyt-optimization-CostsPSD sphx-glr-backref-type-py-method"><span class="n">CostsPSD</span><span class="o">.</span><span class="n">calcPSD</span></a><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">[</span><span class="s1">&#39;eeg&#39;</span><span class="p">]),</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="mi">40</span><span class="p">)</span>
 <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsPSD.downSmoothPSD" title="whobpyt.optimization.CostsPSD.downSmoothPSD" class="sphx-glr-backref-module-whobpyt-optimization-CostsPSD sphx-glr-backref-type-py-method"><span class="n">CostsPSD</span><span class="o">.</span><span class="n">downSmoothPSD</span></a><span class="p">(</span><span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
@@ -648,9 +593,7 @@ epoch:  2 loss: [0.01444685] FC_cor:  0.01855041334841539 cos_sim:  0.8660189360
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Simulated EEG PSD: After Training&#39;)
 </pre></div>
 </div>
-</div>
-<div class="section" id="plots-of-bold-fc-validation">
-<h2>Plots of BOLD FC Validation<a class="headerlink" href="#plots-of-bold-fc-validation" title="Permalink to this headline">¶</a></h2>
+<p>Plots of BOLD FC Validation</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim_FC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">((</span><span class="n">sim_vals</span><span class="p">[</span><span class="s1">&#39;bold&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)[:,</span><span class="n">skip_trans</span><span class="p">:])</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
@@ -664,7 +607,7 @@ epoch:  2 loss: [0.01444685] FC_cor:  0.01855041334841539 cos_sim:  0.8660189360
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  24.749 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 3 minutes  57.190 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>
