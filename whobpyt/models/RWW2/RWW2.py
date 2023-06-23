@@ -48,6 +48,9 @@ class RWW2(AbstractNMM):
         
         self.state_names = ['E', 'I']
         self.output_names = ['E']
+        self.track_params = []  #Is populated during setModelParameters()
+        
+        self.setModelParameters()
 
 
     def info(self):
@@ -74,7 +77,9 @@ def setModelParameters(self):
         var = getattr(self.params, var_name)
         if (var.fit_par):
             param_reg.append(var.val)
+            self.track_params.append(var_name)
     self.params_fitted = {'modelparameter': param_reg, 'hyperparameter': param_hyper}
+    
 
 
 def forward(self, external, hx, hE):

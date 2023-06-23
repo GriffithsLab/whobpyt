@@ -17,6 +17,8 @@ class BOLD_Layer(AbstractMode):
         self.useBC = useBC   #useBC: is if we want the model to use boundary conditions
         
         self.params = params
+        
+        self.setModelParameters()
     
     def info(self):
         return {"state_names": ['x', 'f', 'v', 'q'], "output_name": "bold"}

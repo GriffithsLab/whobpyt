@@ -182,9 +182,7 @@ LF_Con_Mtx = LF_SC_mtx_norm
 
 
 model = mmRWW2(num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len)
-model.setModelParameters()
-model.track_params = ['J']
-#model.J = model.J.val #TODO: This line here so the variable gets tracked. Improve approach. 
+#model.track_params = ['J']
 
 # %%
 # Defining the Objective Function
@@ -195,6 +193,8 @@ model.track_params = ['J']
 
 class mmObjectiveFunction():
     def __init__(self):
+        self.simKey = "E"
+    
         # Weights of Objective Function Components
         self.S_E_mean_weight = 1
         self.S_I_mean_weight = 0 # Not Currently Used
@@ -204,7 +204,7 @@ class mmObjectiveFunction():
         self.BOLD_FC_weight = 0 # Not Currently Used
         
         # Functions of the various Objective Function Components
-        self.S_E_mean = CostsMean(num_regions, varIdx = 0, targetValue = torch.tensor([0.164]))
+        self.S_E_mean = CostsMean(num_regions, simKey = "E", targetValue = torch.tensor([0.164]))
         #self.S_I_mean = CostsMean(...) # Not Currently Used
         #self.EEG_PSD = CostsPSD(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)
         #self.EEG_FC = CostsFC(...) # Not Currently Used
@@ -240,18 +240,6 @@ class mmObjectiveFunction():
 ObjFun = mmObjectiveFunction()
 
 
-#
-
-print(list(model.named_parameters()))
-
-
-#
-
-#optimizer = torch.optim.Adam(model.parameters(), lr = 0.1)
-
-
-#
-
 randData1 = np.random.rand(8, 15000)
 randData2 = np.random.rand(8, 15000)
 num_epochs = 3
@@ -263,65 +251,32 @@ randTS1 = Recording(randData1, step_size)
 randTS2 = Recording(randData2, step_size)
 
 # call model fit
-F = Model_fitting(model, [randTS1.windowedTensor(TPperWindow), randTS2.windowedTensor(TPperWindow)], num_epochs, ObjFun)
+F = Model_fitting(model, ObjFun)
 
 # %%
 # model training
-F.train(learningrate= 0.1, lr_scheduler = False)
-
-# %%
-# model test with 20 window for warmup
-F.evaluate(0)
-
-
-#LossComp = list()
-#
-#J_values = list()
-#
-#num_epochs = 20
-#
-#for i in range(epochs):
-#    print(i)
-#    
-#    node_history, EEG_history, BOLD_history = model.forward()
-#    totalLoss, lossComponents = TotalLossFn.calcTotalLoss(node_history[skip_trans:,:,:], EEG_history[skip_trans:,:,:], BOLD_history[skip_trans:,:,:], returnLossComponents = True)
-#    print("totalLoss = ", totalLoss.item())
-#    
-#    optimizer.zero_grad()
-#    totalLoss.backward()
-#    optimizer.step()
-#    
-#    LossComp.append(lossComponents)
-#    J_values.append(model.nodes.J.detach().clone().numpy())
-#
-#    
-#    print("J values = ", model.nodes.J.detach().clone().numpy())
-
+F.train(u = 0, empRecs = [randTS1, randTS2], num_epochs = num_epochs, TPperWindow = TPperWindow, learningrate = 0.1)
 
 # %%
 # Plots of loss over Training
-# ---------------------------------------------------
-#
-
-plt.plot(F.trainingStats.loss)
-plt.title("Total Loss over Training Windows")
-
+plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
+plt.title("Total Loss over Training Epochs")
 
 # %%
 # Plots of J values over Training
-# ---------------------------------------------------
-#
-
-plt.plot(F.trainingStats.J)
-plt.title("J_{i} Values Changing Over Training Windows")
-
+plt.plot(F.trainingStats.fit_params['J'])
+plt.title("J_{i} Values Changing Over Training Epochs")
 
 
 # %%
-# Plots of S_E and S_I After Training
+# Model Simulation
 # ---------------------------------------------------
 #
+F.simulate(u = 0, numTP = randTS1.length)
 
+
+# %%
+# Plots of S_E and S_I
 plt.figure(figsize = (16, 8))
 plt.title("S_E and S_I")
 for n in range(num_regions):
@@ -335,7 +290,6 @@ plt.legend()
 
 # %%
 # Plots of EEG PSD
-# ---------------------------------------------------
 #
 
 sampleFreqHz = 1000*(1/step_size)
@@ -353,7 +307,6 @@ plt.title("Simulated EEG PSD: After Training")
 
 # %%
 # Plots of BOLD FC
-# ---------------------------------------------------
 #
 
 sim_FC = np.corrcoef(F.lastRec['bold'].npTS()[:,skip_trans:])
@@ -366,7 +319,7 @@ sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
 
 
 # %%
-# Defining the CNMM Validation Model
+# CNMM Validation Model
 # ---------------------------------------------------
 #
 # The Multi-Modal Model
@@ -379,7 +332,6 @@ sim_vals, hE = model_validate.forward(external = 0, hx = model_validate.createIC
 
 # %%
 # Plots of S_E and S_I Validation
-# ---------------------------------------------------
 #
 
 plt.figure(figsize = (16, 8))
@@ -392,10 +344,8 @@ plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(
 plt.legend()
 
 
-
 # %%
 # Plots of EEG PSD Validation
-# ---------------------------------------------------
 #
 
 sampleFreqHz = 1000*(1/step_size)
@@ -410,10 +360,8 @@ plt.ylabel('PSD')
 plt.title("Simulated EEG PSD: After Training")
 
 
-
 # %%
 # Plots of BOLD FC Validation
-# ---------------------------------------------------
 #
 
 sim_FC = np.corrcoef((sim_vals['bold'].T)[:,skip_trans:])
