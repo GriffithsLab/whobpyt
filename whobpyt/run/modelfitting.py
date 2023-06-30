@@ -216,10 +216,10 @@ class Model_fitting:
                 for par_name in self.model.track_params:
                     var = getattr(self.model.params, par_name)
                     if (var.fit_par):
-                        trackedParam[par_name] = var.value().detach().numpy()
+                        trackedParam[par_name] = var.value().detach().numpy().copy()
                     if (var.fit_hyper):
-                        trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().numpy()
-                        trackedParam[par_name + "_prior_var"] = var.prior_var.detach().numpy()
+                        trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().numpy().copy()
+                        trackedParam[par_name + "_prior_var"] = var.prior_var.detach().numpy().copy()
             for key, value in self.model.state_dict().items():
                 if key not in exclude_param:
                     trackedParam[key] = value.detach().numpy().ravel().copy()
