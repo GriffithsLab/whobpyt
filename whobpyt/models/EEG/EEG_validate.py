@@ -43,7 +43,7 @@ class EEG_np():
             layer_hist[i, :, 0] = numpy.matmul(self.LF, node_history[i,:]) #numpy.matmul(self.LF, node_history[i, :, 0] - node_history[i, :, 1])
             
         sim_vals = {}
-        sim_vals["eeg_window"] = layer_hist[:,:,0]
+        sim_vals["eeg"] = layer_hist[:,:,0]
 
             
         return sim_vals, hE #layer_hist

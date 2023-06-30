@@ -2,10 +2,10 @@ import torch
 
 
 class CostsMean():
-    def __init__(self, num_regions,  varIdx, targetValue = None, empiricalData = None):
+    def __init__(self, num_regions, simKey, targetValue = None, empiricalData = None):
         
         self.num_regions = num_regions
-        self.varIdx = varIdx # This is the index in the data simulation to extract variable time series from
+        self.simKey = simKey # This is the key from the numerical simulation used to select the time series
         
         # Target can be specific to each region, or can have a single number that is repeated for each region
         if torch.numel(targetValue) == 1:
@@ -20,10 +20,10 @@ class CostsMean():
             pass
         
     def calcLoss(self, simData):
-        # simData assumed to be in the form [time_steps, regions]
+        # simData assumed to be in the form [regions, time_steps]
         # Returns the sum of the MSE of each regions mean value to target value of each reagion
         
-        meanVar = torch.mean(simData[:,:], 0)
+        meanVar = torch.mean(simData[:,:], 1)
         
         return torch.nn.functional.mse_loss(meanVar, self.targetValue)
         

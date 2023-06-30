@@ -11,9 +11,10 @@ class mmRWW2(RWW2):
     model_name = "mmRWW2"
     
     def __init__(self, num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len):
-        super(mmRWW2, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False)
+
         self.eeg = EEG_Layer(num_regions, paramsEEG, num_channels)
         self.bold = BOLD_Layer(num_regions, paramsBOLD)
+        super(mmRWW2, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False)
         
         self.node_size = num_regions
         self.step_size = step_size
@@ -24,7 +25,10 @@ class mmRWW2(RWW2):
         self.TRs_per_window = 1
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-        self.output_names = ["E"] #TODO: This should be made consistent with info()
+        self.output_names = ["bold", "eeg"]
+        self.track_params = []  #Is populated during setModelParameters()
+        
+        self.setModelParameters()
 
     def info(self):
         return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold", "eeg"]} #TODO: Update to take multiple output names
@@ -56,8 +60,8 @@ def createIC(self, ver):
 def forward(self, external, hx, hE):
     
     NMM_vals, hE = super(mmRWW2, self).forward(external, self.next_start_state[:, 0:2], hE) #TODO: Fix the hx in the future
-    EEG_vals, hE = self.eeg.forward(self.step_size, self.sim_len, NMM_vals["E_window"])
-    BOLD_vals, hE = self.bold.forward(self.next_start_state[:, 2:6], self.step_size, self.sim_len, NMM_vals["E_window"])
+    EEG_vals, hE = self.eeg.forward(self.step_size, self.sim_len, NMM_vals["E"].T)
+    BOLD_vals, hE = self.bold.forward(self.next_start_state[:, 2:6], self.step_size, self.sim_len, NMM_vals["E"].T)
     
     self.next_start_state = torch.cat((NMM_vals["NMM_state"], BOLD_vals["BOLD_state"]), dim=1).detach()
     

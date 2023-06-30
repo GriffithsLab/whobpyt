@@ -14,7 +14,8 @@ from whobpyt.optimization.cost_TS import CostsTS
 class CostsJR(AbstractLoss):
     def __init__(self):
         super(CostsJR, self).__init__()
-        self.mainLoss = CostsTS()
+        self.mainLoss = CostsTS("eeg")
+        self.simKey = "eeg"
         
     def loss(self, sim, emp, model: torch.nn.Module, state_vals):
         # define some constants

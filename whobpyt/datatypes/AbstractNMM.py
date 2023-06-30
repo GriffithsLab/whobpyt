@@ -7,7 +7,7 @@ class AbstractNMM(torch.nn.Module):
         
         self.state_names = ["None"]
         self.output_names = ["None"]
-        self.track_params = []
+        self.track_params = [] #Tracking of NMM Parameters over training
         
         self.use_fit_gains = False  
         self.use_fit_lfm = False

@@ -16,6 +16,7 @@ class CostsFC(AbstractLoss):
     """
     def __init__(self):
         super(CostsFC, self).__init__()
+        self.simKey = simKey
 
     def loss(self, sim, emp, model: torch.nn.Module = None, state_vals = None):
         """Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.

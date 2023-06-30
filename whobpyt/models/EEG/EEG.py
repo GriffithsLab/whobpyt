@@ -15,6 +15,8 @@ class EEG_Layer(AbstractMode):
         self.num_channels = num_channels
         
         self.params = params
+        
+        self.setModelParameters()
     
     def info(self):
         return {"state_names": ["None"], "output_name": "eeg"}
@@ -61,6 +63,6 @@ def forward(self, step_size, sim_len, node_history, useGPU = False):
         layer_hist[i, :, 0] = torch.matmul(self.LF, node_history[i,:]) # node_history[i, :, 0] - node_history[i, :, 1] TODO: Check dimensions
     
     sim_vals = {}
-    sim_vals["eeg_window"] = layer_hist[:,:,0]
+    sim_vals["eeg"] = layer_hist[:,:,0].T
 
     return sim_vals, hE

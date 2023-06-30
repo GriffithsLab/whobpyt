@@ -23,6 +23,7 @@ Welcome to WhoBPyT documentation!
    :caption: API
    :glob:
 
+   API/run
    API/models
    API/optimization
 
