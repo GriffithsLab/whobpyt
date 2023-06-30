@@ -13,8 +13,24 @@ class CostsFC(AbstractLoss):
     """
     Cost function for Fitting the Functional Connectivity (FC) matrix.
     The cost function is the negative log-likelihood of the Pearson correlation between the simulated FC and empirical FC.
+
+    Attributes:
+    -----------
+    simKey: str
+        string key to reference to this const function. i.e., "CostsFC".
+
+    Methods:
+    --------
+    loss: function
+        calculates functional connectivity and uses it to calculate the loss
     """
-    def __init__(self):
+    def __init__(self, simKey):
+        """
+        Parameters:
+        -----------
+        simKey: str
+            type of cost function to be used
+        """
         super(CostsFC, self).__init__()
         self.simKey = simKey
 
@@ -23,9 +39,9 @@ class CostsFC(AbstractLoss):
 
         Parameters
         ----------
-        sim: tensor with node_size X datapoint
+        sim: torch.tensor with node_size X datapoint
             simulated BOLD
-        emp: tensor with node_size X datapoint
+        emp: torch.tensor with node_size X datapoint
             empirical BOLD
         model: torch.nn.Module
             model to be used for the loss calculation
@@ -36,7 +52,7 @@ class CostsFC(AbstractLoss):
 
         Returns
         -------
-        losses_corr: tensor
+        losses_corr: torch.tensor
             cost function value
         """
         logits_series_tf = sim
