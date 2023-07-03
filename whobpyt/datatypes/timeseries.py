@@ -2,28 +2,48 @@ import torch
 import numpy as np
 
 class Recording():
-    """    
-        This class is responsible for holding timeseries of simulated data within NMM and Modals and as input to the Objective Function
-            - Info about step size, length, modailty, dimension
-            - The time series of model state variables
-            - The time series of modality variables (EEG, fMRI)
-                
-        time series stored dict of: num_regions x time_points (May want to change this later)
-     
-    This is the class to load in and store one neuroimaing recording or simulated data. 
-        - Part of the input and output of model_fitting and model_simulation[future]. 
+    '''    
+    This class is responsible for holding timeseries of empirical and simulated data. It is: 
+        - Part of the input and output of Model_fitting and Model_simulation[future]. 
         - It is the format expected by the visualization function of whobpyt. 
     
-    However, recordings() is not used within and across the NMM and Modals, as a simpler dictionary of tensors is used in those contexts. 
-    
-    Input(NumPy or PyTorch): num_regions x ts_length
+    However, the Recording class is not used within and across the NMM and Modals, as a simpler dictionary of tensors is used in those contexts. 
 
-    Numerical simulation internals don't necessarily use this data structure, as 
-    calculations may be more efficient as the transpose: ts_length x num_regions.
+    Numerical simulation internals don't necessarily use this data structure, as calculations may be more efficient as the transpose: ts_length x num_regions.
     
-    """
     
+    Attributes
+    -------------
+    data : Numpy Array or Tensor of dimensions num_regions x ts_length
+        The time series data, either empirical or simulated
+    step_size : Float
+        The step size of the time points in the data class
+    modality : String
+        The name of the modality of the time series   
+    numNodes : Int
+        The number of nodes it time series.
+    length : Int 
+        The number of time points in the time series. 
+    
+    
+    '''
+        
     def __init__(self, data, step_size, modality = ""):
+        '''
+        
+        Parameters
+        -----------
+        
+        data : Numpy Array or Tensor of dimensions num_regions x ts_length
+            The time series data, either empirical or simulated
+        step_size : Float
+            The step size of the time points in the data class
+        modality : String
+            The name of the modality of the time series
+        
+        '''
+        
+        
         if not(torch.is_tensor(data)):
             data = torch.tensor(data) # Store as Tensor
         
@@ -34,28 +54,77 @@ class Recording():
         self.length = self.data.shape[1]
     
     def pyTS(self):
+        '''
+        Returns
+        --------
+        Tensor of num_regions x ts_length
+        
+        '''
+        
         return self.data
     
     def npTS(self):
+        '''
+        Returns
+        ---------
+        Numpy Array of num_regions x ts_length
+        
+        '''
+        
         return self.data.numpy()
         
     def npNodeByTime(self):
+        '''
+        Returns
+        ---------
+        Numpy Array of num_regions x ts_length        
+        
+        '''
+        
         return self.data.numpy()
         
     def npTimeByNodes(self):
+        '''
+        Returns
+        ---------
+        Numpy Array of ts_length x num_regions        
+        
+        '''
+        
         return self.data.numpy().T
         
     def length(self):
+        '''
+        Returns
+        ---------
+        The time series length
+        
+        '''   
+        
         return self.length
         
     def npResample(self):
-        #This outputs resampled data used for Figures
+        '''
+        This outputs resampled data used for figures (TODO: Not yet implemented)        
+        
+        '''
+        
         pass
     
     def windowedTensor(self, TPperWindow):
-        # This adds another dimension for windows used in Model_Fitting
+        '''
+        This method is called by the Model_fitting Class during training to reshape the data into windowed segments (adds another dimension).
         
-        # Output: num_windows x num_regions x window_length
+        Parameters
+        -----------
+        TPperWindow : Int
+            The number of time points in the window that will be back propagated
+        
+        Returns
+        ---------
+        Tensor: num_windows x num_regions x window_length
+            The time series data in a windowed format
+        '''
         
         node_size = self.data.shape[0]
         length_ts = self.data.shape[1]

@@ -26,6 +26,7 @@ Welcome to WhoBPyT documentation!
    API/run
    API/models
    API/optimization
+   API/datatypes
 
 .. toctree::
    :maxdepth: 1
