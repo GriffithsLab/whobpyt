@@ -277,35 +277,42 @@ class RNNJANSEN(AbstractNMM):
             Tensor representing the updated history of the pyramidal population's current.
         """
 
-        # Defining NMM Parameters to simplify later equations
-        A = self.params.A.value() 
-        a = self.params.a.value()
-        B = self.params.B.value()
-        b = self.params.b.value()
-        g = self.params.g.value()
-        c1 = self.params.c1.value()
-        c2 = self.params.c2.value()
-        c3 = self.params.c3.value()
-        c4 = self.params.c4.value()
-        std_in = self.params.std_in.value()
-        vmax = self.params.vmax.value()
-        v0 = self.params.v0.value()
-        r = self.params.r.value()
-        y0 = self.params.y0.value()
-        mu = self.params.mu.value()
-        k = self.params.k.value()
-        cy0 = self.params.cy0.value()
-        ki = self.params.ki.value()
+        # Generate the ReLU module
+        m = torch.nn.ReLU()
         
-        g_f = self.params.g_f.value()
-        g_b = self.params.g_b.value()
-
-        # Define some constants
+        # Define some constants        
+        con_1 = torch.tensor(1.0, dtype=torch.float32) # Define constant 1 tensor
         conduct_lb = 1.5  # lower bound for conduct velocity
         u_2ndsys_ub = 500  # the bound of the input for second order system
         noise_std_lb = 20  # lower bound of std of noise
         lb = 0.01  # lower bound of local gains
         k_lb = 0.5  # lower bound of coefficient of external inputs
+
+
+        # Defining NMM Parameters to simplify later equations
+        #TODO: Change code so that params returns actual value used without extras below
+        A = 0 * con_1 + m(self.params.A.value()) 
+        a = 1 * con_1 + m(self.params.a.value())
+        B = 0 * con_1 + m(self.params.B.value())
+        b = 1 * con_1 + m(self.params.b.value())
+        g = (lb * con_1 + m(self.params.g.value()))
+        c1 = (lb * con_1 + m(self.params.c1.value()))
+        c2 = (lb * con_1 + m(self.params.c2.value()))
+        c3 = (lb * con_1 + m(self.params.c3.value()))
+        c4 = (lb * con_1 + m(self.params.c4.value()))
+        std_in = (noise_std_lb * con_1 + m(self.params.std_in.value()))
+        vmax = self.params.vmax.value()
+        v0 = self.params.v0.value()
+        r = self.params.r.value()
+        y0 = self.params.y0.value()
+        mu = (conduct_lb * con_1 + m(self.params.mu.value()))
+        k = (k_lb * con_1 + m(self.params.k.value()))
+        cy0 = self.params.cy0.value()
+        ki = self.params.ki.value()
+        
+        g_f = (lb * con_1 + m(self.params.g_f.value()))
+        g_b = (lb * con_1 + m(self.params.g_b.value()))
+
 
         next_state = {}
 
@@ -319,11 +326,6 @@ class RNNJANSEN(AbstractNMM):
 
         dt = self.step_size
 
-        # Generate the ReLU module
-        m = torch.nn.ReLU()
-
-        # Define constant 1 tensor
-        con_1 = torch.tensor(1.0, dtype=torch.float32)
         if self.sc.shape[0] > 1:
 
             # Update the Laplacian based on the updated connection gains w_bb.
@@ -353,7 +355,7 @@ class RNNJANSEN(AbstractNMM):
             w_n_b = 0
             w_n_f = 0
 
-        self.delays = (self.dist / (conduct_lb * con_1 + m(mu))).type(torch.int64)
+        self.delays = (self.dist / mu).type(torch.int64)
 
         # Placeholder for the updated current state
         current_state = torch.zeros_like(hx)
@@ -382,31 +384,23 @@ class RNNJANSEN(AbstractNMM):
                 
                 # TMS (or external) input
                 u_tms = external[:, step_i:step_i + 1, i_window]
-                rM = (k_lb * con_1 + m(k)) * ki * u_tms + \
-                    (noise_std_lb * con_1 + m(std_in)) * torch.randn(self.node_size, 1) + \
-                    1 * (lb * con_1 + m(g)) * (LEd_l + 1 * torch.matmul(dg_l, M)) + \
+                rM = k * ki * u_tms + std_in * torch.randn(self.node_size, 1) + \
+                    1 * g * (LEd_l + 1 * torch.matmul(dg_l, M)) + \
                     sigmoid(E - I, vmax, v0, r)  # firing rate for pyramidal population
-                rE = (noise_std_lb * con_1 + m(std_in)) * torch.randn(self.node_size, 1) + \
-                    1 * (lb * con_1 + m(g_f)) * (LEd_f + 1 * torch.matmul(dg_f, E - I)) + \
-                    (lb * con_1 + m(c2)) * sigmoid((lb * con_1 + m(c1)) * M, vmax, v0,
-                                                        r)  # firing rate for excitatory population
-                rI = (noise_std_lb * con_1 + m(std_in)) * torch.randn(self.node_size, 1) + \
-                    1 * (lb * con_1 + m(g_b)) * (-LEd_b - 1 * torch.matmul(dg_b, E - I)) + \
-                    (lb * con_1 + m(c4)) * sigmoid((lb * con_1 + m(c3)) * M, vmax, v0,
-                                                        r)  # firing rate for inhibitory population
+                rE = std_in * torch.randn(self.node_size, 1) + \
+                    1 * g_f * (LEd_f + 1 * torch.matmul(dg_f, E - I)) + \
+                    c2 * sigmoid(c1 * M, vmax, v0, r)  # firing rate for excitatory population
+                rI = std_in * torch.randn(self.node_size, 1) + \
+                    1 * g_b * (-LEd_b - 1 * torch.matmul(dg_b, E - I)) + \
+                    c4 * sigmoid(c3 * M, vmax, v0, r)  # firing rate for inhibitory population
 
                 # Update the states with every step size.
                 ddM = M + dt * Mv
                 ddE = E + dt * Ev
                 ddI = I + dt * Iv
-                ddMv = Mv + dt * sys2nd(0 * con_1 + m(A), 1 * con_1 + m(a),
-                                        u_2ndsys_ub * torch.tanh(rM / u_2ndsys_ub), M, Mv)
-
-                ddEv = Ev + dt * sys2nd(0 * con_1 + m(A), 1 * con_1 + m(a),
-                                        u_2ndsys_ub * torch.tanh(rE / u_2ndsys_ub), E, Ev)
-
-                ddIv = Iv + dt * sys2nd(0 * con_1 + m(B), 1 * con_1 + m(b),
-                                        u_2ndsys_ub * torch.tanh(rI / u_2ndsys_ub), I, Iv)
+                ddMv = Mv + dt * sys2nd(A, a, u_2ndsys_ub * torch.tanh(rM / u_2ndsys_ub), M, Mv)
+                ddEv = Ev + dt * sys2nd(A, a, u_2ndsys_ub * torch.tanh(rE / u_2ndsys_ub), E, Ev)
+                ddIv = Iv + dt * sys2nd(B, b, u_2ndsys_ub * torch.tanh(rI / u_2ndsys_ub), I, Iv)
 
                 # Calculate the saturation for model states (for stability and gradient calculation).
                 E = 1000*torch.tanh(ddE/1000)
