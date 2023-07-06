@@ -94,4 +94,40 @@ def fetch_hcpl2k8(dest_folder = None):
 
    
 
- 
+
+def fetch_MomiEtAlELife2023(dest_folder=None):
+    #
+    # -----
+    # Usage
+    # -----
+    #
+    # thisdir = os.getcwd()
+    # dest_folder = os.path.join(thisdir,'reproduce_Momi_et_al_2023')
+    #
+    # res = fetch_MomiEtAlElife2023(dest_folder=dest_folder)
+    #
+
+    cwd = os.getcwd()
+   
+    # Life hack to stop for erroring on the next line
+    if dest_folder is None: dest_folder = ''
+
+    # Create the target out dir
+    if not os.path.isdir(dest_folder): os.makedirs(dest_folder)
+    os.chdir(dest_folder)
+
+    # Pull the data folder
+    newf_name = ''
+    dlcode = '1iwsxrmu_rnDCvKNYDwTskkCNt709MPuF'
+    res_loc_1 = pull_folder(dlcode, dest_folder=dest_folder,newfolder_name=newf_name)
+
+    # Pull the fsaverage folder
+    newf_name = '' 
+    dlcode = '1YPyf3h9YKnZi0zRwBwolROQuqDtxEfzF'
+    res_loc_2 = pull_folder(dlcode, dest_folder=dest_folder,newfolder_name=newf_name)
+
+    # Confirm you got everything and go back to initial dir
+    os.chdir(cwd)
+
+
+
