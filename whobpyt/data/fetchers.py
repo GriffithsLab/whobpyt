@@ -118,7 +118,8 @@ def fetch_MomiEtAlELife2023(dest_folder=None):
 
     # Pull the data folder
     newf_name = ''
-    dlcode = '1iwsxrmu_rnDCvKNYDwTskkCNt709MPuF'
+    dlcode = '1t-9m0E88xUUcGWWH024H32maQUs_Jjgx'  # This is the DATA_LITE folder
+    # dlcode = '1iwsxrmu_rnDCvKNYDwTskkCNt709MPuF' This is the FULL data folder (too large to download)
     res_loc_1 = pull_folder(dlcode, dest_folder=dest_folder,newfolder_name=newf_name)
 
     # Pull the fsaverage folder
