@@ -48,7 +48,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Fitting Wong_Wang model (HCP data)" href="eg003r__fitting_rww_example.html" />
-    <link rel="prev" title="Optimization" href="../API/optimization.html" /> 
+    <link rel="prev" title="Data Types" href="../API/datatypes.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -120,6 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul class="current">
@@ -231,7 +232,7 @@
 <h2>Importage<a class="headerlink" href="#importage" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># whobpyt stuff</span>
 <span class="kn">import</span> <span class="nn">whobpyt</span>
-<span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">par</span><span class="p">,</span> <span class="n">Recording</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <a href="../API/datatypes.html#whobpyt.datatypes.par" title="whobpyt.datatypes.par" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">par</span></a><span class="p">,</span> <a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">Recording</span></a>
 <span class="kn">from</span> <span class="nn">whobpyt.models.RWW2</span> <span class="kn">import</span> <a href="../API/models.html#whobpyt.models.RWW2.RWW2" title="whobpyt.models.RWW2.RWW2" class="sphx-glr-backref-module-whobpyt-models-RWW2 sphx-glr-backref-type-py-class"><span class="n">mmRWW2</span></a><span class="p">,</span> <span class="n">mmRWW2_np</span><span class="p">,</span> <span class="n">RWW2</span><span class="p">,</span> <span class="n">RWW2_np</span><span class="p">,</span> <span class="n">ParamsRWW2</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.BOLD</span> <span class="kn">import</span> <span class="n">BOLD_Layer</span><span class="p">,</span> <span class="n">BOLD_np</span><span class="p">,</span> <span class="n">BOLD_Params</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.EEG</span> <span class="kn">import</span> <span class="n">EEG_Layer</span><span class="p">,</span> <span class="n">EEG_np</span><span class="p">,</span> <span class="n">EEG_Params</span>
@@ -278,14 +279,14 @@
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/whobpyt/whobpyt/whobpyt/datatypes/parameter.py:26: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/whobpyt/whobpyt/whobpyt/datatypes/parameter.py:66: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
   self.val = torch.tensor(val, dtype=torch.float32)
 </pre></div>
 </div>
 </div>
 <div class="section" id="further-adjusting-parameters-for-network">
 <h2>Further Adjusting Parameters for Network<a class="headerlink" href="#further-adjusting-parameters-for-network" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">paramsNode</span><span class="o">.</span><span class="n">J</span> <span class="o">=</span> <span class="n">par</span><span class="p">((</span><span class="mf">0.15</span>  <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)),</span> <span class="n">fit_par</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">asLog</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">#This is a parameter that will be updated during training</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/datatypes.html#whobpyt.datatypes.par" title="whobpyt.datatypes.par" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">paramsNode</span><span class="o">.</span><span class="n">J</span></a> <span class="o">=</span> <a href="../API/datatypes.html#whobpyt.datatypes.par" title="whobpyt.datatypes.par" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">par</span></a><span class="p">((</span><span class="mf">0.15</span>  <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)),</span> <span class="n">fit_par</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">asLog</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">#This is a parameter that will be updated during training</span>
 </pre></div>
 </div>
 </div>
@@ -448,8 +449,8 @@ Also, written in such a way as to be able to track and plot indiviual components
 <span class="n">TPperWindow</span> <span class="o">=</span> <span class="mi">15000</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">randData1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">randTS1</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">randData1</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
-<span class="n">randTS2</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">randData2</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+<a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">randTS1</span></a> <span class="o">=</span> <a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">Recording</span></a><span class="p">(</span><span class="n">randData1</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+<a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">randTS2</span></a> <span class="o">=</span> <a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">Recording</span></a><span class="p">(</span><span class="n">randData2</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
 
 <span class="c1"># call model fit</span>
 <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a> <span class="o">=</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class"><span class="n">Model_fitting</span></a><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
@@ -460,19 +461,19 @@ Also, written in such a way as to be able to track and plot indiviual components
 </pre></div>
 </div>
 <p>model training</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/run.html#whobpyt.run.Model_fitting.train" title="whobpyt.run.Model_fitting.train" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-method"><span class="n">F</span><span class="o">.</span><span class="n">train</span></a><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">empRecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">randTS1</span><span class="p">,</span> <span class="n">randTS2</span><span class="p">],</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">learningrate</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/run.html#whobpyt.run.Model_fitting.train" title="whobpyt.run.Model_fitting.train" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-method"><span class="n">F</span><span class="o">.</span><span class="n">train</span></a><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">empRecs</span> <span class="o">=</span> <span class="p">[</span><a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">randTS1</span></a><span class="p">,</span> <a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">randTS2</span></a><span class="p">],</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">learningrate</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: [0.4210386] Pseudo FC_cor:  -0.09147847212170818 cos_sim:  0.5677114673932913
-epoch:  0 loss: [0.45546037] Pseudo FC_cor:  0.25454673666786626 cos_sim:  0.8429174704167974
+epoch:  0 loss: [0.41381943] Pseudo FC_cor:  0.08002429819499017 cos_sim:  0.544846903761512
+epoch:  0 loss: [0.45748752] Pseudo FC_cor:  -0.26854738830058583 cos_sim:  0.8391126746794868
 Epoch:  1
-epoch:  1 loss: [0.45424038] Pseudo FC_cor:  -0.1199583227420114 cos_sim:  0.8647836299574857
-epoch:  1 loss: [0.4553421] Pseudo FC_cor:  0.17642380169070357 cos_sim:  0.8666851126677635
+epoch:  1 loss: [0.45228708] Pseudo FC_cor:  -0.20674024653474388 cos_sim:  0.8640953397969908
+epoch:  1 loss: [0.4528707] Pseudo FC_cor:  -0.0019491559678599803 cos_sim:  0.8662341772150853
 Epoch:  2
-epoch:  2 loss: [0.44855756] Pseudo FC_cor:  -0.07883200459085916 cos_sim:  0.8664275434610847
-epoch:  2 loss: [0.44826657] Pseudo FC_cor:  -0.008569509966770994 cos_sim:  0.8667191678442405
+epoch:  2 loss: [0.44832367] Pseudo FC_cor:  -0.16570590354610637 cos_sim:  0.8659319818962111
+epoch:  2 loss: [0.44848344] Pseudo FC_cor:  -0.3711664110607975 cos_sim:  0.86629171861849
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -498,7 +499,7 @@ epoch:  2 loss: [0.44826657] Pseudo FC_cor:  -0.008569509966770994 cos_sim:  0.8
 </div>
 <div class="section" id="model-simulation">
 <h2>Model Simulation<a class="headerlink" href="#model-simulation" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">numTP</span> <span class="o">=</span> <span class="n">randTS1</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">numTP</span> <span class="o">=</span> <a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">randTS1</span></a><span class="o">.</span><span class="n">length</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Plots of S_E and S_I</p>
@@ -514,7 +515,7 @@ epoch:  2 loss: [0.44826657] Pseudo FC_cor:  -0.008569509966770994 cos_sim:  0.8
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fd1349709d0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f48f640c9d0&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD</p>
@@ -572,7 +573,7 @@ epoch:  2 loss: [0.44826657] Pseudo FC_cor:  -0.008569509966770994 cos_sim:  0.8
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fd1348f1a60&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f48f3c508b0&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD Validation</p>
@@ -607,7 +608,7 @@ epoch:  2 loss: [0.44826657] Pseudo FC_cor:  -0.008569509966770994 cos_sim:  0.8
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  11.720 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  24.380 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>
@@ -631,7 +632,7 @@ epoch:  2 loss: [0.44826657] Pseudo FC_cor:  -0.008569509966770994 cos_sim:  0.8
         <a href="eg003r__fitting_rww_example.html" class="btn btn-neutral float-right" title="Fitting Wong_Wang model (HCP data)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../API/optimization.html" class="btn btn-neutral float-left" title="Optimization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../API/datatypes.html" class="btn btn-neutral float-left" title="Data Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
