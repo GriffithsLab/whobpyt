@@ -12,17 +12,41 @@ import whobpyt.datatypes.parameter
 
 
 class TrainingStats:
-    """
-        The class replaces OutputNM.
-        This class is responsible for recording stats during training including:
-            - The training and validation losses over time
-            - The change in parameters over time
-            - changing hyperparameters over time like learing rates
-            
-        These are things typically recorded on a per window/epoch basis  
-    """
+    '''
+    This class is responsible for recording stats during training (it replaces OutputNM) including:
+        - The training and validation losses over time
+        - The change in model parameters over time
+        - changing hyper parameters over time like learing rates TODO
+        
+    These are things typically recorded on a per window/epoch basis  
+        
+    Attributes
+    ------------
+    model_info : Dict
+        Information about model being tracked during training. 
+    track_params : List
+        List of parameter names being tracked during training. 
+    loss : List
+        A list of loss values over training.
+    connectivity : List
+        A list of connectivity values over training.
+    leadfield : List
+        A list of leadfield matrices over training.
+    fit_params : Dict
+        A dictionary of lists where the key is the parameter name and the value is the list of parameter values over training. 
+        
+    '''
 
     def __init__(self, model):
+        '''
+        
+        Parameters
+        -----------
+        model : AbstractNMM
+            A model for which stats will be recorded during training. 
+        
+        '''
+    
         model_info = model.info()
         self.track_params = model.track_params
 
@@ -32,58 +56,78 @@ class TrainingStats:
         self.leadfield = []
 
         self.fit_params = {}
-
-        #for name in set(self.state_names + self.output_names):
-        #    for m in ['train', 'test']:
-        #        setattr(self, name + '_' + m, [])
-
-        #vars_name = [a for a in dir(model.params) if not a.startswith('__') and not callable(getattr(model.params, a))]
-        #for var in vars_name:
-        #    if (type(getattr(model.params, var)) != whobpyt.datatypes.parameter.par):
-        #        if np.any(getattr(model.params, var)[1] > 0):
-        #            if var != 'std_in':
-        #                setattr(self, var, np.array([]))
-        #                for stat_var in ['m', 'v_inv']:
-        #                    setattr(self, var + '_' + stat_var, [])
-        #            else:
-        #                setattr(self, var, [])
-        #    
-        #    else:
-        #    
-        #        if getattr(model.params, var).fit_par:
-        #            setattr(self, var, np.array([]))
-        #        
-        #        if getattr(model.params, var).fit_hyper:
-        #            for stat_var in ['m', 'v_inv']:
-        #                setattr(self, var + '_' + stat_var, [])
             
     def save(self, filename):
+        '''
+        Parameters
+        ------------
+        filename : String
+            The filename to use to save the TrainingStats as a pickle object.
+        
+        '''
+    
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
     
     def reset(self):
+        '''
+        Resets the attributes of the model to a pre-training state. 
+        
+        '''
+    
         self.loss = []
         
         self.network_con = []
         self.leadfield = []
 
-        self.nmm_pars = {}
-        self.other_pars = {}
+        self.fit_params = {}
 
     def appendLoss(self, newValue):
-        """ Append Trainig Loss """
+        """ 
+        Append Trainig Loss
+
+        Parameters
+        -----------
+        newValue : Float
+            The loss value of objective function being tracked.
+        
+        """
         self.loss.append(newValue)
         
     def appendSC(self, newValue):
-        """ Append Network Connections """
+        """ 
+        Append Network Connections 
+        
+        Parameters
+        -----------
+        newValue : Array
+            Current state of the structural connectivity being tracked. 
+        
+        """
         self.connectivity.append(newValue)
         
     def appendLF(self, newValue):
-        """ Append Lead Field Loss """
+        """ 
+        Append Lead Field Loss 
+        
+        Parameters
+        -----------
+        newValue : Array
+            Current state of a lead field matrix being tracked.
+            
+        """
         self.leadfield.append(newValue)
 
     def appendParam(self, newValues):
-        """ Append Fit Parameters """
+        """ 
+        Append Fit Parameters
+        
+        Parameters
+        ----------
+        newValues : Dict
+            Dictionary with current states of each model parameter being tracked.
+        
+        """
         if (self.fit_params == {}):
             for name in newValues.keys():
                 self.fit_params[name] = [newValues[name]]
