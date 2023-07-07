@@ -24,6 +24,7 @@ from whobpyt.datatypes import par, Recording
 from whobpyt.models.RWW import RNNRWW, ParamsRWW
 from whobpyt.optimization.custom_cost_RWW import CostsRWW
 from whobpyt.run import Model_fitting
+from whobpyt.data import fetch_hcpl2k8
 
 # array and pd stuff
 import numpy as np
@@ -38,19 +39,32 @@ import matplotlib.pyplot as plt
 import gdown
 # %%
 # define destination path and download data
+
+
+"""
 des_dir = '../'
 if not os.path.exists(des_dir):
     os.makedirs(des_dir)  # create folder if it does not exist
 url = "https://drive.google.com/drive/folders/18smy3ElTd4VksoL4Z15dhwT5l3yjk6xS"
 os.chdir(des_dir)
 gdown.download_folder(url, remaining_ok = True)
-os.chdir('examples/')
+"""
 
+# Go to examples folder
+#os.chdir('examples')
+
+
+# Download the data for this example to default location ~/.whobpyt/data
+data_dir = fetch_hcpl2k8()
+
+base_dir = os.path.join(data_dir, 'HCP')
 
 # %%
 #get subject list
-base_dir = '../HCP/'
+#base_dir = '../HCP/'
+
 #subs =sorted([sc_file[-10:-4] for sc_file in os.listdir(base_dir) if sc_file[:8] == 'weights_'])
+
 sub = '100307'
 
 
@@ -69,8 +83,8 @@ repeat_size = 5
 
 # %%
 # load raw data and get SC empirical BOLD and FC
-sc_file = base_dir + 'weights_' + sub + '.txt'
-ts_file = base_dir + sub + '_rfMRI_REST1_LR_hpc200_clean__l2k8_sc33_ts.pkl'  # out_dir+'sub_'+sub+'simBOLD_idt.txt'#
+sc_file = os.path.join(base_dir, 'weights_' + sub + '.txt')
+ts_file = os.path.join(base_dir, sub + '_rfMRI_REST1_LR_hpc200_clean__l2k8_sc33_ts.pkl')  # out_dir+'sub_'+sub+'simBOLD_idt.txt'#
 
 
 sc = np.loadtxt(sc_file)
