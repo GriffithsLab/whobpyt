@@ -39,14 +39,14 @@ class Fitting_FNGFPG:
         self.lastSerial = None #The last FNG run
         self.lastRec = None # The last FPG run
         
-    def train(self, stim, empRecs, num_epochs, block_len, learningrate = 0.05):
+    def train(self, stim, empDatas, num_epochs, block_len, learningrate = 0.05):
         '''
         
         Parameters
         -----------
         stim :
         
-        empRecs : Recording
+        empDatas : Recording
             The 
         num_epochs : Int
             Number of epochs for training
@@ -69,7 +69,7 @@ class Fitting_FNGFPG:
             # TRAINING_STATS: placeholders for the history of trainingStats
             loss_his = []  # loss placeholder to take the average for the epoch at the end of the epoch
             
-            for empRec in empRecs:
+            for empData in empDatas:
             
                 # STEP 1/2: FNG (Forward in serial no gradients)
                 # Purpose to get initial conditions to run different segments of time in parallel (which will have the same numerical result but a different backwards graph for back propagation)
@@ -122,8 +122,7 @@ class Fitting_FNGFPG:
                 
                 
                 # calculating loss
-                sim = sim_vals[self.cost.simKey]
-                loss = self.cost.calcLoss(sim)
+                loss = self.cost.calcLoss(sim_vals, empData)
                 
                 optim.zero_grad()
                 loss.backward()
@@ -150,7 +149,7 @@ class Fitting_FNGFPG:
             self.lastRec[simKey] = Recording(sim_vals[simKey].detach().numpy().copy(), step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
             
             
-    def evaluate(self, stim, empRec):
+    def evaluate(self, stim, empData):
         pass
     
     
