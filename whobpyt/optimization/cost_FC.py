@@ -153,9 +153,8 @@ class CostsFixedFC(AbstractLoss):
         cov_sim = torch.matmul(logits_series_tf_n, torch.transpose(logits_series_tf_n, 0, 1))
 
         # Getting the FC matrix for the simulated and empirical BOLD signals
-        FC_sim_T = torch.matmul(torch.matmul(torch.diag(torch.reciprocal(torch.sqrt(
-            torch.diag(cov_sim)))), cov_sim),
-            torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_sim))))) # SIMULATED FC
+        FC_sim_T = torch.matmul(torch.matmul(torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_sim)))), cov_sim),
+                                             torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_sim))))) # SIMULATED FC
 
         # Masking out the upper triangle of the FC matrix and keeping the lower triangle
         ones_tri = torch.tril(torch.ones_like(empFC), -1)
