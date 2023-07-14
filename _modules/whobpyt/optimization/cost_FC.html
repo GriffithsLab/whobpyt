@@ -250,7 +250,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">CostsFC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span></div>
 
-<div class="viewcode-block" id="CostsFC.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFC.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">emp</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">state_vals</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsFC.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFC.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">emp</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.</span>
 
 <span class="sd">        Parameters</span>
@@ -259,12 +259,6 @@
 <span class="sd">            simulated BOLD</span>
 <span class="sd">        emp: torch.tensor with node_size X datapoint</span>
 <span class="sd">            empirical BOLD</span>
-<span class="sd">        model: torch.nn.Module</span>
-<span class="sd">            model to be used for the loss calculation</span>
-<span class="sd">            default: None</span>
-<span class="sd">        state_vals: list</span>
-<span class="sd">            list of state values</span>
-<span class="sd">            default: None</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -314,7 +308,91 @@
         <span class="c1"># Bringing the corr-FC to the 0-1 range, and calculating the negative log-likelihood</span>
         <span class="n">losses_corr</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.5000</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">corr_FC</span><span class="p">)</span>  <span class="c1"># torch.mean((FC_v -FC_sim_v)**2)#</span>
         <span class="k">return</span> <span class="n">losses_corr</span></div></div>
+
+
+
+<span class="k">class</span> <span class="nc">CostsFixedFC</span><span class="p">(</span><span class="n">AbstractLoss</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cost function for Fitting the Functional Connectivity (FC) matrix.</span>
+<span class="sd">    In this version, the empirical FC is given directly, instead of being given an empirical time series. </span>
+<span class="sd">    The cost function is the negative log-likelihood of the Pearson correlation between the simulated FC and empirical FC. </span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    simKey: str</span>
+<span class="sd">        string key to reference to this const function. i.e., &quot;CostsFC&quot;.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">    --------</span>
+<span class="sd">    loss: function</span>
+<span class="sd">        calculates functional connectivity and uses it to calculate the loss</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simKey</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        simKey: str</span>
+<span class="sd">            The state variable or output variable from the model used for the simulated FC</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CostsFixedFC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span>
+
+    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simTS</span><span class="p">,</span> <span class="n">empFC</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to calculate the cost function for Functional Connectivity (FC) fitting. </span>
+<span class="sd">        It initially calculates the FC matrix using the data from the time series, </span>
+<span class="sd">        makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. </span>
+<span class="sd">        The FC matrix values are then transposed to the 0-1 range. </span>
+<span class="sd">        We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        simTS: torch.tensor with node_size X time_point</span>
+<span class="sd">            Simulated Time Series </span>
+<span class="sd">        empFC: torch.tensor with node_size X node_size</span>
+<span class="sd">            Empirical Functional Connectivity</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        losses_corr: torch.tensor</span>
+<span class="sd">            cost function value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logits_series_tf</span> <span class="o">=</span> <span class="n">simTS</span>
+
+        <span class="c1"># get node_size() and TRs_per_window()</span>
+        <span class="n">node_size</span> <span class="o">=</span> <span class="n">logits_series_tf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">truncated_backprop_length</span> <span class="o">=</span> <span class="n">logits_series_tf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># remove mean across time</span>
+        <span class="n">logits_series_tf_n</span> <span class="o">=</span> <span class="n">logits_series_tf</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">logits_series_tf</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">[</span><span class="n">node_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># correlation</span>
+        <span class="n">cov_sim</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">logits_series_tf_n</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">logits_series_tf_n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Getting the FC matrix for the simulated and empirical BOLD signals</span>
+        <span class="n">FC_sim_T</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">reciprocal</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cov_sim</span><span class="p">)))),</span> <span class="n">cov_sim</span><span class="p">),</span>
+                                             <span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">reciprocal</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cov_sim</span><span class="p">)))))</span> <span class="c1"># SIMULATED FC</span>
+
+        <span class="c1"># Masking out the upper triangle of the FC matrix and keeping the lower triangle</span>
+        <span class="n">ones_tri</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">empFC</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">zeros</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">empFC</span><span class="p">)</span>  <span class="c1"># create a tensor all ones</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">greater</span><span class="p">(</span><span class="n">ones_tri</span><span class="p">,</span> <span class="n">zeros</span><span class="p">)</span>  <span class="c1"># boolean tensor, mask[i] = True iff x[i] &gt; 1</span>
+
+        <span class="n">FC_tri_v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">masked_select</span><span class="p">(</span><span class="n">empFC</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+        <span class="n">FC_sim_tri_v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">masked_select</span><span class="p">(</span><span class="n">FC_sim_T</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+
+        <span class="c1"># Bring the FC mean to zero</span>
+        <span class="n">FC_v</span> <span class="o">=</span> <span class="n">FC_tri_v</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">FC_tri_v</span><span class="p">)</span>
+        <span class="n">FC_sim_v</span> <span class="o">=</span> <span class="n">FC_sim_tri_v</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">FC_sim_tri_v</span><span class="p">)</span>
+
+        <span class="c1"># Calculate the correlation coefficient between the simulated FC and empirical FC</span>
+        <span class="n">corr_FC</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">FC_v</span><span class="p">,</span> <span class="n">FC_sim_v</span><span class="p">))</span> \
+                  <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">reciprocal</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">FC_v</span><span class="p">,</span> <span class="n">FC_v</span><span class="p">))))</span> \
+                  <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">reciprocal</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">FC_sim_v</span><span class="p">,</span> <span class="n">FC_sim_v</span><span class="p">))))</span>
+
+        <span class="c1"># Bringing the corr-FC to the 0-1 range, and calculating the negative log-likelihood</span>
+        <span class="n">losses_corr</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.5000</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">corr_FC</span><span class="p">)</span> 
         
+        <span class="k">return</span> <span class="n">losses_corr</span>      
 </pre></div>
 
            </div>

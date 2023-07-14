@@ -278,11 +278,6 @@
 <span class="n">paramsBOLD</span> <span class="o">=</span> <span class="n">BOLD_Params</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/whobpyt/whobpyt/whobpyt/datatypes/parameter.py:66: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
-  self.val = torch.tensor(val, dtype=torch.float32)
-</pre></div>
-</div>
 </div>
 <div class="section" id="further-adjusting-parameters-for-network">
 <h2>Further Adjusting Parameters for Network<a class="headerlink" href="#further-adjusting-parameters-for-network" title="Permalink to this headline">¶</a></h2>
@@ -329,7 +324,7 @@
 </div>
 <img alt="SC of Artificial Data" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.0000)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.)
 
 Text(0.5, 1.0, &#39;SC of Artificial Data&#39;)
 </pre></div>
@@ -466,14 +461,14 @@ Also, written in such a way as to be able to track and plot indiviual components
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: [0.42097452] Pseudo FC_cor:  0.1693326756827711 cos_sim:  0.2875224278513735
-epoch:  0 loss: [0.45654744] Pseudo FC_cor:  0.16451763236097158 cos_sim:  0.83598059616379
+epoch:  0 loss: [0.41463727] Pseudo FC_cor:  0.1586977755987805 cos_sim:  0.4493597529530731
+epoch:  0 loss: [0.45635223] Pseudo FC_cor:  -0.09300284220901907 cos_sim:  0.8358884442603612
 Epoch:  1
-epoch:  1 loss: [0.4524] Pseudo FC_cor:  -0.048331249314303056 cos_sim:  0.8636849979379161
-epoch:  1 loss: [0.45435047] Pseudo FC_cor:  0.07159999234070646 cos_sim:  0.8660426738521851
+epoch:  1 loss: [0.45309526] Pseudo FC_cor:  0.05663878869729631 cos_sim:  0.8637233893925937
+epoch:  1 loss: [0.44642138] Pseudo FC_cor:  -0.023765657783953054 cos_sim:  0.8646881147718081
 Epoch:  2
-epoch:  2 loss: [0.45070592] Pseudo FC_cor:  -0.31993537104627084 cos_sim:  0.8656564882568991
-epoch:  2 loss: [0.4488017] Pseudo FC_cor:  0.23574923761450448 cos_sim:  0.8661701051837825
+epoch:  2 loss: [0.45344442] Pseudo FC_cor:  -0.0663406961050939 cos_sim:  0.8655414075682051
+epoch:  2 loss: [0.4451103] Pseudo FC_cor:  -0.06903268296853683 cos_sim:  0.8647179363167334
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -515,7 +510,7 @@ epoch:  2 loss: [0.4488017] Pseudo FC_cor:  0.23574923761450448 cos_sim:  0.8661
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fce577bf0a0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f86a5ec4d00&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD</p>
@@ -573,7 +568,7 @@ epoch:  2 loss: [0.4488017] Pseudo FC_cor:  0.23574923761450448 cos_sim:  0.8661
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fce5764b5b0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f86a5d0fe20&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD Validation</p>
@@ -608,7 +603,7 @@ epoch:  2 loss: [0.4488017] Pseudo FC_cor:  0.23574923761450448 cos_sim:  0.8661
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 6 minutes  35.916 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  22.727 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>

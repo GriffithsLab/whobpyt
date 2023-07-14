@@ -255,7 +255,7 @@ The cost function is the negative log-likelihood of the Pearson correlation betw
 
 <dl class="py method">
 <dt id="whobpyt.optimization.CostsFC.loss">
-<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_vals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC.loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC.loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -263,12 +263,6 @@ The cost function is the negative log-likelihood of the Pearson correlation betw
 <dt><strong>sim: torch.tensor with node_size X datapoint</strong></dt><dd><p>simulated BOLD</p>
 </dd>
 <dt><strong>emp: torch.tensor with node_size X datapoint</strong></dt><dd><p>empirical BOLD</p>
-</dd>
-<dt><strong>model: torch.nn.Module</strong></dt><dd><p>model to be used for the loss calculation
-default: None</p>
-</dd>
-<dt><strong>state_vals: list</strong></dt><dd><p>list of state values
-default: None</p>
 </dd>
 </dl>
 </dd>
