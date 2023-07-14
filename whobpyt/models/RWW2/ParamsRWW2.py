@@ -35,7 +35,7 @@ class ParamsRWW2(AbstractParams):
         #Setting other variables
         self.w_plus = par(1.4) # Local excitatory recurrence
         self.J_NMDA = par(0.15) # Excitatory synaptic coupling in nA
-        self.J = par(0.15 * torch.ones(num_regions), fit_par = True) # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
+        self.J = par(1.0) # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
         self.gamma = par(0.641/1000) #a kinetic parameter in ms
         self.sig = par(0.01) #0.01 # Noise amplitude at node in nA
         self.I_0 = par(0.382) # The overall effective external input in nA

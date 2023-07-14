@@ -31,6 +31,8 @@ class RWW2(AbstractNMM):
         self.Con_Mtx = Con_Mtx
         self.Dist_Mtx = Dist_Mtx
         
+        self.num_blocks = 1
+        
         self.max_delay = 100 #msec #This should be greater than what is possible of max(Dist_Mtx)/velocity
         self.buffer_len = int(self.max_delay/self.step_size)
         self.delayed_S_E = torch.zeros(self.buffer_len, num_regions)
@@ -62,8 +64,37 @@ class RWW2(AbstractNMM):
     def createIC(self, ver):
         pass
     
-    def forward(self, external, hx, hE):
-        return forward(self, external, hx, hE)
+    def setBlocks(self, num_blocks):
+        self.num_blocks = num_blocks
+        self.eeg.num_blocks = num_blocks
+        self.bold.num_blocks = num_blocks
+    
+    def genNoise(self, block_len):
+        '''
+        This generates noise to be used by the model. It is particulary useful for the FNGFPG design 
+        where the same noise must be used be restructure for two different forward passes. 
+        
+        Parameters
+        ------------
+        
+        '''
+        num_blocks = int(self.sim_len/block_len) #TODO: this is also a model attribute, but is changed when running serial vs. blocked
+        
+        ## Noise for the epoch (which has 1 batch)
+        v_of_T_block = torch.normal(0,1,size = (len(torch.arange(0, block_len, self.step_size)), self.node_size, 2, num_blocks)) 
+        blockNoise = {}
+        blockNoise['E'] = v_of_T_block[:,:,0,:]
+        blockNoise['I'] = v_of_T_block[:,:,1,:]
+        
+        v_of_T_serial = serializeTS(v_of_T_block, self.node_size, 2)
+        serialNoise = {}
+        serialNoise['E'] = torch.unsqueeze(v_of_T_serial[:,:,0],2)
+        serialNoise['I'] = torch.unsqueeze(v_of_T_serial[:,:,1],2)
+        
+        return [serialNoise, blockNoise]
+    
+    def forward(self, external, hx, hE, setNoise = None):
+        return forward(self, external, hx, hE, setNoise)
 
 def setModelParameters(self):
 
@@ -82,7 +113,7 @@ def setModelParameters(self):
     
 
 
-def forward(self, external, hx, hE):
+def forward(self, external, hx, hE, setNoise):
 
     # Some documentation to be written...
 
@@ -103,7 +134,7 @@ def forward(self, external, hx, hE):
     W_I = self.params.W_I.value()
     w_plus = self.params.w_plus.value()       # Local excitatory recurrence
     J_NMDA = self.params.J_NMDA.value()       # Excitatory synaptic coupling in nA
-    J = self.params.J.value()                 # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
+    J = torch.unsqueeze(self.params.J.value(),1) # NOTE: Extra dimension allows for local tuning if applicable # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
     gamma = self.params.gamma.value()         # a kinetic parameter in ms
     sig = self.params.sig.value()             # 0.01 # Noise amplitude at node in nA
     I_0 = self.params.I_0.value()             # The overall effective external input in nA
@@ -154,25 +185,25 @@ def forward(self, external, hx, hE):
     #  layer_history: Tensor - [time_steps, regions, state_vars (+ opt_params)]
     #
     
-    if(useGPU):
-        Ev = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions)).cuda()
-        Iv = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions)).cuda()
-        state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 2).cuda()
+    if setNoise is not None:
+        Ev = setNoise["E"]
+        Iv = setNoise["I"]
+        state_hist = torch.zeros(int((sim_len/self.step_size)/self.num_blocks), self.num_regions, 2, self.num_blocks) #TODO: Deal with the dimensions
         if(withOptVars):
-            opt_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 4).cuda()
+            opt_hist = torch.zeros(int((sim_len/self.step_size)/self.num_blocks), self.num_regions, 4, self.num_blocks)
     else:
-        Ev = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions))
-        Iv = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions))
-        state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 2)
+        Ev = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions, self.num_blocks))
+        Iv = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions, self.num_blocks))
+        state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 2, self.num_blocks)
         if(withOptVars):
-            opt_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 4)
+            opt_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 4, self.num_blocks)
     
     # RWW and State Values
-    S_E = init_state[:, 0]
-    S_I = init_state[:, 1]
+    S_E = init_state[:, 0, :]
+    S_I = init_state[:, 1, :]
 
-    num_steps = int(sim_len/self.step_size)
-    for i in range(num_steps):
+    num_steps = int((sim_len/self.step_size)/self.num_blocks)
+    for i in range(num_steps): 
         
         if((not useDelays) & (not useLaplacian)):
             Network_S_E =  torch.matmul(self.Con_Mtx, S_E)
@@ -200,7 +231,6 @@ def forward(self, external, hx, hE):
 
             Network_S_E = S_E_laplacian 
 
-
         if(useDelays & useLaplacian):
             # WARNING: This has not been tested
             
@@ -223,7 +253,7 @@ def forward(self, external, hx, hE):
 
 
         # Currents
-        I_E = W_E*I_0 + w_plus*J_NMDA*S_E + G*J_NMDA*Network_S_E - J*S_I + I_external
+        I_E = W_E*I_0 + w_plus*J_NMDA*S_E + G*J_NMDA*Network_S_E - torch.matmul(J,torch.ones(1, self.num_blocks))*S_I + I_external # J * S_I updated to allow for local J fitting in parallel for FNGFPG
         I_I = W_I*I_0 + J_NMDA*S_E - J_new*S_I + Lambda*G*J_NMDA*Network_S_E
         
         # Firing Rates
@@ -240,16 +270,16 @@ def forward(self, external, hx, hE):
         dS_I = - S_I/tau_I + gammaI*r_I #+ self.sig*v_of_T[i, :] Noise now added later
             
         # UPDATE VALUES
-        S_E = S_E + self.step_size*dS_E + sqrt(self.step_size)*sig*Ev[i, :]
-        S_I = S_I + self.step_size*dS_I + sqrt(self.step_size)*sig*Iv[i, :]
+        S_E = S_E + self.step_size*dS_E + sqrt(self.step_size)*sig*Ev[i, :, :]
+        S_I = S_I + self.step_size*dS_I + sqrt(self.step_size)*sig*Iv[i, :, :]
                
         # Bound the possible values of state variables (From fit.py code for numerical stability)
         if(self.useBC):
             S_E = torch.tanh(0.00001 + torch.nn.functional.relu(S_E - 0.00001))
             S_I = torch.tanh(0.00001 + torch.nn.functional.relu(S_I - 0.00001))
         
-        state_hist[i, :, 0] = S_E
-        state_hist[i, :, 1] = S_I 
+        state_hist[i, :, 0, :] = S_E
+        state_hist[i, :, 1, :] = S_I
 
         if useDelays:
             self.delayed_S_E = self.delayed_S_E.clone(); self.delayed_S_E[self.buffer_idx, :] = S_E #TODO: This means that not back-propagating the network just the individual nodes
@@ -260,10 +290,10 @@ def forward(self, external, hx, hE):
                 self.buffer_idx = self.buffer_idx + 1
         
         if(withOptVars):
-            opt_hist[i, :, 0] = I_I
-            opt_hist[i, :, 1] = I_E
-            opt_hist[i, :, 2] = r_I
-            opt_hist[i, :, 3] = r_E
+            opt_hist[i, :, 0, :] = I_I
+            opt_hist[i, :, 1, :] = I_E
+            opt_hist[i, :, 2, :] = r_I
+            opt_hist[i, :, 3, :] = r_E
         
     state_vals = torch.cat((torch.unsqueeze(S_E, 1), torch.unsqueeze(S_I, 1)), 1)
     
@@ -278,8 +308,41 @@ def forward(self, external, hx, hE):
     
     sim_vals = {}
     sim_vals["NMM_state"] = state_vals
-    sim_vals["E"] = layer_hist[:,:,0].T
-    sim_vals["I"] = layer_hist[:,:,1].T
+    sim_vals["E"] = layer_hist[:,:,0,:].permute((1,0,2))
+    sim_vals["I"] = layer_hist[:,:,1,:].permute((1,0,2))
     
     return sim_vals, hE
+
     
+    
+def blockTS(data, blocks, numNodes, numSV):
+    # data: time x nodes x state_variables
+    # return: time x nodes x state_variables x blocks
+    
+    n = torch.numel(data)
+    
+    if (not (n%blocks == 0)):
+        print("ERROR: data is not divisable by blocks")
+        return 
+    
+    newTimeDim = int(n/(blocks*numNodes*numSV))
+    
+    data_p = data.permute((2,1,0)) # state_vars x nodes x time
+    data_r = torch.reshape(data_p, (numSV, numNodes, blocks, newTimeDim))
+    data_p2 = data_r.permute((3, 1, 0, 2))
+    
+    return data_p2
+    
+    
+def serializeTS(data, numNodes, numSV):
+    # data: time x nodes x state_variables x blocks
+    # return: time x nodes x state_variables
+
+    n = torch.numel(data)
+    newTimeDim = int(n/(numNodes*numSV))
+    
+    data_p = data.permute((2,1,3,0))
+    data_r = torch.reshape(data_p, (numSV, numNodes, newTimeDim))
+    data_p2 = data_r.permute((2,1,0))
+    
+    return data_p2
