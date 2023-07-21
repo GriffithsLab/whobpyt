@@ -10,6 +10,7 @@ Welcome to WhoBPyT documentation!
       
    about_whobpyt/overview
    about_whobpyt/architecture
+   about_whobpyt/background
 
 .. toctree::
    :maxdepth: 1
@@ -23,9 +24,10 @@ Welcome to WhoBPyT documentation!
    :caption: API
    :glob:
 
-   API/run
    API/models
    API/optimization
+   API/run
+   API/visualization
    API/datatypes
 
 .. toctree::
