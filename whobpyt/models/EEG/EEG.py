@@ -2,7 +2,15 @@ import torch
 from whobpyt.datatypes import AbstractMode
 
 class EEG_Layer(AbstractMode):
-    def __init__(self, num_regions, params, num_channels):        
+    '''
+    
+    Lead Field Matrix multiplication which converts Source Space EEG to Channel Space EEG
+    
+    '''
+
+    def __init__(self, num_regions, params, num_channels): 
+        '''
+        '''
         super(EEG_Layer, self).__init__() # To inherit parameters attribute
                 
         # Initialize the EEG Model 

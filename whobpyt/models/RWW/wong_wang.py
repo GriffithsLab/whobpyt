@@ -12,6 +12,8 @@ import numpy as np  # for numerical operations
 
 class RNNRWW(AbstractNMM):
     """
+    Reduced Wong Wang Excitatory Inhibitory (RWWExcInb) Model with integrated BOLD dynamics
+    
     A module for forward model (WWD) to simulate a window of BOLD signals
     
     Note that the BOLD signal is not done in the standard way, 
