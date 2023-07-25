@@ -5,7 +5,7 @@ module for wong-wang model
 """
 
 import numpy as np  # for numerical operations
-from whobpyt.datatypes.modelparameters import ParamsModel
+from whobpyt.models.RWW import ParamsRWW
 
 
 def h_tf_np(a, b, d, z):
@@ -21,7 +21,7 @@ def h_tf_np(a, b, d, z):
     return num / den
 
 
-class WWD_np:
+class RWW_np:
     """
     A module for forward model (WWD) to simulate a batch of BOLD signals
 
@@ -57,7 +57,7 @@ class WWD_np:
 
     def __init__(self, node_size: int, TRs_per_window: int, step_size: float, step_size_bold: float, tr: float,
                  sc: float, use_dynamic_boundary: bool,
-                 use_Laplacian: bool, param: ParamsModel) -> None:
+                 use_Laplacian: bool, param: ParamsRWW) -> None:
         """
         Parameters
         ----------
