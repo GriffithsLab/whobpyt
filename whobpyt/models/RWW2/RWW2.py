@@ -3,14 +3,63 @@ from whobpyt.datatypes import AbstractNMM, AbstractParams, par
 from math import sqrt
 
 class RWW2(AbstractNMM):
-    ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
-    #
-    # Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitationâ€“inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.
-    # Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.
-    # Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.
-    # Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.  
-  
-    def __init__(self, num_regions, params, Con_Mtx, Dist_Mtx, step_size = 0.0001, useBC = False):        
+    '''
+    Reduced Wong Wang Excitatory Inhibatory (RWWEXcInh) Model - Version 2
+    
+    EQUATIONS & BIOLOGICAL VARIABLES FROM:
+    
+    Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation-inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.
+    
+    Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.
+    
+    Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.
+    
+    Attributes
+    -------------
+    params : ParamsRWW2
+        An AbstractParams object which contains the model's parameters
+    step_size : Float
+        The step size of numerical integration (in msec)
+    num_regions : Int
+        The number of brain regions used in the model
+    node_size : Int
+        The number of brain regions used in the model   
+    Con_Mtx : Tensor [ node_size x node_size ]
+        Matrix with connection strengths between each node
+    Dist_Mtx : Tensor [ node_size x node_size ]
+        Matrix with distances between each node (used for delays)
+    output_size : Int
+        The number of brain regions used in the model
+    state_names : List of Strings
+        A list of the state varaible names of the model
+    output_names : List of Strings
+        A list of the output variable names of the model
+    track_params :
+        A list of which parameter to track over training epochs
+    num_blocks : Int
+        The number of blocks (used by FNGFPG Paradigm)
+    max_delay : 
+        Related to Delays (delay code to be verified)
+    buffer_len :
+        Related to Delays (delay code to be verified)  
+    delayed_S_E : 
+         Related to Delays (delay code to be verified)  
+    buffer_idx :
+         Related to Delays (delay code to be verified)       
+    mu :
+        Related to Delays (delay code to be verified)
+    use_fit_gains : Bool
+        Whether to fit the gains of connection weights (Not Implemented)
+    use_fit_lfm : Bool
+        Whether to fit the Lead Field Matrix (Lead Field Matrix not Used)
+    useBC : Bool
+        Whether to add boundary dynamics to state variables
+    
+    '''
+    
+    def __init__(self, num_regions, params, Con_Mtx, Dist_Mtx, step_size = 0.0001, useBC = False):  
+        '''
+        '''
         super(RWW2, self).__init__() # To inherit parameters attribute
         
         # Initialize the RWW Model 
@@ -94,6 +143,8 @@ class RWW2(AbstractNMM):
         return [serialNoise, blockNoise]
     
     def forward(self, external, hx, hE, setNoise = None):
+        '''
+        '''
         return forward(self, external, hx, hE, setNoise)
 
 def setModelParameters(self):
