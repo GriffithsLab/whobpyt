@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>whobpyt.datatypes.outputs &mdash; WhoBPyT 0.0.0 documentation</title>
+  <title>whobpyt.optimization.cost_Mean &mdash; WhoBPyT 0.0.0 documentation</title>
   
 
   
@@ -206,7 +206,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>whobpyt.datatypes.outputs</li>
+      <li>whobpyt.optimization.cost_Mean</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -221,143 +221,72 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for whobpyt.datatypes.outputs</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather</span>
-<span class="sd">Neural Mass Model fitting</span>
-<span class="sd">module for output datatype</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">pickle</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># for numerical operations</span>
-
-<span class="kn">import</span> <span class="nn">whobpyt.datatypes.parameter</span>
+  <h1>Source code for whobpyt.optimization.cost_Mean</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
 
 
-<div class="viewcode-block" id="TrainingStats"><a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.TrainingStats">[docs]</a><span class="k">class</span> <span class="nc">TrainingStats</span><span class="p">:</span>
+<div class="viewcode-block" id="CostsMean"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean">[docs]</a><span class="k">class</span> <span class="nc">CostsMean</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    This class is responsible for recording stats during training (it replaces OutputNM) including:</span>
-<span class="sd">        - The training and validation losses over time</span>
-<span class="sd">        - The change in model parameters over time</span>
-<span class="sd">        - changing hyper parameters over time like learing rates TODO</span>
-<span class="sd">        </span>
-<span class="sd">    These are things typically recorded on a per window/epoch basis  </span>
-<span class="sd">        </span>
+<span class="sd">    Target Mean Value of a Variable</span>
+<span class="sd">    </span>
+<span class="sd">    This loss function calculates the mean value of a particular variable for every node across time, and then takes the Mean Squared Error of those means with the target value. </span>
+<span class="sd">    </span>
 <span class="sd">    Attributes</span>
-<span class="sd">    ------------</span>
-<span class="sd">    model_info : Dict</span>
-<span class="sd">        Information about model being tracked during training. </span>
-<span class="sd">    track_params : List</span>
-<span class="sd">        List of parameter names being tracked during training. </span>
-<span class="sd">    loss : List</span>
-<span class="sd">        A list of loss values over training.</span>
-<span class="sd">    connectivity : List</span>
-<span class="sd">        A list of connectivity values over training.</span>
-<span class="sd">    leadfield : List</span>
-<span class="sd">        A list of leadfield matrices over training.</span>
-<span class="sd">    fit_params : Dict</span>
-<span class="sd">        A dictionary of lists where the key is the parameter name and the value is the list of parameter values over training. </span>
-<span class="sd">        </span>
+<span class="sd">    -----------------</span>
+<span class="sd">    num_regions : Int</span>
+<span class="sd">        The number of reagons in the model beign fit</span>
+<span class="sd">    simKey : String </span>
+<span class="sd">        The name of the variable for which the mean is calculated</span>
+<span class="sd">    targetValue : Tensor</span>
+<span class="sd">        The target value either as single number or vector</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-
-<div class="viewcode-block" id="TrainingStats.__init__"><a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.TrainingStats.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        -----------</span>
-<span class="sd">        model : AbstractNMM</span>
-<span class="sd">            A model for which stats will be recorded during training. </span>
-<span class="sd">        </span>
-<span class="sd">        &#39;&#39;&#39;</span>
-    
-        <span class="n">model_info</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">track_params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">track_params</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">leadfield</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">fit_params</span> <span class="o">=</span> <span class="p">{}</span></div>
-            
-<div class="viewcode-block" id="TrainingStats.save"><a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.TrainingStats.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        
+<div class="viewcode-block" id="CostsMean.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">empiricalData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Parameters</span>
-<span class="sd">        ------------</span>
-<span class="sd">        filename : String</span>
-<span class="sd">            The filename to use to save the TrainingStats as a pickle object.</span>
-<span class="sd">        </span>
+<span class="sd">        -----------------</span>
+<span class="sd">        num_regions : Int</span>
+<span class="sd">            The number of regions in the model being fit</span>
+<span class="sd">        simKey : String </span>
+<span class="sd">            The name of the variable for which the mean is calculated</span>
+<span class="sd">        targetValue : Tensor</span>
+<span class="sd">            The target value either as single number or vector</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-    
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
-    
-<div class="viewcode-block" id="TrainingStats.reset"><a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.TrainingStats.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Resets the attributes of the model to a pre-training state. </span>
-<span class="sd">        </span>
-<span class="sd">        &#39;&#39;&#39;</span>
-    
-        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="p">[]</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">network_con</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">leadfield</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">fit_params</span> <span class="o">=</span> <span class="p">{}</span></div>
-
-<div class="viewcode-block" id="TrainingStats.appendLoss"><a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.TrainingStats.appendLoss">[docs]</a>    <span class="k">def</span> <span class="nf">appendLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newValue</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">        Append Trainig Loss</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        -----------</span>
-<span class="sd">        newValue : Float</span>
-<span class="sd">            The loss value of objective function being tracked.</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newValue</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span> <span class="o">=</span> <span class="n">num_regions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span> <span class="c1"># This is the key from the numerical simulation used to select the time series</span>
         
-<div class="viewcode-block" id="TrainingStats.appendSC"><a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC">[docs]</a>    <span class="k">def</span> <span class="nf">appendSC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newValue</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">        Append Network Connections </span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        -----------</span>
-<span class="sd">        newValue : Array</span>
-<span class="sd">            Current state of the structural connectivity being tracked. </span>
-<span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newValue</span><span class="p">)</span></div>
-        
-<div class="viewcode-block" id="TrainingStats.appendLF"><a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.TrainingStats.appendLF">[docs]</a>    <span class="k">def</span> <span class="nf">appendLF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newValue</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">        Append Lead Field Loss </span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        -----------</span>
-<span class="sd">        newValue : Array</span>
-<span class="sd">            Current state of a lead field matrix being tracked.</span>
-<span class="sd">            </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">leadfield</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newValue</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="TrainingStats.appendParam"><a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.TrainingStats.appendParam">[docs]</a>    <span class="k">def</span> <span class="nf">appendParam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newValues</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">        Append Fit Parameters</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        newValues : Dict</span>
-<span class="sd">            Dictionary with current states of each model parameter being tracked.</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_params</span> <span class="o">==</span> <span class="p">{}):</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">newValues</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">newValues</span><span class="p">[</span><span class="n">name</span><span class="p">]]</span>
+        <span class="c1"># Target can be specific to each region, or can have a single number that is repeated for each region</span>
+        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">numel</span><span class="p">(</span><span class="n">targetValue</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span> <span class="o">=</span> <span class="n">targetValue</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">newValues</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newValues</span><span class="p">[</span><span class="n">name</span><span class="p">])</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span> <span class="o">=</span> <span class="n">targetValue</span>
+            
+        <span class="k">if</span> <span class="n">empiricalData</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># In the future, if given empiricalData then will calculate the target value in this initialization function. </span>
+            <span class="c1"># That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify</span>
+            <span class="c1"># which one to fit to.</span>
+            <span class="k">pass</span></div>
+        
+<div class="viewcode-block" id="CostsMean.calcLoss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.calcLoss">[docs]</a>    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simData</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method to calculate the loss</span>
+<span class="sd">        </span>
+<span class="sd">        Parmeters</span>
+<span class="sd">        --------------</span>
+<span class="sd">        simData: Tensor[ Nodes x Time ]</span>
+<span class="sd">            The time series used by the loss function </span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        --------------</span>
+<span class="sd">        Tensor</span>
+<span class="sd">            The loss value </span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">meanVar</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">simData</span><span class="p">[:,:],</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">meanVar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span><span class="p">)</span></div></div>
+        
 </pre></div>
 
            </div>

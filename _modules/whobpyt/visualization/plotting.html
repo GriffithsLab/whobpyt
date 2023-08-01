@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>whobpyt.optimization.cost_TS &mdash; WhoBPyT 0.0.0 documentation</title>
+  <title>whobpyt.visualization.plotting &mdash; WhoBPyT 0.0.0 documentation</title>
   
 
   
@@ -206,7 +206,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>whobpyt.optimization.cost_TS</li>
+      <li>whobpyt.visualization.plotting</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -221,37 +221,90 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for whobpyt.optimization.cost_TS</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappisan, Hussain Ather</span>
-<span class="sd">Neural Mass Model fitting</span>
-<span class="sd">module for cost calculation</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># for numerical operations</span>
+  <h1>Source code for whobpyt.visualization.plotting</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">CostsPSD</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractLoss</span> <span class="kn">import</span> <span class="n">AbstractLoss</span>
 
 
-<div class="viewcode-block" id="CostsTS"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS">[docs]</a><span class="k">class</span> <span class="nc">CostsTS</span><span class="p">(</span><span class="n">AbstractLoss</span><span class="p">):</span>
-<div class="viewcode-block" id="CostsTS.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simKey</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CostsTS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span></div>
+<div class="viewcode-block" id="plot_fc"><a class="viewcode-back" href="../../../API/visualization.html#whobpyt.visualization.plot_fc">[docs]</a><span class="k">def</span> <span class="nf">plot_fc</span><span class="p">(</span><span class="n">recording</span><span class="p">,</span> <span class="n">skip_dur</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function takes a Recording object and plots the functional connectivity based on its timeseries data.</span>
 
-<div class="viewcode-block" id="CostsTS.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">emp</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">state_vals</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the Pearson Correlation between the simFC and empFC.</span>
-<span class="sd">        From there, the probability and negative log-likelihood.</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        sim: tensor with node_size X datapoint</span>
-<span class="sd">            simulated EEG</span>
-<span class="sd">        emp: tensor with node_size X datapoint</span>
-<span class="sd">            empirical EEG</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    recording: Recording object containing the activity data.</span>
+<span class="sd">    skip_dur: Initial transient duration to skip (in seconds).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-        <span class="n">losses</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">sim</span> <span class="o">-</span> <span class="n">emp</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1">#</span>
-        <span class="k">return</span> <span class="n">losses</span></div></div>
+    <span class="n">step_size</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">step_size</span>
+    <span class="n">skip_trans</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">skip_dur</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
+    <span class="n">num_regions</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="c1"># Compute functional connectivity</span>
+    <span class="n">sim_FC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">recording</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[:,</span><span class="n">skip_trans</span><span class="p">:])</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated BOLD FC: After Training&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create a mask to ignore self-connections</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
+
+    <span class="c1"># Heatmap of functional connectivity</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">sim_FC</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="plot_timeseries"><a class="viewcode-back" href="../../../API/visualization.html#whobpyt.visualization.plot_timeseries">[docs]</a><span class="k">def</span> <span class="nf">plot_timeseries</span><span class="p">(</span><span class="n">recording</span><span class="p">,</span> <span class="n">pop_label</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes a Recording object and plots the timeseries </span>
+<span class="sd">    activity of a specific population.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    recording: Recording object containing the activity data.</span>
+<span class="sd">    pop_label: String representing the population label.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_regions</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">step_size</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">step_size</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Activity of </span><span class="si">{</span><span class="n">pop_label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_regions</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">recording</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pop_label</span><span class="si">}</span><span class="s2"> Node = </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Time Steps (multiply by step_size to get msec), step_size = </span><span class="si">{</span><span class="n">step_size</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Activity&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+
+
+
+<div class="viewcode-block" id="plot_psd"><a class="viewcode-back" href="../../../API/visualization.html#whobpyt.visualization.plot_psd">[docs]</a><span class="k">def</span> <span class="nf">plot_psd</span><span class="p">(</span><span class="n">recording</span><span class="p">,</span> <span class="n">minFreq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxFreq</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function takes a Recording object and plots the power spectral density (PSD) based on its timeseries data.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    recording: Recording object containing the activity data.</span>
+<span class="sd">    minFreq: Minimum frequency to plot (in Hz).</span>
+<span class="sd">    maxFreq: Maximum frequency to plot (in Hz).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">step_size</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">step_size</span>
+    <span class="n">sampleFreqHz</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
+    <span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">calcPSD</span><span class="p">((</span><span class="n">recording</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span><span class="p">,</span> <span class="n">maxFreq</span><span class="p">)</span>
+    <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">downSmoothPSD</span><span class="p">(</span><span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+    <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">scalePSD</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Hz&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PSD&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated EEG PSD: After Training&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 </pre></div>
 
            </div>

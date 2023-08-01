@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WhoBPyT Code Base Architecture &mdash; WhoBPyT 0.0.0 documentation</title>
+  <title>Code Architecture &mdash; WhoBPyT 0.0.0 documentation</title>
   
 
   
@@ -47,7 +47,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Installation" href="../getting_started/installation.html" />
+    <link rel="next" title="Background Information" href="background.html" />
     <link rel="prev" title="Overview" href="overview.html" /> 
 </head>
 
@@ -100,12 +100,19 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">WhoBPyT Code Base Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-structure">Module structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#api-usage">API Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#rww-params">RWW_Params</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#rww-layer">RWW_Layer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#whole-brain-models">Whole Brain Models:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#objective-function-components">Objective Function Components:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package-expansions">Package Expansions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="background.html#neuroimaging-data">Neuroimaging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="background.html#rwwexcinb">RWWExcInb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="background.html#jansen-rit">Jansen-Rit</a></li>
 </ul>
 </li>
 </ul>
@@ -117,9 +124,10 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -196,7 +204,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>WhoBPyT Code Base Architecture</li>
+      <li>Code Architecture</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -213,95 +221,82 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="whobpyt-code-base-architecture">
-<h1>WhoBPyT Code Base Architecture<a class="headerlink" href="#whobpyt-code-base-architecture" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-structure">
-<h2>Module structure<a class="headerlink" href="#module-structure" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">data.py</span></code> temporarily serves as artificial empirical EEG/fMRI data file, which defines a parameter class (<code class="docutils literal notranslate"><span class="pre">ParamsJR</span></code>) to simulate timeseries data.</p>
-<p><code class="docutils literal notranslate"><span class="pre">models.py</span></code> constructs a feed-forward JansenRitt RNN architectures, each of which simulate a batch of EEG and fMRI signal data.</p>
-<p><code class="docutils literal notranslate"><span class="pre">objective.py</span></code> compares modelled data from <code class="docutils literal notranslate"><span class="pre">models.py</span></code> with empirical data (presently from data.py), then calls <code class="docutils literal notranslate"><span class="pre">fits.py</span></code> to update model parameters based on loss function value.</p>
-<p><code class="docutils literal notranslate"><span class="pre">viz.py</span></code> takes either a model object and may graph functional connectivity or PSDs, or simply plot empirical data.</p>
-<p>Run a simulation –&gt; compare model data with empirical data –&gt; fit model data to empirical data.</p>
-</div>
-<div class="section" id="api-usage">
-<h2>API Usage<a class="headerlink" href="#api-usage" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">whobpyt.models</span> <span class="kn">import</span> <span class="n">RNNJANSEN</span><span class="p">,</span><span class="n">ParamsJR</span> 
-<span class="kn">from</span> <span class="nn">whobpyt.fit</span> <span class="kn">import</span> <span class="n">fit_model</span>
+  <div class="section" id="code-architecture">
+<h1>Code Architecture<a class="headerlink" href="#code-architecture" title="Permalink to this headline">¶</a></h1>
+<p>The package is a collection of interchangable Whole Brain Models, Objective Functions Components, and Parameter Fitting Paradigms. This code base is still in alpha phase and not all combinations of these components are currently supported.</p>
+<div class="section" id="simplified-usage-pseudo-code">
+<h2>Simplified Usage Pseudo Code<a class="headerlink" href="#simplified-usage-pseudo-code" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">whobpyt</span>
 
-<span class="n">data_tofit</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-<span class="n">connectivity</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  
-<span class="n">delays</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> 
+<span class="c1"># Making the training data</span>
+<span class="n">training_input</span> <span class="o">=</span> <span class="p">[</span><span class="n">stimulus1</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">stimulusN</span><span class="p">]</span> <span class="c1"># This can be 0 for the resting-state case</span>
+<span class="n">empirical_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">Recording</span><span class="p">(</span><span class="n">data1</span><span class="p">),</span> <span class="o">...</span><span class="p">,</span> <span class="n">Recording</span><span class="p">(</span><span class="n">dataN</span><span class="p">)]</span>
 
+<span class="c1"># Create the CNMM from whobpyt.models</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">AbstractParams</span><span class="p">(</span><span class="n">P</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">fit</span> <span class="o">=</span> <span class="kc">True</span><span class="p">))</span> <span class="c1"># specify which parameters will be fit</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AbstractNMM</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 
-<span class="c1"># Simulate</span>
-<span class="n">params</span> <span class="o">=</span> <span class="n">ParamsJR</span><span class="p">(</span><span class="s1">&#39;JR&#39;</span><span class="p">,</span> <span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">RNNJANSEN</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span><span class="n">cmat</span><span class="o">=</span><span class="n">connectivity</span><span class="o">=</span><span class="n">conn_mat</span><span class="p">,</span><span class="n">dmat</span><span class="o">=</span><span class="n">delayst</span><span class="p">))</span>
-<span class="n">sim_res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="c1">#Define an objective function from whobpyt.optimization</span>
+<span class="n">objective</span> <span class="o">=</span> <span class="n">AbstractLoss</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;variable&quot;</span><span class="p">)</span> <span class="c1"># specify which variable to use in objective function</span>
 
-<span class="c1"># Fit</span>
-<span class="n">fitter</span> <span class="o">=</span> <span class="n">fit_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">erp_timeseries_data</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">use_priors</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">fitter</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">num_epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-<span class="n">fitted_res</span> <span class="o">=</span> <span class="n">fitter</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+<span class="c1"># Train the Model using a paradigm from whobpyt.run</span>
+<span class="n">fitting</span> <span class="o">=</span> <span class="n">AbstractFitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">objective</span><span class="p">)</span>
+<span class="n">fitting</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">training_input</span><span class="p">,</span> <span class="n">empirical_data</span><span class="p">,</span> <span class="n">epochs</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">lr</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
 
+<span class="c1"># Evaluate the Training</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">fitting</span><span class="o">.</span><span class="n">trainingStats</span><span class="p">)</span>
 
-<span class="c1">## Notes</span>
+<span class="c1"># Evaluate the Found Parameters</span>
+<span class="n">verify_model</span> <span class="o">=</span> <span class="n">NumPyNMM</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+<span class="n">simulated_data</span> <span class="o">=</span> <span class="n">verify_model</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
+
+<span class="c1"># Preform Analysis</span>
+<span class="o">...</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="system-model-and-biophysical-parameters">
-<h2>System, Model, and Biophysical Parameters<a class="headerlink" href="#system-model-and-biophysical-parameters" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="rww-params">
-<h3>RWW_Params<a class="headerlink" href="#rww-params" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">Lambda</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#1 or 0 depending on using long range feed forward inhibition (FFI)</span>
-
-<span class="c1">#Excitatory Gating Variables</span>
-<span class="n">a_E</span> <span class="c1"># nC^(-1)</span>
-<span class="n">b_E</span> <span class="c1"># Hz</span>
-<span class="n">d_E</span> <span class="c1"># s</span>
-<span class="n">tau_E</span> <span class="o">=</span> <span class="n">tau_NMDA</span> <span class="c1"># ms</span>
-<span class="n">W_E</span> 
-
-<span class="c1">#Inhibitory Gating Variables</span>
-<span class="n">a_I</span> <span class="c1"># nC^(-1)</span>
-<span class="n">b_I</span> <span class="c1"># Hz</span>
-<span class="n">d_I</span> <span class="c1"># s</span>
-<span class="n">tau_I</span> <span class="c1"># ms</span>
-<span class="n">W_I</span>
-
-<span class="c1">#Setting other variables</span>
-<span class="n">w_plus</span> <span class="c1"># Local excitatory recurrence</span>
-<span class="n">J_NMDA</span> <span class="c1"># Excitatory synaptic coupling in nA</span>
-<span class="n">J</span> <span class="c1"># Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper</span>
-<span class="n">gamma</span> <span class="c1"># a kinetic parameter in ms</span>
-<span class="n">sig</span> <span class="c1"># Noise amplitude at node in nA</span>
-<span class="c1">#v_of_T # Uncorrelated standard Gaussian noise # NOTE: Now defined at time of running forward model</span>
-<span class="n">I_0</span> <span class="c1"># The overall effective external input in nA</span>
-
-<span class="n">I_external</span> <span class="c1"># External input current </span>
-
-<span class="c1">#Starting Condition</span>
-<span class="c1">#S_E # The average synaptic gating variable of excitatory </span>
-<span class="c1">#S_I # The average synaptic gating variable of inhibitory</span>
-
-<span class="c1">#############################################</span>
-<span class="c1">## Model Additions/modifications</span>
-<span class="c1">#############################################</span>
-
-<span class="bp">self</span><span class="o">.</span><span class="n">gammaI</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">1000</span> <span class="c1"># Zheng suggested this to get oscillations</span>
-</pre></div>
+<div class="section" id="whole-brain-models">
+<h2>Whole Brain Models:<a class="headerlink" href="#whole-brain-models" title="Permalink to this headline">¶</a></h2>
+<p>These models implement the numerical simulation of a CNMM (or modified CNMM). They can be combined with modalities, or may have an integrated modality.</p>
+<p>The built in models are:</p>
+<ul class="simple">
+<li><p>RWWExcInb - Two variations are avaliable</p></li>
+<li><p>JansenRit - With Lead Field, Delays, Laplacian Connections</p></li>
+<li><p>Linear (needs updating)</p></li>
+<li><p>Robinson (Future Addition)</p></li>
+</ul>
 </div>
+<div class="section" id="objective-function-components">
+<h2>Objective Function Components:<a class="headerlink" href="#objective-function-components" title="Permalink to this headline">¶</a></h2>
+<p>Some objective function components can be used individually, others such as biological priors are addons.</p>
+<p>The built in objective functions are:</p>
+<ul class="simple">
+<li><p>Functional Connectivity Correlation</p></li>
+<li><p>Time Series Correlation</p></li>
+<li><p>Power Spectral Density Difference</p></li>
+<li><p>Target Mean Value of a State Variable</p></li>
+<li><p>Biological Priors of Parameters</p></li>
+</ul>
 </div>
-<div class="section" id="rww-layer">
-<h3>RWW_Layer<a class="headerlink" href="#rww-layer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">## EQUATIONS &amp; BIOLOGICAL VARIABLES FROM:</span>
-<span class="c1"># Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation-inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.</span>
-<span class="c1"># Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.</span>
-<span class="c1"># Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.</span>
-<span class="c1"># Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.</span>
-</pre></div>
+<div class="section" id="parameter-fitting-paradigms">
+<h2>Parameter Fitting Paradigms:<a class="headerlink" href="#parameter-fitting-paradigms" title="Permalink to this headline">¶</a></h2>
+<p>Paradigms for fitting model parameters.</p>
+<p>The built in parameter fitting paradigms are:</p>
+<ul class="simple">
+<li><p>Model Fitting - Uses a approch to train on windowed sections of neuroimaging recordings</p></li>
+<li><p>Fitting FNGFPG - A technique to run true time scale BOLD</p></li>
+</ul>
 </div>
-</div>
+<div class="section" id="package-expansions">
+<h2>Package Expansions<a class="headerlink" href="#package-expansions" title="Permalink to this headline">¶</a></h2>
+<p>Further extensions are encouraged, and abstract classes have been created to help facilitate that. In addition to providing some free functionality, the abstract classes act as a template for what methods to implement in order for the new addition to work with the other classes in WhoBPyT.</p>
+<p>Abstract classes to inherit from:</p>
+<ul class="simple">
+<li><p>AbstractParams</p></li>
+<li><p>AbstractNMM</p></li>
+<li><p>AbstractMode</p></li>
+<li><p>AbstractLoss</p></li>
+</ul>
 </div>
 </div>
 
@@ -313,7 +308,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../getting_started/installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="background.html" class="btn btn-neutral float-right" title="Background Information" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -47,8 +47,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Models" href="models.html" />
-    <link rel="prev" title="Installation" href="../getting_started/installation.html" /> 
+    <link rel="next" title="Visualization" href="visualization.html" />
+    <link rel="prev" title="Optimization" href="optimization.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -100,12 +100,19 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">Code Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/background.html">Background Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
 </ul>
 </li>
 </ul>
@@ -117,9 +124,10 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -314,6 +322,66 @@ is associated with an empirical recording, must use a different fitting class.</
 
 </dd></dl>
 
+<dl class="py class">
+<dt id="whobpyt.run.Fitting_FNGFPG">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></code><code class="sig-name descname"><span class="pre">Fitting_FNGFPG</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/customfitting.html#Fitting_FNGFPG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_FNGFPG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitting Forward No Gradient Forward Parallel Gradient (FNG-FPG)</p>
+<dl class="simple">
+<dt>This is a specalized model fitting class to:</dt><dd><ul class="simple">
+<li><p>backpropagate through time of the duration of 10’s of seconds of real time scale simulation</p></li>
+<li><p>learn generalized NMM parameters such that given a SC the model predicts the corresponding FC</p></li>
+<li><p>the label can be a fixed value (example a FC matrix, instead of a neuroimaging recording)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model</strong><span class="classifier">AbstractNMM</span></dt><dd><p>The model which has parameters to be trained.</p>
+</dd>
+<dt><strong>cost</strong><span class="classifier">AbstractLoss</span></dt><dd><p>The objective function that will be used to calculate a loss.</p>
+</dd>
+<dt><strong>trainingStats</strong><span class="classifier">TrainingStats</span></dt><dd><p>An object that will keep track of optimization/machine learning statistics during training.</p>
+</dd>
+<dt><strong>lastSerial</strong><span class="classifier">Recording</span></dt><dd><p>The simulated data from the last serial run (FNG)</p>
+</dd>
+<dt><strong>lastRec</strong><span class="classifier">Recording</span></dt><dd><p>The simulated data from the last parallel run (FPG)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="whobpyt.run.Fitting_FNGFPG.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/customfitting.html#Fitting_FNGFPG.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_FNGFPG.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.run.Fitting_FNGFPG.train">
+<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empDatas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resetIC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/customfitting.html#Fitting_FNGFPG.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_FNGFPG.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>stim</strong><span class="classifier">Int or Tensor</span></dt><dd><p>The input into the NMM (is 0 for the resting state case).</p>
+</dd>
+<dt><strong>empDatas</strong><span class="classifier">List of Recording or other object</span></dt><dd><p>The empirical data compared to in the objective function.</p>
+</dd>
+<dt><strong>num_epochs</strong><span class="classifier">Int</span></dt><dd><p>Number of epochs for training.</p>
+</dd>
+<dt><strong>block_len</strong><span class="classifier">Int</span></dt><dd><p>The number of simulation steps per block. Total number of steps should be divisable by this number.</p>
+</dd>
+<dt><strong>learningrate</strong><span class="classifier">Float</span></dt><dd><p>Learning rate used by backpropagation optimizer.</p>
+</dd>
+<dt><strong>resetIC</strong><span class="classifier">Bool</span></dt><dd><p>Whether to reset the models initial condition after every backpropagation</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -324,10 +392,10 @@ is associated with an empirical recording, must use a different fitting class.</
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="visualization.html" class="btn btn-neutral float-right" title="Visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../getting_started/installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="optimization.html" class="btn btn-neutral float-left" title="Optimization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

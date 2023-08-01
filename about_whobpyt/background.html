@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; WhoBPyT 0.0.0 documentation</title>
+  <title>Background Information &mdash; WhoBPyT 0.0.0 documentation</title>
   
 
   
@@ -47,8 +47,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Models" href="../API/models.html" />
-    <link rel="prev" title="Background Information" href="../about_whobpyt/background.html" /> 
+    <link rel="next" title="Installation" href="../getting_started/installation.html" />
+    <link rel="prev" title="Code Architecture" href="architecture.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -98,29 +98,29 @@
             
             
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">Code Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Code Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#whole-brain-models">Whole Brain Models:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#objective-function-components">Objective Function Components:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#package-expansions">Package Expansions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/background.html">Background Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Background Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neuroimaging-data">Neuroimaging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rwwexcinb">RWWExcInb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jansen-rit">Jansen-Rit</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">Getting Started</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -204,7 +204,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Installation</li>
+      <li>Background Information</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -221,22 +221,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>Create an environment</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create -n &quot;whobpyt&quot; git pip python=3.9
-$ conda activate whobpyt
+  <div class="section" id="background-information">
+<h1>Background Information<a class="headerlink" href="#background-information" title="Permalink to this headline">¶</a></h1>
+<p>The Whole Brain Models are of the form of Connectome-based Neural Mass Models (CNMM), with additional modality equations to produce simulated neuroimaging data.</p>
+<div class="section" id="neuroimaging-data">
+<h2>Neuroimaging Data<a class="headerlink" href="#neuroimaging-data" title="Permalink to this headline">¶</a></h2>
+<p>The following items may be requried (in a consistent parcellated format), depending on the CNMM model and empirical data:</p>
+<ul class="simple">
+<li><p>Structural Connectivity Matrix : For connection strengths</p></li>
+<li><p>Distance Matrix : For connection delays</p></li>
+<li><p>Lead Field Matrix : To convert from CNMM source space to EEG channel space (if empirical EEG data in channel space is used)</p></li>
+<li><p>One or more neuroimaging time series modalities, or a derivative information such as functional connectivity</p></li>
+</ul>
+</div>
+<div class="section" id="system-model-and-biophysical-parameters">
+<h2>System, Model, and Biophysical Parameters<a class="headerlink" href="#system-model-and-biophysical-parameters" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="rwwexcinb">
+<h3>RWWExcInb<a class="headerlink" href="#rwwexcinb" title="Permalink to this headline">¶</a></h3>
+<p>This model is typically used for simulating fMRI BOLD.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">## EQUATIONS &amp; BIOLOGICAL VARIABLES FROM:</span>
+<span class="c1"># Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation-inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.</span>
+<span class="c1"># Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.</span>
+<span class="c1"># Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.</span>
+<span class="c1"># Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.</span>
 </pre></div>
 </div>
-<p>Clone latest version from github</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/GriffithsLab/whobpyt
+</div>
+<div class="section" id="jansen-rit">
+<h3>Jansen-Rit<a class="headerlink" href="#jansen-rit" title="Permalink to this headline">¶</a></h3>
+<p>This model is typically used for simulating EEG.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">## EQUATIONS &amp; BIOLOGICAL VARIABLES FROM:</span>
+<span class="c1"># Jansen BH, Rit VG. Electroencephalogram and visual evoked potential generation in a mathematical model of coupled cortical columns. Biological cybernetics. 1995 Sep;73(4):357-66.</span>
 </pre></div>
 </div>
-<p>Now go to the cloned folder and install manually</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd whobpyt
-$ pip install -r requirements.txt
-$ pip install -e .
-</pre></div>
+</div>
 </div>
 </div>
 
@@ -248,10 +266,10 @@ $ pip install -e .
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../API/models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../getting_started/installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../about_whobpyt/background.html" class="btn btn-neutral float-left" title="Background Information" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="architecture.html" class="btn btn-neutral float-left" title="Code Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

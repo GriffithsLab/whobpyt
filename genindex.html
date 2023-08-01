@@ -100,12 +100,19 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/architecture.html#module-structure">Module structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/architecture.html#api-usage">API Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
-<li class="toctree-l3"><a class="reference internal" href="about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about_whobpyt/architecture.html">Code Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about_whobpyt/background.html">Background Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
 </ul>
 </li>
 </ul>
@@ -117,9 +124,10 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="API/optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/run.html">Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -219,6 +227,7 @@
 <div class="genindex-jumpbox">
  <a href="#_"><strong>_</strong></a>
  | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
@@ -245,6 +254,10 @@
 </li>
         <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.__init__">(whobpyt.datatypes.TrainingStats method)</a>
 </li>
+        <li><a href="API/models.html#whobpyt.models.BOLD.BOLD_Layer.__init__">(whobpyt.models.BOLD.BOLD_Layer method)</a>
+</li>
+        <li><a href="API/models.html#whobpyt.models.EEG.EEG_Layer.__init__">(whobpyt.models.EEG.EEG_Layer method)</a>
+</li>
         <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.__init__">(whobpyt.models.JansenRit.RNNJANSEN method)</a>
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.__init__">(whobpyt.models.RWW.RNNRWW method)</a>
@@ -253,9 +266,15 @@
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsFC.__init__">(whobpyt.optimization.CostsFC method)</a>
 </li>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC.__init__">(whobpyt.optimization.CostsFixedFC method)</a>
+</li>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsMean.__init__">(whobpyt.optimization.CostsMean method)</a>
+</li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.__init__">(whobpyt.optimization.CostsPSD method)</a>
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsTS.__init__">(whobpyt.optimization.CostsTS method)</a>
+</li>
+        <li><a href="API/run.html#whobpyt.run.Fitting_FNGFPG.__init__">(whobpyt.run.Fitting_FNGFPG method)</a>
 </li>
         <li><a href="API/run.html#whobpyt.run.Model_fitting.__init__">(whobpyt.run.Model_fitting method)</a>
 </li>
@@ -279,26 +298,48 @@
   </ul></td>
 </tr></table>
 
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/models.html#whobpyt.models.BOLD.BOLD_Layer">BOLD_Layer (class in whobpyt.models.BOLD)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.calcLoss">calcLoss() (whobpyt.optimization.CostsPSD method)</a>
+      <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC.calcLoss">calcLoss() (whobpyt.optimization.CostsFixedFC method)</a>
+
+      <ul>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsMean.calcLoss">(whobpyt.optimization.CostsMean method)</a>
 </li>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.calcLoss">(whobpyt.optimization.CostsPSD method)</a>
+</li>
+      </ul></li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.calcPSD">calcPSD() (whobpyt.optimization.CostsPSD method)</a>
 </li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFC">CostsFC (class in whobpyt.optimization)</a>
 </li>
-      <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD">CostsPSD (class in whobpyt.optimization)</a>
+      <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC">CostsFixedFC (class in whobpyt.optimization)</a>
+</li>
+      <li><a href="API/optimization.html#whobpyt.optimization.CostsMean">CostsMean (class in whobpyt.optimization)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD">CostsPSD (class in whobpyt.optimization)</a>
+</li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsTS">CostsTS (class in whobpyt.optimization)</a>
 </li>
       <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.createDelayIC">createDelayIC() (whobpyt.models.JansenRit.RNNJANSEN method)</a>
 </li>
-      <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.createIC">createIC() (whobpyt.models.JansenRit.RNNJANSEN method)</a>
+      <li><a href="API/models.html#whobpyt.models.BOLD.BOLD_Layer.createIC">createIC() (whobpyt.models.BOLD.BOLD_Layer method)</a>
 
       <ul>
+        <li><a href="API/models.html#whobpyt.models.EEG.EEG_Layer.createIC">(whobpyt.models.EEG.EEG_Layer method)</a>
+</li>
+        <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.createIC">(whobpyt.models.JansenRit.RNNJANSEN method)</a>
+</li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.createIC">(whobpyt.models.RWW.RNNRWW method)</a>
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW2.RWW2.createIC">(whobpyt.models.RWW2.RWW2 method)</a>
@@ -318,6 +359,10 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/models.html#whobpyt.models.EEG.EEG_Layer">EEG_Layer (class in whobpyt.models.EEG)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/run.html#whobpyt.run.Model_fitting.evaluate">evaluate() (whobpyt.run.Model_fitting method)</a>
 </li>
   </ul></td>
@@ -326,9 +371,15 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.forward">forward() (whobpyt.models.JansenRit.RNNJANSEN method)</a>
+      <li><a href="API/run.html#whobpyt.run.Fitting_FNGFPG">Fitting_FNGFPG (class in whobpyt.run)</a>
+</li>
+      <li><a href="API/models.html#whobpyt.models.BOLD.BOLD_Layer.forward">forward() (whobpyt.models.BOLD.BOLD_Layer method)</a>
 
       <ul>
+        <li><a href="API/models.html#whobpyt.models.EEG.EEG_Layer.forward">(whobpyt.models.EEG.EEG_Layer method)</a>
+</li>
+        <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.forward">(whobpyt.models.JansenRit.RNNJANSEN method)</a>
+</li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.forward">(whobpyt.models.RWW.RNNRWW method)</a>
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW2.RWW2.forward">(whobpyt.models.RWW2.RWW2 method)</a>
@@ -340,9 +391,13 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.info">info() (whobpyt.models.JansenRit.RNNJANSEN method)</a>
+      <li><a href="API/models.html#whobpyt.models.BOLD.BOLD_Layer.info">info() (whobpyt.models.BOLD.BOLD_Layer method)</a>
 
       <ul>
+        <li><a href="API/models.html#whobpyt.models.EEG.EEG_Layer.info">(whobpyt.models.EEG.EEG_Layer method)</a>
+</li>
+        <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.info">(whobpyt.models.JansenRit.RNNJANSEN method)</a>
+</li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.info">(whobpyt.models.RWW.RNNRWW method)</a>
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW2.RWW2.info">(whobpyt.models.RWW2.RWW2 method)</a>
@@ -398,8 +453,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/datatypes.html#whobpyt.datatypes.par">par (class in whobpyt.datatypes)</a>
 </li>
+      <li><a href="API/visualization.html#whobpyt.visualization.plot_fc">plot_fc() (in module whobpyt.visualization)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/visualization.html#whobpyt.visualization.plot_psd">plot_psd() (in module whobpyt.visualization)</a>
+</li>
+      <li><a href="API/visualization.html#whobpyt.visualization.plot_timeseries">plot_timeseries() (in module whobpyt.visualization)</a>
+</li>
       <li><a href="API/datatypes.html#whobpyt.datatypes.Recording.pyTS">pyTS() (whobpyt.datatypes.Recording method)</a>
 </li>
   </ul></td>
@@ -436,11 +497,13 @@
       </ul></li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.scalePSD">scalePSD() (whobpyt.optimization.CostsPSD method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.setModelParameters">setModelParameters() (whobpyt.models.JansenRit.RNNJANSEN method)</a>
+      <li><a href="API/models.html#whobpyt.models.BOLD.BOLD_Layer.setModelParameters">setModelParameters() (whobpyt.models.BOLD.BOLD_Layer method)</a>
 
       <ul>
+        <li><a href="API/models.html#whobpyt.models.EEG.EEG_Layer.setModelParameters">(whobpyt.models.EEG.EEG_Layer method)</a>
+</li>
+        <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.setModelParameters">(whobpyt.models.JansenRit.RNNJANSEN method)</a>
+</li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.setModelParameters">(whobpyt.models.RWW.RNNRWW method)</a>
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW2.RWW2.setModelParameters">(whobpyt.models.RWW2.RWW2 method)</a>
@@ -452,8 +515,12 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/run.html#whobpyt.run.Model_fitting.train">train() (whobpyt.run.Model_fitting method)</a>
+      <li><a href="API/run.html#whobpyt.run.Fitting_FNGFPG.train">train() (whobpyt.run.Fitting_FNGFPG method)</a>
+
+      <ul>
+        <li><a href="API/run.html#whobpyt.run.Model_fitting.train">(whobpyt.run.Model_fitting method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats">TrainingStats (class in whobpyt.datatypes)</a>
