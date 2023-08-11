@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Sorenza Bastiaens, Parsa Oveisi
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak
 Neural Mass Model fitting
 module for JR with forward backward and lateral connection for EEG
 """
@@ -17,6 +17,7 @@ from torch.nn.parameter import Parameter
 from whobpyt.datatypes import AbstractNMM, par
 from whobpyt.models.JansenRit import ParamsJR
 import numpy as np
+import inspect
 
 
 class RNNJANSEN(AbstractNMM):
@@ -46,13 +47,13 @@ class RNNJANSEN(AbstractNMM):
     TRs_per_window: int # TODO: CHANGE THE NAME
         Number of EEG signals to simulate
 
-    sc: float node_size x node_size array
+    sc: ndarray (node_size x node_size) of floats
         Structural connectivity
 
-    lm: float
+    lm: ndarray of floats
         Leadfield matrix from source space to EEG space
 
-    dist: float
+    dist: ndarray of floats
         Distance matrix
 
     use_fit_gains: bool
@@ -88,8 +89,22 @@ class RNNJANSEN(AbstractNMM):
     """
 
     def __init__(self, node_size: int,
-                 TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: float, lm: float, dist: float,
+                 TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: np.ndarray, lm: np.ndarray, dist: np.ndarray,
                  use_fit_gains: bool, use_fit_lfm: bool, params: ParamsJR) -> None:
+        
+        signature = inspect.signature(self.__init__) # Get the signature of the __init__ method
+        expected_types = {param.name: param.annotation for param in signature.parameters.values()} # Extract expected parameter types from the signature
+        
+        for arg_name, arg_type in expected_types.items(): # Iterate through each passed arguments' label and data type
+            if arg_name != 'self' and arg_name in locals(): # Skip 'self' argument and check if argument is present
+                if not isinstance(locals()[arg_name], arg_type): # Check if the passed argument's data type does not match the expected type
+                    passed_arg_type = type(locals()[arg_name]).__name__ # Passed data type
+                    expected_arg_type = arg_type.__name__ # Expected data type
+                    raise ValueError(f"{arg_name} should be of type {expected_arg_type}, but got type {passed_arg_type} instead.") # Halt if discrepancy
+
+                    
+#         model_arg_type_check(signature) # Ensure that passed arguments abide by defined data type
+                    
         """
         Parameters
         ----------
