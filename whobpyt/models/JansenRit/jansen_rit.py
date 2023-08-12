@@ -16,8 +16,8 @@ import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes import AbstractNMM, par
 from whobpyt.models.JansenRit import ParamsJR
+from whobpyt.models.arg_type_check import model_arg_type_check
 import numpy as np
-import inspect
 
 
 class RNNJANSEN(AbstractNMM):
@@ -90,20 +90,9 @@ class RNNJANSEN(AbstractNMM):
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: np.ndarray, lm: np.ndarray, dist: np.ndarray,
-                 use_fit_gains: bool, use_fit_lfm: bool, params: ParamsJR) -> None:
-        
-        signature = inspect.signature(self.__init__) # Get the signature of the __init__ method
-        expected_types = {param.name: param.annotation for param in signature.parameters.values()} # Extract expected parameter types from the signature
-        
-        for arg_name, arg_type in expected_types.items(): # Iterate through each passed arguments' label and data type
-            if arg_name != 'self' and arg_name in locals(): # Skip 'self' argument and check if argument is present
-                if not isinstance(locals()[arg_name], arg_type): # Check if the passed argument's data type does not match the expected type
-                    passed_arg_type = type(locals()[arg_name]).__name__ # Passed data type
-                    expected_arg_type = arg_type.__name__ # Expected data type
-                    raise ValueError(f"{arg_name} should be of type {expected_arg_type}, but got type {passed_arg_type} instead.") # Halt if discrepancy
-
+                 use_fit_gains: bool, use_fit_lfm: bool, params: ParamsJR.ParamsJR) -> None:
                     
-#         model_arg_type_check(signature) # Ensure that passed arguments abide by defined data type
+        model_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
                     
         """
         Parameters
@@ -118,11 +107,11 @@ class RNNJANSEN(AbstractNMM):
             Number of EEG channels.
         tr : float # TODO: CHANGE THE NAME TO sampling_rate
             Sampling rate of the simulated EEG signals 
-        sc: float node_size x node_size array
+        sc: ndarray node_size x node_size float array
             Structural connectivity
-        lm: float
+        lm: ndarray float array
             Leadfield matrix from source space to EEG space
-        dist: float
+        dist: ndarray float array
             Distance matrix
         use_fit_gains: bool
             Flag for fitting gains. 1: fit, 0: not fit
