@@ -16,7 +16,7 @@ import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes import AbstractNMM, par
 from whobpyt.models.JansenRit import ParamsJR
-from whobpyt.functions.arg_type_check import method_arg_type_check
+from whobpyt.functions import method_arg_type_check
 import numpy as np
 
 
