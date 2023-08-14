@@ -10,15 +10,17 @@ class mmRWW2(RWW2):
 
     model_name = "mmRWW2"
     
-    def __init__(self, num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len):
+    def __init__(self, num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device = torch.device('cpu')):
 
-        self.eeg = EEG_Layer(num_regions, paramsEEG, num_channels)
-        self.bold = BOLD_Layer(num_regions, paramsBOLD)
-        super(mmRWW2, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False)
+        self.eeg = EEG_Layer(num_regions, paramsEEG, num_channels, device = device)
+        self.bold = BOLD_Layer(num_regions, paramsBOLD, device = device)
+        super(mmRWW2, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False, device = device)
         
         self.node_size = num_regions
         self.step_size = step_size
         self.sim_len = sim_len
+        
+        self.device = device
         
         self.batch_size = 1
         
@@ -55,6 +57,7 @@ def createIC(self, ver):
     #self.bold.createIC()
     
     self.next_start_state = 0.2 * torch.rand((self.node_size, 6, self.batch_size)) + torch.tensor([[0], [0], [0], [1.0], [1.0], [1.0]]).repeat(self.node_size, 1, self.batch_size)
+    self.next_start_state = self.next_start_state.to(self.device)
     
     return self.next_start_state
     
@@ -68,7 +71,7 @@ def forward(self, external, hx, hE, setNoise):
     self.next_start_state = torch.cat((NMM_vals["NMM_state"], BOLD_vals["BOLD_state"]), dim=1).detach()
     
     sim_vals = {**NMM_vals, **EEG_vals, **BOLD_vals}
-    sim_vals['current_state'] = torch.tensor(1.0) #Dummy variable
+    sim_vals['current_state'] = torch.tensor(1.0).to(self.device) #Dummy variable
     
     # Reshape if Blocking is being Used
     if self.num_blocks > 1:

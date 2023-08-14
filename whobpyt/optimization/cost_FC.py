@@ -111,7 +111,7 @@ class CostsFixedFC(AbstractLoss):
     loss: function
         calculates functional connectivity and uses it to calculate the loss
     """
-    def __init__(self, simKey):
+    def __init__(self, simKey, device = torch.device('cpu')):
         """
         Parameters:
         -----------
@@ -120,6 +120,7 @@ class CostsFixedFC(AbstractLoss):
         """
         super(CostsFixedFC, self).__init__()
         self.simKey = simKey
+        self.device = device
 
     def calcLoss(self, simTS, empFC):
         """Function to calculate the cost function for Functional Connectivity (FC) fitting. 
@@ -157,8 +158,8 @@ class CostsFixedFC(AbstractLoss):
                                              torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_sim))))) # SIMULATED FC
 
         # Masking out the upper triangle of the FC matrix and keeping the lower triangle
-        ones_tri = torch.tril(torch.ones_like(empFC), -1)
-        zeros = torch.zeros_like(empFC)  # create a tensor all ones
+        ones_tri = torch.tril(torch.ones_like(empFC).to(self.device), -1)
+        zeros = torch.zeros_like(empFC).to(self.device)  # create a tensor all ones
         mask = torch.greater(ones_tri, zeros)  # boolean tensor, mask[i] = True iff x[i] > 1
 
         FC_tri_v = torch.masked_select(empFC, mask)

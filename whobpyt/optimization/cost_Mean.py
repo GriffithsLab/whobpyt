@@ -15,9 +15,11 @@ class CostsMean():
         The name of the variable for which the mean is calculated
     targetValue : Tensor
         The target value either as single number or vector
+    device : torch.device
+        Whether the objective function is to run on GPU
     '''
         
-    def __init__(self, num_regions, simKey, targetValue = None, empiricalData = None):
+    def __init__(self, num_regions, simKey, targetValue = None, empiricalData = None, device = torch.device('cpu')):
         '''
         Parameters
         -----------------
@@ -32,11 +34,13 @@ class CostsMean():
         self.num_regions = num_regions
         self.simKey = simKey # This is the key from the numerical simulation used to select the time series
         
+        self.device = device
+        
         # Target can be specific to each region, or can have a single number that is repeated for each region
         if torch.numel(targetValue) == 1:
-            self.targetValue = targetValue.repeat(num_regions)
+            self.targetValue = targetValue.repeat(num_regions).to(device)
         else:
-            self.targetValue = targetValue
+            self.targetValue = targetValue.to(device)
             
         if empiricalData != None:
             # In the future, if given empiricalData then will calculate the target value in this initialization function. 
