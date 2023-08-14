@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Sorenza Bastiaens, Parsa Oveisi
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak
 Neural Mass Model fitting
 module for JR with forward backward and lateral connection for EEG
 """
@@ -16,6 +16,7 @@ import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes import AbstractNMM, par
 from whobpyt.models.JansenRit import ParamsJR
+from whobpyt.functions import method_arg_type_check
 import numpy as np
 
 
@@ -46,13 +47,13 @@ class RNNJANSEN(AbstractNMM):
     TRs_per_window: int # TODO: CHANGE THE NAME
         Number of EEG signals to simulate
 
-    sc: float node_size x node_size array
+    sc: ndarray (node_size x node_size) of floats
         Structural connectivity
 
-    lm: float
+    lm: ndarray of floats
         Leadfield matrix from source space to EEG space
 
-    dist: float
+    dist: ndarray of floats
         Distance matrix
 
     use_fit_gains: bool
@@ -88,8 +89,11 @@ class RNNJANSEN(AbstractNMM):
     """
 
     def __init__(self, node_size: int,
-                 TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: float, lm: float, dist: float,
-                 use_fit_gains: bool, use_fit_lfm: bool, params: ParamsJR) -> None:
+                 TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: np.ndarray, lm: np.ndarray, dist: np.ndarray,
+                 use_fit_gains: bool, use_fit_lfm: bool, params: ParamsJR.ParamsJR) -> None:
+                    
+        method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
+                    
         """
         Parameters
         ----------
@@ -103,11 +107,11 @@ class RNNJANSEN(AbstractNMM):
             Number of EEG channels.
         tr : float # TODO: CHANGE THE NAME TO sampling_rate
             Sampling rate of the simulated EEG signals 
-        sc: float node_size x node_size array
+        sc: ndarray node_size x node_size float array
             Structural connectivity
-        lm: float
+        lm: ndarray float array
             Leadfield matrix from source space to EEG space
-        dist: float
+        dist: ndarray float array
             Distance matrix
         use_fit_gains: bool
             Flag for fitting gains. 1: fit, 0: not fit
