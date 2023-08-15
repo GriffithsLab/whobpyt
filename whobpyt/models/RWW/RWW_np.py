@@ -1,11 +1,11 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather
-Neural Mass Model fitting
-module for wong-wang model
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
+Neural Mass Model fitting module for Wong-Wang model
 """
 
 import numpy as np  # for numerical operations
 from whobpyt.models.RWW import ParamsRWW
+from whobpyt.functions.arg_type_check import method_arg_type_check
 
 
 def h_tf_np(a, b, d, z):
@@ -27,11 +27,11 @@ class RWW_np:
 
     Attibutes
     ---------
-    state_size : int
+    state_size: int
         the number of states in the WWD model
-    input_size : int
+    input_size: int
         the number of states with noise as input
-    tr : float
+    tr: float
         tr of fMRI image
     step_size: float
         Integration step for forward neural model in ms
@@ -46,9 +46,9 @@ class RWW_np:
     sc: float node_size x node_size array
         structural connectivity
     use_Laplacian: bool
-            using Laplacian or not
-        param: ParamsModel
-            define model parameters(var:0 constant var:non-zero Parameter)
+        using Laplacian or not
+    param: ParamsModel
+        define model parameters(var:0 constant var:non-zero Parameter)
     Methods
     -------
     forward(input,  hx, u , u_out)
@@ -56,13 +56,12 @@ class RWW_np:
     """
 
     def __init__(self, node_size: int, TRs_per_window: int, step_size: float, step_size_bold: float, tr: float,
-                 sc: float, use_dynamic_boundary: bool,
-                 use_Laplacian: bool, param: ParamsRWW) -> None:
+                 sc: float, use_dynamic_boundary: bool, use_Laplacian: bool, param: ParamsRWW) -> None:
         """
         Parameters
         ----------
 
-        tr : float in
+        tr: float
             tr of fMRI image
         step_size: float
             Integration step for forward model
@@ -75,6 +74,8 @@ class RWW_np:
             structural connectivity
 
         """
+        method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
+        
         super(WWD_np, self).__init__()
 
         self.step_size = step_size  # integration step 0.05

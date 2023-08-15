@@ -1,14 +1,14 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather
-Neural Mass Model fitting
-module for wong-wang model
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
+Neural Mass Model fitting module for Wong-Wang model
 """
 
 import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes import AbstractNMM, AbstractParams, par
 from whobpyt.models.RWW import ParamsRWW
-import numpy as np  # for numerical operations
+from whobpyt.functions.arg_type_check import method_arg_type_check
+import numpy as np # for numerical operations
 
 class RNNRWW(AbstractNMM):
     """
@@ -97,9 +97,8 @@ class RNNRWW(AbstractNMM):
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, sampling_size: float, tr: float, sc: float, use_fit_gains: bool,
-                 params: ParamsRWW, use_Bifurcation=True, use_Gaussian_EI=False, use_Laplacian=True,
-                 use_dynamic_boundary=True) -> None:
-        
+                 params: ParamsRWW, use_Bifurcation: bool = True, use_Gaussian_EI: bool = False, use_Laplacian: bool = True,
+                 use_dynamic_boundary: bool = True) -> None:
         """
         Parameters
         ----------
@@ -128,7 +127,8 @@ class RNNRWW(AbstractNMM):
             Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
         use_dynamic_boundary: bool
             Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size.
-        """
+        """        
+        method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
         super(RNNRWW, self).__init__()
         
