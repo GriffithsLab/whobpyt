@@ -1,7 +1,6 @@
 """
 Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak
-Neural Mass Model fitting
-module for JR with forward backward and lateral connection for EEG
+Neural Mass Model fitting module for JR with forward, backward, and lateral connection for EEG
 """
 
 # @title new function PyTepFit
@@ -15,8 +14,8 @@ Importage
 import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes import AbstractNMM, par
-from whobpyt.models.JansenRit import ParamsJR
-from whobpyt.functions import method_arg_type_check
+from whobpyt.models.JansenRit.ParamsJR import ParamsJR
+from whobpyt.functions.arg_type_check import method_arg_type_check
 import numpy as np
 
 
@@ -90,10 +89,7 @@ class RNNJANSEN(AbstractNMM):
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: np.ndarray, lm: np.ndarray, dist: np.ndarray,
-                 use_fit_gains: bool, use_fit_lfm: bool, params: ParamsJR.ParamsJR) -> None:
-                    
-        method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
-                    
+                 use_fit_gains: bool, use_fit_lfm: bool, params: ParamsJR) -> None:               
         """
         Parameters
         ----------
@@ -120,7 +116,8 @@ class RNNJANSEN(AbstractNMM):
         params: ParamsJR
             Model parameters object.
         """
-
+        method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
+        
         super(RNNJANSEN, self).__init__()
         self.state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
         self.output_names = ["eeg"]

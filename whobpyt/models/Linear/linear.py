@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
 Neural Mass Model fitting
 module for linear model
 """
@@ -8,6 +8,7 @@ import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes.AbstractParams import AbstractParams
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.functions.arg_type_check import method_arg_type_check
 import numpy as np  # for numerical operations
 
 class ParamsLIN(AbstractParams):
@@ -63,7 +64,7 @@ class RNNLIN(AbstractNMM):
 
     def __init__(self, node_size: int,
                  TRs_per_window: int, step_size: float, sampling_size: float, tr: float, sc: float, use_fit_gains: bool,
-                 param: ParamsLIN, use_Laplacian=True) -> None:
+                 param: ParamsLIN, use_Laplacian: bool = True) -> None:
         """
         Parameters
         ----------
@@ -86,6 +87,8 @@ class RNNLIN(AbstractNMM):
         param: ParamsModel
             define model parameters(var:0 constant var:non-zero Parameter)
         """
+        method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types       
+        
         super(RNNLIN, self).__init__()
         self.state_size = 5  # 6 states WWD model
         # self.input_size = input_size  # 1 or 2
