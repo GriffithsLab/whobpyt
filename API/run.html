@@ -225,7 +225,7 @@
 <h1>Run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="whobpyt.run.Model_fitting">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></code><code class="sig-name descname"><span class="pre">Model_fitting</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></code><code class="sig-name descname"><span class="pre">Model_fitting</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractNMM.AbstractNMM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractLoss.AbstractLoss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting" title="Permalink to this definition">¶</a></dt>
 <dd><p>This Model_fitting class is able to fit resting state data or evoked potential data 
 for which the input training data is empty or some stimulus to one or more NMM nodes,
 and the label is an associated empirical neuroimaging recording.</p>
@@ -247,7 +247,7 @@ is associated with an empirical recording, must use a different fitting class.</
 </dl>
 <dl class="py method">
 <dt id="whobpyt.run.Model_fitting.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractNMM.AbstractNMM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractLoss.AbstractLoss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -262,13 +262,13 @@ is associated with an empirical recording, must use a different fitting class.</
 
 <dl class="py method">
 <dt id="whobpyt.run.Model_fitting.evaluate">
-<code class="sig-name descname"><span class="pre">evaluate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_window_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transient_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">evaluate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_window_num</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transient_num</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>u</strong><span class="classifier">int or Tensor</span></dt><dd><p>external or stimulus</p>
 </dd>
-<dt><strong>num_windows</strong><span class="classifier">int</span></dt><dd><p>Number of time windows to simulate</p>
+<dt><strong>empRec: list of Recording</strong></dt><dd><p>This is the ML “Training Labels”</p>
 </dd>
 <dt><strong>TPperWindow: int</strong></dt><dd><p>Number of Empirical Time Points per window. model.forward does one window at a time.</p>
 </dd>
@@ -297,23 +297,23 @@ is associated with an empirical recording, must use a different fitting class.</
 
 <dl class="py method">
 <dt id="whobpyt.run.Model_fitting.train">
-<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_2ndLevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_scheduler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRecs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningrate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_2ndLevel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_scheduler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.train" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>u: type</strong></dt><dd><p>This stimulus is the ML “Training Input”</p>
 </dd>
-<dt><strong>empRec: List of Recording</strong></dt><dd><p>This is the ML “Training Labels”</p>
+<dt><strong>empRec: list of Recording</strong></dt><dd><p>This is the ML “Training Labels”</p>
 </dd>
 <dt><strong>num_epochs: int</strong></dt><dd><p>the number of times to go through the entire training data set</p>
 </dd>
 <dt><strong>TPperWindow: int</strong></dt><dd><p>Number of Empirical Time Points per window. model.forward does one window at a time.</p>
 </dd>
-<dt><strong>learningrate</strong><span class="classifier">double</span></dt><dd><p>rate of gradient descent</p>
+<dt><strong>learningrate: float</strong></dt><dd><p>rate of gradient descent</p>
 </dd>
-<dt><strong>lr_2ndLevel :</strong></dt><dd><p>learning rate for priors of model parameters, and possibly others</p>
+<dt><strong>lr_2ndLevel: float</strong></dt><dd><p>learning rate for priors of model parameters, and possibly others</p>
 </dd>
-<dt><strong>lr_scheduler</strong><span class="classifier">Bool</span></dt><dd><p>Whether to use the learning rate scheduler</p>
+<dt><strong>lr_scheduler: bool</strong></dt><dd><p>Whether to use the learning rate scheduler</p>
 </dd>
 </dl>
 </dd>

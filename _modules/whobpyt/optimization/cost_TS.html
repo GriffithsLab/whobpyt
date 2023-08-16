@@ -223,7 +223,7 @@
             
   <h1>Source code for whobpyt.optimization.cost_TS</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappisan, Hussain Ather</span>
+<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak</span>
 <span class="sd">Neural Mass Model fitting</span>
 <span class="sd">module for cost calculation</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -231,6 +231,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># for numerical operations</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractLoss</span> <span class="kn">import</span> <span class="n">AbstractLoss</span>
+<span class="kn">from</span> <span class="nn">whobpyt.functions.arg_type_check</span> <span class="kn">import</span> <span class="n">method_arg_type_check</span>
 
 
 <div class="viewcode-block" id="CostsTS"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS">[docs]</a><span class="k">class</span> <span class="nc">CostsTS</span><span class="p">(</span><span class="n">AbstractLoss</span><span class="p">):</span>
@@ -238,10 +239,11 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">CostsTS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span></div>
 
-<div class="viewcode-block" id="CostsTS.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">emp</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">state_vals</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsTS.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsTS.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">emp</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">state_vals</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the Pearson Correlation between the simFC and empFC.</span>
-<span class="sd">        From there, the probability and negative log-likelihood.</span>
+<span class="sd">        From there, compute the probability and negative log-likelihood.</span>
+<span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        sim: tensor with node_size X datapoint</span>
@@ -249,6 +251,7 @@
 <span class="sd">        emp: tensor with node_size X datapoint</span>
 <span class="sd">            empirical EEG</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span> <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="s1">&#39;state_vals&#39;</span><span class="p">])</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
 
         <span class="n">losses</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">sim</span> <span class="o">-</span> <span class="n">emp</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1">#</span>
         <span class="k">return</span> <span class="n">losses</span></div></div>

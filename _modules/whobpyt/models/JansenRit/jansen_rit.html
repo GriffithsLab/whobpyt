@@ -224,8 +224,7 @@
   <h1>Source code for whobpyt.models.JansenRit.jansen_rit</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak</span>
-<span class="sd">Neural Mass Model fitting</span>
-<span class="sd">module for JR with forward backward and lateral connection for EEG</span>
+<span class="sd">Neural Mass Model fitting module for JR with forward, backward, and lateral connection for EEG</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># @title new function PyTepFit</span>
@@ -239,8 +238,8 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch.nn.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">AbstractNMM</span><span class="p">,</span> <span class="n">par</span>
-<span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit</span> <span class="kn">import</span> <span class="n">ParamsJR</span>
-<span class="kn">from</span> <span class="nn">whobpyt.functions</span> <span class="kn">import</span> <span class="n">method_arg_type_check</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.JansenRit.ParamsJR</span> <span class="kn">import</span> <span class="n">ParamsJR</span>
+<span class="kn">from</span> <span class="nn">whobpyt.functions.arg_type_check</span> <span class="kn">import</span> <span class="n">method_arg_type_check</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
@@ -314,10 +313,7 @@
 
 <div class="viewcode-block" id="RNNJANSEN.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.JansenRit.RNNJANSEN.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">TRs_per_window</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">output_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sc</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">lm</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">dist</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                 <span class="n">use_fit_gains</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">use_fit_lfm</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ParamsJR</span><span class="o">.</span><span class="n">ParamsJR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-                    
-        <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
-<span class="w">                    </span>
+                 <span class="n">use_fit_gains</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">use_fit_lfm</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ParamsJR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>               
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -344,7 +340,8 @@
 <span class="sd">        params: ParamsJR</span>
 <span class="sd">            Model parameters object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
+        <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
+        
         <span class="nb">super</span><span class="p">(</span><span class="n">RNNJANSEN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;Ev&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;Iv&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;Pv&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;eeg&quot;</span><span class="p">]</span>
