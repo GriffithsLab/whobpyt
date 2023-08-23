@@ -42,6 +42,11 @@ class mmRWW2(RWW2):
         
     def createIC(self, ver):
         return createIC(self, ver)
+        
+    def setBlocks(self, num_blocks):
+        self.num_blocks = num_blocks
+        self.eeg.num_blocks = num_blocks
+        self.bold.num_blocks = num_blocks
     
     def forward(self, external, hx, hE, setNoise = None):
         return forward(self, external, hx, hE, setNoise)
@@ -71,7 +76,7 @@ def forward(self, external, hx, hE, setNoise):
     self.next_start_state = torch.cat((NMM_vals["NMM_state"], BOLD_vals["BOLD_state"]), dim=1).detach()
     
     sim_vals = {**NMM_vals, **EEG_vals, **BOLD_vals}
-    sim_vals['current_state'] = torch.tensor(1.0).to(self.device) #Dummy variable
+    sim_vals['current_state'] = torch.tensor(1.0, device = self.device) #Dummy variable
     
     # Reshape if Blocking is being Used
     if self.num_blocks > 1:

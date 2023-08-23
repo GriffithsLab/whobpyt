@@ -19,7 +19,7 @@ class CostsMean():
         Whether the objective function is to run on GPU
     '''
         
-    def __init__(self, num_regions, simKey, targetValue = None, empiricalData = None, device = torch.device('cpu')):
+    def __init__(self, num_regions, simKey, targetValue = None, empiricalData = None, batch_size = 1, device = torch.device('cpu')):
         '''
         Parameters
         -----------------
@@ -33,12 +33,16 @@ class CostsMean():
         
         self.num_regions = num_regions
         self.simKey = simKey # This is the key from the numerical simulation used to select the time series
+        self.batch_size = batch_size
         
         self.device = device
         
         # Target can be specific to each region, or can have a single number that is repeated for each region
         if torch.numel(targetValue) == 1:
-            self.targetValue = targetValue.repeat(num_regions).to(device)
+            if self.batch_size == 1:
+                self.targetValue = targetValue.repeat(num_regions).to(device)
+            else:
+                self.targetValue = targetValue.repeat(num_regions, batch_size).to(device)
         else:
             self.targetValue = targetValue.to(device)
             
@@ -47,14 +51,15 @@ class CostsMean():
             # That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify
             # which one to fit to.
             pass
+
         
-    def calcLoss(self, simData):
+    def calcLoss(self, simData, empData = None):
         '''
         Method to calculate the loss
         
         Parmeters
         --------------
-        simData: Tensor[ Nodes x Time ]
+        simData: Tensor[ Nodes x Time ] or [ Nodes x Time x Blocks(Batch) ]
             The time series used by the loss function 
             
         Returns
@@ -63,7 +68,8 @@ class CostsMean():
             The loss value 
         
         '''
-        meanVar = torch.mean(simData[:,:], 1)
+        
+        meanVar = torch.mean(simData, 1)
         
         return torch.nn.functional.mse_loss(meanVar, self.targetValue)
         

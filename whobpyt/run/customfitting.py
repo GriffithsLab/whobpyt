@@ -91,10 +91,10 @@ class Fitting_FNGFPG:
                     delayHist = self.model.createDelayIC(ver = 0) #TODO: Delays are currently is not implemented in various places
                 else:
                     firstIC = self.model.next_start_state
-                    delayHist = torch.tensor(1.0).to(self.device) # TODO: Delays are currently is not implemented in various places
+                    delayHist = torch.tensor(1.0, device = self.device) # TODO: Delays are currently is not implemented in various places
 
                 # initial the external inputs
-                external = torch.tensor([0]).to(self.device) # TODO: Currenlty this code only works for resting state
+                external = torch.tensor([0], device = self.device) # TODO: Currenlty this code only works for resting state
                 
                 num_blocks = int(self.model.sim_len/block_len)
             
