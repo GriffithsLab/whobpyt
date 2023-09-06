@@ -83,3 +83,74 @@ class CostsPSD():
         sdAxis_dS, sdValues_dS_scaled = powerSpectrumLoss.scalePSD(sdAxis_dS, sdValues_dS)
 
         return torch.nn.functional.mse_loss(sdValues_dS_scaled, self.targetValue)
+
+
+class CostsFixedPSD():
+    # Updated Code that fits to a fixed PSD
+    # Support for Fitting_Batch
+    # Support for GPU
+    
+    def __init__(self, num_regions, simKey, sampleFreqHz, targetValue = None, empiricalData = None, batch_size = 1, device = torch.device('cpu')):
+        self.num_regions = num_regions
+        self.simKey = simKey  # This is the index in the data simulation to extract variable time series from
+        self.batch_size = batch_size
+        
+        self.device = device
+        
+        self.sampleFreqHz = sampleFreqHz
+        
+        if targetValue != None:
+            if self.batch_size == 1:
+                self.targetValue = targetValue.repeat(num_regions, 1).to(device)
+            else:
+                self.targetValue = targetValue.repeat(num_regions, 1).to(device) #TODO: Currently taking mean before MSE from all batches, need to document this
+        
+        if empiricalData != None:
+            # In the future, if given empiricalData then will calculate the target value in this initialization function. 
+            # That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify
+            # which one to fit to.
+            pass
+    
+    def calcPSD(self, signal, sampleFreqHz, minFreq = None, maxFreq = None, axMethod = 2):
+        # signal assumed to be in the form of [time_steps, regions or channels] <- This is being changed
+        # Returns the Power Spectrial Density with associated Hz values
+    
+        N = signal.shape[1]
+        
+        # These defines the range of the PSD to return
+        if minFreq == None:
+            minFreq = 0
+        if maxFreq == None:
+            maxFreq = sampleFreqHz//2
+        
+        # Not sure which axis method is correct
+        if axMethod == 1:
+            fftAxis = torch.linspace(0,sampleFreqHz, N).to(self.device)
+        elif axMethod == 2:
+            fftAxis = (torch.arange(N)*sampleFreqHz/N).to(self.device)
+        
+        # Take the FFT of the Signal
+        signalFFT = torch.fft.fft(signal, dim = 1)
+        
+        # Take the square value (it is complex) so following is equivalent:
+        # Square of absolute, or
+        # Sum of real squared and imag squared
+        spectralDensity = torch.abs(signalFFT[:,:N//2,:])**2
+        
+        #Filter to the desired range
+        minPoint = int((minFreq/(sampleFreqHz//2))*(N//2))
+        maxPoint = int((maxFreq/(sampleFreqHz//2))*(N//2))+1
+        sdAxis = fftAxis[minPoint:maxPoint]
+        sdValues = spectralDensity[:,minPoint:maxPoint,:]
+        
+        return sdAxis, sdValues
+               
+    def calcLoss(self, simData, empData = None):
+        # simData assumed to be in the form [time_steps, regions or channels, one or more variables]
+        # Returns the MSE of the difference between the simulated and target power spectrum
+        
+        sdAxis, sdValues = self.calcPSD(simData, sampleFreqHz = self.sampleFreqHz, minFreq = 0, maxFreq = 100)
+        
+        meanValue = torch.mean(sdValues, 2) #TODO: Currently taking mean before MSE from all batches, need to document this
+        
+        return torch.nn.functional.mse_loss(meanValue, self.targetValue)
