@@ -14,20 +14,20 @@ class CostsFC(AbstractLoss):
     Cost function for Fitting the Functional Connectivity (FC) matrix.
     The cost function is the negative log-likelihood of the Pearson correlation between the simulated FC and empirical FC.
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
     simKey: str
         string key to reference to this const function. i.e., "CostsFC".
 
-    Methods:
-    --------
+    Methods
+    -------
     loss: function
         calculates functional connectivity and uses it to calculate the loss
     """
     def __init__(self, simKey):
         """
-        Parameters:
-        -----------
+        Parameters
+        ----------
         simKey: str
             type of cost function to be used
         """
@@ -101,22 +101,27 @@ class CostsFixedFC(AbstractLoss):
     In this version, the empirical FC is given directly, instead of being given an empirical time series. 
     The cost function is the negative log-likelihood of the Pearson correlation between the simulated FC and empirical FC. 
 
-    Attributes:
-    -----------
+    Has GPU support.
+
+    Attributes
+    ----------
     simKey: str
         string key to reference to this const function. i.e., "CostsFC".
-
+    device: torch.device
+        Whether to run on GPU or CPU
     Methods:
     --------
-    loss: function
+    calcLoss: function
         calculates functional connectivity and uses it to calculate the loss
     """
     def __init__(self, simKey, device = torch.device('cpu')):
         """
-        Parameters:
-        -----------
+        Parameters
+        ----------
         simKey: str
             The state variable or output variable from the model used for the simulated FC
+        device: torch.device
+            Whether to run on GPU or CPU
         """
         super(CostsFixedFC, self).__init__()
         self.simKey = simKey

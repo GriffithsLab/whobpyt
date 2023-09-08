@@ -57,7 +57,7 @@ class CostsMean():
         '''
         Method to calculate the loss
         
-        Parmeters
+        Parameters
         --------------
         simData: Tensor[ Nodes x Time ] or [ Nodes x Time x Blocks(Batch) ]
             The time series used by the loss function 
