@@ -71,7 +71,7 @@ class Recording():
         
         '''
         
-        return self.data.numpy()
+        return self.data.cpu().numpy()
         
     def npNodeByTime(self):
         '''
@@ -81,7 +81,7 @@ class Recording():
         
         '''
         
-        return self.data.numpy()
+        return self.data.cpu().numpy()
         
     def npTimeByNodes(self):
         '''
@@ -91,7 +91,7 @@ class Recording():
         
         '''
         
-        return self.data.numpy().T
+        return self.data.cpu().numpy().T
         
     def length(self):
         '''

@@ -28,7 +28,7 @@ from whobpyt.datatypes import par, Recording
 from whobpyt.models.RWW2 import mmRWW2, mmRWW2_np, RWW2, RWW2_np, ParamsRWW2
 from whobpyt.models.BOLD import BOLD_Layer, BOLD_np, BOLD_Params
 from whobpyt.models.EEG import EEG_Layer, EEG_np, EEG_Params
-from whobpyt.optimization import CostsFC, CostsPSD, CostsMean
+from whobpyt.optimization import CostsFC, CostsPSD, CostsMean, CostsFixedFC, CostsFixedPSD
 from whobpyt.run import Model_fitting
 
 # general python stuff
@@ -40,6 +40,10 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+print("Is cuda avaliable?")
+print(torch.cuda.is_available())
+
+device = torch.device("cpu") #Options: "cpu" or "cuda"
 
 # %%
 # Defining Model Parameters
@@ -60,16 +64,18 @@ S_E = 0.6; S_I = 0.1; x = 0.0000; f = 2.4286; v = 1.3283; q = 0.6144 # x,f,v,q m
 init_state = torch.tensor([[S_E, S_I, x, f, v, q]]).repeat(num_regions, 1)
 
 # Add randomness
-init_state = init_state + torch.randn_like(init_state)/30 # Randomizing initial values
+init_state = (init_state + torch.randn_like(init_state)/30).to(device) # Randomizing initial values
 
 # Create a RWW Params
 paramsNode = ParamsRWW2(num_regions)
 
 #Create #EEG Params
 paramsEEG = EEG_Params(torch.eye(num_regions))
+paramsEEG.to(device)
 
 #Create BOLD Params
 paramsBOLD = BOLD_Params()
+paramsBOLD.to(device)
 
 
 # %%
@@ -78,7 +84,7 @@ paramsBOLD = BOLD_Params()
 #
 
 paramsNode.J = par((0.15  * np.ones(num_regions)), fit_par = True, asLog = True) #This is a parameter that will be updated during training
-
+paramsNode.to(device)
 
 # %%
 # Generating a physically possible (in 3D Space) Structural Connectivity Matrix
@@ -92,11 +98,11 @@ square_points = torch.tensor([[1.,1.,1.],
                               [1.,1.,-1.],
                               [-1.,1.,-1.],
                               [1.,-1.,-1.],
-                              [-1.,-1.,-1.]])
+                              [-1.,-1.,-1.]]).to(device)
 sphere_points = square_points / torch.sqrt(torch.sum(torch.square(square_points), axis = 1)).repeat(3, 1).t()
 
 # Second, find the distance between all pairs of points
-dist_mtx = torch.zeros(num_regions, num_regions)
+dist_mtx = torch.zeros(num_regions, num_regions).to(device)
 for x in range(num_regions):
     for y in range(num_regions):
         dist_mtx[x,y]= torch.linalg.norm(sphere_points[x,:] - sphere_points[y,:])
@@ -115,7 +121,7 @@ Con_Mtx = SC_mtx_norm
 
 print(max(abs(torch.linalg.eig(SC_mtx_norm).eigenvalues)))
 mask = np.eye(num_regions)
-sns.heatmap(Con_Mtx, mask = mask, center=0, cmap='RdBu_r', vmin=-0.1, vmax = 0.25)
+sns.heatmap(Con_Mtx.to(torch.device("cpu")), mask = mask, center=0, cmap='RdBu_r', vmin=-0.1, vmax = 0.25)
 plt.title("SC of Artificial Data")
 
 
@@ -133,7 +139,7 @@ Lead_Field = torch.tensor([[1,1,0,0,1,1,0,0],
                            [0,1,0,1,0,1,0,1],
                            [0,0,0,0,1,1,1,1],
                            [1,0,1,0,1,0,1,0],
-                           [0,0,1,1,0,0,1,1]], dtype = torch.float)
+                           [0,0,1,1,0,0,1,1]], dtype = torch.float).to(device)
 LF_Norm = (1/torch.linalg.matrix_norm(Lead_Field, ord = 2)) * Lead_Field
 
 paramsEEG.LF = LF_Norm
@@ -158,7 +164,7 @@ LF_sphere_points = LF_square_points / torch.sqrt(torch.sum(torch.square(LF_squar
 
 
 # Second, find the distance between all pairs of channel points
-LF_dist_mtx = torch.zeros(num_channels, num_channels)
+LF_dist_mtx = torch.zeros(num_channels, num_channels).to(device)
 for x in range(num_channels):
     for y in range(num_channels):
         LF_dist_mtx[x,y]= torch.linalg.norm(LF_sphere_points[x,:] - LF_sphere_points[y,:])
@@ -181,7 +187,7 @@ LF_Con_Mtx = LF_SC_mtx_norm
 # The Multi-Modal Model
 
 
-model = mmRWW2(num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len)
+model = mmRWW2(num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device = device)
 #model.track_params = ['J']
 
 # %%
@@ -204,7 +210,7 @@ class mmObjectiveFunction():
         self.BOLD_FC_weight = 0 # Not Currently Used
         
         # Functions of the various Objective Function Components
-        self.S_E_mean = CostsMean(num_regions, simKey = "E", targetValue = torch.tensor([0.164]))
+        self.S_E_mean = CostsMean(num_regions, simKey = "E", targetValue = torch.tensor([0.164]), device = device)
         #self.S_I_mean = CostsMean(...) # Not Currently Used
         #self.EEG_PSD = CostsPSD(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)
         #self.EEG_FC = CostsFC(...) # Not Currently Used
@@ -215,11 +221,11 @@ class mmObjectiveFunction():
         # sim, ts_window, self.model, next_window
         
         S_E_mean_loss = self.S_E_mean.calcLoss(node_history) 
-        S_I_mean_loss = torch.tensor([0]) #self.S_I_mean.calcLoss(node_history)
-        EEG_PSD_loss = torch.tensor([0]) #self.EEG_PSD.calcLoss(EEG_history) 
-        EEG_FC_loss = torch.tensor([0]) #self.EEG_FC.calcLoss(EEG_history)
-        BOLD_PSD_loss = torch.tensor([0]) #self.BOLD_PS.calcLoss(BOLD_history)
-        BOLD_FC_loss = torch.tensor([0]) #self.BOLD_FC.calcLoss(BOLD_history)
+        S_I_mean_loss = torch.tensor([0]).to(device) #self.S_I_mean.calcLoss(node_history)
+        EEG_PSD_loss = torch.tensor([0]).to(device) #self.EEG_PSD.calcLoss(EEG_history) 
+        EEG_FC_loss = torch.tensor([0]).to(device) #self.EEG_FC.calcLoss(EEG_history)
+        BOLD_PSD_loss = torch.tensor([0]).to(device) #self.BOLD_PS.calcLoss(BOLD_history)
+        BOLD_FC_loss = torch.tensor([0]).to(device) #self.BOLD_FC.calcLoss(BOLD_history)
                 
         totalLoss = self.S_E_mean_weight*S_E_mean_loss + self.S_I_mean_weight*S_I_mean_loss \
                   + self.EEG_PSD_weight*EEG_PSD_loss   + self.EEG_FC_weight*EEG_FC_loss \
@@ -251,7 +257,7 @@ randTS1 = Recording(randData1, step_size)
 randTS2 = Recording(randData2, step_size)
 
 # call model fit
-F = Model_fitting(model, ObjFun)
+F = Model_fitting(model, ObjFun, device = device)
 
 # %%
 # model training
@@ -317,6 +323,20 @@ mask = np.eye(num_regions)
 sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
 
 
+# %%
+# New Fixed FC and PSD Objective Functions
+# ---------------------------------------------------
+#
+
+objFC = CostsFixedFC(simKey = "E", device = device)
+lossFC = objFC.calcLoss(F.lastRec["E"].pyTS().to(device), Con_Mtx)
+print("LossFC: " + str(lossFC.cpu().numpy()))
+
+placeholderPSD = torch.rand(100).to(device)
+objPSD = CostsFixedPSD(num_regions = num_channels, simKey = "E", sampleFreqHz = 10000, minFreq = 1, maxFreq = 100, targetValue = placeholderPSD, rmTransient = 5000, device = device)
+lossPSD = objPSD.calcLoss(F.lastRec["eeg"].pyTS()[:,:,None].to(device))
+print("LossPSD: " + str(lossPSD.cpu().numpy()))
+
 
 # %%
 # CNMM Validation Model
@@ -324,8 +344,10 @@ sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
 #
 # The Multi-Modal Model
 
+model.eeg.params.LF = model.eeg.params.LF.cpu()
+
 val_sim_len = 20*1000 # Simulation length in msecs
-model_validate = mmRWW2_np(num_regions, num_channels, model.params, model.eeg.params, model.bold.params, Con_Mtx.detach().numpy(), dist_mtx.detach().numpy(), step_size, val_sim_len)
+model_validate = mmRWW2_np(num_regions, num_channels, model.params, model.eeg.params, model.bold.params, Con_Mtx.detach().cpu().numpy(), dist_mtx.detach().cpu().numpy(), step_size, val_sim_len)
 
 sim_vals, hE = model_validate.forward(external = 0, hx = model_validate.createIC(ver = 0), hE = 0)
 

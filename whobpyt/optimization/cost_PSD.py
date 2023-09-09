@@ -93,6 +93,8 @@ class CostsFixedPSD():
     """
     Updated Code that fits to a fixed PSD
     
+    The simulated PSD is generated as the square of the Fast Fourier Transform (FFT). A particular range to fit on is selected. The mean is not removed, so it is recommended to set the range such as to disclude the first point of the PSD. Removing an initial transient period before calculating the PSD is also recommended. 
+    
     Designed for Fitting_Batch, where the model output has an extra dimension for batch. TODO: Generalize further to work in case without this dimension as well. 
      
     NOTE: If using batching, the batches will be averaged before calculating the error (as opposed to having an error for each time series in the batch). 
@@ -114,14 +116,14 @@ class CostsFixedPSD():
     sampleFreqHz: Int
         The sampling frequency of the data.        
     targetValue: torch.tensor
-        The sampling frequency of the data.
+        The target PSD. This is assumed to be created with the same frequency range and density as that of the PSD generated from the simulated data. 
     empiricalData: torch.tensor
         NOT IMPLEMENTED: This is a placeholder for the case of getting an empirical timeseries as input, which would be applicable if doing a windowed fitting paradigm
        
     
     """
     
-    def __init__(self, num_regions, simKey, sampleFreqHz, targetValue = None, empiricalData = None, batch_size = 1, rmTransient = 0, device = torch.device('cpu')):
+    def __init__(self, num_regions, simKey, sampleFreqHz, minFreq, maxFreq, targetValue = None, empiricalData = None, batch_size = 1, rmTransient = 0, device = torch.device('cpu')):
         """
         
         
@@ -132,7 +134,11 @@ class CostsFixedPSD():
         simKey: String
             Name of the state variable or modality to be used as input to the cost function.         
         sampleFreqHz: Int
-            The sampling frequency of the data.            
+            The sampling frequency of the data.
+        minFreq: Int
+            The minimum frequnecy of the PSD to return.
+        maxFreq: Int
+            The maximum frequency of the PSD to return.            
         targetValue: torch.tensor
             The sampling frequency of the data.
         empiricalData: torch.tensor
@@ -153,7 +159,9 @@ class CostsFixedPSD():
         
         self.device = device
         
-        self.sampleFreqHz = sampleFreqHz
+        self.sampleFreqHz = sampleFreqHz #
+        self.minFreq = minFreq #
+        self.maxFreq = maxFreq #
         
         if targetValue != None:
             if self.batch_size == 1:
@@ -251,7 +259,7 @@ class CostsFixedPSD():
         
         """
         
-        psdAxis, psdValues = self.calcPSD(simData, sampleFreqHz = self.sampleFreqHz, minFreq = 0, maxFreq = 100) # TODO: Sampling frequency of simulated data and target time series is currently assumed to be the same.
+        psdAxis, psdValues = self.calcPSD(simData, sampleFreqHz = self.sampleFreqHz, minFreq = self.minFreq, maxFreq = self.maxFreq) # TODO: Sampling frequency of simulated data and target time series is currently assumed to be the same.
         
         meanValue = torch.mean(psdValues, 2)
         

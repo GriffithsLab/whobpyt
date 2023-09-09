@@ -108,9 +108,9 @@ class par:
         '''
         
         if self.asLog:
-            return numpy.exp(self.val.detach().clone().numpy())
+            return numpy.exp(self.val.detach().clone().cpu().numpy())
         else:
-            return self.val.detach().clone().numpy()
+            return self.val.detach().clone().cpu().numpy()
     
     def to(self, device):
         '''
