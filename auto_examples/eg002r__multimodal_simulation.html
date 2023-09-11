@@ -100,19 +100,12 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">Code Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/background.html">Background Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
 </ul>
 </li>
 </ul>
@@ -124,10 +117,9 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -244,7 +236,7 @@
 <span class="kn">from</span> <span class="nn">whobpyt.models.RWW2</span> <span class="kn">import</span> <a href="../API/models.html#whobpyt.models.RWW2.RWW2" title="whobpyt.models.RWW2.RWW2" class="sphx-glr-backref-module-whobpyt-models-RWW2 sphx-glr-backref-type-py-class"><span class="n">mmRWW2</span></a><span class="p">,</span> <span class="n">mmRWW2_np</span><span class="p">,</span> <span class="n">RWW2</span><span class="p">,</span> <span class="n">RWW2_np</span><span class="p">,</span> <span class="n">ParamsRWW2</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.BOLD</span> <span class="kn">import</span> <span class="n">BOLD_Layer</span><span class="p">,</span> <span class="n">BOLD_np</span><span class="p">,</span> <span class="n">BOLD_Params</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.EEG</span> <span class="kn">import</span> <span class="n">EEG_Layer</span><span class="p">,</span> <span class="n">EEG_np</span><span class="p">,</span> <span class="n">EEG_Params</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">CostsFC</span><span class="p">,</span> <span class="n">CostsPSD</span><span class="p">,</span> <a href="../API/optimization.html#whobpyt.optimization.CostsMean" title="whobpyt.optimization.CostsMean" class="sphx-glr-backref-module-whobpyt-optimization sphx-glr-backref-type-py-class"><span class="n">CostsMean</span></a>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">CostsFC</span><span class="p">,</span> <span class="n">CostsPSD</span><span class="p">,</span> <span class="n">CostsMean</span>
 <span class="kn">from</span> <span class="nn">whobpyt.run</span> <span class="kn">import</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class"><span class="n">Model_fitting</span></a>
 
 <span class="c1"># general python stuff</span>
@@ -412,7 +404,7 @@ Also, written in such a way as to be able to track and plot indiviual components
         <span class="bp">self</span><span class="o">.</span><span class="n">BOLD_FC_weight</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Not Currently Used</span>
 
         <span class="c1"># Functions of the various Objective Function Components</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsMean" title="whobpyt.optimization.CostsMean" class="sphx-glr-backref-module-whobpyt-optimization sphx-glr-backref-type-py-class"><span class="n">CostsMean</span></a><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.164</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span> <span class="o">=</span> <span class="n">CostsMean</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.164</span><span class="p">]))</span>
         <span class="c1">#self.S_I_mean = CostsMean(...) # Not Currently Used</span>
         <span class="c1">#self.EEG_PSD = CostsPSD(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)</span>
         <span class="c1">#self.EEG_FC = CostsFC(...) # Not Currently Used</span>
@@ -469,14 +461,14 @@ Also, written in such a way as to be able to track and plot indiviual components
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: [0.4176719] Pseudo FC_cor:  0.1134004113617777 cos_sim:  0.6327965723584174
-epoch:  0 loss: [0.4553799] Pseudo FC_cor:  -0.39732747067226293 cos_sim:  0.8414357977546131
+epoch:  0 loss: [0.4176115] Pseudo FC_cor:  -0.3456788436395855 cos_sim:  0.1887339437894714
+epoch:  0 loss: [0.45645976] Pseudo FC_cor:  0.03262254879867729 cos_sim:  0.8365468727281813
 Epoch:  1
-epoch:  1 loss: [0.45456272] Pseudo FC_cor:  -0.32860689597540177 cos_sim:  0.8644148694227285
-epoch:  1 loss: [0.4531624] Pseudo FC_cor:  -0.06470027595943514 cos_sim:  0.8660565840694068
+epoch:  1 loss: [0.4524491] Pseudo FC_cor:  0.08409808717305571 cos_sim:  0.8649030803532769
+epoch:  1 loss: [0.4525414] Pseudo FC_cor:  -0.23529235760256637 cos_sim:  0.8658146395973985
 Epoch:  2
-epoch:  2 loss: [0.4495111] Pseudo FC_cor:  -0.3002213890218304 cos_sim:  0.866057666767897
-epoch:  2 loss: [0.44466016] Pseudo FC_cor:  -0.2455804353358117 cos_sim:  0.8661234761908223
+epoch:  2 loss: [0.4498625] Pseudo FC_cor:  0.09163504166987407 cos_sim:  0.8668793380445716
+epoch:  2 loss: [0.44650167] Pseudo FC_cor:  -0.16910295609670783 cos_sim:  0.8658608472858924
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -518,7 +510,7 @@ epoch:  2 loss: [0.44466016] Pseudo FC_cor:  -0.2455804353358117 cos_sim:  0.866
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7faf2f2aecd0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa9a4dd3130&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD</p>
@@ -576,7 +568,7 @@ epoch:  2 loss: [0.44466016] Pseudo FC_cor:  -0.2455804353358117 cos_sim:  0.866
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7faf2f16e790&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa9a2aa2040&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD Validation</p>
@@ -611,7 +603,7 @@ epoch:  2 loss: [0.44466016] Pseudo FC_cor:  -0.2455804353358117 cos_sim:  0.866
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  29.268 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  1.693 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>

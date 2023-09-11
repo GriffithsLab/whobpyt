@@ -100,19 +100,12 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../about_whobpyt/architecture.html">Code Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../about_whobpyt/background.html">Background Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
 </ul>
 </li>
 </ul>
@@ -124,10 +117,9 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/optimization.html">Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../API/run.html">Run</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -223,7 +215,7 @@
             
   <h1>Source code for whobpyt.optimization.cost_FC</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak</span>
+<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappisan, Hussain Ather</span>
 <span class="sd">Neural Mass Model fitting</span>
 <span class="sd">module for cost calculation</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -231,7 +223,6 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># for numerical operations</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractLoss</span> <span class="kn">import</span> <span class="n">AbstractLoss</span>
-<span class="kn">from</span> <span class="nn">whobpyt.functions.arg_type_check</span> <span class="kn">import</span> <span class="n">method_arg_type_check</span>
 
 
 <div class="viewcode-block" id="CostsFC"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFC">[docs]</a><span class="k">class</span> <span class="nc">CostsFC</span><span class="p">(</span><span class="n">AbstractLoss</span><span class="p">):</span>
@@ -259,14 +250,14 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">CostsFC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span></div>
 
-<div class="viewcode-block" id="CostsFC.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFC.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">emp</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsFC.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFC.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">emp</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        sim: torch.Tensor with node_size X datapoint</span>
+<span class="sd">        sim: torch.tensor with node_size X datapoint</span>
 <span class="sd">            simulated BOLD</span>
-<span class="sd">        emp: torch.Tensor with node_size X datapoint</span>
+<span class="sd">        emp: torch.tensor with node_size X datapoint</span>
 <span class="sd">            empirical BOLD</span>
 
 <span class="sd">        Returns</span>
@@ -274,8 +265,6 @@
 <span class="sd">        losses_corr: torch.tensor</span>
 <span class="sd">            cost function value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
-        
         <span class="n">logits_series_tf</span> <span class="o">=</span> <span class="n">sim</span>
         <span class="n">labels_series_tf</span> <span class="o">=</span> <span class="n">emp</span>
         <span class="c1"># get node_size() and TRs_per_window()</span>
@@ -322,7 +311,7 @@
 
 
 
-<div class="viewcode-block" id="CostsFixedFC"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC">[docs]</a><span class="k">class</span> <span class="nc">CostsFixedFC</span><span class="p">(</span><span class="n">AbstractLoss</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">CostsFixedFC</span><span class="p">(</span><span class="n">AbstractLoss</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cost function for Fitting the Functional Connectivity (FC) matrix.</span>
 <span class="sd">    In this version, the empirical FC is given directly, instead of being given an empirical time series. </span>
@@ -338,7 +327,7 @@
 <span class="sd">    loss: function</span>
 <span class="sd">        calculates functional connectivity and uses it to calculate the loss</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="CostsFixedFC.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simKey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simKey</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters:</span>
 <span class="sd">        -----------</span>
@@ -346,9 +335,9 @@
 <span class="sd">            The state variable or output variable from the model used for the simulated FC</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CostsFixedFC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span>
 
-<div class="viewcode-block" id="CostsFixedFC.calcLoss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.calcLoss">[docs]</a>    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simTS</span><span class="p">,</span> <span class="n">empFC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simTS</span><span class="p">,</span> <span class="n">empFC</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to calculate the cost function for Functional Connectivity (FC) fitting. </span>
 <span class="sd">        It initially calculates the FC matrix using the data from the time series, </span>
 <span class="sd">        makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. </span>
@@ -403,7 +392,7 @@
         <span class="c1"># Bringing the corr-FC to the 0-1 range, and calculating the negative log-likelihood</span>
         <span class="n">losses_corr</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.5000</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">corr_FC</span><span class="p">)</span> 
         
-        <span class="k">return</span> <span class="n">losses_corr</span>      </div></div>
+        <span class="k">return</span> <span class="n">losses_corr</span>      
 </pre></div>
 
            </div>

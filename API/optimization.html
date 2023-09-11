@@ -47,7 +47,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Run" href="run.html" />
+    <link rel="next" title="Data Types" href="datatypes.html" />
     <link rel="prev" title="Models" href="models.html" /> 
 </head>
 
@@ -100,19 +100,12 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">Code Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/background.html">Background Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
 </ul>
 </li>
 </ul>
@@ -124,10 +117,9 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="run.html">Run</a></li>
-<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -234,17 +226,17 @@
 
 <dl class="py method">
 <dt id="whobpyt.optimization.CostsTS.loss">
-<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_vals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_TS.html#CostsTS.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsTS.loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_vals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_TS.html#CostsTS.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsTS.loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the Pearson Correlation between the simFC and empFC.
-From there, compute the probability and negative log-likelihood.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>sim: tensor with node_size X datapoint</strong></dt><dd><p>simulated EEG</p>
-</dd>
-<dt><strong>emp: tensor with node_size X datapoint</strong></dt><dd><p>empirical EEG</p>
-</dd>
-</dl>
+From there, the probability and negative log-likelihood.
+Parameters
+———-
+sim: tensor with node_size X datapoint</p>
+<blockquote>
+<div><p>simulated EEG</p>
+</div></blockquote>
+<dl class="simple">
+<dt>emp: tensor with node_size X datapoint</dt><dd><p>empirical EEG</p>
 </dd>
 </dl>
 </dd></dl>
@@ -263,53 +255,14 @@ The cost function is the negative log-likelihood of the Pearson correlation betw
 
 <dl class="py method">
 <dt id="whobpyt.optimization.CostsFC.loss">
-<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC.loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC.loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>sim: torch.Tensor with node_size X datapoint</strong></dt><dd><p>simulated BOLD</p>
+<dt><strong>sim: torch.tensor with node_size X datapoint</strong></dt><dd><p>simulated BOLD</p>
 </dd>
-<dt><strong>emp: torch.Tensor with node_size X datapoint</strong></dt><dd><p>empirical BOLD</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>losses_corr: torch.tensor</dt><dd><p>cost function value</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="whobpyt.optimization.CostsFixedFC">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></code><code class="sig-name descname"><span class="pre">CostsFixedFC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFixedFC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFixedFC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cost function for Fitting the Functional Connectivity (FC) matrix.
-In this version, the empirical FC is given directly, instead of being given an empirical time series. 
-The cost function is the negative log-likelihood of the Pearson correlation between the simulated FC and empirical FC.</p>
-<dl class="py method">
-<dt id="whobpyt.optimization.CostsFixedFC.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFixedFC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFixedFC.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="whobpyt.optimization.CostsFixedFC.calcLoss">
-<code class="sig-name descname"><span class="pre">calcLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simTS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empFC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFixedFC.calcLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFixedFC.calcLoss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to calculate the cost function for Functional Connectivity (FC) fitting. 
-It initially calculates the FC matrix using the data from the time series, 
-makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. 
-The FC matrix values are then transposed to the 0-1 range. 
-We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>simTS: torch.tensor with node_size X time_point</strong></dt><dd><p>Simulated Time Series</p>
-</dd>
-<dt><strong>empFC: torch.tensor with node_size X node_size</strong></dt><dd><p>Empirical Functional Connectivity</p>
+<dt><strong>emp: torch.tensor with node_size X datapoint</strong></dt><dd><p>empirical BOLD</p>
 </dd>
 </dl>
 </dd>
@@ -355,56 +308,6 @@ We then use this FC matrix as a probability matrix and use it to get the cross-e
 
 </dd></dl>
 
-<dl class="py class">
-<dt id="whobpyt.optimization.CostsMean">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></code><code class="sig-name descname"><span class="pre">CostsMean</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_Mean.html#CostsMean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsMean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Target Mean Value of a Variable</p>
-<p>This loss function calculates the mean value of a particular variable for every node across time, and then takes the Mean Squared Error of those means with the target value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>num_regions</strong><span class="classifier">Int</span></dt><dd><p>The number of reagons in the model beign fit</p>
-</dd>
-<dt><strong>simKey</strong><span class="classifier">String</span></dt><dd><p>The name of the variable for which the mean is calculated</p>
-</dd>
-<dt><strong>targetValue</strong><span class="classifier">Tensor</span></dt><dd><p>The target value either as single number or vector</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="whobpyt.optimization.CostsMean.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_Mean.html#CostsMean.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsMean.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>num_regions</strong><span class="classifier">Int</span></dt><dd><p>The number of regions in the model being fit</p>
-</dd>
-<dt><strong>simKey</strong><span class="classifier">String</span></dt><dd><p>The name of the variable for which the mean is calculated</p>
-</dd>
-<dt><strong>targetValue</strong><span class="classifier">Tensor</span></dt><dd><p>The target value either as single number or vector</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="whobpyt.optimization.CostsMean.calcLoss">
-<code class="sig-name descname"><span class="pre">calcLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_Mean.html#CostsMean.calcLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsMean.calcLoss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to calculate the loss</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Tensor</dt><dd><p>The loss value</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -415,7 +318,7 @@ We then use this FC matrix as a probability matrix and use it to get the cross-e
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="run.html" class="btn btn-neutral float-right" title="Run" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="datatypes.html" class="btn btn-neutral float-right" title="Data Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="models.html" class="btn btn-neutral float-left" title="Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

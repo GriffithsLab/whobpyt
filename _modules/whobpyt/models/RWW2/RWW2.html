@@ -100,19 +100,12 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/architecture.html">Code Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/background.html">Background Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
 </ul>
 </li>
 </ul>
@@ -124,10 +117,9 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/optimization.html">Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../API/run.html">Run</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -227,63 +219,14 @@
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
 
 <div class="viewcode-block" id="RWW2"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2">[docs]</a><span class="k">class</span> <span class="nc">RWW2</span><span class="p">(</span><span class="n">AbstractNMM</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Reduced Wong Wang Excitatory Inhibatory (RWWEXcInh) Model - Version 2</span>
-<span class="sd">    </span>
-<span class="sd">    EQUATIONS &amp; BIOLOGICAL VARIABLES FROM:</span>
-<span class="sd">    </span>
-<span class="sd">    Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation-inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.</span>
-<span class="sd">    </span>
-<span class="sd">    Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.</span>
-<span class="sd">    </span>
-<span class="sd">    Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.</span>
-<span class="sd">    </span>
-<span class="sd">    Attributes</span>
-<span class="sd">    -------------</span>
-<span class="sd">    params : ParamsRWW2</span>
-<span class="sd">        An AbstractParams object which contains the model&#39;s parameters</span>
-<span class="sd">    step_size : Float</span>
-<span class="sd">        The step size of numerical integration (in msec)</span>
-<span class="sd">    num_regions : Int</span>
-<span class="sd">        The number of brain regions used in the model</span>
-<span class="sd">    node_size : Int</span>
-<span class="sd">        The number of brain regions used in the model   </span>
-<span class="sd">    Con_Mtx : Tensor [ node_size x node_size ]</span>
-<span class="sd">        Matrix with connection strengths between each node</span>
-<span class="sd">    Dist_Mtx : Tensor [ node_size x node_size ]</span>
-<span class="sd">        Matrix with distances between each node (used for delays)</span>
-<span class="sd">    output_size : Int</span>
-<span class="sd">        The number of brain regions used in the model</span>
-<span class="sd">    state_names : List of Strings</span>
-<span class="sd">        A list of the state varaible names of the model</span>
-<span class="sd">    output_names : List of Strings</span>
-<span class="sd">        A list of the output variable names of the model</span>
-<span class="sd">    track_params :</span>
-<span class="sd">        A list of which parameter to track over training epochs</span>
-<span class="sd">    num_blocks : Int</span>
-<span class="sd">        The number of blocks (used by FNGFPG Paradigm)</span>
-<span class="sd">    max_delay : </span>
-<span class="sd">        Related to Delays (delay code to be verified)</span>
-<span class="sd">    buffer_len :</span>
-<span class="sd">        Related to Delays (delay code to be verified)  </span>
-<span class="sd">    delayed_S_E : </span>
-<span class="sd">         Related to Delays (delay code to be verified)  </span>
-<span class="sd">    buffer_idx :</span>
-<span class="sd">         Related to Delays (delay code to be verified)       </span>
-<span class="sd">    mu :</span>
-<span class="sd">        Related to Delays (delay code to be verified)</span>
-<span class="sd">    use_fit_gains : Bool</span>
-<span class="sd">        Whether to fit the gains of connection weights (Not Implemented)</span>
-<span class="sd">    use_fit_lfm : Bool</span>
-<span class="sd">        Whether to fit the Lead Field Matrix (Lead Field Matrix not Used)</span>
-<span class="sd">    useBC : Bool</span>
-<span class="sd">        Whether to add boundary dynamics to state variables</span>
-<span class="sd">    </span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    
-<div class="viewcode-block" id="RWW2.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">Dist_Mtx</span><span class="p">,</span> <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span><span class="p">,</span> <span class="n">useBC</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>  
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+    <span class="c1">## EQUATIONS &amp; BIOLOGICAL VARIABLES FROM:</span>
+    <span class="c1">#</span>
+    <span class="c1"># Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitationâ€“inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.</span>
+    <span class="c1"># Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.</span>
+    <span class="c1"># Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.</span>
+    <span class="c1"># Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.  </span>
+  
+<div class="viewcode-block" id="RWW2.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">Dist_Mtx</span><span class="p">,</span> <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span><span class="p">,</span> <span class="n">useBC</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>        
         <span class="nb">super</span><span class="p">(</span><span class="n">RWW2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span> <span class="c1"># To inherit parameters attribute</span>
         
         <span class="c1"># Initialize the RWW Model </span>
@@ -367,8 +310,6 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">serialNoise</span><span class="p">,</span> <span class="n">blockNoise</span><span class="p">]</span>
     
 <div class="viewcode-block" id="RWW2.forward"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external</span><span class="p">,</span> <span class="n">hx</span><span class="p">,</span> <span class="n">hE</span><span class="p">,</span> <span class="n">setNoise</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external</span><span class="p">,</span> <span class="n">hx</span><span class="p">,</span> <span class="n">hE</span><span class="p">,</span> <span class="n">setNoise</span><span class="p">)</span></div></div>
 
 <span class="k">def</span> <span class="nf">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

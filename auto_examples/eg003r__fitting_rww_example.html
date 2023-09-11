@@ -100,19 +100,12 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">Code Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/background.html">Background Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
 </ul>
 </li>
 </ul>
@@ -124,10 +117,9 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -290,14 +282,14 @@ From: https://drive.google.com/uc?id=1EOwDLj5SxWpwxEk5MT7cShiMPLszemuq
 To: /home/runner/.whobpyt/data/hcpl2k8/HCP/100307_rfMRI_REST1_LR_hpc200_clean__l2k8_sc33_ts.pkl
 
   0%|          | 0.00/804k [00:00&lt;?, ?B/s]
-100%|##########| 804k/804k [00:00&lt;00:00, 7.62MB/s]
-100%|##########| 804k/804k [00:00&lt;00:00, 7.57MB/s]
+ 65%|######5   | 524k/804k [00:00&lt;00:00, 4.24MB/s]
+100%|##########| 804k/804k [00:00&lt;00:00, 5.77MB/s]
 Downloading...
 From: https://drive.google.com/uc?id=1B9U47D19DrQOnNugs8keDNFQha1GfPGv
 To: /home/runner/.whobpyt/data/hcpl2k8/HCP/weights_100307.txt
 
   0%|          | 0.00/172k [00:00&lt;?, ?B/s]
-100%|##########| 172k/172k [00:00&lt;00:00, 2.64MB/s]
+100%|##########| 172k/172k [00:00&lt;00:00, 2.25MB/s]
 Download completed
 
 
@@ -378,15 +370,15 @@ base_dir = ‘../HCP/’</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: 5.3446527 Pseudo FC_cor:  0.1941877951295646 cos_sim:  -0.0045628072850768045
+epoch:  0 loss: 5.727834 Pseudo FC_cor:  0.16020147864019355 cos_sim:  -0.00494923556948079
 Epoch:  1
-epoch:  1 loss: 4.784424 Pseudo FC_cor:  0.25996048961121976 cos_sim:  -0.005429020873857679
+epoch:  1 loss: 4.140036 Pseudo FC_cor:  0.2575920443278582 cos_sim:  -0.005443146305140142
 Epoch:  2
-epoch:  2 loss: 3.7069094 Pseudo FC_cor:  0.29304217635426033 cos_sim:  -0.004939207809402376
+epoch:  2 loss: 3.7750292 Pseudo FC_cor:  0.40479794430886873 cos_sim:  -0.005236310544615975
 Epoch:  3
-epoch:  3 loss: 3.5602539 Pseudo FC_cor:  0.343315105232971 cos_sim:  -0.00544681114259645
+epoch:  3 loss: 3.5673645 Pseudo FC_cor:  0.3904707857407299 cos_sim:  -0.005008841752904151
 Epoch:  4
-epoch:  4 loss: 2.510186 Pseudo FC_cor:  0.3996271022796521 cos_sim:  -0.004785341262612974
+epoch:  4 loss: 3.243282 Pseudo FC_cor:  0.2970336547810622 cos_sim:  -0.004887619313078507
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -419,7 +411,7 @@ epoch:  4 loss: 2.510186 Pseudo FC_cor:  0.3996271022796521 cos_sim:  -0.0047853
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.4228803249655138 cos_sim:  -0.005070930970856023
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.46861181277845326 cos_sim:  -0.005565349823819029
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -458,7 +450,7 @@ epoch:  4 loss: 2.510186 Pseudo FC_cor:  0.3996271022796521 cos_sim:  -0.0047853
 </pre></div>
 </div>
 <img alt="The empirical FC, The simulated FC" class="sphx-glr-single-img" src="../_images/sphx_glr_eg003r__fitting_rww_example_005.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 10 minutes  41.872 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 9 minutes  55.161 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg003r-fitting-rww-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/6e0d2e4bec0ad2802eb3fd7a90e5faa9/eg003r__fitting_rww_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg003r__fitting_rww_example.py</span></code></a></p>

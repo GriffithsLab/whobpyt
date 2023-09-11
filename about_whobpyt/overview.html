@@ -47,7 +47,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Code Architecture" href="architecture.html" />
+    <link rel="next" title="WhoBPyT Code Base Architecture" href="architecture.html" />
     <link rel="prev" title="Welcome to WhoBPyT documentation!" href="../index.html" /> 
 </head>
 
@@ -100,19 +100,12 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">Code Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#whole-brain-models">Whole Brain Models:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#objective-function-components">Objective Function Components:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#package-expansions">Package Expansions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="background.html">Background Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="background.html#neuroimaging-data">Neuroimaging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="background.html#rwwexcinb">RWWExcInb</a></li>
-<li class="toctree-l3"><a class="reference internal" href="background.html#jansen-rit">Jansen-Rit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#rww-layer">RWW_Layer</a></li>
 </ul>
 </li>
 </ul>
@@ -124,10 +117,9 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -223,12 +215,7 @@
             
   <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>Whole Brain Modelling in PyTorch (WhoBPyT) is a Python package for fitting parameters of Whole Brain Models (WBM) to neuroimaging data. In particular, differential equation based WBMs such as Connectome-based Neural Mass Models (CNMM) can be implemented in PyTorch, and by doing so the simulated neuoimaging data can be backpropagated through time to update model parameters. This is the deep learning approach that WhoBPyT uses.</p>
-<p>In order to use this package, a brain model, objective function, and parameter fitting paradigm must be chosen. The appropriate choices will depend on the research question and the neuroimaging data avaliable. Data must be processed ahead of time into a consistent parcellated format.</p>
-<p>After fitting, the result will be one or more sets of paramters. It’s important to verify these parameters in another model implementation, as the models implemented in PyTorch may have default or optional moditications that deviate from the original model’s dynamics.</p>
-<p>If you use this package, please consider citing the following papers:</p>
-<p>Griffiths JD, Wang Z, Ather SH, Momi D, Rich S, Diaconescu A, McIntosh AR, Shen K. Deep Learning-Based Parameter Estimation for Neurophysiological Models of Neuroimaging Data. bioRxiv. 2022 May 19:2022-05.</p>
-<p>Momi D, Wang Z, Griffiths JD. TMS-evoked responses are driven by recurrent large-scale network dynamics. Elife. 2023;12.</p>
+<p>TO ADD</p>
 </div>
 
 
@@ -239,7 +226,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="architecture.html" class="btn btn-neutral float-right" title="Code Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="architecture.html" class="btn btn-neutral float-right" title="WhoBPyT Code Base Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to WhoBPyT documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

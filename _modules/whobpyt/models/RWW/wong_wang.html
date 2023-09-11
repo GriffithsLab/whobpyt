@@ -100,19 +100,12 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/architecture.html">Code Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/background.html">Background Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
 </ul>
 </li>
 </ul>
@@ -124,10 +117,9 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/optimization.html">Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../API/run.html">Run</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -223,21 +215,19 @@
             
   <h1>Source code for whobpyt.models.RWW.wong_wang</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak</span>
-<span class="sd">Neural Mass Model fitting module for Wong-Wang model</span>
+<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather</span>
+<span class="sd">Neural Mass Model fitting</span>
+<span class="sd">module for wong-wang model</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch.nn.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">AbstractNMM</span><span class="p">,</span> <span class="n">AbstractParams</span><span class="p">,</span> <span class="n">par</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.RWW</span> <span class="kn">import</span> <span class="n">ParamsRWW</span>
-<span class="kn">from</span> <span class="nn">whobpyt.functions.arg_type_check</span> <span class="kn">import</span> <span class="n">method_arg_type_check</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> <span class="c1"># for numerical operations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># for numerical operations</span>
 
 <div class="viewcode-block" id="RNNRWW"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW.RNNRWW">[docs]</a><span class="k">class</span> <span class="nc">RNNRWW</span><span class="p">(</span><span class="n">AbstractNMM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reduced Wong Wang Excitatory Inhibitory (RWWExcInb) Model with integrated BOLD dynamics</span>
-<span class="sd">    </span>
 <span class="sd">    A module for forward model (WWD) to simulate a window of BOLD signals</span>
 <span class="sd">    </span>
 <span class="sd">    Note that the BOLD signal is not done in the standard way, </span>
@@ -321,8 +311,9 @@
 
 <div class="viewcode-block" id="RNNRWW.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW.RNNRWW.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">TRs_per_window</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sampling_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">tr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">use_fit_gains</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-                 <span class="n">params</span><span class="p">:</span> <span class="n">ParamsRWW</span><span class="p">,</span> <span class="n">use_Bifurcation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">use_Gaussian_EI</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">use_Laplacian</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                 <span class="n">use_dynamic_boundary</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+                 <span class="n">params</span><span class="p">:</span> <span class="n">ParamsRWW</span><span class="p">,</span> <span class="n">use_Bifurcation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_Gaussian_EI</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_Laplacian</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">use_dynamic_boundary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -351,8 +342,7 @@
 <span class="sd">            Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity</span>
 <span class="sd">        use_dynamic_boundary: bool</span>
 <span class="sd">            Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size.</span>
-<span class="sd">        &quot;&quot;&quot;</span>        
-        <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="nb">super</span><span class="p">(</span><span class="n">RNNRWW</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         
