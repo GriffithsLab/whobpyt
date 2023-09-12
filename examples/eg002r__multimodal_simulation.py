@@ -14,7 +14,6 @@ What is being modeled:
 
 """  
 
-
 # sphinx_gallery_thumbnail_number = 1
 
 # %%
@@ -30,6 +29,7 @@ from whobpyt.models.BOLD import BOLD_Layer, BOLD_np, BOLD_Params
 from whobpyt.models.EEG import EEG_Layer, EEG_np, EEG_Params
 from whobpyt.optimization import CostsFC, CostsPSD, CostsMean, CostsFixedFC, CostsFixedPSD
 from whobpyt.run import Model_fitting
+from whobpyt.data.generators import gen_cube
 
 # general python stuff
 import torch
@@ -77,108 +77,26 @@ paramsEEG.to(device)
 paramsBOLD = BOLD_Params()
 paramsBOLD.to(device)
 
-
-# %%
-# Further Adjusting Parameters for Network
-# ---------------------------------------------------
-#
-
 paramsNode.J = par((0.15  * np.ones(num_regions)), fit_par = True, asLog = True) #This is a parameter that will be updated during training
 paramsNode.to(device)
 
 # %%
-# Generating a physically possible (in 3D Space) Structural Connectivity Matrix
+# Using the Synthetic Cube Data For Demo Purposes
 # ---------------------------------------------------
 #
-# First, get corner points on a cube and project onto a sphere
-square_points = torch.tensor([[1.,1.,1.],
-                              [-1.,1.,1.],
-                              [1.,-1.,1.],
-                              [-1.,-1.,1.],
-                              [1.,1.,-1.],
-                              [-1.,1.,-1.],
-                              [1.,-1.,-1.],
-                              [-1.,-1.,-1.]]).to(device)
-sphere_points = square_points / torch.sqrt(torch.sum(torch.square(square_points), axis = 1)).repeat(3, 1).t()
 
-# Second, find the distance between all pairs of points
-dist_mtx = torch.zeros(num_regions, num_regions).to(device)
-for x in range(num_regions):
-    for y in range(num_regions):
-        dist_mtx[x,y]= torch.linalg.norm(sphere_points[x,:] - sphere_points[y,:])
+syntheticCubeInfo = gen_cube(device)
 
-# Third, Structural Connectivity defined to be 1/dist and remove self-connection values
-SC_mtx = 1/dist_mtx
-for z in range(num_regions):
-    SC_mtx[z,z] = 0.0
+Con_Mtx = syntheticCubeInfo["SC"]
+dist_mtx = syntheticCubeInfo["dist"]
+LF_Norm = syntheticCubeInfo["LF"]
 
-# Fourth, Normalize the matrix
-SC_mtx_norm = (1/torch.linalg.matrix_norm(SC_mtx, ord = 2)) * SC_mtx
-Con_Mtx = SC_mtx_norm
-
-
-# Blah
-
-print(max(abs(torch.linalg.eig(SC_mtx_norm).eigenvalues)))
+print(max(abs(torch.linalg.eig(Con_Mtx).eigenvalues)))
 mask = np.eye(num_regions)
 sns.heatmap(Con_Mtx.to(torch.device("cpu")), mask = mask, center=0, cmap='RdBu_r', vmin=-0.1, vmax = 0.25)
 plt.title("SC of Artificial Data")
 
-
-
-# %%
-# Generating a Lead Field Matrix
-# ---------------------------------------------------
-#
-# Placing an EEG Electrode in the middle of each cube face. 
-# Then electrode is equally distance from four courner on cube face squre.
-# Assume no signal from further four points. 
-
-Lead_Field = torch.tensor([[1,1,0,0,1,1,0,0],
-                           [1,1,1,1,0,0,0,0],
-                           [0,1,0,1,0,1,0,1],
-                           [0,0,0,0,1,1,1,1],
-                           [1,0,1,0,1,0,1,0],
-                           [0,0,1,1,0,0,1,1]], dtype = torch.float).to(device)
-LF_Norm = (1/torch.linalg.matrix_norm(Lead_Field, ord = 2)) * Lead_Field
-
 paramsEEG.LF = LF_Norm
-
-
-# %%
-# Generating a "Connectivity Matrix" for Channel Space
-# ---------------------------------------------------
-#
-# Generating a physically possible (in 3D Space) "Channel" Connectivity Matrix
-# That is a theoretical matrix for the EEG SC to be fit to
-
-# First, get face points on a cube and project onto a sphere
-LF_square_points = torch.tensor([[0.,1.,0.],
-                                 [0.,0.,1.],
-                                 [-1.,0.,0.],
-                                 [0.,0.,-1.],
-                                 [1.,0.,0.],
-                                 [0.,-1.,0.]])
-# Note: this does nothing as the points are already on the r=1 sphere
-LF_sphere_points = LF_square_points / torch.sqrt(torch.sum(torch.square(LF_square_points), axis = 1)).repeat(3, 1).t()
-
-
-# Second, find the distance between all pairs of channel points
-LF_dist_mtx = torch.zeros(num_channels, num_channels).to(device)
-for x in range(num_channels):
-    for y in range(num_channels):
-        LF_dist_mtx[x,y]= torch.linalg.norm(LF_sphere_points[x,:] - LF_sphere_points[y,:])
-
-# Third, Structural Connectivity defined to be 1/dist and remove self-connection values
-LF_SC_mtx = 1/LF_dist_mtx
-for z in range(num_channels):
-    LF_SC_mtx[z,z] = 0.0
-
-# Fourth, Normalize the matrix
-LF_SC_mtx_norm = (1/torch.linalg.matrix_norm(LF_SC_mtx, ord = 2)) * LF_SC_mtx
-LF_Con_Mtx = LF_SC_mtx_norm
-
-
 
 # %%
 # Defining the CNMM Model
@@ -188,7 +106,7 @@ LF_Con_Mtx = LF_SC_mtx_norm
 
 
 model = mmRWW2(num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device = device)
-#model.track_params = ['J']
+
 
 # %%
 # Defining the Objective Function
@@ -236,15 +154,12 @@ class mmObjectiveFunction():
         else:
             return totalLoss
 
+ObjFun = mmObjectiveFunction()
 
 # %%
 # Training The Model
 # ---------------------------------------------------
 #
-
-
-ObjFun = mmObjectiveFunction()
-
 
 randData1 = np.random.rand(8, 15000)
 randData2 = np.random.rand(8, 15000)
@@ -293,7 +208,6 @@ plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(
 plt.legend()
 
 
-
 # %%
 # Plots of EEG PSD
 #
@@ -308,7 +222,6 @@ plt.plot(sdAxis_dS, sdValues_dS_scaled.detach())
 plt.xlabel('Hz')
 plt.ylabel('PSD')
 plt.title("Simulated EEG PSD: After Training")
-
 
 
 # %%
