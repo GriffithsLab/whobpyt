@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappisan, Hussain Ather
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
 Neural Mass Model fitting
 module for cost calculation
 """
@@ -7,6 +7,7 @@ module for cost calculation
 import numpy as np  # for numerical operations
 import torch
 from whobpyt.datatypes.AbstractLoss import AbstractLoss
+from whobpyt.functions.arg_type_check import method_arg_type_check
 
 
 class CostsFC(AbstractLoss):
@@ -34,14 +35,14 @@ class CostsFC(AbstractLoss):
         super(CostsFC, self).__init__()
         self.simKey = simKey
 
-    def loss(self, sim, emp):
+    def loss(self, sim: torch.Tensor, emp: torch.Tensor):
         """Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.
 
         Parameters
         ----------
-        sim: torch.tensor with node_size X datapoint
+        sim: torch.Tensor with node_size X datapoint
             simulated BOLD
-        emp: torch.tensor with node_size X datapoint
+        emp: torch.Tensor with node_size X datapoint
             empirical BOLD
 
         Returns
@@ -49,6 +50,8 @@ class CostsFC(AbstractLoss):
         losses_corr: torch.tensor
             cost function value
         """
+        method_arg_type_check(self.loss) # Check that the passed arguments (excluding self) abide by their expected data types
+        
         logits_series_tf = sim
         labels_series_tf = emp
         # get node_size() and TRs_per_window()
