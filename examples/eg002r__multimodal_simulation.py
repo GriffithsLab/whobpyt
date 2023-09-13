@@ -237,21 +237,6 @@ sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
 
 
 # %%
-# New Fixed FC and PSD Objective Functions
-# ---------------------------------------------------
-#
-
-objFC = CostsFixedFC(simKey = "E", device = device)
-lossFC = objFC.calcLoss(F.lastRec["E"].pyTS().to(device), Con_Mtx)
-print("LossFC: " + str(lossFC.cpu().numpy()))
-
-placeholderPSD = torch.rand(100).to(device)
-objPSD = CostsFixedPSD(num_regions = num_channels, simKey = "E", sampleFreqHz = 10000, minFreq = 1, maxFreq = 100, targetValue = placeholderPSD, rmTransient = 5000, device = device)
-lossPSD = objPSD.calcLoss(F.lastRec["eeg"].pyTS()[:,:,None].to(device))
-print("LossPSD: " + str(lossPSD.cpu().numpy()))
-
-
-# %%
 # CNMM Validation Model
 # ---------------------------------------------------
 #
