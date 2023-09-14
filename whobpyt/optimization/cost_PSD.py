@@ -1,5 +1,5 @@
 import torch
-
+from warnings import warn
 
 class CostsPSD():
     '''
@@ -21,7 +21,9 @@ class CostsPSD():
             # That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify
             # which one to fit to.
             pass
-    
+        warn(f'{self.__class__.__name__} will be deprecated.', DeprecationWarning, stacklevel=2)
+
+
     def calcPSD(signal, sampleFreqHz, minFreq = None, maxFreq = None, axMethod = 2):
         # signal assumed to be in the form of [time_steps, regions or channels]
         # Returns the Power Spectrial Density with associated Hz values
