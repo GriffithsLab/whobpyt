@@ -2,6 +2,16 @@ import torch
 from whobpyt.datatypes import AbstractMode
    
 class BOLD_Layer(AbstractMode):
+    '''
+    Balloon-Windkessel Hemodynamic Response Function Forward Model
+    
+    Equations & Biological Variables From:
+    
+    Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.  
+    
+    Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.
+    '''
+
     def __init__(self, num_regions, params, useBC = False):        
         super(BOLD_Layer, self).__init__() # To inherit parameters attribute
                 
@@ -23,6 +33,8 @@ class BOLD_Layer(AbstractMode):
         self.setModelParameters()
     
     def info(self):
+        '''
+        '''
         return {"state_names": ['x', 'f', 'v', 'q'], "output_name": "bold"}
             
     def setModelParameters(self):

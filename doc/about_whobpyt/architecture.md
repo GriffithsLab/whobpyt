@@ -1,96 +1,80 @@
-# WhoBPyT Code Base Architecture
+Code Architecture
+===================================
 
+The package is a collection of interchangable Whole Brain Models, Objective Functions Components, and Parameter Fitting Paradigms. This code base is still in alpha phase and not all combinations of these components are currently supported. 
 
-## Module structure
-
-`data.py` temporarily serves as artificial empirical EEG/fMRI data file, which defines a parameter class (`ParamsJR`) to simulate timeseries data.  
-
-`models.py` constructs a feed-forward JansenRitt RNN architectures, each of which simulate a batch of EEG and fMRI signal data.  
-
-`objective.py` compares modelled data from `models.py` with empirical data (presently from data.py), then calls `fits.py` to update model parameters based on loss function value.  
-
-`viz.py` takes either a model object and may graph functional connectivity or PSDs, or simply plot empirical data.
-
-
-Run a simulation --> compare model data with empirical data --> fit model data to empirical data.
-
-
-
-## API Usage
+## Simplified Usage Pseudo Code
 
 ```python
-from whobpyt.models import RNNJANSEN,ParamsJR 
-from whobpyt.fit import fit_model
+import whobpyt
 
-data_tofit = ''
-connectivity = ''  
-delays = '' 
+# Making the training data
+training_input = [stimulus1, ..., stimulusN] # This can be 0 for the resting-state case
+empirical_data = [Recording(data1), ..., Recording(dataN)]
 
+# Create the CNMM from whobpyt.models
+params = AbstractParams(P = par(value, fit = True)) # specify which parameters will be fit
+model = AbstractNMM(params)
 
-# Simulate
-params = ParamsJR('JR', A = [3.25, 0])
-model = RNNJANSEN(params=params,cmat=connectivity=conn_mat,dmat=delayst))
-sim_res = model.run()
+#Define an objective function from whobpyt.optimization
+objective = AbstractLoss(key = "variable") # specify which variable to use in objective function
 
-# Fit
-fitter = fit_model(model, erp_timeseries_data, num_epochs=50, use_priors=0)
-fitter.run(num_epochs=50)
-fitted_res = fitter.test()
+# Train the Model using a paradigm from whobpyt.run
+fitting = AbstractFitting(model, objective)
+fitting.train(training_input, empirical_data, epochs = 100, lr = 0.1)
 
+# Evaluate the Training
+plot(fitting.trainingStats)
 
-## Notes
+# Evaluate the Found Parameters
+verify_model = NumPyNMM(model.params)
+simulated_data = verify_model.simulate()
+
+# Preform Analysis
+...
+
 ```
 
-## System, Model, and Biophysical Parameters
-### RWW_Params
-```
-G = 1
-Lambda = 0 #1 or 0 depending on using long range feed forward inhibition (FFI)
+## Whole Brain Models: 
 
-#Excitatory Gating Variables
-a_E # nC^(-1)
-b_E # Hz
-d_E # s
-tau_E = tau_NMDA # ms
-W_E 
+These models implement the numerical simulation of a CNMM (or modified CNMM). They can be combined with modalities, or may have an integrated modality. 
 
-#Inhibitory Gating Variables
-a_I # nC^(-1)
-b_I # Hz
-d_I # s
-tau_I # ms
-W_I
+The built in models are:
 
-#Setting other variables
-w_plus # Local excitatory recurrence
-J_NMDA # Excitatory synaptic coupling in nA
-J # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
-gamma # a kinetic parameter in ms
-sig # Noise amplitude at node in nA
-#v_of_T # Uncorrelated standard Gaussian noise # NOTE: Now defined at time of running forward model
-I_0 # The overall effective external input in nA
+- RWWExcInb - Two variations are avaliable
+- JansenRit - With Lead Field, Delays, Laplacian Connections
+- Linear (needs updating)
+- Robinson (Future Addition)
 
-I_external # External input current 
+## Objective Function Components:
 
-#Starting Condition
-#S_E # The average synaptic gating variable of excitatory 
-#S_I # The average synaptic gating variable of inhibitory
+Some objective function components can be used individually, others such as biological priors are addons. 
 
-#############################################
-## Model Additions/modifications
-#############################################
+The built in objective functions are:
 
-self.gammaI = 1/1000 # Zheng suggested this to get oscillations
-```
+- Functional Connectivity Correlation
+- Time Series Correlation
+- Power Spectral Density Difference 
+- Target Mean Value of a State Variable
+- Biological Priors of Parameters
+
+## Parameter Fitting Paradigms: 
+
+Paradigms for fitting model parameters.
+
+The built in parameter fitting paradigms are:
+
+- Model Fitting - Uses a approch to train on windowed sections of neuroimaging recordings
+- Fitting FNGFPG - A technique to run true time scale BOLD 
 
 
-### RWW_Layer
-```
-## EQUATIONS & BIOLOGICAL VARIABLES FROM:
-# Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation-inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.
-# Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.
-# Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.
-# Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.
-```
+## Package Expansions
 
+Further extensions are encouraged, and abstract classes have been created to help facilitate that. In addition to providing some free functionality, the abstract classes act as a template for what methods to implement in order for the new addition to work with the other classes in WhoBPyT.
 
+Abstract classes to inherit from:
+
+- AbstractParams
+- AbstractNMM
+- AbstractMode
+- AbstractLoss
