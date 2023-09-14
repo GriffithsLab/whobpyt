@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>whobpyt.run.customfitting &mdash; WhoBPyT 0.0.0 documentation</title>
+  <title>whobpyt.run.batchfitting &mdash; WhoBPyT 0.0.0 documentation</title>
   
 
   
@@ -211,7 +211,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>whobpyt.run.customfitting</li>
+      <li>whobpyt.run.batchfitting</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -226,10 +226,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for whobpyt.run.customfitting</h1><div class="highlight"><pre>
+  <h1>Source code for whobpyt.run.batchfitting</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Code based on:</span>
-<span class="c1"># github.com/GriffithsLab/whobpyt/blob/dev/whobpyt/run/modelfitting.py</span>
-<span class="c1"># github.com/Andrew-Clappison/whobpyt/blob/parallel_idea/examples/Multimodal_Parallel_Simulation_Example_v6.ipynb</span>
+<span class="c1"># github.com/GriffithsLab/whobpyt/blob/dev/whobpyt/run/customfitting.py</span>
 
 
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -237,14 +236,11 @@
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">Recording</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">TrainingStats</span>
 
-<div class="viewcode-block" id="Fitting_FNGFPG"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Fitting_FNGFPG">[docs]</a><span class="k">class</span> <span class="nc">Fitting_FNGFPG</span><span class="p">:</span>
+<div class="viewcode-block" id="Fitting_Batch"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Fitting_Batch">[docs]</a><span class="k">class</span> <span class="nc">Fitting_Batch</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Fitting Forward No Gradient Forward Parallel Gradient (FNG-FPG)</span>
+<span class="sd">    Fitting Batch</span>
 <span class="sd">    </span>
-<span class="sd">    This is a specalized model fitting class to:</span>
-<span class="sd">        - backpropagate through time of the duration of 10&#39;s of seconds of real time scale simulation</span>
-<span class="sd">        - learn generalized NMM parameters such that given a SC the model predicts the corresponding FC</span>
-<span class="sd">        - the label can be a fixed value (example a FC matrix, instead of a neuroimaging recording)</span>
+<span class="sd">    This is a specalized model fitting class to train using a batched approach.</span>
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    -----------</span>
@@ -253,16 +249,14 @@
 <span class="sd">    cost : AbstractLoss</span>
 <span class="sd">        The objective function that will be used to calculate a loss.</span>
 <span class="sd">    trainingStats : TrainingStats</span>
-<span class="sd">        An object that will keep track of optimization/machine learning statistics during training. </span>
-<span class="sd">    lastSerial : Recording</span>
-<span class="sd">        The simulated data from the last serial run (FNG)</span>
-<span class="sd">    lastRec :  Recording   </span>
-<span class="sd">        The simulated data from the last parallel run (FPG)</span>
+<span class="sd">        An object that will keep track of optimization/machine learning statistics during training.</span>
+<span class="sd">    lastRec :  Recording</span>
+<span class="sd">        The simulated data from the last batch run</span>
 <span class="sd">    device : torch.device</span>
 <span class="sd">        Whether the fitting is to run on CPU or GPU</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-<div class="viewcode-block" id="Fitting_FNGFPG.__init__"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Fitting_FNGFPG.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>
+<div class="viewcode-block" id="Fitting_Batch.__init__"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Fitting_Batch.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cost</span> <span class="o">=</span> <span class="n">cost</span>
@@ -270,11 +264,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">trainingStats</span> <span class="o">=</span> <span class="n">TrainingStats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lastSerial</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1">#The last FNG run</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># The last FPG run</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span> <span class="o">=</span> <span class="kc">None</span></div>
         
-<div class="viewcode-block" id="Fitting_FNGFPG.train"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Fitting_FNGFPG.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stim</span><span class="p">,</span> <span class="n">empDatas</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">block_len</span><span class="p">,</span> <span class="n">learningrate</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">resetIC</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Fitting_Batch.train"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Fitting_Batch.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stim</span><span class="p">,</span> <span class="n">empDatas</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">learningrate</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">staticIC</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">staticNoise</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        </span>
 <span class="sd">        Method to train the model.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
@@ -285,19 +279,25 @@
 <span class="sd">            The empirical data compared to in the objective function. </span>
 <span class="sd">        num_epochs : Int</span>
 <span class="sd">            Number of epochs for training.</span>
-<span class="sd">        block_len : Int</span>
-<span class="sd">            The number of simulation steps per block. Total number of steps should be divisable by this number.    </span>
+<span class="sd">        batch_size : Int</span>
+<span class="sd">            The number of simulations run that will be backpropagated through simultaneously.    </span>
 <span class="sd">        learningrate : Float</span>
 <span class="sd">            Learning rate used by backpropagation optimizer.</span>
-<span class="sd">        resetIC : Bool</span>
+<span class="sd">        staticIC : Bool</span>
 <span class="sd">            Whether to reset the models initial condition after every backpropagation</span>
-<span class="sd">        </span>
+<span class="sd">        staticNoise : Bool</span>
+<span class="sd">            Whether to use the same noise for each epoch</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         
         <span class="n">optim</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params_fitted</span><span class="p">[</span><span class="s1">&#39;modelparameter&#39;</span><span class="p">],</span> <span class="n">lr</span> <span class="o">=</span> <span class="n">learningrate</span><span class="p">)</span>
-        
+                        
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">setBlocks</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span> <span class="c1"># Set Block Size to one before creating IC</span>
         <span class="n">initCond</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">#initCond is not being used, but this method resets the next_start_state of the model directly</span>
         <span class="n">stateHist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createDelayIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">[</span><span class="n">serialNoise</span><span class="p">,</span> <span class="n">blockNoise</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">genNoise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sim_len</span><span class="p">,</span> <span class="n">batched</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">serialNoise</span>
+        
+        <span class="n">dummyVal</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         
         <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;epoch: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
@@ -307,69 +307,38 @@
             
             <span class="k">for</span> <span class="n">empData</span> <span class="ow">in</span> <span class="n">empDatas</span><span class="p">:</span>
             
-                <span class="c1"># STEP 1/2: FNG (Forward in serial no gradients)</span>
-                <span class="c1"># Purpose to get initial conditions to run different segments of time in parallel (which will have the same numerical result but a different backwards graph for back propagation)</span>
-                
-                <span class="c1"># Set Block Size to one before creating IC</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">setBlocks</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            
-                <span class="k">if</span> <span class="n">resetIC</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">staticIC</span><span class="p">:</span>
                     <span class="c1"># initial state</span>
                     <span class="n">firstIC</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
                     <span class="c1"># initials of history of E</span>
                     <span class="n">delayHist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createDelayIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">#TODO: Delays are currently is not implemented in various places</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">firstIC</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">next_start_state</span>
-                    <span class="n">delayHist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="c1"># TODO: Delays are currently is not implemented in various places</span>
+                    <span class="n">delayHist</span> <span class="o">=</span> <span class="n">dummyVal</span> <span class="c1"># TODO: Delays are currently is not implemented in various places</span>
 
                 <span class="c1"># initial the external inputs</span>
-                <span class="n">external</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="c1"># TODO: Currenlty this code only works for resting state</span>
+                <span class="n">external</span> <span class="o">=</span> <span class="n">dummyVal</span> <span class="c1"># TODO: Currenlty this code only works for resting state</span>
                 
-                <span class="n">num_blocks</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sim_len</span><span class="o">/</span><span class="n">block_len</span><span class="p">)</span>
-            
-                <span class="c1">## Noise for the epoch (which has 1 batch)</span>
-                <span class="p">[</span><span class="n">serialNoise</span><span class="p">,</span> <span class="n">blockNoise</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">genNoise</span><span class="p">(</span><span class="n">block_len</span><span class="p">)</span>
+                <span class="n">num_blocks</span> <span class="o">=</span> <span class="n">batch_size</span>
+                
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">staticNoise</span><span class="p">:</span>
+                    <span class="p">[</span><span class="n">serialNoise</span><span class="p">,</span> <span class="n">blockNoise</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">genNoise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sim_len</span><span class="p">,</span> <span class="n">batched</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+                    <span class="k">del</span> <span class="n">serialNoise</span>
 
-                <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-                    <span class="n">sim_vals</span><span class="p">,</span> <span class="n">delayHist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">external</span><span class="p">,</span> <span class="n">firstIC</span><span class="p">,</span> <span class="n">delayHist</span><span class="p">,</span> <span class="n">serialNoise</span><span class="p">)</span>
-                
-                <span class="c1"># Saving last Serial Run for Confirming it matches the Block Run</span>
-                <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_epochs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-                    <span class="n">lastSerial</span> <span class="o">=</span> <span class="p">{}</span>
-                    <span class="k">for</span> <span class="n">simKey</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
-                        <span class="n">lastSerial</span><span class="p">[</span><span class="n">simKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">[</span><span class="n">simKey</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">step_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">step_size</span><span class="p">)</span> 
+                <span class="n">sim_vals</span><span class="p">,</span> <span class="n">delayHist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">external</span><span class="p">,</span> <span class="n">firstIC</span><span class="p">,</span> <span class="n">delayHist</span><span class="p">,</span> <span class="n">blockNoise</span><span class="p">,</span> <span class="n">batched</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Serial Finished&quot;</span><span class="p">)</span>
-    
-                <span class="c1"># STEP 2/2 FPG (Forward in &quot;Parallel&quot; with Gradients)</span>
-                <span class="c1"># Using initial conditions acquired for serial run and with the same noise</span>
                 
-                <span class="c1">#print(blockNoise[&#39;E&#39;].shape) # Time x Nodes x Blocks</span>
-                <span class="n">newICs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span><span class="p">),</span> <span class="n">num_blocks</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="c1"># nodes x state_variables x blocks</span>
-                <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span><span class="p">):</span> <span class="c1">#WARNING: Cannot use set() here as it does not preserve order, also this code assumes order of model.state_names is correct</span>
-                    <span class="n">newICs</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">sim_vals</span><span class="p">[</span><span class="n">name</span><span class="p">][:,(</span><span class="nb">int</span><span class="p">(</span><span class="n">block_len</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">step_size</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)::</span><span class="nb">int</span><span class="p">(</span><span class="n">block_len</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">step_size</span><span class="p">)]</span>
-                    <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">ICs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">firstIC</span><span class="p">,</span> <span class="n">newICs</span><span class="p">),</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
-                <span class="n">newICs</span> <span class="o">=</span> <span class="n">ICs</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">:</span><span class="n">num_blocks</span><span class="p">]</span> <span class="c1">#This gets rid of the last state, for which would be the IC of the next forward() call</span>
-                <span class="n">nextICs</span> <span class="o">=</span> <span class="n">ICs</span><span class="p">[:,:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="c1">#Brackets are to keep the dimension</span>
-
-                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">setBlocks</span><span class="p">(</span><span class="n">num_blocks</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">next_start_state</span> <span class="o">=</span> <span class="n">newICs</span>
-                <span class="n">sim_vals</span><span class="p">,</span> <span class="n">delayHist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">external</span><span class="p">,</span> <span class="n">newICs</span><span class="p">,</span> <span class="n">delayHist</span><span class="p">,</span> <span class="n">blockNoise</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">next_start_state</span> <span class="o">=</span> <span class="n">nextICs</span> <span class="c1">#TODO: Update to deal with delays as well</span>
-                
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Blocked Finished&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batched Forward Finished&quot;</span><span class="p">)</span>
                 
                 
                 <span class="c1"># calculating loss</span>
-                <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">calcLoss</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">,</span> <span class="n">empData</span><span class="p">)</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">calcLoss</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">simKey</span><span class="p">],</span> <span class="n">empData</span><span class="p">)</span>
                 
                 <span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
                 <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
                 <span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
                 
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Params Updated&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batched Backwards Finished&quot;</span><span class="p">)</span>
                                                 
                 <span class="c1"># TRAINING_STATS: Adding Loss for every training backpropagation</span>
                 <span class="n">loss_his</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
@@ -384,7 +353,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">appendParam</span><span class="p">(</span><span class="n">trackedParams</span><span class="p">)</span>
     
         <span class="c1"># Saving the last recording of training as a Model_fitting attribute</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lastSerial</span> <span class="o">=</span> <span class="n">lastSerial</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">simKey</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="n">simKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">[</span><span class="n">simKey</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">step_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">step_size</span><span class="p">)</span> <span class="c1">#TODO: This won&#39;t work if different variables have different step sizes</span></div>

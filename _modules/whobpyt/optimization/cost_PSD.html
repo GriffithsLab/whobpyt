@@ -135,10 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#using-the-synthetic-cube-data-for-demo-purposes">Using the Synthetic Cube Data For Demo Purposes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
@@ -156,6 +153,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html">Evaluating CPU vs. GPU Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#defining-the-data-and-parameters">Defining the Data and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-fixed-psd-with-batched-paradigm">Training a CNMM Model - Fixed PSD with Batched Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-multimodal-objective-with-fng-fpg-paradigm">Training a CNMM Model - Multimodal Objective with FNG-FPG Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#cnmm-verification-model">CNMM Verification Model</a></li>
 </ul>
 </li>
 </ul>
@@ -223,9 +228,13 @@
             
   <h1>Source code for whobpyt.optimization.cost_PSD</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <div class="viewcode-block" id="CostsPSD"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD">[docs]</a><span class="k">class</span> <span class="nc">CostsPSD</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    WARNING: This function is no longer supported.</span>
+<span class="sd">    TODO: Needs to be updated. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># TODO: Deal with num_region vs. num_channels vs. num_parcels conflict with variable naming</span>
 <div class="viewcode-block" id="CostsPSD.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span><span class="p">,</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">empiricalData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span> <span class="o">=</span> <span class="n">num_regions</span>
@@ -240,8 +249,10 @@
             <span class="c1"># In the future, if given empiricalData then will calculate the target value in this initialization function. </span>
             <span class="c1"># That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify</span>
             <span class="c1"># which one to fit to.</span>
-            <span class="k">pass</span></div>
-    
+            <span class="k">pass</span>
+        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> will be deprecated.&#39;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="CostsPSD.calcPSD"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD.calcPSD">[docs]</a>    <span class="k">def</span> <span class="nf">calcPSD</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axMethod</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
         <span class="c1"># signal assumed to be in the form of [time_steps, regions or channels]</span>
         <span class="c1"># Returns the Power Spectrial Density with associated Hz values</span>
@@ -307,6 +318,185 @@
         <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span> <span class="o">=</span> <span class="n">powerSpectrumLoss</span><span class="o">.</span><span class="n">scalePSD</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">sdValues_dS_scaled</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CostsFixedPSD"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedPSD">[docs]</a><span class="k">class</span> <span class="nc">CostsFixedPSD</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Updated Code that fits to a fixed PSD</span>
+<span class="sd">    </span>
+<span class="sd">    The simulated PSD is generated as the square of the Fast Fourier Transform (FFT). A particular range to fit on is selected. The mean is not removed, so it is recommended to set the range such as to disclude the first point of the PSD. Removing an initial transient period before calculating the PSD is also recommended. </span>
+<span class="sd">    </span>
+<span class="sd">    Designed for Fitting_Batch, where the model output has an extra dimension for batch. TODO: Generalize further to work in case without this dimension as well. </span>
+<span class="sd">     </span>
+<span class="sd">    NOTE: If using batching, the batches will be averaged before calculating the error (as opposed to having an error for each time series in the batch). </span>
+<span class="sd">    </span>
+<span class="sd">    Has GPU support.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    simKey: String</span>
+<span class="sd">        Name of the state variable or modality to be used as input to the cost function. </span>
+<span class="sd">    num_regions: Int</span>
+<span class="sd">        The number of nodes in the model. </span>
+<span class="sd">    batch_size: Int</span>
+<span class="sd">        The number of elements in the batch. </span>
+<span class="sd">    rmTransient: Int</span>
+<span class="sd">        The number of initial time steps of simulation to remove as the transient. Default: 0</span>
+<span class="sd">    device: torch.device</span>
+<span class="sd">        Whether to run the objective function on CPU or GPU.</span>
+<span class="sd">    sampleFreqHz: Int</span>
+<span class="sd">        The sampling frequency of the data.        </span>
+<span class="sd">    targetValue: torch.tensor</span>
+<span class="sd">        The target PSD. This is assumed to be created with the same frequency range and density as that of the PSD generated from the simulated data. </span>
+<span class="sd">    empiricalData: torch.tensor</span>
+<span class="sd">        NOT IMPLEMENTED: This is a placeholder for the case of getting an empirical timeseries as input, which would be applicable if doing a windowed fitting paradigm</span>
+<span class="sd">       </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="CostsFixedPSD.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedPSD.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span><span class="p">,</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span><span class="p">,</span> <span class="n">maxFreq</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">empiricalData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rmTransient</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        num_regions; Int</span>
+<span class="sd">            The number of nodes in the model.             </span>
+<span class="sd">        simKey: String</span>
+<span class="sd">            Name of the state variable or modality to be used as input to the cost function.         </span>
+<span class="sd">        sampleFreqHz: Int</span>
+<span class="sd">            The sampling frequency of the data.</span>
+<span class="sd">        minFreq: Int</span>
+<span class="sd">            The minimum frequnecy of the PSD to return.</span>
+<span class="sd">        maxFreq: Int</span>
+<span class="sd">            The maximum frequency of the PSD to return.            </span>
+<span class="sd">        targetValue: torch.tensor</span>
+<span class="sd">            The sampling frequency of the data.</span>
+<span class="sd">        empiricalData: torch.tensor</span>
+<span class="sd">            NOT IMPLEMENTED: This is a placeholder for the case of getting an empirical timeseries as input, which would be applicable if doing a windowed fitting paradigm            </span>
+<span class="sd">        batch_size: Int</span>
+<span class="sd">            The number of elements in the batch. </span>
+<span class="sd">        rmTransient: Int</span>
+<span class="sd">            The number of initial time steps of simulation to remove as the transient. Default: 0        </span>
+<span class="sd">        device: torch.device</span>
+<span class="sd">            Whether to run the objective function on CPU or GPU.        </span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span> <span class="o">=</span> <span class="n">num_regions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span>  <span class="c1"># This is the index in the data simulation to extract variable time series from</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rmTransient</span> <span class="o">=</span> <span class="n">rmTransient</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampleFreqHz</span> <span class="o">=</span> <span class="n">sampleFreqHz</span> <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minFreq</span> <span class="o">=</span> <span class="n">minFreq</span> <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxFreq</span> <span class="o">=</span> <span class="n">maxFreq</span> <span class="c1">#</span>
+        
+        <span class="k">if</span> <span class="n">targetValue</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span> <span class="o">=</span> <span class="n">targetValue</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span> <span class="o">=</span> <span class="n">targetValue</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#TODO: Currently taking mean before MSE from all batches, need to document this</span>
+        
+        <span class="k">if</span> <span class="n">empiricalData</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># In the future, if given empiricalData then will calculate the target value in this initialization function. </span>
+            <span class="c1"># That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify</span>
+            <span class="c1"># which one to fit to.</span>
+            <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="CostsFixedPSD.calcPSD"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedPSD.calcPSD">[docs]</a>    <span class="k">def</span> <span class="nf">calcPSD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axMethod</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method calculates the Power Spectral Density (PSD) as the square of the Fast Fourier Transform (FFT). </span>
+<span class="sd">        </span>
+<span class="sd">        Tested when working with the default simulation frequency of 10,000Hz. </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        signal: torch.tensor</span>
+<span class="sd">            The timeseries outputted by a model. Dimensions: [nodes, time, batch]</span>
+<span class="sd">        sampleFreqHz: Int</span>
+<span class="sd">            The sampling frequency of the data.</span>
+<span class="sd">        minFreq: Int</span>
+<span class="sd">            The minimum frequnecy of the PSD to return.</span>
+<span class="sd">        maxFreq: Int</span>
+<span class="sd">            The maximum frequency of the PSD to return.</span>
+<span class="sd">        axMethod: Int</span>
+<span class="sd">            Either 1 or 2 depending on the approach to calculate the PSD axis.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sdAxis: torch.tensor</span>
+<span class="sd">            The axis values of the PSD</span>
+<span class="sd">        sdValues: torch.tensor</span>
+<span class="sd">            The PSD values [____, ____]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        
+        <span class="c1"># signal assumed to be in the form of [time_steps, regions or channels] &lt;- This is being changed</span>
+        <span class="c1"># Returns the Power Spectrial Density with associated Hz values</span>
+    
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rmTransient</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[:,</span><span class="bp">self</span><span class="o">.</span><span class="n">rmTransient</span><span class="p">:,:]</span>
+    
+        <span class="n">N</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        
+        <span class="c1"># These defines the range of the PSD to return</span>
+        <span class="k">if</span> <span class="n">minFreq</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">minFreq</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">maxFreq</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">maxFreq</span> <span class="o">=</span> <span class="n">sampleFreqHz</span><span class="o">//</span><span class="mi">2</span>
+        
+        <span class="c1"># Not sure which axis method is correct</span>
+        <span class="k">if</span> <span class="n">axMethod</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">fftAxis</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">axMethod</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">fftAxis</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="n">sampleFreqHz</span><span class="o">/</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        
+        <span class="c1"># Take the FFT of the Signal</span>
+        <span class="n">signalFFT</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># Take the square value (it is complex) so following is equivalent:</span>
+        <span class="c1"># Square of absolute, or</span>
+        <span class="c1"># Sum of real squared and imag squared</span>
+        <span class="n">spectralDensity</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signalFFT</span><span class="p">[:,:</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">,:])</span><span class="o">**</span><span class="mi">2</span>
+        
+        <span class="c1">#Filter to the desired range</span>
+        <span class="n">minPoint</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">minFreq</span><span class="o">/</span><span class="p">(</span><span class="n">sampleFreqHz</span><span class="o">//</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">maxPoint</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">maxFreq</span><span class="o">/</span><span class="p">(</span><span class="n">sampleFreqHz</span><span class="o">//</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">sdAxis</span> <span class="o">=</span> <span class="n">fftAxis</span><span class="p">[</span><span class="n">minPoint</span><span class="p">:</span><span class="n">maxPoint</span><span class="p">]</span>
+        <span class="n">sdValues</span> <span class="o">=</span> <span class="n">spectralDensity</span><span class="p">[:,</span><span class="n">minPoint</span><span class="p">:</span><span class="n">maxPoint</span><span class="p">,:]</span>
+        
+        <span class="k">return</span> <span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span></div>
+               
+<div class="viewcode-block" id="CostsFixedPSD.calcLoss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedPSD.calcLoss">[docs]</a>    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simData</span><span class="p">,</span> <span class="n">empData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        NOTE: If using batching, the batches will be averaged before calculating the error (as opposed to having an error for each simulated time series in the batch).</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        simData: torch.tensor</span>
+<span class="sd">            Simulated Data in the form [regions, time_steps, block/batch]</span>
+<span class="sd">        empData: torch.tensor</span>
+<span class="sd">            NOT IMPLEMENTED: This is a placeholder for the case of getting an empirical timeseries as input, which would be applicable if doing a windowed fitting paradigm</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        psdMSE:</span>
+<span class="sd">            The MSE of the difference between the simulated and target power spectrum within the specified range</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">psdAxis</span><span class="p">,</span> <span class="n">psdValues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calcPSD</span><span class="p">(</span><span class="n">simData</span><span class="p">,</span> <span class="n">sampleFreqHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">minFreq</span><span class="p">,</span> <span class="n">maxFreq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxFreq</span><span class="p">)</span> <span class="c1"># TODO: Sampling frequency of simulated data and target time series is currently assumed to be the same.</span>
+        
+        <span class="n">meanValue</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">psdValues</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        
+        <span class="n">psdMSE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">meanValue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">psdMSE</span></div></div>
 </pre></div>
 
            </div>

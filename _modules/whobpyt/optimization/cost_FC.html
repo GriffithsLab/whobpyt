@@ -135,10 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#using-the-synthetic-cube-data-for-demo-purposes">Using the Synthetic Cube Data For Demo Purposes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
@@ -156,6 +153,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html">Evaluating CPU vs. GPU Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#defining-the-data-and-parameters">Defining the Data and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-fixed-psd-with-batched-paradigm">Training a CNMM Model - Fixed PSD with Batched Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-multimodal-objective-with-fng-fpg-paradigm">Training a CNMM Model - Multimodal Objective with FNG-FPG Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#cnmm-verification-model">CNMM Verification Model</a></li>
 </ul>
 </li>
 </ul>
@@ -239,20 +244,20 @@
 <span class="sd">    Cost function for Fitting the Functional Connectivity (FC) matrix.</span>
 <span class="sd">    The cost function is the negative log-likelihood of the Pearson correlation between the simulated FC and empirical FC.</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">    -----------</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
 <span class="sd">    simKey: str</span>
 <span class="sd">        string key to reference to this const function. i.e., &quot;CostsFC&quot;.</span>
 
-<span class="sd">    Methods:</span>
-<span class="sd">    --------</span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
 <span class="sd">    loss: function</span>
 <span class="sd">        calculates functional connectivity and uses it to calculate the loss</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="CostsFC.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simKey</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters:</span>
-<span class="sd">        -----------</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        simKey: str</span>
 <span class="sd">            type of cost function to be used</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -328,25 +333,31 @@
 <span class="sd">    In this version, the empirical FC is given directly, instead of being given an empirical time series. </span>
 <span class="sd">    The cost function is the negative log-likelihood of the Pearson correlation between the simulated FC and empirical FC. </span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">    -----------</span>
+<span class="sd">    Has GPU support.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
 <span class="sd">    simKey: str</span>
 <span class="sd">        string key to reference to this const function. i.e., &quot;CostsFC&quot;.</span>
-
+<span class="sd">    device: torch.device</span>
+<span class="sd">        Whether to run on GPU or CPU</span>
 <span class="sd">    Methods:</span>
 <span class="sd">    --------</span>
-<span class="sd">    loss: function</span>
+<span class="sd">    calcLoss: function</span>
 <span class="sd">        calculates functional connectivity and uses it to calculate the loss</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="CostsFixedFC.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simKey</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsFixedFC.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simKey</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters:</span>
-<span class="sd">        -----------</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        simKey: str</span>
 <span class="sd">            The state variable or output variable from the model used for the simulated FC</span>
+<span class="sd">        device: torch.device</span>
+<span class="sd">            Whether to run on GPU or CPU</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CostsFixedFC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span></div>
 
 <div class="viewcode-block" id="CostsFixedFC.calcLoss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.calcLoss">[docs]</a>    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simTS</span><span class="p">,</span> <span class="n">empFC</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to calculate the cost function for Functional Connectivity (FC) fitting. </span>
@@ -384,8 +395,8 @@
                                              <span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">reciprocal</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cov_sim</span><span class="p">)))))</span> <span class="c1"># SIMULATED FC</span>
 
         <span class="c1"># Masking out the upper triangle of the FC matrix and keeping the lower triangle</span>
-        <span class="n">ones_tri</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">empFC</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">zeros</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">empFC</span><span class="p">)</span>  <span class="c1"># create a tensor all ones</span>
+        <span class="n">ones_tri</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">empFC</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">zeros</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">empFC</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># create a tensor all ones</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">greater</span><span class="p">(</span><span class="n">ones_tri</span><span class="p">,</span> <span class="n">zeros</span><span class="p">)</span>  <span class="c1"># boolean tensor, mask[i] = True iff x[i] &gt; 1</span>
 
         <span class="n">FC_tri_v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">masked_select</span><span class="p">(</span><span class="n">empFC</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>

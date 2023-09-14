@@ -135,10 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#using-the-synthetic-cube-data-for-demo-purposes">Using the Synthetic Cube Data For Demo Purposes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
@@ -156,6 +153,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html">Evaluating CPU vs. GPU Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#defining-the-data-and-parameters">Defining the Data and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-fixed-psd-with-batched-paradigm">Training a CNMM Model - Fixed PSD with Batched Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-multimodal-objective-with-fng-fpg-paradigm">Training a CNMM Model - Multimodal Objective with FNG-FPG Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#cnmm-verification-model">CNMM Verification Model</a></li>
 </ul>
 </li>
 </ul>
@@ -232,7 +237,7 @@
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="EEG_Layer.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.EEG.EEG_Layer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">):</span> 
+<div class="viewcode-block" id="EEG_Layer.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.EEG.EEG_Layer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span> 
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EEG_Layer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span> <span class="c1"># To inherit parameters attribute</span>
@@ -245,6 +250,8 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span> <span class="o">=</span> <span class="n">num_regions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span> <span class="o">=</span> <span class="n">num_channels</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span> <span class="o">=</span> <span class="mi">1</span>
         
@@ -261,19 +268,19 @@
 <div class="viewcode-block" id="EEG_Layer.createIC"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.EEG.EEG_Layer.createIC">[docs]</a>    <span class="k">def</span> <span class="nf">createIC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ver</span><span class="p">):</span>
         <span class="k">pass</span></div>
     
-<div class="viewcode-block" id="EEG_Layer.forward"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.EEG.EEG_Layer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">useGPU</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">useGPU</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>   </div></div>
+<div class="viewcode-block" id="EEG_Layer.forward"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.EEG.EEG_Layer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">)</span>   </div></div>
 
 <span class="k">def</span> <span class="nf">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1">#############################################</span>
     <span class="c1">## EEG Lead Field</span>
     <span class="c1">#############################################</span>
     
-    <span class="bp">self</span><span class="o">.</span><span class="n">LF</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">LF</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">LF</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">LF</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
     
-<span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">useGPU</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">):</span>
     
-    <span class="n">hE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="c1">#Dummy variable</span>
+    <span class="n">hE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="c1">#Dummy variable</span>
     
     <span class="c1"># Runs the EEG Model</span>
     <span class="c1">#</span>
@@ -281,16 +288,13 @@
     <span class="c1">#  step_size: Float - The step size in msec which must match node_history step size.</span>
     <span class="c1">#  sim_len: Int - The amount of EEG to simulate in msec, and should match time simulated in node_history. </span>
     <span class="c1">#  node_history: Tensor - [time_points, regions, num_blocks] # This would be input coming from NMM</span>
-    <span class="c1">#  useGPU: Boolean - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network_NMM code</span>
+    <span class="c1">#  device: torch.device - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network_NMM code</span>
     <span class="c1">#</span>
     <span class="c1"># OUTPUT</span>
     <span class="c1">#  layer_history: Tensor - [time_steps, regions, num_blocks]</span>
     <span class="c1">#</span>
     
-    <span class="k">if</span><span class="p">(</span><span class="n">useGPU</span><span class="p">):</span>
-        <span class="n">layer_hist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">sim_len</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">layer_hist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">sim_len</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">)</span>
+    <span class="n">layer_hist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">sim_len</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
     <span class="n">num_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">sim_len</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>

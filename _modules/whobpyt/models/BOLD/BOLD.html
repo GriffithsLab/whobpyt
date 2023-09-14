@@ -135,10 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#using-the-synthetic-cube-data-for-demo-purposes">Using the Synthetic Cube Data For Demo Purposes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
@@ -156,6 +153,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html">Evaluating CPU vs. GPU Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#defining-the-data-and-parameters">Defining the Data and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-fixed-psd-with-batched-paradigm">Training a CNMM Model - Fixed PSD with Batched Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-multimodal-objective-with-fng-fpg-paradigm">Training a CNMM Model - Multimodal Objective with FNG-FPG Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../auto_examples/eg005r__gpu_support.html#cnmm-verification-model">CNMM Verification Model</a></li>
 </ul>
 </li>
 </ul>
@@ -236,7 +241,7 @@
 <span class="sd">    Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="BOLD_Layer.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.BOLD.BOLD_Layer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">useBC</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>        
+<div class="viewcode-block" id="BOLD_Layer.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.BOLD.BOLD_Layer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">useBC</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>        
         <span class="nb">super</span><span class="p">(</span><span class="n">BOLD_Layer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span> <span class="c1"># To inherit parameters attribute</span>
                 
         <span class="c1"># Initialize the BOLD Model </span>
@@ -249,6 +254,8 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span> <span class="o">=</span> <span class="n">num_regions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">useBC</span> <span class="o">=</span> <span class="n">useBC</span>   <span class="c1">#useBC: is if we want the model to use boundary conditions</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span> <span class="o">=</span> <span class="mi">1</span>
         
@@ -272,15 +279,15 @@
         <span class="c1">#q = 1   # deoxyhemoglobin content </span>
         <span class="k">pass</span></div>
     
-<div class="viewcode-block" id="BOLD_Layer.forward"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.BOLD.BOLD_Layer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">useGPU</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">useGPU</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>    </div></div>
+<div class="viewcode-block" id="BOLD_Layer.forward"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.BOLD.BOLD_Layer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">)</span>    </div></div>
 
 <span class="k">def</span> <span class="nf">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">pass</span>
     
-<span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">useGPU</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">node_history</span><span class="p">):</span>
     
-    <span class="n">hE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="c1">#Dummy variable</span>
+    <span class="n">hE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="c1">#Dummy variable</span>
     
     <span class="c1"># Runs the BOLD Model</span>
     <span class="c1">#</span>
@@ -290,7 +297,6 @@
     <span class="c1">#                     (NOTE: bold equations are in sec so step_size will be divide by 1000)</span>
     <span class="c1">#  sim_len: Int - The amount of BOLD to simulate in msec, and should match time simulated in node_history. </span>
     <span class="c1">#  node_history: Tensor - [time_points, regions] # This would be S_E if input coming from RWW</span>
-    <span class="c1">#  useGPU: Boolean - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network_NMM code</span>
     <span class="c1">#</span>
     <span class="c1"># OUTPUT</span>
     <span class="c1">#  state_vars: Tensor - [regions, state_vars]</span>
@@ -308,10 +314,7 @@
     <span class="n">k_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">k_2</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
     <span class="n">k_3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">k_3</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
     
-    <span class="k">if</span><span class="p">(</span><span class="n">useGPU</span><span class="p">):</span>
-        <span class="n">layer_hist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">sim_len</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span><span class="p">,</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">layer_hist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">sim_len</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span><span class="p">,</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">)</span>
+    <span class="n">layer_hist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">sim_len</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span><span class="p">,</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
     
     <span class="c1"># BOLD State Values</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">init_state</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
@@ -346,7 +349,7 @@
         
         <span class="c1">#BOLD Calculation</span>
         <span class="n">BOLD</span> <span class="o">=</span> <span class="n">V_0</span><span class="o">*</span><span class="p">(</span><span class="n">k_1</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span> <span class="o">+</span> <span class="n">k_2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="o">/</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">k_3</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">v</span><span class="p">))</span>
-        
+                
         <span class="n">layer_hist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">x</span>
         <span class="n">layer_hist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">f</span>
         <span class="n">layer_hist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span>

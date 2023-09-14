@@ -135,10 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#using-the-synthetic-cube-data-for-demo-purposes">Using the Synthetic Cube Data For Demo Purposes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
@@ -156,6 +153,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html">Evaluating CPU vs. GPU Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#defining-the-data-and-parameters">Defining the Data and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-fixed-psd-with-batched-paradigm">Training a CNMM Model - Fixed PSD with Batched Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-multimodal-objective-with-fng-fpg-paradigm">Training a CNMM Model - Multimodal Objective with FNG-FPG Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg005r__gpu_support.html#cnmm-verification-model">CNMM Verification Model</a></li>
 </ul>
 </li>
 </ul>
@@ -239,9 +244,11 @@
 <span class="sd">        The name of the variable for which the mean is calculated</span>
 <span class="sd">    targetValue : Tensor</span>
 <span class="sd">        The target value either as single number or vector</span>
+<span class="sd">    device : torch.device</span>
+<span class="sd">        Whether the objective function is to run on GPU</span>
 <span class="sd">    &#39;&#39;&#39;</span>
         
-<div class="viewcode-block" id="CostsMean.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">empiricalData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsMean.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">empiricalData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------------</span>
@@ -255,26 +262,33 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span> <span class="o">=</span> <span class="n">num_regions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span> <span class="c1"># This is the key from the numerical simulation used to select the time series</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
         
         <span class="c1"># Target can be specific to each region, or can have a single number that is repeated for each region</span>
         <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">numel</span><span class="p">(</span><span class="n">targetValue</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span> <span class="o">=</span> <span class="n">targetValue</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span> <span class="o">=</span> <span class="n">targetValue</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span> <span class="o">=</span> <span class="n">targetValue</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span> <span class="o">=</span> <span class="n">targetValue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span> <span class="o">=</span> <span class="n">targetValue</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
             
         <span class="k">if</span> <span class="n">empiricalData</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># In the future, if given empiricalData then will calculate the target value in this initialization function. </span>
             <span class="c1"># That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify</span>
             <span class="c1"># which one to fit to.</span>
             <span class="k">pass</span></div>
+
         
-<div class="viewcode-block" id="CostsMean.calcLoss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.calcLoss">[docs]</a>    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simData</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsMean.calcLoss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.calcLoss">[docs]</a>    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simData</span><span class="p">,</span> <span class="n">empData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Method to calculate the loss</span>
 <span class="sd">        </span>
-<span class="sd">        Parmeters</span>
+<span class="sd">        Parameters</span>
 <span class="sd">        --------------</span>
-<span class="sd">        simData: Tensor[ Nodes x Time ]</span>
+<span class="sd">        simData: Tensor[ Nodes x Time ] or [ Nodes x Time x Blocks(Batch) ]</span>
 <span class="sd">            The time series used by the loss function </span>
 <span class="sd">            </span>
 <span class="sd">        Returns</span>
@@ -283,7 +297,8 @@
 <span class="sd">            The loss value </span>
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">meanVar</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">simData</span><span class="p">[:,:],</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">meanVar</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">simData</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">meanVar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span><span class="p">)</span></div></div>
         

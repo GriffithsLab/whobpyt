@@ -135,10 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#using-the-synthetic-cube-data-for-demo-purposes">Using the Synthetic Cube Data For Demo Purposes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
@@ -156,6 +153,14 @@
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/eg005r__gpu_support.html">Evaluating CPU vs. GPU Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg005r__gpu_support.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg005r__gpu_support.html#defining-the-data-and-parameters">Defining the Data and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-fixed-psd-with-batched-paradigm">Training a CNMM Model - Fixed PSD with Batched Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-multimodal-objective-with-fng-fpg-paradigm">Training a CNMM Model - Multimodal Objective with FNG-FPG Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg005r__gpu_support.html#cnmm-verification-model">CNMM Verification Model</a></li>
 </ul>
 </li>
 </ul>
@@ -268,11 +273,15 @@
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC.__init__">(whobpyt.optimization.CostsFixedFC method)</a>
 </li>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedPSD.__init__">(whobpyt.optimization.CostsFixedPSD method)</a>
+</li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsMean.__init__">(whobpyt.optimization.CostsMean method)</a>
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.__init__">(whobpyt.optimization.CostsPSD method)</a>
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsTS.__init__">(whobpyt.optimization.CostsTS method)</a>
+</li>
+        <li><a href="API/run.html#whobpyt.run.Fitting_Batch.__init__">(whobpyt.run.Fitting_Batch method)</a>
 </li>
         <li><a href="API/run.html#whobpyt.run.Fitting_FNGFPG.__init__">(whobpyt.run.Fitting_FNGFPG method)</a>
 </li>
@@ -312,21 +321,29 @@
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC.calcLoss">calcLoss() (whobpyt.optimization.CostsFixedFC method)</a>
 
       <ul>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedPSD.calcLoss">(whobpyt.optimization.CostsFixedPSD method)</a>
+</li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsMean.calcLoss">(whobpyt.optimization.CostsMean method)</a>
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.calcLoss">(whobpyt.optimization.CostsPSD method)</a>
 </li>
       </ul></li>
-      <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.calcPSD">calcPSD() (whobpyt.optimization.CostsPSD method)</a>
+      <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedPSD.calcPSD">calcPSD() (whobpyt.optimization.CostsFixedPSD method)</a>
+
+      <ul>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.calcPSD">(whobpyt.optimization.CostsPSD method)</a>
 </li>
+      </ul></li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFC">CostsFC (class in whobpyt.optimization)</a>
 </li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC">CostsFixedFC (class in whobpyt.optimization)</a>
 </li>
-      <li><a href="API/optimization.html#whobpyt.optimization.CostsMean">CostsMean (class in whobpyt.optimization)</a>
+      <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedPSD">CostsFixedPSD (class in whobpyt.optimization)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/optimization.html#whobpyt.optimization.CostsMean">CostsMean (class in whobpyt.optimization)</a>
+</li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD">CostsPSD (class in whobpyt.optimization)</a>
 </li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsTS">CostsTS (class in whobpyt.optimization)</a>
@@ -371,6 +388,8 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/run.html#whobpyt.run.Fitting_Batch">Fitting_Batch (class in whobpyt.run)</a>
+</li>
       <li><a href="API/run.html#whobpyt.run.Fitting_FNGFPG">Fitting_FNGFPG (class in whobpyt.run)</a>
 </li>
       <li><a href="API/models.html#whobpyt.models.BOLD.BOLD_Layer.forward">forward() (whobpyt.models.BOLD.BOLD_Layer method)</a>
@@ -515,9 +534,13 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/run.html#whobpyt.run.Fitting_FNGFPG.train">train() (whobpyt.run.Fitting_FNGFPG method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.par.to">to() (whobpyt.datatypes.par method)</a>
+</li>
+      <li><a href="API/run.html#whobpyt.run.Fitting_Batch.train">train() (whobpyt.run.Fitting_Batch method)</a>
 
       <ul>
+        <li><a href="API/run.html#whobpyt.run.Fitting_FNGFPG.train">(whobpyt.run.Fitting_FNGFPG method)</a>
+</li>
         <li><a href="API/run.html#whobpyt.run.Model_fitting.train">(whobpyt.run.Model_fitting method)</a>
 </li>
       </ul></li>

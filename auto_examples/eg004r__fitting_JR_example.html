@@ -47,6 +47,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluating CPU vs. GPU Performance" href="eg005r__gpu_support.html" />
     <link rel="prev" title="Fitting Wong_Wang model (HCP data)" href="eg003r__fitting_rww_example.html" /> 
 </head>
 
@@ -134,10 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#using-the-synthetic-cube-data-for-demo-purposes">Using the Synthetic Cube Data For Demo Purposes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
@@ -155,6 +153,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#model-training">Model Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eg005r__gpu_support.html">Evaluating CPU vs. GPU Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#defining-the-data-and-parameters">Defining the Data and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#training-a-cnmm-model-fixed-psd-with-batched-paradigm">Training a CNMM Model - Fixed PSD with Batched Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#training-a-cnmm-model-multimodal-objective-with-fng-fpg-paradigm">Training a CNMM Model - Multimodal Objective with FNG-FPG Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#cnmm-verification-model">CNMM Verification Model</a></li>
 </ul>
 </li>
 </ul>
@@ -348,45 +354,45 @@
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: -22813.469 Pseudo FC_cor:  0.3444751738471641 cos_sim:  0.026403125723924767
+epoch:  0 loss: -22813.469 Pseudo FC_cor:  0.22074540692558178 cos_sim:  0.023981647231488303
 Epoch:  1
-epoch:  1 loss: -24701.771 Pseudo FC_cor:  0.10032999358964793 cos_sim:  0.011202597696923297
+epoch:  1 loss: -24701.746 Pseudo FC_cor:  0.17999556282205206 cos_sim:  0.024710709705812246
 Epoch:  2
-epoch:  2 loss: -26248.479 Pseudo FC_cor:  0.354894473189136 cos_sim:  -0.0037043044397884273
+epoch:  2 loss: -26248.516 Pseudo FC_cor:  0.25997850769963476 cos_sim:  -0.008318896426800584
 Epoch:  3
-epoch:  3 loss: -27553.2 Pseudo FC_cor:  0.299461399272383 cos_sim:  0.015325720995035671
+epoch:  3 loss: -27553.139 Pseudo FC_cor:  0.42589470486729974 cos_sim:  0.14964463639685927
 Epoch:  4
-epoch:  4 loss: -28682.709 Pseudo FC_cor:  0.842970918167661 cos_sim:  0.2593920926810552
+epoch:  4 loss: -28682.633 Pseudo FC_cor:  0.8693352785189156 cos_sim:  0.38979992235269156
 Epoch:  5
-epoch:  5 loss: -29680.25 Pseudo FC_cor:  0.8541105598378069 cos_sim:  0.41396685998225957
+epoch:  5 loss: -29680.256 Pseudo FC_cor:  0.9600221713237478 cos_sim:  0.34276221494621867
 Epoch:  6
-epoch:  6 loss: -30574.76 Pseudo FC_cor:  0.8783216751254623 cos_sim:  0.35976796395316757
+epoch:  6 loss: -30574.756 Pseudo FC_cor:  0.8351066586342514 cos_sim:  0.27260900058419846
 Epoch:  7
-epoch:  7 loss: -31386.428 Pseudo FC_cor:  0.8376591021051254 cos_sim:  0.41988181055295387
+epoch:  7 loss: -31386.36 Pseudo FC_cor:  0.939765348837345 cos_sim:  0.3805409156874533
 Epoch:  8
-epoch:  8 loss: -32129.883 Pseudo FC_cor:  0.9358530301355499 cos_sim:  0.3963059723601683
+epoch:  8 loss: -32129.877 Pseudo FC_cor:  0.9064964900431401 cos_sim:  0.3450069068111633
 Epoch:  9
-epoch:  9 loss: -32816.24 Pseudo FC_cor:  0.8224844792576164 cos_sim:  0.27109283386421623
+epoch:  9 loss: -32816.227 Pseudo FC_cor:  0.8412427972971678 cos_sim:  0.32281918458144865
 Epoch:  10
-epoch:  10 loss: -33453.914 Pseudo FC_cor:  0.8336203733370885 cos_sim:  0.3837870059935602
+epoch:  10 loss: -33453.953 Pseudo FC_cor:  0.8753337896239287 cos_sim:  0.43403267479901964
 Epoch:  11
-epoch:  11 loss: -34049.754 Pseudo FC_cor:  0.9433355477316832 cos_sim:  0.343220633184035
+epoch:  11 loss: -34049.758 Pseudo FC_cor:  0.9434745921954278 cos_sim:  0.3565053321198569
 Epoch:  12
-epoch:  12 loss: -34609.145 Pseudo FC_cor:  0.9061082596491841 cos_sim:  0.41077731442715004
+epoch:  12 loss: -34609.125 Pseudo FC_cor:  0.9072626295807839 cos_sim:  0.43534824787606496
 Epoch:  13
-epoch:  13 loss: -35136.39 Pseudo FC_cor:  0.9303867041578741 cos_sim:  0.3293060111017354
+epoch:  13 loss: -35136.37 Pseudo FC_cor:  0.8797635335886257 cos_sim:  0.4440111099657699
 Epoch:  14
-epoch:  14 loss: -35635.28 Pseudo FC_cor:  0.9553720383841776 cos_sim:  0.3948430633942716
+epoch:  14 loss: -35635.242 Pseudo FC_cor:  0.9001143549221302 cos_sim:  0.35047909448180764
 Epoch:  15
-epoch:  15 loss: -36108.74 Pseudo FC_cor:  0.9076450288953651 cos_sim:  0.419332924321145
+epoch:  15 loss: -36108.664 Pseudo FC_cor:  0.8922349785349475 cos_sim:  0.45112826213934387
 Epoch:  16
-epoch:  16 loss: -36559.42 Pseudo FC_cor:  0.8300323742917602 cos_sim:  0.45147695468448534
+epoch:  16 loss: -36559.39 Pseudo FC_cor:  0.8708114429287818 cos_sim:  0.344999101639284
 Epoch:  17
-epoch:  17 loss: -36989.48 Pseudo FC_cor:  0.8967950383371309 cos_sim:  0.37928557902463267
+epoch:  17 loss: -36989.44 Pseudo FC_cor:  0.8494259628890898 cos_sim:  0.32898204958800864
 Epoch:  18
-epoch:  18 loss: -37400.86 Pseudo FC_cor:  0.9091801666357371 cos_sim:  0.5677076792797233
+epoch:  18 loss: -37400.902 Pseudo FC_cor:  0.8636877139995711 cos_sim:  0.47721889594485034
 Epoch:  19
-epoch:  19 loss: -37795.23 Pseudo FC_cor:  0.9287119812615189 cos_sim:  0.36004473154709116
+epoch:  19 loss: -37795.207 Pseudo FC_cor:  0.902211169869377 cos_sim:  0.40060280898678424
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -422,7 +428,7 @@ epoch:  19 loss: -37795.23 Pseudo FC_cor:  0.9287119812615189 cos_sim:  0.360044
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9429873113970264 cos_sim:  0.40019330329929376
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9431851508881393 cos_sim:  0.44892292507348364
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -449,7 +455,7 @@ epoch:  19 loss: -37795.23 Pseudo FC_cor:  0.9287119812615189 cos_sim:  0.360044
 </pre></div>
 </div>
 <img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_004.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  22.926 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 9 minutes  13.875 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/96a042e39a4f43abe4e10ca8c12118f5/eg004r__fitting_JR_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg004r__fitting_JR_example.py</span></code></a></p>
@@ -469,6 +475,8 @@ epoch:  19 loss: -37795.23 Pseudo FC_cor:  0.9287119812615189 cos_sim:  0.360044
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="eg005r__gpu_support.html" class="btn btn-neutral float-right" title="Evaluating CPU vs. GPU Performance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="eg003r__fitting_rww_example.html" class="btn btn-neutral float-left" title="Fitting Wong_Wang model (HCP data)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

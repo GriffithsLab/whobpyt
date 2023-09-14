@@ -135,10 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#using-the-synthetic-cube-data-for-demo-purposes">Using the Synthetic Cube Data For Demo Purposes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg002r__multimodal_simulation.html#training-the-model">Training The Model</a></li>
@@ -156,6 +153,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg004r__fitting_JR_example.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/eg005r__gpu_support.html">Evaluating CPU vs. GPU Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg005r__gpu_support.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg005r__gpu_support.html#defining-the-data-and-parameters">Defining the Data and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-fixed-psd-with-batched-paradigm">Training a CNMM Model - Fixed PSD with Batched Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg005r__gpu_support.html#training-a-cnmm-model-multimodal-objective-with-fng-fpg-paradigm">Training a CNMM Model - Multimodal Objective with FNG-FPG Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auto_examples/eg005r__gpu_support.html#cnmm-verification-model">CNMM Verification Model</a></li>
 </ul>
 </li>
 </ul>
@@ -225,7 +230,7 @@
 <h1>Run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="whobpyt.run.Model_fitting">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></code><code class="sig-name descname"><span class="pre">Model_fitting</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractNMM.AbstractNMM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractLoss.AbstractLoss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></code><code class="sig-name descname"><span class="pre">Model_fitting</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractNMM.AbstractNMM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractLoss.AbstractLoss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting" title="Permalink to this definition">¶</a></dt>
 <dd><p>This Model_fitting class is able to fit resting state data or evoked potential data 
 for which the input training data is empty or some stimulus to one or more NMM nodes,
 and the label is an associated empirical neuroimaging recording.</p>
@@ -242,18 +247,22 @@ is associated with an empirical recording, must use a different fitting class.</
 </dd>
 <dt><strong>lastRec: Recording</strong></dt><dd><p>The last simulation of fitting(), evaluation(), or simulation()</p>
 </dd>
+<dt><strong>device</strong><span class="classifier">torch.device</span></dt><dd><p>Whether the fitting is to run on CPU or GPU</p>
+</dd>
 </dl>
 </dd>
 </dl>
 <dl class="py method">
 <dt id="whobpyt.run.Model_fitting.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractNMM.AbstractNMM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractLoss.AbstractLoss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractNMM.AbstractNMM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.datatypes.AbstractLoss.AbstractLoss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/modelfitting.html#Model_fitting.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Model_fitting.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>model: AbstractNMM</strong></dt><dd><p>Whole Brain Model to Simulate</p>
 </dd>
 <dt><strong>cost: AbstractLoss</strong></dt><dd><p>A particular objective function which the model will be optimized for.</p>
+</dd>
+<dt><strong>device</strong><span class="classifier">torch.device</span></dt><dd><p>Whether the fitting is to run on CPU or GPU</p>
 </dd>
 </dl>
 </dd>
@@ -323,8 +332,63 @@ is associated with an empirical recording, must use a different fitting class.</
 </dd></dl>
 
 <dl class="py class">
+<dt id="whobpyt.run.Fitting_Batch">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></code><code class="sig-name descname"><span class="pre">Fitting_Batch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/batchfitting.html#Fitting_Batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_Batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitting Batch</p>
+<p>This is a specalized model fitting class to train using a batched approach.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model</strong><span class="classifier">AbstractNMM</span></dt><dd><p>The model which has parameters to be trained.</p>
+</dd>
+<dt><strong>cost</strong><span class="classifier">AbstractLoss</span></dt><dd><p>The objective function that will be used to calculate a loss.</p>
+</dd>
+<dt><strong>trainingStats</strong><span class="classifier">TrainingStats</span></dt><dd><p>An object that will keep track of optimization/machine learning statistics during training.</p>
+</dd>
+<dt><strong>lastRec</strong><span class="classifier">Recording</span></dt><dd><p>The simulated data from the last batch run</p>
+</dd>
+<dt><strong>device</strong><span class="classifier">torch.device</span></dt><dd><p>Whether the fitting is to run on CPU or GPU</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="whobpyt.run.Fitting_Batch.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/batchfitting.html#Fitting_Batch.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_Batch.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.run.Fitting_Batch.train">
+<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empDatas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">staticIC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">staticNoise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/batchfitting.html#Fitting_Batch.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_Batch.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>stim</strong><span class="classifier">Int or Tensor</span></dt><dd><p>The input into the NMM (is 0 for the resting state case).</p>
+</dd>
+<dt><strong>empDatas</strong><span class="classifier">List of Recording or other object</span></dt><dd><p>The empirical data compared to in the objective function.</p>
+</dd>
+<dt><strong>num_epochs</strong><span class="classifier">Int</span></dt><dd><p>Number of epochs for training.</p>
+</dd>
+<dt><strong>batch_size</strong><span class="classifier">Int</span></dt><dd><p>The number of simulations run that will be backpropagated through simultaneously.</p>
+</dd>
+<dt><strong>learningrate</strong><span class="classifier">Float</span></dt><dd><p>Learning rate used by backpropagation optimizer.</p>
+</dd>
+<dt><strong>staticIC</strong><span class="classifier">Bool</span></dt><dd><p>Whether to reset the models initial condition after every backpropagation</p>
+</dd>
+<dt><strong>staticNoise</strong><span class="classifier">Bool</span></dt><dd><p>Whether to use the same noise for each epoch</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="whobpyt.run.Fitting_FNGFPG">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></code><code class="sig-name descname"><span class="pre">Fitting_FNGFPG</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/customfitting.html#Fitting_FNGFPG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_FNGFPG" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></code><code class="sig-name descname"><span class="pre">Fitting_FNGFPG</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/customfitting.html#Fitting_FNGFPG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_FNGFPG" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fitting Forward No Gradient Forward Parallel Gradient (FNG-FPG)</p>
 <dl class="simple">
 <dt>This is a specalized model fitting class to:</dt><dd><ul class="simple">
@@ -347,12 +411,14 @@ is associated with an empirical recording, must use a different fitting class.</
 </dd>
 <dt><strong>lastRec</strong><span class="classifier">Recording</span></dt><dd><p>The simulated data from the last parallel run (FPG)</p>
 </dd>
+<dt><strong>device</strong><span class="classifier">torch.device</span></dt><dd><p>Whether the fitting is to run on CPU or GPU</p>
+</dd>
 </dl>
 </dd>
 </dl>
 <dl class="py method">
 <dt id="whobpyt.run.Fitting_FNGFPG.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/customfitting.html#Fitting_FNGFPG.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_FNGFPG.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/run/customfitting.html#Fitting_FNGFPG.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.run.Fitting_FNGFPG.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 

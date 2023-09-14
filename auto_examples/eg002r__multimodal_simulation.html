@@ -135,10 +135,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fitting S_E Mean to 0.164 using default RWW Parameters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#defining-model-parameters">Defining Model Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#further-adjusting-parameters-for-network">Further Adjusting Parameters for Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">Generating a physically possible (in 3D Space) Structural Connectivity Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generating-a-lead-field-matrix">Generating a Lead Field Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generating-a-connectivity-matrix-for-channel-space">Generating a “Connectivity Matrix” for Channel Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-synthetic-cube-data-for-demo-purposes">Using the Synthetic Cube Data For Demo Purposes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#defining-the-cnmm-model">Defining the CNMM Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#defining-the-objective-function">Defining the Objective Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#training-the-model">Training The Model</a></li>
@@ -156,6 +153,14 @@
 <li class="toctree-l2"><a class="reference internal" href="eg004r__fitting_JR_example.html#importage">Importage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg004r__fitting_JR_example.html#model-training">Model Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eg004r__fitting_JR_example.html#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eg005r__gpu_support.html">Evaluating CPU vs. GPU Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#importage">Importage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#defining-the-data-and-parameters">Defining the Data and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#training-a-cnmm-model-fixed-psd-with-batched-paradigm">Training a CNMM Model - Fixed PSD with Batched Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#training-a-cnmm-model-multimodal-objective-with-fng-fpg-paradigm">Training a CNMM Model - Multimodal Objective with FNG-FPG Paradigm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eg005r__gpu_support.html#cnmm-verification-model">CNMM Verification Model</a></li>
 </ul>
 </li>
 </ul>
@@ -244,8 +249,9 @@
 <span class="kn">from</span> <span class="nn">whobpyt.models.RWW2</span> <span class="kn">import</span> <a href="../API/models.html#whobpyt.models.RWW2.RWW2" title="whobpyt.models.RWW2.RWW2" class="sphx-glr-backref-module-whobpyt-models-RWW2 sphx-glr-backref-type-py-class"><span class="n">mmRWW2</span></a><span class="p">,</span> <span class="n">mmRWW2_np</span><span class="p">,</span> <span class="n">RWW2</span><span class="p">,</span> <span class="n">RWW2_np</span><span class="p">,</span> <span class="n">ParamsRWW2</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.BOLD</span> <span class="kn">import</span> <span class="n">BOLD_Layer</span><span class="p">,</span> <span class="n">BOLD_np</span><span class="p">,</span> <span class="n">BOLD_Params</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.EEG</span> <span class="kn">import</span> <span class="n">EEG_Layer</span><span class="p">,</span> <span class="n">EEG_np</span><span class="p">,</span> <span class="n">EEG_Params</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">CostsFC</span><span class="p">,</span> <span class="n">CostsPSD</span><span class="p">,</span> <a href="../API/optimization.html#whobpyt.optimization.CostsMean" title="whobpyt.optimization.CostsMean" class="sphx-glr-backref-module-whobpyt-optimization sphx-glr-backref-type-py-class"><span class="n">CostsMean</span></a>
+<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">CostsFC</span><span class="p">,</span> <span class="n">CostsPSD</span><span class="p">,</span> <a href="../API/optimization.html#whobpyt.optimization.CostsMean" title="whobpyt.optimization.CostsMean" class="sphx-glr-backref-module-whobpyt-optimization sphx-glr-backref-type-py-class"><span class="n">CostsMean</span></a><span class="p">,</span> <span class="n">CostsFixedFC</span><span class="p">,</span> <span class="n">CostsFixedPSD</span>
 <span class="kn">from</span> <span class="nn">whobpyt.run</span> <span class="kn">import</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class"><span class="n">Model_fitting</span></a>
+<span class="kn">from</span> <span class="nn">whobpyt.data.generators</span> <span class="kn">import</span> <span class="n">gen_cube</span>
 
 <span class="c1"># general python stuff</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -255,6 +261,16 @@
 <span class="c1"># viz stuff</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is cuda avaliable?&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">())</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span> <span class="c1">#Options: &quot;cpu&quot; or &quot;cuda&quot;</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Is cuda avaliable?
+False
 </pre></div>
 </div>
 </div>
@@ -274,124 +290,50 @@
 <span class="n">init_state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="n">S_E</span><span class="p">,</span> <span class="n">S_I</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">q</span><span class="p">]])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Add randomness</span>
-<span class="n">init_state</span> <span class="o">=</span> <span class="n">init_state</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">init_state</span><span class="p">)</span><span class="o">/</span><span class="mi">30</span> <span class="c1"># Randomizing initial values</span>
+<span class="n">init_state</span> <span class="o">=</span> <span class="p">(</span><span class="n">init_state</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">init_state</span><span class="p">)</span><span class="o">/</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1"># Randomizing initial values</span>
 
 <span class="c1"># Create a RWW Params</span>
 <span class="n">paramsNode</span> <span class="o">=</span> <span class="n">ParamsRWW2</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
 
 <span class="c1">#Create #EEG Params</span>
 <span class="n">paramsEEG</span> <span class="o">=</span> <span class="n">EEG_Params</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_regions</span><span class="p">))</span>
+<span class="n">paramsEEG</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1">#Create BOLD Params</span>
 <span class="n">paramsBOLD</span> <span class="o">=</span> <span class="n">BOLD_Params</span><span class="p">()</span>
+<span class="n">paramsBOLD</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<a href="../API/datatypes.html#whobpyt.datatypes.par" title="whobpyt.datatypes.par" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">paramsNode</span><span class="o">.</span><span class="n">J</span></a> <span class="o">=</span> <a href="../API/datatypes.html#whobpyt.datatypes.par" title="whobpyt.datatypes.par" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">par</span></a><span class="p">((</span><span class="mf">0.15</span>  <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)),</span> <span class="n">fit_par</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">asLog</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">#This is a parameter that will be updated during training</span>
+<span class="n">paramsNode</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="further-adjusting-parameters-for-network">
-<h2>Further Adjusting Parameters for Network<a class="headerlink" href="#further-adjusting-parameters-for-network" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../API/datatypes.html#whobpyt.datatypes.par" title="whobpyt.datatypes.par" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">paramsNode</span><span class="o">.</span><span class="n">J</span></a> <span class="o">=</span> <a href="../API/datatypes.html#whobpyt.datatypes.par" title="whobpyt.datatypes.par" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">par</span></a><span class="p">((</span><span class="mf">0.15</span>  <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)),</span> <span class="n">fit_par</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">asLog</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">#This is a parameter that will be updated during training</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="generating-a-physically-possible-in-3d-space-structural-connectivity-matrix">
-<h2>Generating a physically possible (in 3D Space) Structural Connectivity Matrix<a class="headerlink" href="#generating-a-physically-possible-in-3d-space-structural-connectivity-matrix" title="Permalink to this headline">¶</a></h2>
-<p>First, get corner points on a cube and project onto a sphere</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">square_points</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
-                              <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
-                              <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
-                              <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
-                              <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
-                              <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
-                              <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
-                              <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">]])</span>
-<span class="n">sphere_points</span> <span class="o">=</span> <span class="n">square_points</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">square_points</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+<div class="section" id="using-the-synthetic-cube-data-for-demo-purposes">
+<h2>Using the Synthetic Cube Data For Demo Purposes<a class="headerlink" href="#using-the-synthetic-cube-data-for-demo-purposes" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">syntheticCubeInfo</span> <span class="o">=</span> <span class="n">gen_cube</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
-<span class="c1"># Second, find the distance between all pairs of points</span>
-<span class="n">dist_mtx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_regions</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_regions</span><span class="p">):</span>
-        <span class="n">dist_mtx</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span><span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">sphere_points</span><span class="p">[</span><span class="n">x</span><span class="p">,:]</span> <span class="o">-</span> <span class="n">sphere_points</span><span class="p">[</span><span class="n">y</span><span class="p">,:])</span>
+<span class="n">Con_Mtx</span> <span class="o">=</span> <span class="n">syntheticCubeInfo</span><span class="p">[</span><span class="s2">&quot;SC&quot;</span><span class="p">]</span>
+<span class="n">dist_mtx</span> <span class="o">=</span> <span class="n">syntheticCubeInfo</span><span class="p">[</span><span class="s2">&quot;dist&quot;</span><span class="p">]</span>
+<span class="n">LF_Norm</span> <span class="o">=</span> <span class="n">syntheticCubeInfo</span><span class="p">[</span><span class="s2">&quot;LF&quot;</span><span class="p">]</span>
 
-<span class="c1"># Third, Structural Connectivity defined to be 1/dist and remove self-connection values</span>
-<span class="n">SC_mtx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">dist_mtx</span>
-<span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_regions</span><span class="p">):</span>
-    <span class="n">SC_mtx</span><span class="p">[</span><span class="n">z</span><span class="p">,</span><span class="n">z</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-<span class="c1"># Fourth, Normalize the matrix</span>
-<span class="n">SC_mtx_norm</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_norm</span><span class="p">(</span><span class="n">SC_mtx</span><span class="p">,</span> <span class="nb">ord</span> <span class="o">=</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">SC_mtx</span>
-<span class="n">Con_Mtx</span> <span class="o">=</span> <span class="n">SC_mtx_norm</span>
-
-
-<span class="c1"># Blah</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">SC_mtx_norm</span><span class="p">)</span><span class="o">.</span><span class="n">eigenvalues</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">Con_Mtx</span><span class="p">)</span><span class="o">.</span><span class="n">eigenvalues</span><span class="p">)))</span>
 <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">Con_Mtx</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)),</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;SC of Artificial Data&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="SC of Artificial Data" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_001.png" />
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.)
-
-Text(0.5, 1.0, &#39;SC of Artificial Data&#39;)
-</pre></div>
-</div>
-</div>
-<div class="section" id="generating-a-lead-field-matrix">
-<h2>Generating a Lead Field Matrix<a class="headerlink" href="#generating-a-lead-field-matrix" title="Permalink to this headline">¶</a></h2>
-<p>Placing an EEG Electrode in the middle of each cube face.
-Then electrode is equally distance from four courner on cube face squre.
-Assume no signal from further four points.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Lead_Field</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-                           <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-                           <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
-                           <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
-                           <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-                           <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
-<span class="n">LF_Norm</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_norm</span><span class="p">(</span><span class="n">Lead_Field</span><span class="p">,</span> <span class="nb">ord</span> <span class="o">=</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">Lead_Field</span>
 
 <span class="n">paramsEEG</span><span class="o">.</span><span class="n">LF</span> <span class="o">=</span> <span class="n">LF_Norm</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="generating-a-connectivity-matrix-for-channel-space">
-<h2>Generating a “Connectivity Matrix” for Channel Space<a class="headerlink" href="#generating-a-connectivity-matrix-for-channel-space" title="Permalink to this headline">¶</a></h2>
-<p>Generating a physically possible (in 3D Space) “Channel” Connectivity Matrix
-That is a theoretical matrix for the EEG SC to be fit to</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, get face points on a cube and project onto a sphere</span>
-<span class="n">LF_square_points</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">],</span>
-                                 <span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
-                                 <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">],</span>
-                                 <span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
-                                 <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">],</span>
-                                 <span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">]])</span>
-<span class="c1"># Note: this does nothing as the points are already on the r=1 sphere</span>
-<span class="n">LF_sphere_points</span> <span class="o">=</span> <span class="n">LF_square_points</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">LF_square_points</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
-
-
-<span class="c1"># Second, find the distance between all pairs of channel points</span>
-<span class="n">LF_dist_mtx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_channels</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_channels</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_channels</span><span class="p">):</span>
-        <span class="n">LF_dist_mtx</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span><span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">LF_sphere_points</span><span class="p">[</span><span class="n">x</span><span class="p">,:]</span> <span class="o">-</span> <span class="n">LF_sphere_points</span><span class="p">[</span><span class="n">y</span><span class="p">,:])</span>
-
-<span class="c1"># Third, Structural Connectivity defined to be 1/dist and remove self-connection values</span>
-<span class="n">LF_SC_mtx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">LF_dist_mtx</span>
-<span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_channels</span><span class="p">):</span>
-    <span class="n">LF_SC_mtx</span><span class="p">[</span><span class="n">z</span><span class="p">,</span><span class="n">z</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-<span class="c1"># Fourth, Normalize the matrix</span>
-<span class="n">LF_SC_mtx_norm</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_norm</span><span class="p">(</span><span class="n">LF_SC_mtx</span><span class="p">,</span> <span class="nb">ord</span> <span class="o">=</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">LF_SC_mtx</span>
-<span class="n">LF_Con_Mtx</span> <span class="o">=</span> <span class="n">LF_SC_mtx_norm</span>
+<img alt="SC of Artificial Data" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.0000)
 </pre></div>
 </div>
 </div>
 <div class="section" id="defining-the-cnmm-model">
 <h2>Defining the CNMM Model<a class="headerlink" href="#defining-the-cnmm-model" title="Permalink to this headline">¶</a></h2>
 <p>The Multi-Modal Model</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <a href="../API/models.html#whobpyt.models.RWW2.RWW2" title="whobpyt.models.RWW2.RWW2" class="sphx-glr-backref-module-whobpyt-models-RWW2 sphx-glr-backref-type-py-class"><span class="n">mmRWW2</span></a><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">paramsNode</span><span class="p">,</span> <span class="n">paramsEEG</span><span class="p">,</span> <span class="n">paramsBOLD</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">dist_mtx</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">)</span>
-<span class="c1">#model.track_params = [&#39;J&#39;]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <a href="../API/models.html#whobpyt.models.RWW2.RWW2" title="whobpyt.models.RWW2.RWW2" class="sphx-glr-backref-module-whobpyt-models-RWW2 sphx-glr-backref-type-py-class"><span class="n">mmRWW2</span></a><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">paramsNode</span><span class="p">,</span> <span class="n">paramsEEG</span><span class="p">,</span> <span class="n">paramsBOLD</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">dist_mtx</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -412,7 +354,7 @@ Also, written in such a way as to be able to track and plot indiviual components
         <span class="bp">self</span><span class="o">.</span><span class="n">BOLD_FC_weight</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Not Currently Used</span>
 
         <span class="c1"># Functions of the various Objective Function Components</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsMean" title="whobpyt.optimization.CostsMean" class="sphx-glr-backref-module-whobpyt-optimization sphx-glr-backref-type-py-class"><span class="n">CostsMean</span></a><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.164</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsMean" title="whobpyt.optimization.CostsMean" class="sphx-glr-backref-module-whobpyt-optimization sphx-glr-backref-type-py-class"><span class="n">CostsMean</span></a><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">simKey</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="n">targetValue</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.164</span><span class="p">]),</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
         <span class="c1">#self.S_I_mean = CostsMean(...) # Not Currently Used</span>
         <span class="c1">#self.EEG_PSD = CostsPSD(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)</span>
         <span class="c1">#self.EEG_FC = CostsFC(...) # Not Currently Used</span>
@@ -423,11 +365,11 @@ Also, written in such a way as to be able to track and plot indiviual components
         <span class="c1"># sim, ts_window, self.model, next_window</span>
 
         <span class="n">S_E_mean_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span><span class="o">.</span><span class="n">calcLoss</span><span class="p">(</span><span class="n">node_history</span><span class="p">)</span>
-        <span class="n">S_I_mean_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span> <span class="c1">#self.S_I_mean.calcLoss(node_history)</span>
-        <span class="n">EEG_PSD_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span> <span class="c1">#self.EEG_PSD.calcLoss(EEG_history)</span>
-        <span class="n">EEG_FC_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span> <span class="c1">#self.EEG_FC.calcLoss(EEG_history)</span>
-        <span class="n">BOLD_PSD_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span> <span class="c1">#self.BOLD_PS.calcLoss(BOLD_history)</span>
-        <span class="n">BOLD_FC_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span> <span class="c1">#self.BOLD_FC.calcLoss(BOLD_history)</span>
+        <span class="n">S_I_mean_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.S_I_mean.calcLoss(node_history)</span>
+        <span class="n">EEG_PSD_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.EEG_PSD.calcLoss(EEG_history)</span>
+        <span class="n">EEG_FC_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.EEG_FC.calcLoss(EEG_history)</span>
+        <span class="n">BOLD_PSD_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.BOLD_PS.calcLoss(BOLD_history)</span>
+        <span class="n">BOLD_FC_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.BOLD_FC.calcLoss(BOLD_history)</span>
 
         <span class="n">totalLoss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean_weight</span><span class="o">*</span><span class="n">S_E_mean_loss</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">S_I_mean_weight</span><span class="o">*</span><span class="n">S_I_mean_loss</span> \
                   <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">EEG_PSD_weight</span><span class="o">*</span><span class="n">EEG_PSD_loss</span>   <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">EEG_FC_weight</span><span class="o">*</span><span class="n">EEG_FC_loss</span> \
@@ -437,15 +379,14 @@ Also, written in such a way as to be able to track and plot indiviual components
             <span class="k">return</span> <span class="n">totalLoss</span><span class="p">,</span> <span class="p">(</span><span class="n">S_E_mean_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">S_I_mean_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">EEG_PSD_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">EEG_FC_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">BOLD_PSD_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">BOLD_FC_loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">totalLoss</span>
+
+<span class="n">ObjFun</span> <span class="o">=</span> <span class="n">mmObjectiveFunction</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="training-the-model">
 <h2>Training The Model<a class="headerlink" href="#training-the-model" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">mmObjectiveFunction</span><span class="p">()</span>
-
-
-<span class="n">randData1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15000</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">randData1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15000</span><span class="p">)</span>
 <span class="n">randData2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15000</span><span class="p">)</span>
 <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">num_recordings</span> <span class="o">=</span> <span class="mi">2</span>
@@ -456,7 +397,7 @@ Also, written in such a way as to be able to track and plot indiviual components
 <a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">randTS2</span></a> <span class="o">=</span> <a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">Recording</span></a><span class="p">(</span><span class="n">randData2</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
 
 <span class="c1"># call model fit</span>
-<a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a> <span class="o">=</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class"><span class="n">Model_fitting</span></a><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
+<a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">F</span></a> <span class="o">=</span> <a href="../API/run.html#whobpyt.run.Model_fitting" title="whobpyt.run.Model_fitting" class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class"><span class="n">Model_fitting</span></a><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
@@ -469,14 +410,14 @@ Also, written in such a way as to be able to track and plot indiviual components
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: [0.4310316] Pseudo FC_cor:  -0.09077627982489582 cos_sim:  0.40392874508704846
-epoch:  0 loss: [0.45281997] Pseudo FC_cor:  -0.04905462033144452 cos_sim:  0.8392687955344975
+epoch:  0 loss: [0.4155369] Pseudo FC_cor:  -0.03479213671944179 cos_sim:  0.35929419935533713
+epoch:  0 loss: [0.45835388] Pseudo FC_cor:  0.013132454765592983 cos_sim:  0.8391594842850496
 Epoch:  1
-epoch:  1 loss: [0.45624995] Pseudo FC_cor:  0.06388380393919095 cos_sim:  0.8648802785355554
-epoch:  1 loss: [0.45275316] Pseudo FC_cor:  -0.07142234011471311 cos_sim:  0.865724540731095
+epoch:  1 loss: [0.44934487] Pseudo FC_cor:  -0.14813434391328903 cos_sim:  0.8636843379150656
+epoch:  1 loss: [0.45355254] Pseudo FC_cor:  -0.20922865522511178 cos_sim:  0.8655895841956874
 Epoch:  2
-epoch:  2 loss: [0.45075187] Pseudo FC_cor:  -0.23014625998998303 cos_sim:  0.8665646954440291
-epoch:  2 loss: [0.44209468] Pseudo FC_cor:  -0.08331450265385654 cos_sim:  0.8657588777901652
+epoch:  2 loss: [0.44938043] Pseudo FC_cor:  0.2621747549338517 cos_sim:  0.8656177200313582
+epoch:  2 loss: [0.45020294] Pseudo FC_cor:  -0.08134649568152875 cos_sim:  0.86563816034345
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -518,7 +459,7 @@ epoch:  2 loss: [0.44209468] Pseudo FC_cor:  -0.08331450265385654 cos_sim:  0.86
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fc05ec5e9a0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f32e139cb20&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD</p>
@@ -557,8 +498,10 @@ epoch:  2 loss: [0.44209468] Pseudo FC_cor:  -0.08331450265385654 cos_sim:  0.86
 <div class="section" id="cnmm-validation-model">
 <h2>CNMM Validation Model<a class="headerlink" href="#cnmm-validation-model" title="Permalink to this headline">¶</a></h2>
 <p>The Multi-Modal Model</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val_sim_len</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="mi">1000</span> <span class="c1"># Simulation length in msecs</span>
-<span class="n">model_validate</span> <span class="o">=</span> <span class="n">mmRWW2_np</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dist_mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">val_sim_len</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">LF</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">LF</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+
+<span class="n">val_sim_len</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="mi">1000</span> <span class="c1"># Simulation length in msecs</span>
+<span class="n">model_validate</span> <span class="o">=</span> <span class="n">mmRWW2_np</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dist_mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">val_sim_len</span><span class="p">)</span>
 
 <span class="n">sim_vals</span><span class="p">,</span> <span class="n">hE</span> <span class="o">=</span> <span class="n">model_validate</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">external</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hx</span> <span class="o">=</span> <span class="n">model_validate</span><span class="o">.</span><span class="n">createIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">),</span> <span class="n">hE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
@@ -576,7 +519,7 @@ epoch:  2 loss: [0.44209468] Pseudo FC_cor:  -0.08331450265385654 cos_sim:  0.86
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fc05ea94cd0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f32e1244760&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD Validation</p>
@@ -611,7 +554,7 @@ epoch:  2 loss: [0.44209468] Pseudo FC_cor:  -0.08331450265385654 cos_sim:  0.86
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  47.648 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  44.667 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>
