@@ -98,12 +98,19 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">Code Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/background.html">Background Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
 </ul>
 </li>
 </ul>
@@ -115,9 +122,10 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -213,7 +221,7 @@
             
   <div class="section" id="computation-times">
 <span id="sphx-glr-auto-examples-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this headline">¶</a></h1>
-<p><strong>24:21.772</strong> total execution time for <strong>auto_examples</strong> files:</p>
+<p><strong>16:52.878</strong> total execution time for <strong>auto_examples</strong> files:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 84%" />
@@ -222,15 +230,15 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="eg003r__fitting_rww_example.html#sphx-glr-auto-examples-eg003r-fitting-rww-example-py"><span class="std std-ref">Fitting Wong_Wang model (HCP data)</span></a> (<code class="docutils literal notranslate"><span class="pre">eg003r__fitting_rww_example.py</span></code>)</p></td>
-<td><p>09:55.161</p></td>
+<td><p>06:42.304</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="eg004r__fitting_JR_example.html#sphx-glr-auto-examples-eg004r-fitting-jr-example-py"><span class="std std-ref">Fitting JR model (Tepit data)</span></a> (<code class="docutils literal notranslate"><span class="pre">eg004r__fitting_JR_example.py</span></code>)</p></td>
-<td><p>07:24.918</p></td>
+<td><p>05:22.926</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="eg002r__multimodal_simulation.html#sphx-glr-auto-examples-eg002r-multimodal-simulation-py"><span class="std std-ref">Fitting S_E Mean to 0.164 using default RWW Parameters</span></a> (<code class="docutils literal notranslate"><span class="pre">eg002r__multimodal_simulation.py</span></code>)</p></td>
-<td><p>07:01.693</p></td>
+<td><p>04:47.648</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="eg001x__template.html#sphx-glr-auto-examples-eg001x-template-py"><span class="std std-ref">WhoBPyT Demo</span></a> (<code class="docutils literal notranslate"><span class="pre">eg001x__template.py</span></code>)</p></td>

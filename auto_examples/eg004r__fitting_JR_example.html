@@ -99,12 +99,19 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">Code Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/background.html">Background Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
 </ul>
 </li>
 </ul>
@@ -116,9 +123,10 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/run.html">Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -340,45 +348,45 @@
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: -22813.47 Pseudo FC_cor:  0.3580031895555551 cos_sim:  0.026970080626761952
+epoch:  0 loss: -22813.469 Pseudo FC_cor:  0.3444751738471641 cos_sim:  0.026403125723924767
 Epoch:  1
-epoch:  1 loss: -24701.727 Pseudo FC_cor:  0.04012516891590694 cos_sim:  0.01650564193818374
+epoch:  1 loss: -24701.771 Pseudo FC_cor:  0.10032999358964793 cos_sim:  0.011202597696923297
 Epoch:  2
-epoch:  2 loss: -26248.488 Pseudo FC_cor:  0.15422437831025937 cos_sim:  -0.022156597004870937
+epoch:  2 loss: -26248.479 Pseudo FC_cor:  0.354894473189136 cos_sim:  -0.0037043044397884273
 Epoch:  3
-epoch:  3 loss: -27553.166 Pseudo FC_cor:  0.20769658024312954 cos_sim:  0.06495600694588051
+epoch:  3 loss: -27553.2 Pseudo FC_cor:  0.299461399272383 cos_sim:  0.015325720995035671
 Epoch:  4
-epoch:  4 loss: -28682.658 Pseudo FC_cor:  0.847004751718768 cos_sim:  0.1632569575216562
+epoch:  4 loss: -28682.709 Pseudo FC_cor:  0.842970918167661 cos_sim:  0.2593920926810552
 Epoch:  5
-epoch:  5 loss: -29680.238 Pseudo FC_cor:  0.8627399387250748 cos_sim:  0.20425125515807874
+epoch:  5 loss: -29680.25 Pseudo FC_cor:  0.8541105598378069 cos_sim:  0.41396685998225957
 Epoch:  6
-epoch:  6 loss: -30574.805 Pseudo FC_cor:  0.9051470758872958 cos_sim:  0.45517427865010524
+epoch:  6 loss: -30574.76 Pseudo FC_cor:  0.8783216751254623 cos_sim:  0.35976796395316757
 Epoch:  7
-epoch:  7 loss: -31386.393 Pseudo FC_cor:  0.8737194594944446 cos_sim:  0.36843157875700316
+epoch:  7 loss: -31386.428 Pseudo FC_cor:  0.8376591021051254 cos_sim:  0.41988181055295387
 Epoch:  8
-epoch:  8 loss: -32129.883 Pseudo FC_cor:  0.8626973201761755 cos_sim:  0.4516178032275419
+epoch:  8 loss: -32129.883 Pseudo FC_cor:  0.9358530301355499 cos_sim:  0.3963059723601683
 Epoch:  9
-epoch:  9 loss: -32816.223 Pseudo FC_cor:  0.8533160025313806 cos_sim:  0.2778734110049371
+epoch:  9 loss: -32816.24 Pseudo FC_cor:  0.8224844792576164 cos_sim:  0.27109283386421623
 Epoch:  10
-epoch:  10 loss: -33453.934 Pseudo FC_cor:  0.9144728677416305 cos_sim:  0.4350881366388719
+epoch:  10 loss: -33453.914 Pseudo FC_cor:  0.8336203733370885 cos_sim:  0.3837870059935602
 Epoch:  11
-epoch:  11 loss: -34049.758 Pseudo FC_cor:  0.9632147619095318 cos_sim:  0.4014659928482312
+epoch:  11 loss: -34049.754 Pseudo FC_cor:  0.9433355477316832 cos_sim:  0.343220633184035
 Epoch:  12
-epoch:  12 loss: -34609.145 Pseudo FC_cor:  0.8283155460532413 cos_sim:  0.44210955581066846
+epoch:  12 loss: -34609.145 Pseudo FC_cor:  0.9061082596491841 cos_sim:  0.41077731442715004
 Epoch:  13
-epoch:  13 loss: -35136.375 Pseudo FC_cor:  0.8199274396673273 cos_sim:  0.21509110717381186
+epoch:  13 loss: -35136.39 Pseudo FC_cor:  0.9303867041578741 cos_sim:  0.3293060111017354
 Epoch:  14
-epoch:  14 loss: -35635.254 Pseudo FC_cor:  0.9172085523059716 cos_sim:  0.41210924483017364
+epoch:  14 loss: -35635.28 Pseudo FC_cor:  0.9553720383841776 cos_sim:  0.3948430633942716
 Epoch:  15
-epoch:  15 loss: -36108.746 Pseudo FC_cor:  0.9004602981652585 cos_sim:  0.36850478617610116
+epoch:  15 loss: -36108.74 Pseudo FC_cor:  0.9076450288953651 cos_sim:  0.419332924321145
 Epoch:  16
-epoch:  16 loss: -36559.375 Pseudo FC_cor:  0.8786832373180311 cos_sim:  0.4205304440230474
+epoch:  16 loss: -36559.42 Pseudo FC_cor:  0.8300323742917602 cos_sim:  0.45147695468448534
 Epoch:  17
-epoch:  17 loss: -36989.516 Pseudo FC_cor:  0.9099397835620193 cos_sim:  0.3789185949264755
+epoch:  17 loss: -36989.48 Pseudo FC_cor:  0.8967950383371309 cos_sim:  0.37928557902463267
 Epoch:  18
-epoch:  18 loss: -37400.906 Pseudo FC_cor:  0.8715645939232262 cos_sim:  0.4655471871246959
+epoch:  18 loss: -37400.86 Pseudo FC_cor:  0.9091801666357371 cos_sim:  0.5677076792797233
 Epoch:  19
-epoch:  19 loss: -37795.266 Pseudo FC_cor:  0.8810393021139566 cos_sim:  0.37983555450869944
+epoch:  19 loss: -37795.23 Pseudo FC_cor:  0.9287119812615189 cos_sim:  0.36004473154709116
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -414,7 +422,7 @@ epoch:  19 loss: -37795.266 Pseudo FC_cor:  0.8810393021139566 cos_sim:  0.37983
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9312730256447267 cos_sim:  0.4934378071408174
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9429873113970264 cos_sim:  0.40019330329929376
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -441,7 +449,7 @@ epoch:  19 loss: -37795.266 Pseudo FC_cor:  0.8810393021139566 cos_sim:  0.37983
 </pre></div>
 </div>
 <img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_004.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  24.918 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  22.926 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/96a042e39a4f43abe4e10ca8c12118f5/eg004r__fitting_JR_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg004r__fitting_JR_example.py</span></code></a></p>

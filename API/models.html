@@ -48,7 +48,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Optimization" href="optimization.html" />
-    <link rel="prev" title="Run" href="run.html" /> 
+    <link rel="prev" title="Installation" href="../getting_started/installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -100,12 +100,19 @@
               <p class="caption"><span class="caption-text">About WhoBPyT</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">WhoBPyT Code Base Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#module-structure">Module structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#api-usage">API Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-params">RWW_Params</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/architecture.html#rww-layer">RWW_Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/architecture.html">Code Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../about_whobpyt/background.html">Background Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
 </ul>
 </li>
 </ul>
@@ -117,9 +124,10 @@
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="run.html">Run</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datatypes.html">Data Types</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -217,7 +225,7 @@
 <h1>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="whobpyt.models.JansenRit.RNNJANSEN">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.JansenRit.</span></code><code class="sig-name descname"><span class="pre">RNNJANSEN</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">node_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">TRs_per_window:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">step_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">output_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">tr:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sc:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">lm:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">dist:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">use_fit_gains:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">use_fit_lfm:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">params:</span> <span class="pre">&lt;module</span> <span class="pre">'whobpyt.models.JansenRit.ParamsJR'</span> <span class="pre">from</span> <span class="pre">'/home/runner/work/whobpyt/whobpyt/whobpyt/models/JansenRit/ParamsJR.py'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.JansenRit.</span></code><code class="sig-name descname"><span class="pre">RNNJANSEN</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TRs_per_window</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_gains</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_lfm</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.models.JansenRit.ParamsJR.ParamsJR</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN" title="Permalink to this definition">¶</a></dt>
 <dd><p>A module for forward model (JansenRit) to simulate EEG signals</p>
 <p class="rubric">Methods</p>
 <table class="docutils align-default">
@@ -242,7 +250,7 @@
 </table>
 <dl class="py method">
 <dt id="whobpyt.models.JansenRit.RNNJANSEN.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">node_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">TRs_per_window:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">step_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">output_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">tr:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sc:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">lm:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">dist:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">use_fit_gains:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">use_fit_lfm:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">params:</span> <span class="pre">&lt;module</span> <span class="pre">'whobpyt.models.JansenRit.ParamsJR'</span> <span class="pre">from</span> <span class="pre">'/home/runner/work/whobpyt/whobpyt/whobpyt/models/JansenRit/ParamsJR.py'&gt;</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TRs_per_window</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_gains</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_lfm</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">whobpyt.models.JansenRit.ParamsJR.ParamsJR</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../_modules/whobpyt/models/JansenRit/jansen_rit.html#RNNJANSEN.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.JansenRit.RNNJANSEN.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -256,11 +264,11 @@
 </dd>
 <dt><strong>tr</strong><span class="classifier">float # TODO: CHANGE THE NAME TO sampling_rate</span></dt><dd><p>Sampling rate of the simulated EEG signals</p>
 </dd>
-<dt><strong>sc: float node_size x node_size array</strong></dt><dd><p>Structural connectivity</p>
+<dt><strong>sc: ndarray node_size x node_size float array</strong></dt><dd><p>Structural connectivity</p>
 </dd>
-<dt><strong>lm: float</strong></dt><dd><p>Leadfield matrix from source space to EEG space</p>
+<dt><strong>lm: ndarray float array</strong></dt><dd><p>Leadfield matrix from source space to EEG space</p>
 </dd>
-<dt><strong>dist: float</strong></dt><dd><p>Distance matrix</p>
+<dt><strong>dist: ndarray float array</strong></dt><dd><p>Distance matrix</p>
 </dd>
 <dt><strong>use_fit_gains: bool</strong></dt><dd><p>Flag for fitting gains. 1: fit, 0: not fit</p>
 </dd>
@@ -366,8 +374,9 @@ each population’s current and voltage at each time step.</p>
 
 <dl class="py class">
 <dt id="whobpyt.models.RWW.RNNRWW">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.RWW.</span></code><code class="sig-name descname"><span class="pre">RNNRWW</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">node_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">TRs_per_window:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">step_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sampling_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">tr:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sc:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">use_fit_gains:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">params:</span> <span class="pre">&lt;module</span> <span class="pre">'whobpyt.models.RWW.ParamsRWW'</span> <span class="pre">from</span> <span class="pre">'/home/runner/work/whobpyt/whobpyt/whobpyt/models/RWW/ParamsRWW.py'&gt;</span></em>, <em class="sig-param"><span class="pre">use_Bifurcation=True</span></em>, <em class="sig-param"><span class="pre">use_Gaussian_EI=False</span></em>, <em class="sig-param"><span class="pre">use_Laplacian=True</span></em>, <em class="sig-param"><span class="pre">use_dynamic_boundary=True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW/wong_wang.html#RNNRWW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW.RNNRWW" title="Permalink to this definition">¶</a></dt>
-<dd><p>A module for forward model (WWD) to simulate a window of BOLD signals</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.RWW.</span></code><code class="sig-name descname"><span class="pre">RNNRWW</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">node_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">TRs_per_window:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">step_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sampling_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">tr:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sc:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">use_fit_gains:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">params:</span> <span class="pre">&lt;module</span> <span class="pre">'whobpyt.models.RWW.ParamsRWW'</span> <span class="pre">from</span> <span class="pre">'/home/runner/work/whobpyt/whobpyt/whobpyt/models/RWW/ParamsRWW.py'&gt;</span></em>, <em class="sig-param"><span class="pre">use_Bifurcation:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">use_Gaussian_EI:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">use_Laplacian:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">use_dynamic_boundary:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW/wong_wang.html#RNNRWW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW.RNNRWW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduced Wong Wang Excitatory Inhibitory (RWWExcInb) Model with integrated BOLD dynamics</p>
+<p>A module for forward model (WWD) to simulate a window of BOLD signals</p>
 <p>Note that the BOLD signal is not done in the standard way, 
 and there are other customizations to the neural mass model that may 
 deviate from standard differential equation simulation. Thus, the
@@ -437,7 +446,7 @@ parameter should be tested on a validation model after fitting.</p>
 </table>
 <dl class="py method">
 <dt id="whobpyt.models.RWW.RNNRWW.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">node_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">TRs_per_window:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">step_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sampling_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">tr:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sc:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">use_fit_gains:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">params:</span> <span class="pre">&lt;module</span> <span class="pre">'whobpyt.models.RWW.ParamsRWW'</span> <span class="pre">from</span> <span class="pre">'/home/runner/work/whobpyt/whobpyt/whobpyt/models/RWW/ParamsRWW.py'&gt;</span></em>, <em class="sig-param"><span class="pre">use_Bifurcation=True</span></em>, <em class="sig-param"><span class="pre">use_Gaussian_EI=False</span></em>, <em class="sig-param"><span class="pre">use_Laplacian=True</span></em>, <em class="sig-param"><span class="pre">use_dynamic_boundary=True</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../_modules/whobpyt/models/RWW/wong_wang.html#RNNRWW.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW.RNNRWW.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">node_size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">TRs_per_window:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">step_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sampling_size:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">tr:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">sc:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">use_fit_gains:</span> <span class="pre">bool</span></em>, <em class="sig-param"><span class="pre">params:</span> <span class="pre">&lt;module</span> <span class="pre">'whobpyt.models.RWW.ParamsRWW'</span> <span class="pre">from</span> <span class="pre">'/home/runner/work/whobpyt/whobpyt/whobpyt/models/RWW/ParamsRWW.py'&gt;</span></em>, <em class="sig-param"><span class="pre">use_Bifurcation:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">use_Gaussian_EI:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">use_Laplacian:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">use_dynamic_boundary:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../_modules/whobpyt/models/RWW/wong_wang.html#RNNRWW.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW.RNNRWW.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -562,11 +571,59 @@ Contents are the time series from model simulation</p>
 <dl class="py class">
 <dt id="whobpyt.models.RWW2.RWW2">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.RWW2.</span></code><code class="sig-name descname"><span class="pre">RWW2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Con_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Dist_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useBC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Reduced Wong Wang Excitatory Inhibatory (RWWEXcInh) Model - Version 2</p>
+<p>EQUATIONS &amp; BIOLOGICAL VARIABLES FROM:</p>
+<p>Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation-inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.</p>
+<p>Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.</p>
+<p>Wong KF, Wang XJ. A recurrent network mechanism of time integration in perceptual decisions. Journal of Neuroscience. 2006 Jan 25;26(4):1314-28.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">ParamsRWW2</span></dt><dd><p>An AbstractParams object which contains the model’s parameters</p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">Float</span></dt><dd><p>The step size of numerical integration (in msec)</p>
+</dd>
+<dt><strong>num_regions</strong><span class="classifier">Int</span></dt><dd><p>The number of brain regions used in the model</p>
+</dd>
+<dt><strong>node_size</strong><span class="classifier">Int</span></dt><dd><p>The number of brain regions used in the model</p>
+</dd>
+<dt><strong>Con_Mtx</strong><span class="classifier">Tensor [ node_size x node_size ]</span></dt><dd><p>Matrix with connection strengths between each node</p>
+</dd>
+<dt><strong>Dist_Mtx</strong><span class="classifier">Tensor [ node_size x node_size ]</span></dt><dd><p>Matrix with distances between each node (used for delays)</p>
+</dd>
+<dt><strong>output_size</strong><span class="classifier">Int</span></dt><dd><p>The number of brain regions used in the model</p>
+</dd>
+<dt><strong>state_names</strong><span class="classifier">List of Strings</span></dt><dd><p>A list of the state varaible names of the model</p>
+</dd>
+<dt><strong>output_names</strong><span class="classifier">List of Strings</span></dt><dd><p>A list of the output variable names of the model</p>
+</dd>
+<dt><strong>track_params :</strong></dt><dd><p>A list of which parameter to track over training epochs</p>
+</dd>
+<dt><strong>num_blocks</strong><span class="classifier">Int</span></dt><dd><p>The number of blocks (used by FNGFPG Paradigm)</p>
+</dd>
+<dt><strong>max_delay :</strong></dt><dd><p>Related to Delays (delay code to be verified)</p>
+</dd>
+<dt><strong>buffer_len :</strong></dt><dd><p>Related to Delays (delay code to be verified)</p>
+</dd>
+<dt><strong>delayed_S_E :</strong></dt><dd><p>Related to Delays (delay code to be verified)</p>
+</dd>
+<dt><strong>buffer_idx :</strong></dt><dd><p>Related to Delays (delay code to be verified)</p>
+</dd>
+<dt><strong>mu :</strong></dt><dd><p>Related to Delays (delay code to be verified)</p>
+</dd>
+<dt><strong>use_fit_gains</strong><span class="classifier">Bool</span></dt><dd><p>Whether to fit the gains of connection weights (Not Implemented)</p>
+</dd>
+<dt><strong>use_fit_lfm</strong><span class="classifier">Bool</span></dt><dd><p>Whether to fit the Lead Field Matrix (Lead Field Matrix not Used)</p>
+</dd>
+<dt><strong>useBC</strong><span class="classifier">Bool</span></dt><dd><p>Whether to add boundary dynamics to state variables</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="whobpyt.models.RWW2.RWW2.__init__">
 <code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Con_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Dist_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useBC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="whobpyt.models.RWW2.RWW2.createIC">
@@ -576,16 +633,7 @@ Contents are the time series from model simulation</p>
 <dl class="py method">
 <dt id="whobpyt.models.RWW2.RWW2.forward">
 <code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setNoise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="whobpyt.models.RWW2.RWW2.info">
@@ -595,6 +643,72 @@ registered hooks while the latter silently ignores them.</p>
 <dl class="py method">
 <dt id="whobpyt.models.RWW2.RWW2.setModelParameters">
 <code class="sig-name descname"><span class="pre">setModelParameters</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2.setModelParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2.setModelParameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="whobpyt.models.BOLD.BOLD_Layer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.BOLD.</span></code><code class="sig-name descname"><span class="pre">BOLD_Layer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useBC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/BOLD/BOLD.html#BOLD_Layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.BOLD.BOLD_Layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Balloon-Windkessel Hemodynamic Response Function Forward Model</p>
+<p>Equations &amp; Biological Variables From:</p>
+<p>Friston KJ, Harrison L, Penny W. Dynamic causal modelling. Neuroimage. 2003 Aug 1;19(4):1273-302.</p>
+<p>Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.</p>
+<dl class="py method">
+<dt id="whobpyt.models.BOLD.BOLD_Layer.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useBC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/BOLD/BOLD.html#BOLD_Layer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.BOLD.BOLD_Layer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.BOLD.BOLD_Layer.createIC">
+<code class="sig-name descname"><span class="pre">createIC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/BOLD/BOLD.html#BOLD_Layer.createIC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.BOLD.BOLD_Layer.createIC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.BOLD.BOLD_Layer.forward">
+<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_history</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useGPU</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/BOLD/BOLD.html#BOLD_Layer.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.BOLD.BOLD_Layer.forward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.BOLD.BOLD_Layer.info">
+<code class="sig-name descname"><span class="pre">info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/BOLD/BOLD.html#BOLD_Layer.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.BOLD.BOLD_Layer.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.BOLD.BOLD_Layer.setModelParameters">
+<code class="sig-name descname"><span class="pre">setModelParameters</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/BOLD/BOLD.html#BOLD_Layer.setModelParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.BOLD.BOLD_Layer.setModelParameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="whobpyt.models.EEG.EEG_Layer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.EEG.</span></code><code class="sig-name descname"><span class="pre">EEG_Layer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/EEG/EEG.html#EEG_Layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.EEG.EEG_Layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lead Field Matrix multiplication which converts Source Space EEG to Channel Space EEG</p>
+<dl class="py method">
+<dt id="whobpyt.models.EEG.EEG_Layer.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/EEG/EEG.html#EEG_Layer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.EEG.EEG_Layer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.EEG.EEG_Layer.createIC">
+<code class="sig-name descname"><span class="pre">createIC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/EEG/EEG.html#EEG_Layer.createIC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.EEG.EEG_Layer.createIC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.EEG.EEG_Layer.forward">
+<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_history</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useGPU</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/EEG/EEG.html#EEG_Layer.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.EEG.EEG_Layer.forward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.EEG.EEG_Layer.info">
+<code class="sig-name descname"><span class="pre">info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/EEG/EEG.html#EEG_Layer.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.EEG.EEG_Layer.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.models.EEG.EEG_Layer.setModelParameters">
+<code class="sig-name descname"><span class="pre">setModelParameters</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/EEG/EEG.html#EEG_Layer.setModelParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.EEG.EEG_Layer.setModelParameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -612,7 +726,7 @@ registered hooks while the latter silently ignores them.</p>
         <a href="optimization.html" class="btn btn-neutral float-right" title="Optimization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="run.html" class="btn btn-neutral float-left" title="Run" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../getting_started/installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
