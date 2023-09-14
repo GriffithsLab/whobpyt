@@ -15,20 +15,20 @@ class CostsFC(AbstractLoss):
     Cost function for Fitting the Functional Connectivity (FC) matrix.
     The cost function is the negative log-likelihood of the Pearson correlation between the simulated FC and empirical FC.
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
     simKey: str
         string key to reference to this const function. i.e., "CostsFC".
 
-    Methods:
-    --------
+    Methods
+    -------
     loss: function
         calculates functional connectivity and uses it to calculate the loss
     """
     def __init__(self, simKey):
         """
-        Parameters:
-        -----------
+        Parameters
+        ----------
         simKey: str
             type of cost function to be used
         """
@@ -104,25 +104,31 @@ class CostsFixedFC(AbstractLoss):
     In this version, the empirical FC is given directly, instead of being given an empirical time series. 
     The cost function is the negative log-likelihood of the Pearson correlation between the simulated FC and empirical FC. 
 
-    Attributes:
-    -----------
+    Has GPU support.
+
+    Attributes
+    ----------
     simKey: str
         string key to reference to this const function. i.e., "CostsFC".
-
+    device: torch.device
+        Whether to run on GPU or CPU
     Methods:
     --------
-    loss: function
+    calcLoss: function
         calculates functional connectivity and uses it to calculate the loss
     """
-    def __init__(self, simKey):
+    def __init__(self, simKey, device = torch.device('cpu')):
         """
-        Parameters:
-        -----------
+        Parameters
+        ----------
         simKey: str
             The state variable or output variable from the model used for the simulated FC
+        device: torch.device
+            Whether to run on GPU or CPU
         """
         super(CostsFixedFC, self).__init__()
         self.simKey = simKey
+        self.device = device
 
     def calcLoss(self, simTS, empFC):
         """Function to calculate the cost function for Functional Connectivity (FC) fitting. 
@@ -160,8 +166,8 @@ class CostsFixedFC(AbstractLoss):
                                              torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_sim))))) # SIMULATED FC
 
         # Masking out the upper triangle of the FC matrix and keeping the lower triangle
-        ones_tri = torch.tril(torch.ones_like(empFC), -1)
-        zeros = torch.zeros_like(empFC)  # create a tensor all ones
+        ones_tri = torch.tril(torch.ones_like(empFC).to(self.device), -1)
+        zeros = torch.zeros_like(empFC).to(self.device)  # create a tensor all ones
         mask = torch.greater(ones_tri, zeros)  # boolean tensor, mask[i] = True iff x[i] > 1
 
         FC_tri_v = torch.masked_select(empFC, mask)

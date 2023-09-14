@@ -1,5 +1,5 @@
 import numpy as np
-from whobpyt.datatypes import par
+from whobpyt.datatypes import AbstractParams, par
 
 # Multi-Modal Connectome-based Neural Mass Modelling
 
@@ -13,7 +13,7 @@ from whobpyt.datatypes import par
 
 import numpy
 
-class BOLD_Params():
+class BOLD_Params(AbstractParams):
     def __init__(self):
         #############################################
         ## BOLD Constants

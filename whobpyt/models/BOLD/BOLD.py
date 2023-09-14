@@ -12,7 +12,7 @@ class BOLD_Layer(AbstractMode):
     Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.
     '''
 
-    def __init__(self, num_regions, params, useBC = False):        
+    def __init__(self, num_regions, params, useBC = False, device = torch.device('cpu')):        
         super(BOLD_Layer, self).__init__() # To inherit parameters attribute
                 
         # Initialize the BOLD Model 
@@ -25,6 +25,8 @@ class BOLD_Layer(AbstractMode):
         
         self.num_regions = num_regions
         self.useBC = useBC   #useBC: is if we want the model to use boundary conditions
+        
+        self.device = device
         
         self.num_blocks = 1
         
@@ -48,15 +50,15 @@ class BOLD_Layer(AbstractMode):
         #q = 1   # deoxyhemoglobin content 
         pass
     
-    def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
-        return forward(self, init_state, step_size, sim_len, node_history, useGPU = False)    
+    def forward(self, init_state, step_size, sim_len, node_history):
+        return forward(self, init_state, step_size, sim_len, node_history)    
 
 def setModelParameters(self):
     pass
     
-def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
+def forward(self, init_state, step_size, sim_len, node_history):
     
-    hE = torch.tensor(1.0) #Dummy variable
+    hE = torch.tensor(1.0).to(self.device) #Dummy variable
     
     # Runs the BOLD Model
     #
@@ -66,7 +68,6 @@ def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
     #                     (NOTE: bold equations are in sec so step_size will be divide by 1000)
     #  sim_len: Int - The amount of BOLD to simulate in msec, and should match time simulated in node_history. 
     #  node_history: Tensor - [time_points, regions] # This would be S_E if input coming from RWW
-    #  useGPU: Boolean - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network_NMM code
     #
     # OUTPUT
     #  state_vars: Tensor - [regions, state_vars]
@@ -84,10 +85,7 @@ def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
     k_2 = self.params.k_2.value()
     k_3 = self.params.k_3.value()
     
-    if(useGPU):
-        layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_regions, 4 + 1, self.num_blocks).cuda()
-    else:
-        layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_regions, 4 + 1, self.num_blocks)
+    layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_regions, 4 + 1, self.num_blocks).to(self.device)
     
     # BOLD State Values
     x = init_state[:, 0, :]
@@ -122,7 +120,7 @@ def forward(self, init_state, step_size, sim_len, node_history, useGPU = False):
         
         #BOLD Calculation
         BOLD = V_0*(k_1*(1 - q) + k_2*(1 - q/v) + k_3*(1 - v))
-        
+                
         layer_hist[i, :, 0, :] = x
         layer_hist[i, :, 1, :] = f
         layer_hist[i, :, 2, :] = v
