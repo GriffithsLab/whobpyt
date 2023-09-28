@@ -7,8 +7,9 @@ import torch
 import numpy as np
 from whobpyt.datatypes import Recording
 from whobpyt.datatypes import TrainingStats
+from whobpyt.datatypes.AbstractFitting import AbstractFitting
 
-class Fitting_FNGFPG:
+class Fitting_FNGFPG(AbstractFitting):
     """
     Fitting Forward No Gradient Forward Parallel Gradient (FNG-FPG)
     
