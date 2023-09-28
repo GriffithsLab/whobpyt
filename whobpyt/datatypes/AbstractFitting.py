@@ -6,7 +6,7 @@ from whobpyt.datatypes.AbstractLoss import AbstractLoss
 from whobpyt.datatypes.outputs import TrainingStats
 
 class AbstractFitting():
-    # AbstractFitting is template for different parameter optimization or machine learning paradigms to enherit from. 
+    # AbstractFitting is a template class for different parameter optimization or machine learning paradigms to inherit from. 
 
     def __init__(self, model: AbstractNMM, cost: AbstractLoss, device = torch.device('cpu')):
         # Initializing the class
@@ -16,7 +16,7 @@ class AbstractFitting():
         self.device = device
         
         self.trainingStats = TrainingStats(self.model)
-        self.lastRec = None
+        self.lastRec = None # Saves the last simulation during training
     
     
     def save(self, filename):
@@ -36,7 +36,7 @@ class AbstractFitting():
     
     
     def simulate():
-        # This function is intended to run only run some duration of simulation.
+        # This function is intended for running some fixed duration of simulation.
         pass
     
     
