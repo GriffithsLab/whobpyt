@@ -7,6 +7,7 @@ import numpy as np  # for numerical operations
 import torch
 import torch.optim as optim
 from whobpyt.datatypes import Recording
+from whobpyt.datatypes.AbstractFitting import AbstractFitting
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
 from whobpyt.datatypes.AbstractLoss import AbstractLoss
 from whobpyt.datatypes.outputs import TrainingStats
@@ -16,7 +17,7 @@ import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-class Model_fitting:
+class Model_fitting(AbstractFitting):
     """
     This Model_fitting class is able to fit resting state data or evoked potential data 
     for which the input training data is empty or some stimulus to one or more NMM nodes,

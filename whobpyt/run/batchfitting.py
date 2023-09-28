@@ -6,8 +6,9 @@ import torch
 import numpy as np
 from whobpyt.datatypes import Recording
 from whobpyt.datatypes import TrainingStats
+from whobpyt.datatypes.AbstractFitting import AbstractFitting
 
-class Fitting_Batch:
+class Fitting_Batch(AbstractFitting):
     """
     Fitting Batch
     

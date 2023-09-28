@@ -192,7 +192,8 @@ sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
 sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
 
 plt.figure()
-plt.plot(sdAxis_dS, sdValues_dS_scaled.detach())
+for n in range(num_channels):
+    plt.plot(sdAxis_dS, sdValues_dS_scaled.detach()[:,n])
 plt.xlabel('Hz')
 plt.ylabel('PSD')
 plt.title("Simulated EEG PSD: After Training")
