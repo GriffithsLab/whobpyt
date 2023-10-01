@@ -32,15 +32,15 @@ class CostsFC(AbstractLoss):
         simKey: str
             type of cost function to be used
         """
-        super(CostsFC, self).__init__()
+        super(CostsFC, self).__init__(simKey)
         self.simKey = simKey
 
-    def loss(self, sim: torch.Tensor, emp: torch.Tensor):
+    def loss(self, simData: dict, emp: torch.Tensor):
         """Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.
 
         Parameters
         ----------
-        sim: torch.Tensor with node_size X datapoint
+        simData: dict of torch.Tensor with node_size X datapoint
             simulated BOLD
         emp: torch.Tensor with node_size X datapoint
             empirical BOLD
@@ -51,6 +51,8 @@ class CostsFC(AbstractLoss):
             cost function value
         """
         method_arg_type_check(self.loss) # Check that the passed arguments (excluding self) abide by their expected data types
+        
+        sim = simData[self.simKey]
         
         logits_series_tf = sim
         labels_series_tf = emp
@@ -114,7 +116,7 @@ class CostsFixedFC(AbstractLoss):
         Whether to run on GPU or CPU
     Methods:
     --------
-    calcLoss: function
+    loss: function
         calculates functional connectivity and uses it to calculate the loss
     """
     def __init__(self, simKey, device = torch.device('cpu')):
@@ -130,7 +132,7 @@ class CostsFixedFC(AbstractLoss):
         self.simKey = simKey
         self.device = device
 
-    def calcLoss(self, simTS, empFC):
+    def loss(self, simData, empFC):
         """Function to calculate the cost function for Functional Connectivity (FC) fitting. 
         It initially calculates the FC matrix using the data from the time series, 
         makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. 
@@ -139,9 +141,9 @@ class CostsFixedFC(AbstractLoss):
 
         Parameters
         ----------
-        simTS: torch.tensor with node_size X time_point
+        simData: dict of torch.tensor with node_size X time_point
             Simulated Time Series 
-        empFC: torch.tensor with node_size X node_size
+        empData: torch.tensor with node_size X node_size
             Empirical Functional Connectivity
 
         Returns
@@ -149,6 +151,9 @@ class CostsFixedFC(AbstractLoss):
         losses_corr: torch.tensor
             cost function value
         """
+        simTS = simData[self.simKey]
+        empFC = empData
+        
         logits_series_tf = simTS
 
         # get node_size() and TRs_per_window()

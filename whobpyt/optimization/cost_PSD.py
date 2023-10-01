@@ -1,13 +1,15 @@
 import torch
 from warnings import warn
+from whobpyt.datatypes.AbstractLoss import AbstractLoss
 
-class CostsPSD():
+class CostsPSD(AbstractLoss):
     '''
     WARNING: This function is no longer supported.
     TODO: Needs to be updated. 
     '''
     # TODO: Deal with num_region vs. num_channels vs. num_parcels conflict with variable naming
     def __init__(self, num_regions, simKey, sampleFreqHz, targetValue = None, empiricalData = None):
+        super(CostsPSD, self).__init__(simKey)
         self.num_regions = num_regions
         self.simKey = simKey  # This is the index in the data simulation to extract variable time series from
         
@@ -18,7 +20,7 @@ class CostsPSD():
         
         if empiricalData != None:
             # In the future, if given empiricalData then will calculate the target value in this initialization function. 
-            # That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify
+            # That will possibly involve a time series of targets, for which then the loss would need a parameter to identify
             # which one to fit to.
             pass
         warn(f'{self.__class__.__name__} will be deprecated.', DeprecationWarning, stacklevel=2)
@@ -80,18 +82,19 @@ class CostsPSD():
         return sdAxis_dS, sdValues_dS_scaled
 
     
-    def calcLoss(self, simData):
-        # simData assumed to be in the form [time_steps, regions or channels, one or more variables]
+    def loss(self, simData, empData = None):
+        # simData assumed to be dict with values in the form [time_steps, regions or channels, one or more variables]
         # Returns the MSE of the difference between the simulated and target power spectrum
+        sim = simData[self.simKey]
         
-        sdAxis, sdValues = powerSpectrumLoss.calcPSD(simData[:, :, self.simKey], sampleFreqHz = self.sampleFreqHz, minFreq = 2, maxFreq = 40)
+        sdAxis, sdValues = powerSpectrumLoss.calcPSD(sim[:, :, self.simKey], sampleFreqHz = self.sampleFreqHz, minFreq = 2, maxFreq = 40)
         sdAxis_dS, sdValues_dS = powerSpectrumLoss.downSmoothPSD(sdAxis, sdValues, numPoints = 32)
         sdAxis_dS, sdValues_dS_scaled = powerSpectrumLoss.scalePSD(sdAxis_dS, sdValues_dS)
 
         return torch.nn.functional.mse_loss(sdValues_dS_scaled, self.targetValue)
 
 
-class CostsFixedPSD():
+class CostsFixedPSD(AbstractLoss):
     """
     Updated Code that fits to a fixed PSD
     
@@ -153,7 +156,8 @@ class CostsFixedPSD():
             Whether to run the objective function on CPU or GPU.        
         
         """
-    
+        super(CostsFixedPSD, self).__init__(simKey)
+        
         self.num_regions = num_regions
         self.simKey = simKey  # This is the index in the data simulation to extract variable time series from
         self.batch_size = batch_size
@@ -173,7 +177,7 @@ class CostsFixedPSD():
         
         if empiricalData != None:
             # In the future, if given empiricalData then will calculate the target value in this initialization function. 
-            # That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify
+            # That will possibly involve a time series of targets, for which then the loss would need a parameter to identify
             # which one to fit to.
             pass
     
@@ -185,7 +189,7 @@ class CostsFixedPSD():
         
         Parameters
         ----------
-        signal: torch.tensor
+        signal: dict of torch.tensor
             The timeseries outputted by a model. Dimensions: [nodes, time, batch]
         sampleFreqHz: Int
             The sampling frequency of the data.
@@ -241,7 +245,7 @@ class CostsFixedPSD():
         
         return sdAxis, sdValues
                
-    def calcLoss(self, simData, empData = None):
+    def loss(self, simData, empData = None):
         """
         
         NOTE: If using batching, the batches will be averaged before calculating the error (as opposed to having an error for each simulated time series in the batch).
@@ -260,8 +264,9 @@ class CostsFixedPSD():
             The MSE of the difference between the simulated and target power spectrum within the specified range
         
         """
+        sim = simData[self.simKey]
         
-        psdAxis, psdValues = self.calcPSD(simData, sampleFreqHz = self.sampleFreqHz, minFreq = self.minFreq, maxFreq = self.maxFreq) # TODO: Sampling frequency of simulated data and target time series is currently assumed to be the same.
+        psdAxis, psdValues = self.calcPSD(sim, sampleFreqHz = self.sampleFreqHz, minFreq = self.minFreq, maxFreq = self.maxFreq) # TODO: Sampling frequency of simulated data and target time series is currently assumed to be the same.
         
         meanValue = torch.mean(psdValues, 2)
         

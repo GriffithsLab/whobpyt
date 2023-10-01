@@ -135,15 +135,15 @@ class mmObjectiveFunction():
         #self.BOLD_PSD = CostsPSD(...) # Not Currently Used
         #self.BOLD_FC = CostsFC(num_regions, varIdx = 4, targetValue = SC_mtx_norm)
                 
-    def loss(self, node_history, EEG_history, BOLD_history, temp, returnLossComponents = False):
+    def loss(self, simData, empData = None, returnLossComponents = False):
         # sim, ts_window, self.model, next_window
         
-        S_E_mean_loss = self.S_E_mean.calcLoss(node_history) 
-        S_I_mean_loss = torch.tensor([0]).to(device) #self.S_I_mean.calcLoss(node_history)
-        EEG_PSD_loss = torch.tensor([0]).to(device) #self.EEG_PSD.calcLoss(EEG_history) 
-        EEG_FC_loss = torch.tensor([0]).to(device) #self.EEG_FC.calcLoss(EEG_history)
-        BOLD_PSD_loss = torch.tensor([0]).to(device) #self.BOLD_PS.calcLoss(BOLD_history)
-        BOLD_FC_loss = torch.tensor([0]).to(device) #self.BOLD_FC.calcLoss(BOLD_history)
+        S_E_mean_loss = self.S_E_mean.loss(simData) 
+        S_I_mean_loss = torch.tensor([0]).to(device) #self.S_I_mean.loss(simData)
+        EEG_PSD_loss = torch.tensor([0]).to(device) #self.EEG_PSD.loss(simData) 
+        EEG_FC_loss = torch.tensor([0]).to(device) #self.EEG_FC.loss(simData)
+        BOLD_PSD_loss = torch.tensor([0]).to(device) #self.BOLD_PS.loss(simData)
+        BOLD_FC_loss = torch.tensor([0]).to(device) #self.BOLD_FC.loss(simData)
                 
         totalLoss = self.S_E_mean_weight*S_E_mean_loss + self.S_I_mean_weight*S_I_mean_loss \
                   + self.EEG_PSD_weight*EEG_PSD_loss   + self.EEG_FC_weight*EEG_FC_loss \
