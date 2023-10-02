@@ -5,7 +5,7 @@ from whobpyt.optimization import CostsMean
 from whobpyt.optimization import CostsPSD
 from whobpyt.optimization import CostsFixedFC
 
-class CostsmmRWW2(AbstractLoss):
+class CostsmmRWWEI2(AbstractLoss):
     def __init__(self, num_regions, simKey, targetValue, device = torch.device('cpu')):  
         # Defining the Objective Function
         # ---------------------------------------------------

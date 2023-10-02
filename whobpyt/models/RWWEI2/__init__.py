@@ -1,7 +1,7 @@
-from .RWW2 import RWW2
-from .RWW2_validate import RWW2_np
+from .RWWEI2 import RWWEI2
+from .RWWEI2_validate import RWWEI2_np
 
-from .ParamsRWW2 import ParamsRWW2
+from .ParamsRWWEI2 import ParamsRWWEI2
 
-from .mmRWW2 import mmRWW2
-from .mmRWW2_validate import mmRWW2_np
+from .Multimodal_RWWEI2 import RWWEI2_EEG_BOLD
+from .Multimodal_RWWEI2_validate import RWWEI2_EEG_BOLD_np

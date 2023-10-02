@@ -2,7 +2,7 @@ import torch
 from whobpyt.datatypes import AbstractNMM, AbstractParams, par
 from math import sqrt
 
-class RWW2(AbstractNMM):
+class RWWEI2(AbstractNMM):
     '''
     Reduced Wong Wang Excitatory Inhibatory (RWWEXcInh) Model - Version 2
     
@@ -16,7 +16,7 @@ class RWW2(AbstractNMM):
     
     Attributes
     -------------
-    params : ParamsRWW2
+    params : ParamsRWWEI2
         An AbstractParams object which contains the model's parameters
     step_size : Float
         The step size of numerical integration (in msec)
@@ -61,7 +61,7 @@ class RWW2(AbstractNMM):
     def __init__(self, num_regions, params, Con_Mtx, Dist_Mtx, step_size = 0.1, sim_len = 1000, useBC = False, device = torch.device('cpu')):  
         '''
         '''
-        super(RWW2, self).__init__() # To inherit parameters attribute
+        super(RWWEI2, self).__init__() # To inherit parameters attribute
         
         # Initialize the RWW Model 
         #

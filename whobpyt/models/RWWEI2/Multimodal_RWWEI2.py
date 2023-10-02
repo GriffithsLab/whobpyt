@@ -2,19 +2,19 @@
 
 import torch
 from whobpyt.datatypes import AbstractNMM, AbstractMode, AbstractParams
-from whobpyt.models.RWW2 import RWW2, ParamsRWW2
+from whobpyt.models.RWWEI2 import RWWEI2, ParamsRWWEI2
 from whobpyt.models.BOLD import BOLD_Layer, BOLD_Params
 from whobpyt.models.EEG import EEG_Layer, EEG_Params
 
-class mmRWW2(RWW2):
+class RWWEI2_EEG_BOLD(RWWEI2):
 
-    model_name = "mmRWW2"
+    model_name = "RWWEI2_EEG_BOLD"
     
     def __init__(self, num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device = torch.device('cpu')):
 
         self.eeg = EEG_Layer(num_regions, paramsEEG, num_channels, device = device)
         self.bold = BOLD_Layer(num_regions, paramsBOLD, device = device)
-        super(mmRWW2, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False, device = device)
+        super(RWWEI2_EEG_BOLD, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False, device = device)
         
         self.node_size = num_regions
         self.step_size = step_size
@@ -52,12 +52,12 @@ class mmRWW2(RWW2):
         return forward(self, external, hx, hE, setNoise)
 
 def setModelParameters(self):
-    super(mmRWW2, self).setModelParameters() # Currently this is the only one with parameters being fitted
+    super(RWWEI2_EEG_BOLD, self).setModelParameters() # Currently this is the only one with parameters being fitted
     self.eeg.setModelParameters()
     self.bold.setModelParameters()    
 
 def createIC(self, ver):
-    #super(mmRWW2, self).createIC()
+    #super(RWWEI2_EEG_BOLD, self).createIC()
     #self.eeg.createIC()
     #self.bold.createIC()
     
@@ -69,7 +69,7 @@ def createIC(self, ver):
 
 def forward(self, external, hx, hE, setNoise):
     
-    NMM_vals, hE = super(mmRWW2, self).forward(external, self.next_start_state[:, 0:2, :], hE, setNoise) #TODO: Fix the hx in the future
+    NMM_vals, hE = super(RWWEI2_EEG_BOLD, self).forward(external, self.next_start_state[:, 0:2, :], hE, setNoise) #TODO: Fix the hx in the future
     EEG_vals, hE = self.eeg.forward(self.step_size, self.sim_len, NMM_vals["E"].permute((1,0,2)))
     BOLD_vals, hE = self.bold.forward(self.next_start_state[:, 2:6, :], self.step_size, self.sim_len, NMM_vals["E"].permute((1,0,2)))
     
