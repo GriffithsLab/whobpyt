@@ -135,7 +135,7 @@ class Fitting_FNGFPG(AbstractFitting):
                 
                 
                 # calculating loss
-                loss = self.cost.calcLoss(sim_vals, empData)
+                loss = self.cost.loss(sim_vals, empData)
                 
                 optim.zero_grad()
                 loss.backward()

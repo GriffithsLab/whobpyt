@@ -5,10 +5,8 @@ from whobpyt.optimization import CostsMean
 from whobpyt.optimization import CostsPSD
 from whobpyt.optimization import CostsFixedFC
 
-class CostsmmRWW2(AbstractLoss):
-    def __init__(self, num_regions, simKey, targetValue, device = torch.device('cpu')):
-        super(CostsmmRWW2, self).__init__()
-        
+class CostsmmRWWEI2(AbstractLoss):
+    def __init__(self, num_regions, simKey, targetValue, device = torch.device('cpu')):  
         # Defining the Objective Function
         # ---------------------------------------------------
         # Written in such as way as to be able to adjust the relative importance of components that make up the objective function.
@@ -31,18 +29,15 @@ class CostsmmRWW2(AbstractLoss):
         self.EEG_FC = CostsFixedFC(simKey = "eeg", device = device)
         #self.BOLD_PSD = CostsPSD(...) # Not Currently Used
         self.BOLD_FC = CostsFixedFC(simKey = "bold", device = device)
-
-    def loss(self, sim, emp, model: torch.nn.Module, state_vals):
-        pass
         
-    def calcLoss(self, simData, empData, returnLossComponents = False):
+    def loss(self, simData, empData, returnLossComponents = False):
         
-        S_E_mean_loss = self.S_E_mean.calcLoss(simData[self.S_E_mean.simKey]) 
-        S_I_mean_loss = torch.tensor([0]).to(self.device) #self.S_I_mean.calcLoss(node_history)
-        EEG_PSD_loss = torch.tensor([0]).to(self.device) #self.EEG_PSD.calcLoss(EEG_history) 
-        EEG_FC_loss = self.EEG_FC.calcLoss(simData[self.EEG_FC.simKey], empData['EEG_FC'])
-        BOLD_PSD_loss = torch.tensor([0]).to(self.device) #self.BOLD_PS.calcLoss(BOLD_history)
-        BOLD_FC_loss = self.BOLD_FC.calcLoss(simData[self.BOLD_FC.simKey], empData['BOLD_FC'])
+        S_E_mean_loss = self.S_E_mean.loss(simData) 
+        S_I_mean_loss = torch.tensor([0]).to(self.device) #self.S_I_mean.loss(node_history)
+        EEG_PSD_loss = torch.tensor([0]).to(self.device) #self.EEG_PSD.loss(EEG_history) 
+        EEG_FC_loss = self.EEG_FC.loss(simData, empData['EEG_FC'])
+        BOLD_PSD_loss = torch.tensor([0]).to(self.device) #self.BOLD_PS.loss(BOLD_history)
+        BOLD_FC_loss = self.BOLD_FC.loss(simData, empData['BOLD_FC'])
                 
         totalLoss = self.S_E_mean_weight*S_E_mean_loss + self.S_I_mean_weight*S_I_mean_loss \
                   + self.EEG_PSD_weight*EEG_PSD_loss   + self.EEG_FC_weight*EEG_FC_loss \

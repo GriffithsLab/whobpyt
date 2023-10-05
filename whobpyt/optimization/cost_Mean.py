@@ -1,7 +1,8 @@
 import torch
+from whobpyt.datatypes.AbstractLoss import AbstractLoss
 
 
-class CostsMean():
+class CostsMean(AbstractLoss):
     '''
     Target Mean Value of a Variable
     
@@ -30,6 +31,7 @@ class CostsMean():
         targetValue : Tensor
             The target value either as single number or vector
         '''
+        super(CostsMean, self).__init__(simKey)
         
         self.num_regions = num_regions
         self.simKey = simKey # This is the key from the numerical simulation used to select the time series
@@ -48,18 +50,18 @@ class CostsMean():
             
         if empiricalData != None:
             # In the future, if given empiricalData then will calculate the target value in this initialization function. 
-            # That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify
+            # That will possibly involve a time series of targets, for which then the loss would need a parameter to identify
             # which one to fit to.
             pass
 
         
-    def calcLoss(self, simData, empData = None):
+    def loss(self, simData, empData = None):
         '''
         Method to calculate the loss
         
         Parameters
         --------------
-        simData: Tensor[ Nodes x Time ] or [ Nodes x Time x Blocks(Batch) ]
+        simData: dict of Tensor[ Nodes x Time ] or [ Nodes x Time x Blocks(Batch) ]
             The time series used by the loss function 
             
         Returns
@@ -69,7 +71,9 @@ class CostsMean():
         
         '''
         
-        meanVar = torch.mean(simData, 1)
+        sim = simData[self.simKey]
+        
+        meanVar = torch.mean(sim, 1)
         
         return torch.nn.functional.mse_loss(meanVar, self.targetValue)
         

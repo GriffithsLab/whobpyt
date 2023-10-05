@@ -170,8 +170,7 @@ class Model_fitting(AbstractFitting):
                     ts_window = torch.tensor(windowedTS[win_idx, :, :], dtype=torch.float32)
 
                     # calculating loss
-                    sim = next_window[self.cost.simKey]
-                    loss = self.cost.loss(sim, ts_window, self.model, next_window)
+                    loss = self.cost.loss(next_window, ts_window)
                     
                     # TIME SERIES: Put the window of simulated forward model.
                     for name in set(self.model.state_names + self.model.output_names):

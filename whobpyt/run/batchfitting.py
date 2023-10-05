@@ -104,7 +104,7 @@ class Fitting_Batch(AbstractFitting):
                 
                 
                 # calculating loss
-                loss = self.cost.calcLoss(sim_vals[self.cost.simKey], empData)
+                loss = self.cost.loss(sim_vals, empData)
                 
                 optim.zero_grad()
                 loss.backward()
