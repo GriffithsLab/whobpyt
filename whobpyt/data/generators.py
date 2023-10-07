@@ -3,11 +3,19 @@ import numpy as np
 
 
 def gen_cube(device = torch.device("cpu")):
+    """"Generates a synthetic dataset based on the structure of a cube. Not biologically realistic, but useful for demos and testing.
+
+    Args:
+        device (torch.device, optional): Specify the PyTorch device to use, e.g., CPU, GPU, etc. Defaults to torch.device("cpu").
+
+    Returns:
+        dict: A deictionary containing the following keys:
+            "SC" (torch.tensor): A synthetic structural connectivity matrix
+            "dist" (torch.tensor): A matrix of distances between regions
+            "LF" (torch.tensor): A normalized lead field matrix
+            "Source FC" (torch.tensor): A synthetic Functional Connectivity Matrix
+            "Channel FC" (torch.tensor): A synthetic Functional Connectivity Matrix for Channel Space
     """
-    # Generates a synthetic dataset based on the structure of a cube
-    # Not biologically realistic, but useful for demos and testing
-    """
-    
     # %%
     # Generating a physically possible (in 3D Space) Structural Connectivity Matrix
     # ---------------------------------------------------
@@ -94,18 +102,21 @@ def gen_cube(device = torch.device("cpu")):
     
 
 def syntheticSC(numRegions, seed = None, maxConDist = 50):
-    # Returns a synetheic Structural Connectivity Matrix with associated region locations in 3D Space
-    #
-    # numRegions: The number of regions in the connectome (must be an even number).
-    # seed: value to use as np.random.seed() for reproducability. 
-    # maxConDist: The max distance between regions such that less than this distance there can still be a connection strength.
-    #             May wish to scale this based on numRegions. 
-    #
-    # con: Structural Connectivity Matrix
-    # loc: List of region locations in 3D space
-    #
-    # Recommend to try different seeds and pick good SC matrices based on visual inspection 
-    # using nilearn.plotting.view_connectome(con, loc).
+    """Returns a synetheic Structural Connectivity Matrix with associated region locations in 3D Space
+
+    Args:
+        numRegions (int): The number of regions in the connectome (must be an even number).
+        seed (int, optional): value to use as np.random.seed() for reproducability.. Defaults to None.
+        maxConDist (int, optional): The max distance between regions such that less than this distance there can still be a connection strength. May wish to scale this based on `numRegions`. Defaults to 50.
+
+    Raises:
+        ValueError: If `numRegions` is not an even number.
+
+    Returns:
+        con (np.array): Structural Connectivity Matrix
+        loc (list): List of region locations in 3D space
+    """    
+    # Recommendation: try different seeds and pick good SC matrices based on visual inspection - using nilearn.plotting.view_connectome(con, loc).
     
     if seed != None:
         np.random.seed(seed)
