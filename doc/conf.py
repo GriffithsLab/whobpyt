@@ -63,7 +63,23 @@ html_theme = 'sphinx_rtd_theme'
 #    'logo_only': False,#True,
 #    'navigation_depth': 5,
 #}
-html_context = {}
+
+# Add MathJax configurations
+html_context = {
+    'sphinx_mathjax_config': {
+        'TeX': {
+            'extensions': ['AMSmath.js', 'AMSsymbols.js', 'amsfonts.js', 'amssymb.js'],
+        },
+        'TeX2jax': {
+            'inlineMath': [['$', '$'], ['\\(', '\\)']],
+            'displayMath': [['$$', '$$'], ['\\[', '\\]']],
+            'processEscapes': True,
+            'skipTags': ['script', 'noscript', 'style', 'textarea', 'pre'],
+        },
+        'messageStyle': 'none',  # Suppress MathJax status messages
+        'displayAlign': 'center',
+    },
+}
 
 if not 'READTHEDOCS' in os.environ:
     html_static_path = ['_static/']
