@@ -20,9 +20,10 @@ Steps to use `whobpyt` in GitHub Codespaces:
 8. Once the environment is created, the python environment will install the necessary packages. This should take 4-5 minutes.
 9. Your configured codespace should be ready. Now you get a full VS Code environment in your browser. You can now explore the code, run the examples, and even edit the code and commit your changes back to the repo.
 
-Now you should be good to continue with the rest of the example code in the notebook, and experiment with new ideas. 
+Now you should be good to continue with the rest of the example code in `.py` files, `.ipynb` notebooks, and experiment with new ideas. 
 
 
-**Note**:
+**Notes**:
 
-The codespaces environment is ephemeral, meaning that it will be deleted after 30 minutes of inactivity. You can always create a new codespace from the same branch and continue your work. You can change this idle timeout settings according to [this guideline](https://docs.github.com/en/codespaces/customizing-your-codespace/setting-your-timeout-period-for-github-codespaces).
+- The codespaces environment is ephemeral, meaning that it will be deleted after 30 minutes of inactivity. You can always create a new codespace from the same branch and continue your work. You can change this idle timeout settings according to [this guideline](https://docs.github.com/en/codespaces/customizing-your-codespace/setting-your-timeout-period-for-github-codespaces).
+- Given the full implementation of VS Code on the codespaces instance with a full Azure Virtual Machine (VM) in the backend, you can use the full power of VS Code, including the terminal, debugging, GitHub Copilot, and even the integrated Jupyter notebook. You can find more information about the VS Code integration with GitHub Codespaces [here](https://docs.github.com/en/codespaces/developing-in-codespaces/using-visual-studio-code-in-codespaces).
