@@ -18,6 +18,8 @@ Welcome to WhoBPyT documentation!
    :glob:
  
    getting_started/installation
+   getting_started/running_in_colab
+   getting_started/running_in_codespaces
 
 .. toctree::
    :maxdepth: 2
