@@ -22,5 +22,7 @@ Steps to use `whobpyt` in GitHub Codespaces:
 
 Now you should be good to continue with the rest of the example code in the notebook, and experiment with new ideas. 
 
-Note:
+
+**Note**:
+
 The codespaces environment is ephemeral, meaning that it will be deleted after 30 minutes of inactivity. You can always create a new codespace from the same branch and continue your work. You can change this idle timeout settings according to [this guideline](https://docs.github.com/en/codespaces/customizing-your-codespace/setting-your-timeout-period-for-github-codespaces).
