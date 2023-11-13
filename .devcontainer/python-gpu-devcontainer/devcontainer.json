@@ -1,5 +1,5 @@
 {
-    "name": "python_whobpyt",
+    "name": "WhoBPyT-GPU",
     "image": "mcr.microsoft.com/devcontainers/python:3.9",
       
     "customizations": {
