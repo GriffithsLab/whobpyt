@@ -3,9 +3,9 @@ name: test
 
 on:
     push:
-        branches: [ dev, 'dev/*', 'feat/*', 'fix/*', 'hotfix/*', 'enh/*', 'misc/*' ]
+        branches: [ '*' ]
     pull_request:
-        branches: [ main, dev ]
+        branches: [ '*' ]
 
 jobs:
     build:
