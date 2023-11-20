@@ -1,0 +1,27 @@
+name: test
+# testing the package by building the html help files.
+
+on:
+    push:
+        branches: [ dev, 'dev/*', 'feat/*', 'fix/*', 'hotfix/*', 'enh/*', 'misc/*' ]
+    pull_request:
+        branches: [ main, dev ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v2
+        - name: Set up Python
+          uses: actions/setup-python@v1
+          with:
+            python-version: 3.9
+        - name: Install dependencies
+          run: |
+            pip install -r requirements.txt
+            pip install .
+        - name: Build docs
+          run: |
+            cd doc
+            mkdir _static
+            make html
