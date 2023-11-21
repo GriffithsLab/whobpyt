@@ -31,7 +31,7 @@ class par:
         Not yet implemented
     '''
 
-    def __init__(self, val, prior_mean = None, prior_var = None, fit_par = False, fit_hyper = False, asLog = False, isPlastic = False):
+    def __init__(self, val, prior_mean = None, prior_var = None, fit_par = False, fit_hyper = False, asLog = False, isPlastic = False, device = torch.device('cpu')):
         '''
         
         Parameters
@@ -50,6 +50,8 @@ class par:
             Whether the log of the parameter value will be stored instead of the parameter itself (will prevent parameter from being negative).
         isPlastic : Bool
             A future potential feature to be implemented
+        device: torch.device
+            Whether to run on CPU or GPU
         '''
         
         if numpy.all(prior_mean != None) & numpy.all(prior_var != None) & (asLog == False):
@@ -63,17 +65,19 @@ class par:
             prior_mean = 0
             prior_var = 0
     
-        self.val = torch.tensor(val, dtype=torch.float32)
+        self.val = torch.tensor(val, dtype=torch.float32).to(device)
         self.asLog = asLog # Store log(val) instead of val directly, so that val itself will always stay positive during training
         if asLog:
             self.val = torch.log(self.val) #TODO: It's not ideal that the attribute is called val when it might be log(val)
             
-        self.prior_mean = torch.tensor(prior_mean, dtype=torch.float32)
-        self.prior_var = torch.tensor(prior_var, dtype=torch.float32)
+        self.prior_mean = torch.tensor(prior_mean, dtype=torch.float32).to(device)
+        self.prior_var = torch.tensor(prior_var, dtype=torch.float32).to(device)
         self.fit_par = fit_par
         self.fit_hyper = fit_hyper
         
         self.isPlastic = isPlastic #Custom functionality, may not be compatible with other features
+        
+        self.device = device
         
         if fit_par:
             self.val = torch.nn.parameter.Parameter(self.val)
@@ -104,10 +108,28 @@ class par:
         '''
         
         if self.asLog:
-            return numpy.exp(self.val.detach().clone().numpy())
+            return numpy.exp(self.val.detach().clone().cpu().numpy())
         else:
-            return self.val.detach().clone().numpy()
+            return self.val.detach().clone().cpu().numpy()
+    
+    def to(self, device):
+        '''
+        '''
+        self.device = device
         
+        if self.fit_par:
+            self.val = torch.nn.Parameter(self.val.detach().clone().to(device))
+        else:
+            self.val = self.val.to(device) 
+            
+        if self.fit_hyper:            
+            self.prior_mean = torch.nn.Parameter(self.prior_mean.detach().clone().to(device))
+            self.prior_var = torch.nn.Parameter(self.prior_var.detach().clone().to(device))
+        else:
+            self.prior_mean = self.prior_mean.to(device)
+            self.prior_var = self.prior_var.to(device) 
+
+
     def randSet(self):
         '''
         This method sets the initial value using the mean and variance of the priors.

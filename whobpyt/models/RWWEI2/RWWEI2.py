@@ -2,7 +2,7 @@ import torch
 from whobpyt.datatypes import AbstractNMM, AbstractParams, par
 from math import sqrt
 
-class RWW2(AbstractNMM):
+class RWWEI2(AbstractNMM):
     '''
     Reduced Wong Wang Excitatory Inhibatory (RWWEXcInh) Model - Version 2
     
@@ -16,7 +16,7 @@ class RWW2(AbstractNMM):
     
     Attributes
     -------------
-    params : ParamsRWW2
+    params : ParamsRWWEI2
         An AbstractParams object which contains the model's parameters
     step_size : Float
         The step size of numerical integration (in msec)
@@ -54,13 +54,14 @@ class RWW2(AbstractNMM):
         Whether to fit the Lead Field Matrix (Lead Field Matrix not Used)
     useBC : Bool
         Whether to add boundary dynamics to state variables
-    
+    device : torch.device
+        Whether the model is run on CPU or GPU
     '''
     
-    def __init__(self, num_regions, params, Con_Mtx, Dist_Mtx, step_size = 0.0001, useBC = False):  
+    def __init__(self, num_regions, params, Con_Mtx, Dist_Mtx, step_size = 0.1, sim_len = 1000, useBC = False, device = torch.device('cpu')):  
         '''
         '''
-        super(RWW2, self).__init__() # To inherit parameters attribute
+        super(RWWEI2, self).__init__() # To inherit parameters attribute
         
         # Initialize the RWW Model 
         #
@@ -74,6 +75,7 @@ class RWW2(AbstractNMM):
         #                   NOTE: This is discouraged as it will likely influence results. Instead, choose a smaller step size. 
 
         self.step_size = step_size
+        self.sim_len = sim_len
         
         self.num_regions = num_regions
         self.node_size = num_regions #Variable used by modelfitting
@@ -82,12 +84,14 @@ class RWW2(AbstractNMM):
         
         self.num_blocks = 1
         
+        self.device = device
+        
         self.max_delay = 100 #msec #This should be greater than what is possible of max(Dist_Mtx)/velocity
         self.buffer_len = int(self.max_delay/self.step_size)
-        self.delayed_S_E = torch.zeros(self.buffer_len, num_regions)
+        self.delayed_S_E = torch.zeros(self.buffer_len, num_regions).to(self.device)
         
         self.buffer_idx = 0
-        self.mu = torch.tensor([0]) #Connection Speed addition
+        self.mu = torch.tensor([0]).to(self.device) #Connection Speed addition
         
         self.params = params
         
@@ -111,14 +115,15 @@ class RWW2(AbstractNMM):
         return setModelParameters(self)
         
     def createIC(self, ver):
-        pass
-    
+        self.next_start_state = torch.tensor(0.1) + 0.2 * torch.rand((self.node_size, 2, self.num_blocks))
+        self.next_start_state = self.next_start_state.to(self.device)
+        
+        return self.next_start_state
+        
     def setBlocks(self, num_blocks):
         self.num_blocks = num_blocks
-        self.eeg.num_blocks = num_blocks
-        self.bold.num_blocks = num_blocks
     
-    def genNoise(self, block_len):
+    def genNoise(self, block_len, batched = False):
         '''
         This generates noise to be used by the model. It is particulary useful for the FNGFPG design 
         where the same noise must be used be restructure for two different forward passes. 
@@ -127,10 +132,12 @@ class RWW2(AbstractNMM):
         ------------
         
         '''
-        num_blocks = int(self.sim_len/block_len) #TODO: this is also a model attribute, but is changed when running serial vs. blocked
+        num_blocks = int(self.sim_len/block_len) #TODO: this is also a model attribute, but is changed when running serial vs. blocked during FNGFPG
+        if batched == True:
+            num_blocks = self.num_blocks
         
         ## Noise for the epoch (which has 1 batch)
-        v_of_T_block = torch.normal(0,1,size = (len(torch.arange(0, block_len, self.step_size)), self.node_size, 2, num_blocks)) 
+        v_of_T_block = torch.normal(0,1,size = (len(torch.arange(0, block_len, self.step_size)), self.node_size, 2, num_blocks), device = self.device) 
         blockNoise = {}
         blockNoise['E'] = v_of_T_block[:,:,0,:]
         blockNoise['I'] = v_of_T_block[:,:,1,:]
@@ -142,18 +149,18 @@ class RWW2(AbstractNMM):
         
         return [serialNoise, blockNoise]
     
-    def forward(self, external, hx, hE, setNoise = None):
+    def forward(self, external, hx, hE, setNoise = None, batched = False):
         '''
         '''
-        return forward(self, external, hx, hE, setNoise)
+        return forward(self, external, hx, hE, setNoise, batched)
 
 def setModelParameters(self):
 
     # NOTE: Parameters stored in self.params
  
     # To make the parameters work with modelfitting.py
-    param_reg = [torch.nn.Parameter(torch.tensor(1.))]
-    param_hyper = [torch.nn.Parameter(torch.tensor(1.))]
+    param_reg = [torch.nn.Parameter(torch.tensor(1., device = self.device))]
+    param_hyper = [torch.nn.Parameter(torch.tensor(1., device = self.device))]
     vars_names = [a for a in dir(self.params) if (type(getattr(self.params, a)) == par)]
     for var_name in vars_names:
         var = getattr(self.params, var_name)
@@ -164,7 +171,7 @@ def setModelParameters(self):
     
 
 
-def forward(self, external, hx, hE, setNoise):
+def forward(self, external, hx, hE, setNoise, batched):
 
     # Some documentation to be written...
 
@@ -192,13 +199,15 @@ def forward(self, external, hx, hE, setNoise):
     I_external = self.params.I_external.value() #External input current 
     gammaI = self.params.gammaI.value()
     J_new = self.params.J_new.value()
+    
+    const51=torch.tensor([51], device = self.device)
 
     def H_for_E_V3(I_E, update = False):
         
         numer = torch.abs(a_E*I_E - b_E) + 1e-9*1
         denom = torch.where((-d_E*(a_E*I_E - b_E) > 50), 
                             torch.abs(1 - 1e9*(-d_E*(a_E*I_E - b_E))) + 1e-9*d_E,
-                            torch.abs(1 - torch.exp(torch.min(-d_E*(a_E*I_E - b_E), torch.tensor([51])))) + 1e-9*d_E)
+                            torch.abs(1 - torch.exp(torch.min(-d_E*(a_E*I_E - b_E), const51))) + 1e-9*d_E)
         r_E = numer / denom
         
         return r_E
@@ -208,7 +217,7 @@ def forward(self, external, hx, hE, setNoise):
         numer = torch.abs(a_I*I_I - b_I) + 1e-9*1
         denom = torch.where((-d_I*(a_I*I_I - b_I) > 50),
                             torch.abs(1 - 1e5*(-d_I*(a_I*I_I - b_I))) + 1e-9*d_I,
-                            torch.abs(1 - torch.exp(torch.min(-d_I*(a_I*I_I - b_I), torch.tensor([51])))) + 1e-9*d_I)
+                            torch.abs(1 - torch.exp(torch.min(-d_I*(a_I*I_I - b_I), const51))) + 1e-9*d_I)
         r_I = numer / denom
         
         return r_I
@@ -219,7 +228,6 @@ def forward(self, external, hx, hE, setNoise):
     useDelays = False
     useLaplacian = False
     withOptVars = False
-    useGPU = False
     debug = False
 
             
@@ -229,31 +237,36 @@ def forward(self, external, hx, hE, setNoise):
     #  init_state: Tensor [regions, state_vars] # Regions is number of nodes and should match self.num_regions. There are 2 state variables. 
     #  sim_len: Int - The length of time to simulate in msec
     #  withOptVars: Boolean - Whether to include the Current and Firing rate variables of excitatory and inhibitory populations in layer_history
-    #  useGPU:  Boolean - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network Code
     #
     # OUTPUT
     #  state_vars:  Tensor - [regions, state_vars]
     #  layer_history: Tensor - [time_steps, regions, state_vars (+ opt_params)]
     #
     
+    if batched:
+        num_steps = int((sim_len/self.step_size))
+    else:
+        num_steps = int((sim_len/self.step_size)/self.num_blocks)
+    
     if setNoise is not None:
         Ev = setNoise["E"]
         Iv = setNoise["I"]
-        state_hist = torch.zeros(int((sim_len/self.step_size)/self.num_blocks), self.num_regions, 2, self.num_blocks) #TODO: Deal with the dimensions
+        state_hist = torch.zeros(num_steps, self.num_regions, 2, self.num_blocks, device = self.device) #TODO: Deal with the dimensions
         if(withOptVars):
-            opt_hist = torch.zeros(int((sim_len/self.step_size)/self.num_blocks), self.num_regions, 4, self.num_blocks)
+            opt_hist = torch.zeros(num_steps, self.num_regions, 4, self.num_blocks, device = self.device)
     else:
-        Ev = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions, self.num_blocks))
-        Iv = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions, self.num_blocks))
-        state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 2, self.num_blocks)
+        Ev = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions, self.num_blocks)).to(self.device)
+        Iv = torch.normal(0,1,size = (len(torch.arange(0, sim_len, self.step_size)), self.num_regions, self.num_blocks)).to(self.device)
+        state_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 2, self.num_blocks).to(self.device)
         if(withOptVars):
-            opt_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 4, self.num_blocks)
+            opt_hist = torch.zeros(int(sim_len/self.step_size), self.num_regions, 4, self.num_blocks).to(self.device)
+    
+    ones_row = torch.ones(1, self.num_blocks, device = self.device)
     
     # RWW and State Values
     S_E = init_state[:, 0, :]
     S_I = init_state[:, 1, :]
 
-    num_steps = int((sim_len/self.step_size)/self.num_blocks)
     for i in range(num_steps): 
         
         if((not useDelays) & (not useLaplacian)):
@@ -300,11 +313,9 @@ def forward(self, external, hx, hE, setNoise):
             Delayed_Laplacian_S_E = (S_E_delayed_Vector + torch.matmul(Laplacian_diagonal, S_E))
             
             Network_S_E = Delayed_Laplacian_S_E
-            
-
 
         # Currents
-        I_E = W_E*I_0 + w_plus*J_NMDA*S_E + G*J_NMDA*Network_S_E - torch.matmul(J,torch.ones(1, self.num_blocks))*S_I + I_external # J * S_I updated to allow for local J fitting in parallel for FNGFPG
+        I_E = W_E*I_0 + w_plus*J_NMDA*S_E + G*J_NMDA*Network_S_E - torch.matmul(J,ones_row)*S_I + I_external # J * S_I updated to allow for local J fitting in parallel for FNGFPG
         I_I = W_I*I_0 + J_NMDA*S_E - J_new*S_I + Lambda*G*J_NMDA*Network_S_E
         
         # Firing Rates

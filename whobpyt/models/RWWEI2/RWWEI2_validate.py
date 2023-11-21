@@ -15,7 +15,7 @@ import numpy as np
 import numpy
 from math import sqrt
     
-class RWW2_np():
+class RWWEI2_np():
     def __init__(self, num_regions, params, Con_Mtx, Dist_Mtx, step_size = 0.1):        
         
         # Initialize the RWW Model 

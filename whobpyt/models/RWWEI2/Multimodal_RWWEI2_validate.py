@@ -2,16 +2,16 @@
 
 import numpy as np
 from whobpyt.datatypes import AbstractNMM, AbstractMode, AbstractParams
-from whobpyt.models.RWW2 import RWW2_np, ParamsRWW2
+from whobpyt.models.RWWEI2 import RWWEI2_np, ParamsRWWEI2
 from whobpyt.models.BOLD import BOLD_np, BOLD_Params
 from whobpyt.models.EEG import EEG_np, EEG_Params
 
-class mmRWW2_np(RWW2_np):
+class RWWEI2_EEG_BOLD_np(RWWEI2_np):
 
-    model_name = "mmRWW2_np"
+    model_name = "RWWEI2_EEG_BOLD_np"
     
     def __init__(self, num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len):
-        super(mmRWW2_np, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size)
+        super(RWWEI2_EEG_BOLD_np, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size)
         self.eeg = EEG_np(num_regions, paramsEEG, num_channels)
         self.bold = BOLD_np(num_regions, paramsBOLD)
         
@@ -39,12 +39,12 @@ class mmRWW2_np(RWW2_np):
         return forward(self, external, hx, hE)
 
 def setModelParameters(self):
-    super(mmRWW2, self).setModelParameters() # Currently this is the only one with parameters being fitted
+    super(RWWEI2_EEG_BOLD, self).setModelParameters() # Currently this is the only one with parameters being fitted
     self.eeg.setModelParameters()
     self.bold.setModelParameters()    
 
 def createIC(self, ver):
-    #super(mmRWW2, self).createIC()
+    #super(RWWEI2_EEG_BOLD, self).createIC()
     #self.eeg.createIC()
     #self.bold.createIC()
     
@@ -55,7 +55,7 @@ def createIC(self, ver):
 
 def forward(self, external, hx, hE):
     
-    NMM_vals, hE = super(mmRWW2_np, self).forward(external, self.next_start_state[:, 0:2], hE) #TODO: Fix the hx in the future
+    NMM_vals, hE = super(RWWEI2_EEG_BOLD_np, self).forward(external, self.next_start_state[:, 0:2], hE) #TODO: Fix the hx in the future
     EEG_vals, hE = self.eeg.forward(self.step_size, self.sim_len, NMM_vals["E"])
     BOLD_vals, hE = self.bold.forward(self.next_start_state[:, 2:6], self.step_size, self.sim_len, NMM_vals["E"])
     
