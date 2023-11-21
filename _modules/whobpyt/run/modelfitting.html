@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -236,6 +238,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">Recording</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractFitting</span> <span class="kn">import</span> <span class="n">AbstractFitting</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractNMM</span> <span class="kn">import</span> <span class="n">AbstractNMM</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractLoss</span> <span class="kn">import</span> <span class="n">AbstractLoss</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes.outputs</span> <span class="kn">import</span> <span class="n">TrainingStats</span>
@@ -245,7 +248,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="kn">import</span> <span class="n">cosine_similarity</span>
 
 
-<div class="viewcode-block" id="Model_fitting"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Model_fitting">[docs]</a><span class="k">class</span> <span class="nc">Model_fitting</span><span class="p">:</span>
+<div class="viewcode-block" id="Model_fitting"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Model_fitting">[docs]</a><span class="k">class</span> <span class="nc">Model_fitting</span><span class="p">(</span><span class="n">AbstractFitting</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This Model_fitting class is able to fit resting state data or evoked potential data </span>
 <span class="sd">    for which the input training data is empty or some stimulus to one or more NMM nodes,</span>
@@ -398,8 +401,7 @@
                     <span class="n">ts_window</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">windowedTS</span><span class="p">[</span><span class="n">win_idx</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
                     <span class="c1"># calculating loss</span>
-                    <span class="n">sim</span> <span class="o">=</span> <span class="n">next_window</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">simKey</span><span class="p">]</span>
-                    <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">ts_window</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">next_window</span><span class="p">)</span>
+                    <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">next_window</span><span class="p">,</span> <span class="n">ts_window</span><span class="p">)</span>
                     
                     <span class="c1"># TIME SERIES: Put the window of simulated forward model.</span>
                     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>

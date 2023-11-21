@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -267,7 +269,7 @@
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.__init__">(whobpyt.models.RWW.RNNRWW method)</a>
 </li>
-        <li><a href="API/models.html#whobpyt.models.RWW2.RWW2.__init__">(whobpyt.models.RWW2.RWW2 method)</a>
+        <li><a href="API/models.html#whobpyt.models.RWWEI2.RWWEI2.__init__">(whobpyt.models.RWWEI2.RWWEI2 method)</a>
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsFC.__init__">(whobpyt.optimization.CostsFC method)</a>
 </li>
@@ -318,16 +320,6 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC.calcLoss">calcLoss() (whobpyt.optimization.CostsFixedFC method)</a>
-
-      <ul>
-        <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedPSD.calcLoss">(whobpyt.optimization.CostsFixedPSD method)</a>
-</li>
-        <li><a href="API/optimization.html#whobpyt.optimization.CostsMean.calcLoss">(whobpyt.optimization.CostsMean method)</a>
-</li>
-        <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.calcLoss">(whobpyt.optimization.CostsPSD method)</a>
-</li>
-      </ul></li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedPSD.calcPSD">calcPSD() (whobpyt.optimization.CostsFixedPSD method)</a>
 
       <ul>
@@ -340,12 +332,12 @@
 </li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedPSD">CostsFixedPSD (class in whobpyt.optimization)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsMean">CostsMean (class in whobpyt.optimization)</a>
 </li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD">CostsPSD (class in whobpyt.optimization)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsTS">CostsTS (class in whobpyt.optimization)</a>
 </li>
       <li><a href="API/models.html#whobpyt.models.JansenRit.RNNJANSEN.createDelayIC">createDelayIC() (whobpyt.models.JansenRit.RNNJANSEN method)</a>
@@ -359,7 +351,7 @@
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.createIC">(whobpyt.models.RWW.RNNRWW method)</a>
 </li>
-        <li><a href="API/models.html#whobpyt.models.RWW2.RWW2.createIC">(whobpyt.models.RWW2.RWW2 method)</a>
+        <li><a href="API/models.html#whobpyt.models.RWWEI2.RWWEI2.createIC">(whobpyt.models.RWWEI2.RWWEI2 method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -401,7 +393,7 @@
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.forward">(whobpyt.models.RWW.RNNRWW method)</a>
 </li>
-        <li><a href="API/models.html#whobpyt.models.RWW2.RWW2.forward">(whobpyt.models.RWW2.RWW2 method)</a>
+        <li><a href="API/models.html#whobpyt.models.RWWEI2.RWWEI2.forward">(whobpyt.models.RWWEI2.RWWEI2 method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -419,7 +411,7 @@
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.info">(whobpyt.models.RWW.RNNRWW method)</a>
 </li>
-        <li><a href="API/models.html#whobpyt.models.RWW2.RWW2.info">(whobpyt.models.RWW2.RWW2 method)</a>
+        <li><a href="API/models.html#whobpyt.models.RWWEI2.RWWEI2.info">(whobpyt.models.RWWEI2.RWWEI2 method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -430,11 +422,17 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/datatypes.html#whobpyt.datatypes.Recording.length">length() (whobpyt.datatypes.Recording method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFC.loss">loss() (whobpyt.optimization.CostsFC method)</a>
 
       <ul>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC.loss">(whobpyt.optimization.CostsFixedFC method)</a>
+</li>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedPSD.loss">(whobpyt.optimization.CostsFixedPSD method)</a>
+</li>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsMean.loss">(whobpyt.optimization.CostsMean method)</a>
+</li>
+        <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.loss">(whobpyt.optimization.CostsPSD method)</a>
+</li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsTS.loss">(whobpyt.optimization.CostsTS method)</a>
 </li>
       </ul></li>
@@ -500,7 +498,7 @@
 </li>
       <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW">RNNRWW (class in whobpyt.models.RWW)</a>
 </li>
-      <li><a href="API/models.html#whobpyt.models.RWW2.RWW2">RWW2 (class in whobpyt.models.RWW2)</a>
+      <li><a href="API/models.html#whobpyt.models.RWWEI2.RWWEI2">RWWEI2 (class in whobpyt.models.RWWEI2)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -525,7 +523,7 @@
 </li>
         <li><a href="API/models.html#whobpyt.models.RWW.RNNRWW.setModelParameters">(whobpyt.models.RWW.RNNRWW method)</a>
 </li>
-        <li><a href="API/models.html#whobpyt.models.RWW2.RWW2.setModelParameters">(whobpyt.models.RWW2.RWW2 method)</a>
+        <li><a href="API/models.html#whobpyt.models.RWWEI2.RWWEI2.setModelParameters">(whobpyt.models.RWWEI2.RWWEI2 method)</a>
 </li>
       </ul></li>
   </ul></td>

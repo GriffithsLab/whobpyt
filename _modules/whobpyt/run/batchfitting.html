@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -235,8 +237,9 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">Recording</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">TrainingStats</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractFitting</span> <span class="kn">import</span> <span class="n">AbstractFitting</span>
 
-<div class="viewcode-block" id="Fitting_Batch"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Fitting_Batch">[docs]</a><span class="k">class</span> <span class="nc">Fitting_Batch</span><span class="p">:</span>
+<div class="viewcode-block" id="Fitting_Batch"><a class="viewcode-back" href="../../../API/run.html#whobpyt.run.Fitting_Batch">[docs]</a><span class="k">class</span> <span class="nc">Fitting_Batch</span><span class="p">(</span><span class="n">AbstractFitting</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fitting Batch</span>
 <span class="sd">    </span>
@@ -332,7 +335,7 @@
                 
                 
                 <span class="c1"># calculating loss</span>
-                <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">calcLoss</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">simKey</span><span class="p">],</span> <span class="n">empData</span><span class="p">)</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">sim_vals</span><span class="p">,</span> <span class="n">empData</span><span class="p">)</span>
                 
                 <span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
                 <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>

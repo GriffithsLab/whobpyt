@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>whobpyt.models.RWW2.RWW2 &mdash; WhoBPyT 0.0.0 documentation</title>
+  <title>whobpyt.models.RWWEI2.RWWEI2 &mdash; WhoBPyT 0.0.0 documentation</title>
   
 
   
@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -211,7 +213,7 @@
         
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
         
-      <li>whobpyt.models.RWW2.RWW2</li>
+      <li>whobpyt.models.RWWEI2.RWWEI2</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -226,12 +228,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for whobpyt.models.RWW2.RWW2</h1><div class="highlight"><pre>
+  <h1>Source code for whobpyt.models.RWWEI2.RWWEI2</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <span class="n">AbstractNMM</span><span class="p">,</span> <span class="n">AbstractParams</span><span class="p">,</span> <span class="n">par</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
 
-<div class="viewcode-block" id="RWW2"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2">[docs]</a><span class="k">class</span> <span class="nc">RWW2</span><span class="p">(</span><span class="n">AbstractNMM</span><span class="p">):</span>
+<div class="viewcode-block" id="RWWEI2"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWWEI2.RWWEI2">[docs]</a><span class="k">class</span> <span class="nc">RWWEI2</span><span class="p">(</span><span class="n">AbstractNMM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Reduced Wong Wang Excitatory Inhibatory (RWWEXcInh) Model - Version 2</span>
 <span class="sd">    </span>
@@ -245,7 +247,7 @@
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    -------------</span>
-<span class="sd">    params : ParamsRWW2</span>
+<span class="sd">    params : ParamsRWWEI2</span>
 <span class="sd">        An AbstractParams object which contains the model&#39;s parameters</span>
 <span class="sd">    step_size : Float</span>
 <span class="sd">        The step size of numerical integration (in msec)</span>
@@ -287,10 +289,10 @@
 <span class="sd">        Whether the model is run on CPU or GPU</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-<div class="viewcode-block" id="RWW2.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">Dist_Mtx</span><span class="p">,</span> <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">sim_len</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">useBC</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>  
+<div class="viewcode-block" id="RWWEI2.__init__"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWWEI2.RWWEI2.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_regions</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">Dist_Mtx</span><span class="p">,</span> <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">sim_len</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">useBC</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>  
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">RWW2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span> <span class="c1"># To inherit parameters attribute</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RWWEI2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span> <span class="c1"># To inherit parameters attribute</span>
         
         <span class="c1"># Initialize the RWW Model </span>
         <span class="c1">#</span>
@@ -337,13 +339,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">setModelParameters</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="RWW2.info"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RWWEI2.info"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWWEI2.RWWEI2.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;state_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">],</span> <span class="s2">&quot;output_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">]}</span></div>
             
-<div class="viewcode-block" id="RWW2.setModelParameters"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.setModelParameters">[docs]</a>    <span class="k">def</span> <span class="nf">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RWWEI2.setModelParameters"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWWEI2.RWWEI2.setModelParameters">[docs]</a>    <span class="k">def</span> <span class="nf">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">setModelParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="RWW2.createIC"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.createIC">[docs]</a>    <span class="k">def</span> <span class="nf">createIC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ver</span><span class="p">):</span>
+<div class="viewcode-block" id="RWWEI2.createIC"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWWEI2.RWWEI2.createIC">[docs]</a>    <span class="k">def</span> <span class="nf">createIC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ver</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">next_start_state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_blocks</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">next_start_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_start_state</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         
@@ -378,7 +380,7 @@
         
         <span class="k">return</span> <span class="p">[</span><span class="n">serialNoise</span><span class="p">,</span> <span class="n">blockNoise</span><span class="p">]</span>
     
-<div class="viewcode-block" id="RWW2.forward"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWW2.RWW2.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external</span><span class="p">,</span> <span class="n">hx</span><span class="p">,</span> <span class="n">hE</span><span class="p">,</span> <span class="n">setNoise</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">batched</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RWWEI2.forward"><a class="viewcode-back" href="../../../../API/models.html#whobpyt.models.RWWEI2.RWWEI2.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external</span><span class="p">,</span> <span class="n">hx</span><span class="p">,</span> <span class="n">hE</span><span class="p">,</span> <span class="n">setNoise</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">batched</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external</span><span class="p">,</span> <span class="n">hx</span><span class="p">,</span> <span class="n">hE</span><span class="p">,</span> <span class="n">setNoise</span><span class="p">,</span> <span class="n">batched</span><span class="p">)</span></div></div>

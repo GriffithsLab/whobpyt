@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -295,14 +297,13 @@ From: https://drive.google.com/uc?id=1EOwDLj5SxWpwxEk5MT7cShiMPLszemuq
 To: /home/runner/.whobpyt/data/hcpl2k8/HCP/100307_rfMRI_REST1_LR_hpc200_clean__l2k8_sc33_ts.pkl
 
   0%|          | 0.00/804k [00:00&lt;?, ?B/s]
- 65%|######5   | 524k/804k [00:00&lt;00:00, 4.43MB/s]
-100%|##########| 804k/804k [00:00&lt;00:00, 6.03MB/s]
+100%|##########| 804k/804k [00:00&lt;00:00, 38.2MB/s]
 Downloading...
 From: https://drive.google.com/uc?id=1B9U47D19DrQOnNugs8keDNFQha1GfPGv
 To: /home/runner/.whobpyt/data/hcpl2k8/HCP/weights_100307.txt
 
   0%|          | 0.00/172k [00:00&lt;?, ?B/s]
-100%|##########| 172k/172k [00:00&lt;00:00, 2.28MB/s]
+100%|##########| 172k/172k [00:00&lt;00:00, 8.95MB/s]
 Download completed
 
 
@@ -368,7 +369,7 @@ base_dir = ‘../HCP/’</p>
 </pre></div>
 </div>
 <p>create objective function</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">CostsRWW</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">CostsRWW</span><span class="p">(</span><a href="../API/models.html#whobpyt.models.RWW.RNNRWW" title="whobpyt.models.RWW.RNNRWW" class="sphx-glr-backref-module-whobpyt-models-RWW sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">)</span>
 </pre></div>
 </div>
 <p>call model fit</p>
@@ -383,15 +384,15 @@ base_dir = ‘../HCP/’</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: 5.0410123 Pseudo FC_cor:  0.20992193724867828 cos_sim:  -0.0047826659170298325
+epoch:  0 loss: 5.718211 Pseudo FC_cor:  0.18691674540058015 cos_sim:  -0.004774508611451939
 Epoch:  1
-epoch:  1 loss: 4.4182925 Pseudo FC_cor:  0.26251805053739175 cos_sim:  -0.005406436678973873
+epoch:  1 loss: 4.224457 Pseudo FC_cor:  0.22542613109290688 cos_sim:  -0.005240257986684098
 Epoch:  2
-epoch:  2 loss: 3.5801435 Pseudo FC_cor:  0.38987537380420134 cos_sim:  -0.005171291522023127
+epoch:  2 loss: 4.2831283 Pseudo FC_cor:  0.2741260279004978 cos_sim:  -0.005332600540347616
 Epoch:  3
-epoch:  3 loss: 2.832609 Pseudo FC_cor:  0.3773920394728281 cos_sim:  -0.005382476110571206
+epoch:  3 loss: 3.6359882 Pseudo FC_cor:  0.3966283575491853 cos_sim:  -0.005123399967543859
 Epoch:  4
-epoch:  4 loss: 3.1462564 Pseudo FC_cor:  0.29699669498319886 cos_sim:  -0.005348036773504196
+epoch:  4 loss: 3.0329878 Pseudo FC_cor:  0.3953441000593168 cos_sim:  -0.00559086944118858
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -424,7 +425,7 @@ epoch:  4 loss: 3.1462564 Pseudo FC_cor:  0.29699669498319886 cos_sim:  -0.00534
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.4766555029583106 cos_sim:  -0.005426998866802147
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.5103053394197712 cos_sim:  -0.005762588657608615
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -463,7 +464,7 @@ epoch:  4 loss: 3.1462564 Pseudo FC_cor:  0.29699669498319886 cos_sim:  -0.00534
 </pre></div>
 </div>
 <img alt="The empirical FC, The simulated FC" class="sphx-glr-single-img" src="../_images/sphx_glr_eg003r__fitting_rww_example_005.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 11 minutes  14.333 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  35.573 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg003r-fitting-rww-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/6e0d2e4bec0ad2802eb3fd7a90e5faa9/eg003r__fitting_rww_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg003r__fitting_rww_example.py</span></code></a></p>

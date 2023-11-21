@@ -20,11 +20,11 @@ This code is set to run on CPU by default, and then GPU can be tested by updatin
 # whobpyt stuff
 import whobpyt
 from whobpyt.datatypes import par, Recording
-from whobpyt.models.RWW2 import mmRWW2, mmRWW2_np, RWW2, RWW2_np, ParamsRWW2
+from whobpyt.models.RWWEI2 import RWWEI2_EEG_BOLD, RWWEI2_EEG_BOLD_np, RWWEI2, RWWEI2_np, ParamsRWWEI2
 from whobpyt.models.BOLD import BOLD_Layer, BOLD_np, BOLD_Params
 from whobpyt.models.EEG import EEG_Layer, EEG_np, EEG_Params
 from whobpyt.optimization import CostsFC, CostsPSD, CostsMean, CostsFixedFC, CostsFixedPSD
-from whobpyt.optimization.custom_cost_mmRWW2 import CostsmmRWW2
+from whobpyt.optimization.custom_cost_mmRWW2 import CostsmmRWWEI2
 from whobpyt.run import Model_fitting, Fitting_FNGFPG, Fitting_Batch
 from whobpyt.data.generators import gen_cube
 
@@ -67,7 +67,7 @@ sns.heatmap(Con_Mtx.to(torch.device("cpu")), mask = mask, center=0, cmap='RdBu_r
 plt.title("SC of Artificial Data")
 
 # Create a RWW Params
-paramsNode = ParamsRWW2(num_regions)
+paramsNode = ParamsRWWEI2(num_regions)
 
 paramsNode.J = par((0.15 * np.ones(num_regions)), fit_par = True, asLog = True) #This is a parameter that will be updated during training
 paramsNode.G = par(torch.tensor(1.0), None, None, True, False, False)
@@ -92,7 +92,7 @@ paramsBOLD.to(device)
 # Simulation Length
 step_size = 0.1 # Step Size in msecs
 sim_len = 1500 # Simulation length in msecs
-model = RWW2(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, sim_len, device = device)
+model = RWWEI2(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, sim_len, device = device)
 
 demoPSD = torch.rand(100).to(device)
 objFun = CostsFixedPSD(num_regions = num_regions, simKey = "E", sampleFreqHz = 10000, minFreq = 1, maxFreq = 100, targetValue = demoPSD, rmTransient = 5000, device = device)
@@ -126,10 +126,10 @@ plt.title("Total Loss over Training Epochs")
 # Simulation Length
 step_size = 0.1 # Step Size in msecs
 sim_len = 5000 # Simulation length in msecs
-model = mmRWW2(num_regions, num_channels, model.params, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device)
+model = RWWEI2_EEG_BOLD(num_regions, num_channels, model.params, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device)
 
 targetValue = torch.tensor([0.164]).to(device)
-objFun = CostsmmRWW2(num_regions, simKey = "E", targetValue = targetValue, device = device)
+objFun = CostsmmRWWEI2(num_regions, simKey = "E", targetValue = targetValue, device = device)
 
 # Create a Fitting Object
 F = Fitting_FNGFPG(model, objFun, device)
@@ -163,7 +163,7 @@ plt.title("Total Loss over Training Epochs")
 model.eeg.params.LF = model.eeg.params.LF.cpu()
 
 val_sim_len = 20*1000 # Simulation length in msecs
-model_validate = mmRWW2_np(num_regions, num_channels, model.params, model.eeg.params, model.bold.params, Con_Mtx.detach().cpu().numpy(), dist_mtx.detach().cpu().numpy(), step_size, val_sim_len)
+model_validate = RWWEI2_EEG_BOLD_np(num_regions, num_channels, model.params, model.eeg.params, model.bold.params, Con_Mtx.detach().cpu().numpy(), dist_mtx.detach().cpu().numpy(), step_size, val_sim_len)
 
 sim_vals, hE = model_validate.forward(external = 0, hx = model_validate.createIC(ver = 0), hE = 0)
 
@@ -192,7 +192,8 @@ sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
 sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
 
 plt.figure()
-plt.plot(sdAxis_dS, sdValues_dS_scaled.detach())
+for n in range(num_channels):
+    plt.plot(sdAxis_dS, sdValues_dS_scaled.detach()[:,n])
 plt.xlabel('Hz')
 plt.ylabel('PSD')
 plt.title("Simulated EEG PSD: After Training")

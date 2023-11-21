@@ -48,7 +48,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Optimization" href="optimization.html" />
-    <link rel="prev" title="Installation" href="../getting_started/installation.html" /> 
+    <link rel="prev" title="Running whobpyt in GitHub Codespaces" href="../getting_started/running_in_codespaces.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
@@ -574,8 +576,8 @@ Contents are the time series from model simulation</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="whobpyt.models.RWW2.RWW2">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.RWW2.</span></code><code class="sig-name descname"><span class="pre">RWW2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Con_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Dist_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useBC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2" title="Permalink to this definition">¶</a></dt>
+<dt id="whobpyt.models.RWWEI2.RWWEI2">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">whobpyt.models.RWWEI2.</span></code><code class="sig-name descname"><span class="pre">RWWEI2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Con_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Dist_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useBC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWWEI2/RWWEI2.html#RWWEI2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWWEI2.RWWEI2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reduced Wong Wang Excitatory Inhibatory (RWWEXcInh) Model - Version 2</p>
 <p>EQUATIONS &amp; BIOLOGICAL VARIABLES FROM:</p>
 <p>Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitation-inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.</p>
@@ -584,7 +586,7 @@ Contents are the time series from model simulation</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>params</strong><span class="classifier">ParamsRWW2</span></dt><dd><p>An AbstractParams object which contains the model’s parameters</p>
+<dt><strong>params</strong><span class="classifier">ParamsRWWEI2</span></dt><dd><p>An AbstractParams object which contains the model’s parameters</p>
 </dd>
 <dt><strong>step_size</strong><span class="classifier">Float</span></dt><dd><p>The step size of numerical integration (in msec)</p>
 </dd>
@@ -628,28 +630,28 @@ Contents are the time series from model simulation</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="whobpyt.models.RWW2.RWW2.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Con_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Dist_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useBC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="whobpyt.models.RWWEI2.RWWEI2.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Con_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Dist_Mtx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useBC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">device(type='cpu')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWWEI2/RWWEI2.html#RWWEI2.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWWEI2.RWWEI2.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="whobpyt.models.RWW2.RWW2.createIC">
-<code class="sig-name descname"><span class="pre">createIC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2.createIC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2.createIC" title="Permalink to this definition">¶</a></dt>
+<dt id="whobpyt.models.RWWEI2.RWWEI2.createIC">
+<code class="sig-name descname"><span class="pre">createIC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWWEI2/RWWEI2.html#RWWEI2.createIC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWWEI2.RWWEI2.createIC" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="whobpyt.models.RWW2.RWW2.forward">
-<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setNoise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2.forward" title="Permalink to this definition">¶</a></dt>
+<dt id="whobpyt.models.RWWEI2.RWWEI2.forward">
+<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setNoise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWWEI2/RWWEI2.html#RWWEI2.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWWEI2.RWWEI2.forward" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="whobpyt.models.RWW2.RWW2.info">
-<code class="sig-name descname"><span class="pre">info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2.info" title="Permalink to this definition">¶</a></dt>
+<dt id="whobpyt.models.RWWEI2.RWWEI2.info">
+<code class="sig-name descname"><span class="pre">info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWWEI2/RWWEI2.html#RWWEI2.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWWEI2.RWWEI2.info" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="whobpyt.models.RWW2.RWW2.setModelParameters">
-<code class="sig-name descname"><span class="pre">setModelParameters</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWW2/RWW2.html#RWW2.setModelParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWW2.RWW2.setModelParameters" title="Permalink to this definition">¶</a></dt>
+<dt id="whobpyt.models.RWWEI2.RWWEI2.setModelParameters">
+<code class="sig-name descname"><span class="pre">setModelParameters</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/RWWEI2/RWWEI2.html#RWWEI2.setModelParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.RWWEI2.RWWEI2.setModelParameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -733,7 +735,7 @@ Contents are the time series from model simulation</p>
         <a href="optimization.html" class="btn btn-neutral float-right" title="Optimization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../getting_started/installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../getting_started/running_in_codespaces.html" class="btn btn-neutral float-left" title="Running whobpyt in GitHub Codespaces" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

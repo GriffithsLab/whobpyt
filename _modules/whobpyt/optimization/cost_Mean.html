@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -228,9 +230,10 @@
             
   <h1>Source code for whobpyt.optimization.cost_Mean</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">whobpyt.datatypes.AbstractLoss</span> <span class="kn">import</span> <span class="n">AbstractLoss</span>
 
 
-<div class="viewcode-block" id="CostsMean"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean">[docs]</a><span class="k">class</span> <span class="nc">CostsMean</span><span class="p">():</span>
+<div class="viewcode-block" id="CostsMean"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean">[docs]</a><span class="k">class</span> <span class="nc">CostsMean</span><span class="p">(</span><span class="n">AbstractLoss</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Target Mean Value of a Variable</span>
 <span class="sd">    </span>
@@ -259,6 +262,7 @@
 <span class="sd">        targetValue : Tensor</span>
 <span class="sd">            The target value either as single number or vector</span>
 <span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CostsMean</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">simKey</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">num_regions</span> <span class="o">=</span> <span class="n">num_regions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span> <span class="c1"># This is the key from the numerical simulation used to select the time series</span>
@@ -277,18 +281,18 @@
             
         <span class="k">if</span> <span class="n">empiricalData</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># In the future, if given empiricalData then will calculate the target value in this initialization function. </span>
-            <span class="c1"># That will possibly involve a time series of targets, for which then the calcLoss would need a parameter to identify</span>
+            <span class="c1"># That will possibly involve a time series of targets, for which then the loss would need a parameter to identify</span>
             <span class="c1"># which one to fit to.</span>
             <span class="k">pass</span></div>
 
         
-<div class="viewcode-block" id="CostsMean.calcLoss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.calcLoss">[docs]</a>    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simData</span><span class="p">,</span> <span class="n">empData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsMean.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simData</span><span class="p">,</span> <span class="n">empData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Method to calculate the loss</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        --------------</span>
-<span class="sd">        simData: Tensor[ Nodes x Time ] or [ Nodes x Time x Blocks(Batch) ]</span>
+<span class="sd">        simData: dict of Tensor[ Nodes x Time ] or [ Nodes x Time x Blocks(Batch) ]</span>
 <span class="sd">            The time series used by the loss function </span>
 <span class="sd">            </span>
 <span class="sd">        Returns</span>
@@ -298,7 +302,9 @@
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         
-        <span class="n">meanVar</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">simData</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">simData</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">simKey</span><span class="p">]</span>
+        
+        <span class="n">meanVar</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">meanVar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetValue</span><span class="p">)</span></div></div>
         

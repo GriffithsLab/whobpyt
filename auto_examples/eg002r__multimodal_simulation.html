@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -246,7 +248,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># whobpyt stuff</span>
 <span class="kn">import</span> <span class="nn">whobpyt</span>
 <span class="kn">from</span> <span class="nn">whobpyt.datatypes</span> <span class="kn">import</span> <a href="../API/datatypes.html#whobpyt.datatypes.par" title="whobpyt.datatypes.par" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">par</span></a><span class="p">,</span> <a href="../API/datatypes.html#whobpyt.datatypes.Recording" title="whobpyt.datatypes.Recording" class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class"><span class="n">Recording</span></a>
-<span class="kn">from</span> <span class="nn">whobpyt.models.RWW2</span> <span class="kn">import</span> <a href="../API/models.html#whobpyt.models.RWW2.RWW2" title="whobpyt.models.RWW2.RWW2" class="sphx-glr-backref-module-whobpyt-models-RWW2 sphx-glr-backref-type-py-class"><span class="n">mmRWW2</span></a><span class="p">,</span> <span class="n">mmRWW2_np</span><span class="p">,</span> <span class="n">RWW2</span><span class="p">,</span> <span class="n">RWW2_np</span><span class="p">,</span> <span class="n">ParamsRWW2</span>
+<span class="kn">from</span> <span class="nn">whobpyt.models.RWWEI2</span> <span class="kn">import</span> <a href="../API/models.html#whobpyt.models.RWWEI2.RWWEI2" title="whobpyt.models.RWWEI2.RWWEI2" class="sphx-glr-backref-module-whobpyt-models-RWWEI2 sphx-glr-backref-type-py-class"><span class="n">RWWEI2_EEG_BOLD</span></a><span class="p">,</span> <span class="n">RWWEI2_EEG_BOLD_np</span><span class="p">,</span> <span class="n">RWWEI2</span><span class="p">,</span> <span class="n">RWWEI2_np</span><span class="p">,</span> <span class="n">ParamsRWWEI2</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.BOLD</span> <span class="kn">import</span> <span class="n">BOLD_Layer</span><span class="p">,</span> <span class="n">BOLD_np</span><span class="p">,</span> <span class="n">BOLD_Params</span>
 <span class="kn">from</span> <span class="nn">whobpyt.models.EEG</span> <span class="kn">import</span> <span class="n">EEG_Layer</span><span class="p">,</span> <span class="n">EEG_np</span><span class="p">,</span> <span class="n">EEG_Params</span>
 <span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">CostsFC</span><span class="p">,</span> <span class="n">CostsPSD</span><span class="p">,</span> <a href="../API/optimization.html#whobpyt.optimization.CostsMean" title="whobpyt.optimization.CostsMean" class="sphx-glr-backref-module-whobpyt-optimization sphx-glr-backref-type-py-class"><span class="n">CostsMean</span></a><span class="p">,</span> <span class="n">CostsFixedFC</span><span class="p">,</span> <span class="n">CostsFixedPSD</span>
@@ -293,7 +295,7 @@ False
 <span class="n">init_state</span> <span class="o">=</span> <span class="p">(</span><span class="n">init_state</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">init_state</span><span class="p">)</span><span class="o">/</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1"># Randomizing initial values</span>
 
 <span class="c1"># Create a RWW Params</span>
-<span class="n">paramsNode</span> <span class="o">=</span> <span class="n">ParamsRWW2</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
+<span class="n">paramsNode</span> <span class="o">=</span> <span class="n">ParamsRWWEI2</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
 
 <span class="c1">#Create #EEG Params</span>
 <span class="n">paramsEEG</span> <span class="o">=</span> <span class="n">EEG_Params</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_regions</span><span class="p">))</span>
@@ -326,14 +328,14 @@ False
 </div>
 <img alt="SC of Artificial Data" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.0000)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor(1.)
 </pre></div>
 </div>
 </div>
 <div class="section" id="defining-the-cnmm-model">
 <h2>Defining the CNMM Model<a class="headerlink" href="#defining-the-cnmm-model" title="Permalink to this headline">¶</a></h2>
 <p>The Multi-Modal Model</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <a href="../API/models.html#whobpyt.models.RWW2.RWW2" title="whobpyt.models.RWW2.RWW2" class="sphx-glr-backref-module-whobpyt-models-RWW2 sphx-glr-backref-type-py-class"><span class="n">mmRWW2</span></a><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">paramsNode</span><span class="p">,</span> <span class="n">paramsEEG</span><span class="p">,</span> <span class="n">paramsBOLD</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">dist_mtx</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <a href="../API/models.html#whobpyt.models.RWWEI2.RWWEI2" title="whobpyt.models.RWWEI2.RWWEI2" class="sphx-glr-backref-module-whobpyt-models-RWWEI2 sphx-glr-backref-type-py-class"><span class="n">RWWEI2_EEG_BOLD</span></a><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">paramsNode</span><span class="p">,</span> <span class="n">paramsEEG</span><span class="p">,</span> <span class="n">paramsBOLD</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="p">,</span> <span class="n">dist_mtx</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">sim_len</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -361,15 +363,15 @@ Also, written in such a way as to be able to track and plot indiviual components
         <span class="c1">#self.BOLD_PSD = CostsPSD(...) # Not Currently Used</span>
         <span class="c1">#self.BOLD_FC = CostsFC(num_regions, varIdx = 4, targetValue = SC_mtx_norm)</span>
 
-    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_history</span><span class="p">,</span> <span class="n">EEG_history</span><span class="p">,</span> <span class="n">BOLD_history</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">returnLossComponents</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simData</span><span class="p">,</span> <span class="n">empData</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">returnLossComponents</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="c1"># sim, ts_window, self.model, next_window</span>
 
-        <span class="n">S_E_mean_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span><span class="o">.</span><span class="n">calcLoss</span><span class="p">(</span><span class="n">node_history</span><span class="p">)</span>
-        <span class="n">S_I_mean_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.S_I_mean.calcLoss(node_history)</span>
-        <span class="n">EEG_PSD_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.EEG_PSD.calcLoss(EEG_history)</span>
-        <span class="n">EEG_FC_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.EEG_FC.calcLoss(EEG_history)</span>
-        <span class="n">BOLD_PSD_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.BOLD_PS.calcLoss(BOLD_history)</span>
-        <span class="n">BOLD_FC_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.BOLD_FC.calcLoss(BOLD_history)</span>
+        <span class="n">S_E_mean_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">simData</span><span class="p">)</span>
+        <span class="n">S_I_mean_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.S_I_mean.loss(simData)</span>
+        <span class="n">EEG_PSD_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.EEG_PSD.loss(simData)</span>
+        <span class="n">EEG_FC_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.EEG_FC.loss(simData)</span>
+        <span class="n">BOLD_PSD_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.BOLD_PS.loss(simData)</span>
+        <span class="n">BOLD_FC_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1">#self.BOLD_FC.loss(simData)</span>
 
         <span class="n">totalLoss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S_E_mean_weight</span><span class="o">*</span><span class="n">S_E_mean_loss</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">S_I_mean_weight</span><span class="o">*</span><span class="n">S_I_mean_loss</span> \
                   <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">EEG_PSD_weight</span><span class="o">*</span><span class="n">EEG_PSD_loss</span>   <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">EEG_FC_weight</span><span class="o">*</span><span class="n">EEG_FC_loss</span> \
@@ -410,14 +412,14 @@ Also, written in such a way as to be able to track and plot indiviual components
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: [0.4155369] Pseudo FC_cor:  -0.03479213671944179 cos_sim:  0.35929419935533713
-epoch:  0 loss: [0.45835388] Pseudo FC_cor:  0.013132454765592983 cos_sim:  0.8391594842850496
+epoch:  0 loss: [0.4079072] Pseudo FC_cor:  0.1930493412570337 cos_sim:  0.5856602011937174
+epoch:  0 loss: [0.45189685] Pseudo FC_cor:  -0.28154322711502644 cos_sim:  0.8378587204696681
 Epoch:  1
-epoch:  1 loss: [0.44934487] Pseudo FC_cor:  -0.14813434391328903 cos_sim:  0.8636843379150656
-epoch:  1 loss: [0.45355254] Pseudo FC_cor:  -0.20922865522511178 cos_sim:  0.8655895841956874
+epoch:  1 loss: [0.46054104] Pseudo FC_cor:  -0.06210675572332903 cos_sim:  0.8630219284023755
+epoch:  1 loss: [0.4505421] Pseudo FC_cor:  -0.01744732304215365 cos_sim:  0.8660870291203728
 Epoch:  2
-epoch:  2 loss: [0.44938043] Pseudo FC_cor:  0.2621747549338517 cos_sim:  0.8656177200313582
-epoch:  2 loss: [0.45020294] Pseudo FC_cor:  -0.08134649568152875 cos_sim:  0.86563816034345
+epoch:  2 loss: [0.45097744] Pseudo FC_cor:  0.06428089612139959 cos_sim:  0.8650856426059397
+epoch:  2 loss: [0.45289907] Pseudo FC_cor:  -0.32061798766235583 cos_sim:  0.8661525174603812
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -459,7 +461,7 @@ epoch:  2 loss: [0.45020294] Pseudo FC_cor:  -0.08134649568152875 cos_sim:  0.86
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f32e139cb20&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fd625ff98e0&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD</p>
@@ -469,7 +471,8 @@ epoch:  2 loss: [0.45020294] Pseudo FC_cor:  -0.08134649568152875 cos_sim:  0.86
 <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsPSD.scalePSD" title="whobpyt.optimization.CostsPSD.scalePSD" class="sphx-glr-backref-module-whobpyt-optimization-CostsPSD sphx-glr-backref-type-py-method"><span class="n">CostsPSD</span><span class="o">.</span><span class="n">scalePSD</span></a><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_channels</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span><span class="o">.</span><span class="n">detach</span><span class="p">()[:,</span><span class="n">n</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Hz&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PSD&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated EEG PSD: After Training&quot;</span><span class="p">)</span>
@@ -501,7 +504,7 @@ epoch:  2 loss: [0.45020294] Pseudo FC_cor:  -0.08134649568152875 cos_sim:  0.86
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">LF</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">LF</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
 
 <span class="n">val_sim_len</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="mi">1000</span> <span class="c1"># Simulation length in msecs</span>
-<span class="n">model_validate</span> <span class="o">=</span> <span class="n">mmRWW2_np</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dist_mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">val_sim_len</span><span class="p">)</span>
+<span class="n">model_validate</span> <span class="o">=</span> <span class="n">RWWEI2_EEG_BOLD_np</span><span class="p">(</span><span class="n">num_regions</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">eeg</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">Con_Mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dist_mtx</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">val_sim_len</span><span class="p">)</span>
 
 <span class="n">sim_vals</span><span class="p">,</span> <span class="n">hE</span> <span class="o">=</span> <span class="n">model_validate</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">external</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hx</span> <span class="o">=</span> <span class="n">model_validate</span><span class="o">.</span><span class="n">createIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">),</span> <span class="n">hE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
@@ -519,7 +522,7 @@ epoch:  2 loss: [0.45020294] Pseudo FC_cor:  -0.08134649568152875 cos_sim:  0.86
 </div>
 <img alt="S_E and S_I" class="sphx-glr-single-img" src="../_images/sphx_glr_eg002r__multimodal_simulation_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f32e1244760&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fd621717910&gt;
 </pre></div>
 </div>
 <p>Plots of EEG PSD Validation</p>
@@ -529,7 +532,8 @@ epoch:  2 loss: [0.45020294] Pseudo FC_cor:  -0.08134649568152875 cos_sim:  0.86
 <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span> <span class="o">=</span> <a href="../API/optimization.html#whobpyt.optimization.CostsPSD.scalePSD" title="whobpyt.optimization.CostsPSD.scalePSD" class="sphx-glr-backref-module-whobpyt-optimization-CostsPSD sphx-glr-backref-type-py-method"><span class="n">CostsPSD</span><span class="o">.</span><span class="n">scalePSD</span></a><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_channels</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span><span class="o">.</span><span class="n">detach</span><span class="p">()[:,</span><span class="n">n</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Hz&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PSD&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated EEG PSD: After Training&quot;</span><span class="p">)</span>
@@ -554,7 +558,7 @@ epoch:  2 loss: [0.45020294] Pseudo FC_cor:  -0.08134649568152875 cos_sim:  0.86
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Simulated BOLD FC: After Training&#39;}&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  44.667 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 3 minutes  26.233 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg002r-multimodal-simulation-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3c5011f8f7f9c596535d7002f9b87c31/eg002r__multimodal_simulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg002r__multimodal_simulation.py</span></code></a></p>

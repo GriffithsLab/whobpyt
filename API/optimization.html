@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
@@ -239,15 +241,15 @@
 
 <dl class="py method">
 <dt id="whobpyt.optimization.CostsTS.loss">
-<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_vals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_TS.html#CostsTS.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsTS.loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_TS.html#CostsTS.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsTS.loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the Pearson Correlation between the simFC and empFC.
 From there, compute the probability and negative log-likelihood.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>sim: tensor with node_size X datapoint</strong></dt><dd><p>simulated EEG</p>
+<dt><strong>simData: dict of tensor with node_size X datapoint</strong></dt><dd><p>simulated EEG</p>
 </dd>
-<dt><strong>emp: tensor with node_size X datapoint</strong></dt><dd><p>empirical EEG</p>
+<dt><strong>empData: tensor with node_size X datapoint</strong></dt><dd><p>empirical EEG</p>
 </dd>
 </dl>
 </dd>
@@ -296,14 +298,14 @@ The cost function is the negative log-likelihood of the Pearson correlation betw
 
 <dl class="py method">
 <dt id="whobpyt.optimization.CostsFC.loss">
-<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC.loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFC.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFC.loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>sim: torch.Tensor with node_size X datapoint</strong></dt><dd><p>simulated BOLD</p>
+<dt><strong>simData: dict of torch.Tensor with node_size X datapoint</strong></dt><dd><p>simulated BOLD</p>
 </dd>
-<dt><strong>emp: torch.Tensor with node_size X datapoint</strong></dt><dd><p>empirical BOLD</p>
+<dt><strong>empData: torch.Tensor with node_size X datapoint</strong></dt><dd><p>empirical BOLD</p>
 </dd>
 </dl>
 </dd>
@@ -334,7 +336,7 @@ The cost function is the negative log-likelihood of the Pearson correlation betw
 </dd>
 <dt><strong>Methods:</strong></dt><dd></dd>
 <dt><strong>——–</strong></dt><dd></dd>
-<dt><strong>calcLoss: function</strong></dt><dd><p>calculates functional connectivity and uses it to calculate the loss</p>
+<dt><strong>loss: function</strong></dt><dd><p>calculates functional connectivity and uses it to calculate the loss</p>
 </dd>
 </dl>
 </dd>
@@ -355,8 +357,8 @@ The cost function is the negative log-likelihood of the Pearson correlation betw
 </dd></dl>
 
 <dl class="py method">
-<dt id="whobpyt.optimization.CostsFixedFC.calcLoss">
-<code class="sig-name descname"><span class="pre">calcLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simTS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empFC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFixedFC.calcLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFixedFC.calcLoss" title="Permalink to this definition">¶</a></dt>
+<dt id="whobpyt.optimization.CostsFixedFC.loss">
+<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_FC.html#CostsFixedFC.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFixedFC.loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to calculate the cost function for Functional Connectivity (FC) fitting. 
 It initially calculates the FC matrix using the data from the time series, 
 makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. 
@@ -365,9 +367,9 @@ We then use this FC matrix as a probability matrix and use it to get the cross-e
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>simTS: torch.tensor with node_size X time_point</strong></dt><dd><p>Simulated Time Series</p>
+<dt><strong>simData: dict of torch.tensor with node_size X time_point</strong></dt><dd><p>Simulated Time Series</p>
 </dd>
-<dt><strong>empFC: torch.tensor with node_size X node_size</strong></dt><dd><p>Empirical Functional Connectivity</p>
+<dt><strong>empData: torch.tensor with node_size X node_size</strong></dt><dd><p>Empirical Functional Connectivity</p>
 </dd>
 </dl>
 </dd>
@@ -394,11 +396,6 @@ TODO: Needs to be updated.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="whobpyt.optimization.CostsPSD.calcLoss">
-<code class="sig-name descname"><span class="pre">calcLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsPSD.calcLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsPSD.calcLoss" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt id="whobpyt.optimization.CostsPSD.calcPSD">
 <code class="sig-name descname"><span class="pre">calcPSD</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minFreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxFreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axMethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsPSD.calcPSD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsPSD.calcPSD" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -406,6 +403,11 @@ TODO: Needs to be updated.</p>
 <dl class="py method">
 <dt id="whobpyt.optimization.CostsPSD.downSmoothPSD">
 <code class="sig-name descname"><span class="pre">downSmoothPSD</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sdValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsPSD.downSmoothPSD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsPSD.downSmoothPSD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.optimization.CostsPSD.loss">
+<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsPSD.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsPSD.loss" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -477,28 +479,6 @@ TODO: Needs to be updated.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="whobpyt.optimization.CostsFixedPSD.calcLoss">
-<code class="sig-name descname"><span class="pre">calcLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsFixedPSD.calcLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFixedPSD.calcLoss" title="Permalink to this definition">¶</a></dt>
-<dd><p>NOTE: If using batching, the batches will be averaged before calculating the error (as opposed to having an error for each simulated time series in the batch).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>simData: torch.tensor</strong></dt><dd><p>Simulated Data in the form [regions, time_steps, block/batch]</p>
-</dd>
-<dt><strong>empData: torch.tensor</strong></dt><dd><p>NOT IMPLEMENTED: This is a placeholder for the case of getting an empirical timeseries as input, which would be applicable if doing a windowed fitting paradigm</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>psdMSE:</dt><dd><p>The MSE of the difference between the simulated and target power spectrum within the specified range</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="whobpyt.optimization.CostsFixedPSD.calcPSD">
 <code class="sig-name descname"><span class="pre">calcPSD</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minFreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxFreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axMethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsFixedPSD.calcPSD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFixedPSD.calcPSD" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method calculates the Power Spectral Density (PSD) as the square of the Fast Fourier Transform (FFT).</p>
@@ -506,7 +486,7 @@ TODO: Needs to be updated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>signal: torch.tensor</strong></dt><dd><p>The timeseries outputted by a model. Dimensions: [nodes, time, batch]</p>
+<dt><strong>signal: dict of torch.tensor</strong></dt><dd><p>The timeseries outputted by a model. Dimensions: [nodes, time, batch]</p>
 </dd>
 <dt><strong>sampleFreqHz: Int</strong></dt><dd><p>The sampling frequency of the data.</p>
 </dd>
@@ -523,6 +503,28 @@ TODO: Needs to be updated.</p>
 <dt>sdAxis: torch.tensor</dt><dd><p>The axis values of the PSD</p>
 </dd>
 <dt>sdValues: torch.tensor</dt><dd><p>The PSD values [____, ____]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="whobpyt.optimization.CostsFixedPSD.loss">
+<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_PSD.html#CostsFixedPSD.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsFixedPSD.loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOTE: If using batching, the batches will be averaged before calculating the error (as opposed to having an error for each simulated time series in the batch).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>simData: torch.tensor</strong></dt><dd><p>Simulated Data in the form [regions, time_steps, block/batch]</p>
+</dd>
+<dt><strong>empData: torch.tensor</strong></dt><dd><p>NOT IMPLEMENTED: This is a placeholder for the case of getting an empirical timeseries as input, which would be applicable if doing a windowed fitting paradigm</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>psdMSE:</dt><dd><p>The MSE of the difference between the simulated and target power spectrum within the specified range</p>
 </dd>
 </dl>
 </dd>
@@ -568,13 +570,13 @@ TODO: Needs to be updated.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="whobpyt.optimization.CostsMean.calcLoss">
-<code class="sig-name descname"><span class="pre">calcLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_Mean.html#CostsMean.calcLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsMean.calcLoss" title="Permalink to this definition">¶</a></dt>
+<dt id="whobpyt.optimization.CostsMean.loss">
+<code class="sig-name descname"><span class="pre">loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/optimization/cost_Mean.html#CostsMean.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.optimization.CostsMean.loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method to calculate the loss</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>simData: Tensor[ Nodes x Time ] or [ Nodes x Time x Blocks(Batch) ]</strong></dt><dd><p>The time series used by the loss function</p>
+<dt><strong>simData: dict of Tensor[ Nodes x Time ] or [ Nodes x Time x Blocks(Batch) ]</strong></dt><dd><p>The time series used by the loss function</p>
 </dd>
 </dl>
 </dd>

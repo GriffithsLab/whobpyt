@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -261,17 +263,17 @@
 <span class="sd">        simKey: str</span>
 <span class="sd">            type of cost function to be used</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CostsFC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CostsFC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">simKey</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span></div>
 
-<div class="viewcode-block" id="CostsFC.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFC.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">emp</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsFC.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFC.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simData</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">empData</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        sim: torch.Tensor with node_size X datapoint</span>
+<span class="sd">        simData: dict of torch.Tensor with node_size X datapoint</span>
 <span class="sd">            simulated BOLD</span>
-<span class="sd">        emp: torch.Tensor with node_size X datapoint</span>
+<span class="sd">        empData: torch.Tensor with node_size X datapoint</span>
 <span class="sd">            empirical BOLD</span>
 
 <span class="sd">        Returns</span>
@@ -281,8 +283,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
         
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">simData</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">simKey</span><span class="p">]</span>
+        
         <span class="n">logits_series_tf</span> <span class="o">=</span> <span class="n">sim</span>
-        <span class="n">labels_series_tf</span> <span class="o">=</span> <span class="n">emp</span>
+        <span class="n">labels_series_tf</span> <span class="o">=</span> <span class="n">empData</span>
         <span class="c1"># get node_size() and TRs_per_window()</span>
         <span class="n">node_size</span> <span class="o">=</span> <span class="n">logits_series_tf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">truncated_backprop_length</span> <span class="o">=</span> <span class="n">logits_series_tf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -343,7 +347,7 @@
 <span class="sd">        Whether to run on GPU or CPU</span>
 <span class="sd">    Methods:</span>
 <span class="sd">    --------</span>
-<span class="sd">    calcLoss: function</span>
+<span class="sd">    loss: function</span>
 <span class="sd">        calculates functional connectivity and uses it to calculate the loss</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="CostsFixedFC.__init__"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simKey</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>
@@ -359,7 +363,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">simKey</span> <span class="o">=</span> <span class="n">simKey</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span></div>
 
-<div class="viewcode-block" id="CostsFixedFC.calcLoss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.calcLoss">[docs]</a>    <span class="k">def</span> <span class="nf">calcLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simTS</span><span class="p">,</span> <span class="n">empFC</span><span class="p">):</span>
+<div class="viewcode-block" id="CostsFixedFC.loss"><a class="viewcode-back" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simData</span><span class="p">,</span> <span class="n">empData</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to calculate the cost function for Functional Connectivity (FC) fitting. </span>
 <span class="sd">        It initially calculates the FC matrix using the data from the time series, </span>
 <span class="sd">        makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. </span>
@@ -368,9 +372,9 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        simTS: torch.tensor with node_size X time_point</span>
+<span class="sd">        simData: dict of torch.tensor with node_size X time_point</span>
 <span class="sd">            Simulated Time Series </span>
-<span class="sd">        empFC: torch.tensor with node_size X node_size</span>
+<span class="sd">        empData: torch.tensor with node_size X node_size</span>
 <span class="sd">            Empirical Functional Connectivity</span>
 
 <span class="sd">        Returns</span>
@@ -378,6 +382,9 @@
 <span class="sd">        losses_corr: torch.tensor</span>
 <span class="sd">            cost function value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">simTS</span> <span class="o">=</span> <span class="n">simData</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">simKey</span><span class="p">]</span>
+        <span class="n">empFC</span> <span class="o">=</span> <span class="n">empData</span>
+        
         <span class="n">logits_series_tf</span> <span class="o">=</span> <span class="n">simTS</span>
 
         <span class="c1"># get node_size() and TRs_per_window()</span>

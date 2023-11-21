@@ -121,6 +121,8 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -337,7 +339,7 @@
 </pre></div>
 </div>
 <p>create objective function</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">CostsJR</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">CostsJR</span><span class="p">(</span><a href="../API/models.html#whobpyt.models.JansenRit.RNNJANSEN" title="whobpyt.models.JansenRit.RNNJANSEN" class="sphx-glr-backref-module-whobpyt-models-JansenRit sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">)</span>
 </pre></div>
 </div>
 <p>call model fit</p>
@@ -354,45 +356,45 @@
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: -22813.469 Pseudo FC_cor:  0.22074540692558178 cos_sim:  0.023981647231488303
+epoch:  0 loss: -22813.467 Pseudo FC_cor:  0.23362638130157626 cos_sim:  0.022123901650104864
 Epoch:  1
-epoch:  1 loss: -24701.746 Pseudo FC_cor:  0.17999556282205206 cos_sim:  0.024710709705812246
+epoch:  1 loss: -24701.768 Pseudo FC_cor:  0.20925311544246972 cos_sim:  0.02229608128477237
 Epoch:  2
-epoch:  2 loss: -26248.516 Pseudo FC_cor:  0.25997850769963476 cos_sim:  -0.008318896426800584
+epoch:  2 loss: -26248.475 Pseudo FC_cor:  0.5643732367077845 cos_sim:  0.04568982834303402
 Epoch:  3
-epoch:  3 loss: -27553.139 Pseudo FC_cor:  0.42589470486729974 cos_sim:  0.14964463639685927
+epoch:  3 loss: -27553.195 Pseudo FC_cor:  0.529921704552922 cos_sim:  0.09490041901348034
 Epoch:  4
-epoch:  4 loss: -28682.633 Pseudo FC_cor:  0.8693352785189156 cos_sim:  0.38979992235269156
+epoch:  4 loss: -28682.72 Pseudo FC_cor:  0.90220102596896 cos_sim:  0.0357663805677315
 Epoch:  5
-epoch:  5 loss: -29680.256 Pseudo FC_cor:  0.9600221713237478 cos_sim:  0.34276221494621867
+epoch:  5 loss: -29680.242 Pseudo FC_cor:  0.8933950816375 cos_sim:  0.3135680863950159
 Epoch:  6
-epoch:  6 loss: -30574.756 Pseudo FC_cor:  0.8351066586342514 cos_sim:  0.27260900058419846
+epoch:  6 loss: -30574.842 Pseudo FC_cor:  0.9582761587782064 cos_sim:  0.2368949397086073
 Epoch:  7
-epoch:  7 loss: -31386.36 Pseudo FC_cor:  0.939765348837345 cos_sim:  0.3805409156874533
+epoch:  7 loss: -31386.418 Pseudo FC_cor:  0.7313690019084692 cos_sim:  0.18256879496102268
 Epoch:  8
-epoch:  8 loss: -32129.877 Pseudo FC_cor:  0.9064964900431401 cos_sim:  0.3450069068111633
+epoch:  8 loss: -32129.922 Pseudo FC_cor:  0.882336280669383 cos_sim:  0.1974967533511931
 Epoch:  9
-epoch:  9 loss: -32816.227 Pseudo FC_cor:  0.8412427972971678 cos_sim:  0.32281918458144865
+epoch:  9 loss: -32816.234 Pseudo FC_cor:  0.8481548185641853 cos_sim:  0.33143133606940145
 Epoch:  10
-epoch:  10 loss: -33453.953 Pseudo FC_cor:  0.8753337896239287 cos_sim:  0.43403267479901964
+epoch:  10 loss: -33453.934 Pseudo FC_cor:  0.917120777651072 cos_sim:  0.4050599423037025
 Epoch:  11
-epoch:  11 loss: -34049.758 Pseudo FC_cor:  0.9434745921954278 cos_sim:  0.3565053321198569
+epoch:  11 loss: -34049.81 Pseudo FC_cor:  0.9175850397816613 cos_sim:  0.23433252261813547
 Epoch:  12
-epoch:  12 loss: -34609.125 Pseudo FC_cor:  0.9072626295807839 cos_sim:  0.43534824787606496
+epoch:  12 loss: -34609.055 Pseudo FC_cor:  0.8887246312117993 cos_sim:  0.295086241049062
 Epoch:  13
-epoch:  13 loss: -35136.37 Pseudo FC_cor:  0.8797635335886257 cos_sim:  0.4440111099657699
+epoch:  13 loss: -35136.406 Pseudo FC_cor:  0.8670182900422037 cos_sim:  0.4581670120559461
 Epoch:  14
-epoch:  14 loss: -35635.242 Pseudo FC_cor:  0.9001143549221302 cos_sim:  0.35047909448180764
+epoch:  14 loss: -35635.277 Pseudo FC_cor:  0.8686637439584485 cos_sim:  0.2989352039174159
 Epoch:  15
-epoch:  15 loss: -36108.664 Pseudo FC_cor:  0.8922349785349475 cos_sim:  0.45112826213934387
+epoch:  15 loss: -36108.715 Pseudo FC_cor:  0.9109683629155805 cos_sim:  0.32403072574619957
 Epoch:  16
-epoch:  16 loss: -36559.39 Pseudo FC_cor:  0.8708114429287818 cos_sim:  0.344999101639284
+epoch:  16 loss: -36559.363 Pseudo FC_cor:  0.8988001460761493 cos_sim:  0.24717290150775925
 Epoch:  17
-epoch:  17 loss: -36989.44 Pseudo FC_cor:  0.8494259628890898 cos_sim:  0.32898204958800864
+epoch:  17 loss: -36989.492 Pseudo FC_cor:  0.858367171244655 cos_sim:  0.3904090361368561
 Epoch:  18
-epoch:  18 loss: -37400.902 Pseudo FC_cor:  0.8636877139995711 cos_sim:  0.47721889594485034
+epoch:  18 loss: -37400.938 Pseudo FC_cor:  0.8352793876289681 cos_sim:  0.4762737244373877
 Epoch:  19
-epoch:  19 loss: -37795.207 Pseudo FC_cor:  0.902211169869377 cos_sim:  0.40060280898678424
+epoch:  19 loss: -37795.266 Pseudo FC_cor:  0.8203955359732638 cos_sim:  0.22989564964940296
 </pre></div>
 </div>
 <p>Plots of loss over Training</p>
@@ -428,7 +430,7 @@ epoch:  19 loss: -37795.207 Pseudo FC_cor:  0.902211169869377 cos_sim:  0.400602
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9431851508881393 cos_sim:  0.44892292507348364
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.9327183235571372 cos_sim:  0.2992186630278292
 </pre></div>
 </div>
 <p>Plot SC and fitted SC</p>
@@ -455,7 +457,7 @@ epoch:  19 loss: -37795.207 Pseudo FC_cor:  0.902211169869377 cos_sim:  0.400602
 </pre></div>
 </div>
 <img alt="Test: sourced EEG, Test, empirical" class="sphx-glr-single-img" src="../_images/sphx_glr_eg004r__fitting_JR_example_004.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 9 minutes  13.875 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 3 minutes  28.236 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg004r-fitting-jr-example-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/96a042e39a4f43abe4e10ca8c12118f5/eg004r__fitting_JR_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg004r__fitting_JR_example.py</span></code></a></p>
