@@ -114,7 +114,7 @@ model = RNNRWW(node_size, TPperWindow, step_size, repeat_size, tr, sc, True, par
 
 # %%
 # create objective function
-ObjFun = CostsRWW()
+ObjFun = CostsRWW(model)
 
 # %%
 # call model fit

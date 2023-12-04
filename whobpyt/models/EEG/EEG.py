@@ -8,7 +8,7 @@ class EEG_Layer(AbstractMode):
     
     '''
 
-    def __init__(self, num_regions, params, num_channels): 
+    def __init__(self, num_regions, params, num_channels, device = torch.device('cpu')): 
         '''
         '''
         super(EEG_Layer, self).__init__() # To inherit parameters attribute
@@ -21,6 +21,8 @@ class EEG_Layer(AbstractMode):
         
         self.num_regions = num_regions
         self.num_channels = num_channels
+        
+        self.device = device
         
         self.num_blocks = 1
         
@@ -37,19 +39,19 @@ class EEG_Layer(AbstractMode):
     def createIC(self, ver):
         pass
     
-    def forward(self, step_size, sim_len, node_history, useGPU = False):
-        return forward(self, step_size, sim_len, node_history, useGPU = False)   
+    def forward(self, step_size, sim_len, node_history, device = torch.device('cpu')):
+        return forward(self, step_size, sim_len, node_history)   
 
 def setModelParameters(self):
     #############################################
     ## EEG Lead Field
     #############################################
     
-    self.LF = self.params.LF
+    self.LF = self.params.LF.to(self.device)
     
-def forward(self, step_size, sim_len, node_history, useGPU = False):
+def forward(self, step_size, sim_len, node_history):
     
-    hE = torch.tensor(1.0) #Dummy variable
+    hE = torch.tensor(1.0).to(self.device) #Dummy variable
     
     # Runs the EEG Model
     #
@@ -57,16 +59,13 @@ def forward(self, step_size, sim_len, node_history, useGPU = False):
     #  step_size: Float - The step size in msec which must match node_history step size.
     #  sim_len: Int - The amount of EEG to simulate in msec, and should match time simulated in node_history. 
     #  node_history: Tensor - [time_points, regions, num_blocks] # This would be input coming from NMM
-    #  useGPU: Boolean - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network_NMM code
+    #  device: torch.device - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network_NMM code
     #
     # OUTPUT
     #  layer_history: Tensor - [time_steps, regions, num_blocks]
     #
     
-    if(useGPU):
-        layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_channels, self.num_blocks).cuda()
-    else:
-        layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_channels, self.num_blocks)
+    layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_channels, self.num_blocks).to(self.device)
 
     num_steps = int((sim_len/step_size)/self.num_blocks)
     for i in range(num_steps):

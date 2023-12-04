@@ -112,7 +112,7 @@ model = RNNJANSEN(node_size, TPperWindow, step_size, output_size, tr, sc, lm, di
 
 # %%
 # create objective function
-ObjFun = CostsJR()
+ObjFun = CostsJR(model)
 
 # %%
 # call model fit
