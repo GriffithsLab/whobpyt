@@ -1,8 +1,7 @@
 import torch
-from whobpyt.datatypes.AbstractParams import AbstractParams
-from whobpyt.datatypes.parameter import par
+from whobpyt.datatypes import AbstractParams, par
 
-class ParamsRWW2(AbstractParams):
+class ParamsRWWEI2(AbstractParams):
     ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
     #
     # Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitationâ€“inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.
@@ -36,7 +35,7 @@ class ParamsRWW2(AbstractParams):
         #Setting other variables
         self.w_plus = par(1.4) # Local excitatory recurrence
         self.J_NMDA = par(0.15) # Excitatory synaptic coupling in nA
-        self.J = par(0.15 * torch.ones(num_regions), fit_par = True) # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
+        self.J = par(1.0) # Local feedback inhibitory synaptic coupling. 1 in no-FIC case, different in FIC case #TODO: Currently set to J_NMDA but should calculate based on paper
         self.gamma = par(0.641/1000) #a kinetic parameter in ms
         self.sig = par(0.01) #0.01 # Noise amplitude at node in nA
         self.I_0 = par(0.382) # The overall effective external input in nA
@@ -49,3 +48,4 @@ class ParamsRWW2(AbstractParams):
         #############################################
         
         self.gammaI = par(1/1000) #Zheng suggested this to get oscillations
+        self.J_new = par(1)
