@@ -22,12 +22,10 @@ sys.path.append('..')
 
 # whobpyt stuff
 import whobpyt
-from whobpyt.data.dataload import dataloader
-from whobpyt.datatypes.parameter import par
-from whobpyt.models.JansenRit.jansen_rit import ParamsJR
-from whobpyt.models.JansenRit.jansen_rit import RNNJANSEN
-from whobpyt.optimization.modelfitting import Model_fitting
+from whobpyt.datatypes import par, Recording
+from whobpyt.models.JansenRit import RNNJANSEN, ParamsJR
 from whobpyt.optimization.custom_cost_JR import CostsJR
+from whobpyt.run import Model_fitting
 
 # array and pd stuff
 import numpy as np
@@ -79,9 +77,9 @@ sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 node_size = sc.shape[0]
 
 output_size = eeg_data.shape[0]
-batch_size = 20
+TPperWindow = 20
 step_size = 0.0001
-num_epoches = 120
+num_epochs = 20
 tr = 0.001
 state_size = 6
 base_batch_num = 200
@@ -91,10 +89,11 @@ base_batch_num = 20
 hidden_size = int(tr/step_size)
 
 
-
 # %%
 # prepare data structure of the model
-data_mean = dataloader(eeg_data.T, num_epoches, batch_size)
+print(eeg_data.shape)
+EEGstep = tr
+data_mean = Recording(eeg_data, EEGstep) #dataloader(eeg_data.T, num_epochs, batch_size)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
@@ -109,49 +108,63 @@ params = ParamsJR(A = par(3.25), a= par(100,100, 2, True, True), B = par(22), b 
 
 # %%
 # call model want to fit
-model = RNNJANSEN(node_size, batch_size, step_size, output_size, tr, sc, lm, dist, True, False, params)
-
-# %%
-# initial model parameters and set the fitted model parameter in Tensors
-model.setModelParameters()
+model = RNNJANSEN(node_size, TPperWindow, step_size, output_size, tr, sc, lm, dist, True, False, params)
 
 # %%
 # create objective function
-ObjFun = CostsJR()
+ObjFun = CostsJR(model)
 
 # %%
 # call model fit
-F = Model_fitting(model, data_mean, num_epoches, ObjFun)
+F = Model_fitting(model, ObjFun)
 
 # %%
-# model training
+# Model Training
+# ---------------------------------------------------
+#
 u = np.zeros((node_size,hidden_size,time_dim))
 u[:,:,110:120]= 200
-F.train(u=u, epoch_min = 100, r_lb = 0.95)
+F.train(u = u, empRecs = [data_mean], num_epochs = num_epochs, TPperWindow = TPperWindow)
 
 # %%
-# model test with 20 window for warmup
-F.test(200, u =u)
+# Plots of loss over Training
+plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
+plt.title("Total Loss over Training Epochs")
+
+# %%
+# Plots of parameter values over Training
+plt.plot(F.trainingStats.fit_params['a'], label = "a")
+plt.plot(F.trainingStats.fit_params['b'], label = "b")
+plt.plot(F.trainingStats.fit_params['c1'], label = "c1")
+plt.plot(F.trainingStats.fit_params['c2'], label = "c2")
+plt.plot(F.trainingStats.fit_params['c3'], label = "c3")
+plt.plot(F.trainingStats.fit_params['c4'], label = "c4")
+plt.legend()
+plt.title("Select Variables Changing Over Training Epochs")
+
+# %%
+# Model Evaluation (with 20 window for warmup)
+# ---------------------------------------------------
+#
+F.evaluate(u = u, empRec = data_mean, TPperWindow = TPperWindow, base_window_num = 20)
 
 # %%
 # Plot SC and fitted SC
-
 fig, ax = plt.subplots(1, 2, figsize=(5, 4))
-im0 = ax[0].imshow(sc, cmap='bwr')
+im0 = ax[0].imshow(sc, cmap='bwr', vmin = 0.0, vmax = 0.02)
 ax[0].set_title('The empirical SC')
 fig.colorbar(im0, ax=ax[0], fraction=0.046, pad=0.04)
-im1 = ax[1].imshow(F.model.sc_fitted.detach().numpy(), cmap='bwr')
+im1 = ax[1].imshow(F.model.sc_fitted.detach().numpy(), cmap='bwr', vmin = 0.0, vmax = 0.02)
 ax[1].set_title('The fitted SC')
 fig.colorbar(im1, ax=ax[1], fraction=0.046, pad=0.04)
 plt.show()
 
-
 # %%
 # Plot the EEG
 fig, ax = plt.subplots(1,3, figsize=(12,8))
-ax[0].plot(F.output_sim.P_test.T)
+ax[0].plot(F.lastRec['P'].npTS().T)
 ax[0].set_title('Test: sourced EEG')
-ax[1].plot(F.output_sim.eeg_test.T)
+ax[1].plot(F.lastRec["eeg"].npTS().T)
 ax[1].set_title('Test')
 ax[2].plot(eeg_data.T)
 ax[2].set_title('empirical')

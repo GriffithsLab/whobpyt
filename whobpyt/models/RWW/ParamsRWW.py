@@ -5,8 +5,7 @@ module for wong-wang model
 """
 
 import torch
-from whobpyt.datatypes.AbstractParams import AbstractParams
-from whobpyt.datatypes.parameter import par
+from whobpyt.datatypes import AbstractParams, par
 
 class ParamsRWW(AbstractParams):
     
