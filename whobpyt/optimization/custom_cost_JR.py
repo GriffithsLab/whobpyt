@@ -16,15 +16,15 @@ class CostsJR(AbstractLoss):
         self.mainLoss = CostsTS("eeg")
         self.simKey = "eeg"
         self.model = model
-        
+
     def loss(self, simData: dict, empData: torch.Tensor):
-        
+
         method_arg_type_check(self.loss) # Check that the passed arguments (excluding self) abide by their expected data types
         sim = simData
         emp = empData
-        
+
         model = self.model
-       
+
         # define some constants
         lb = 0.001
 
@@ -37,8 +37,7 @@ class CostsJR(AbstractLoss):
         if model.use_fit_gains:
             exclude_param.append('gains_con') #TODO: Is this correct?
 
-        if model.use_fit_lfm:
-            exclude_param.append('lm') #TODO: Is this correct?
+
 
         loss_main = self.mainLoss.loss(sim, emp)
 
@@ -49,12 +48,12 @@ class CostsJR(AbstractLoss):
 
         for var_name in variables_p:
             var = getattr(model.params, var_name)
-            if var.has_prior and var_name not in ['std_in'] and \
+            if var.fit_par and \
                         var_name not in exclude_param:
-                loss_prior.append(torch.sum((lb + m(var.prior_var)) * \
+                loss_prior.append(torch.sum(( m(var.prior_var)) * \
                                             (m(var.val) - m(var.prior_mean)) ** 2) \
-                                  + torch.sum(-torch.log(lb + m(var.prior_var))))
-        
+                                  + torch.sum(-torch.log( m(var.prior_var))))
+
         # total loss
         loss = 0.1 * w_cost * loss_main + 1 * sum(loss_prior) + 1 * loss_EI
-        return loss
+        return loss, loss_main
