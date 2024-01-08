@@ -89,7 +89,12 @@ class par:
 
 
 
-
+     def to(self, device):
+        '''
+        '''
+        self.device = device
+        
+        self.val = self.val.to(self.device)
 
 
     def npValue(self):
