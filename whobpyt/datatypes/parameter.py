@@ -92,7 +92,18 @@ class par:
 
 
 
-
+    def npValue(self):
+        '''
+        Returns
+        --------
+        NumPy of Value
+            The parameter value(s) as a NumPy Array
+        '''
+        
+        if self.asLog:
+            return numpy.exp(self.val.detach().clone().cpu().numpy())
+        else:
+            return self.val.detach().clone().cpu().numpy()
 
     def value(self):
         '''
