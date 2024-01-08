@@ -12,6 +12,7 @@ Neural Mass Model fitting module for JR with forward, backward, and lateral conn
 Importage
 """
 import torch
+from torch.distributions.normal import Normal
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes import AbstractNMM, par
 from whobpyt.models.CBNet.ParamsCBNet import ParamsCBnet
