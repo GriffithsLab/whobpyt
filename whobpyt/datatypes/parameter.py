@@ -1,6 +1,7 @@
 import torch
 import numpy
 import numpy as np
+
 class par:
     '''
     Features of this class:
@@ -57,7 +58,7 @@ class par:
                 prior_mean_ts = torch.tensor(prior_mean, dtype=torch.float32).to(self.device)
                 self.prior_mean = prior_mean_ts
                 prior_std_ts = torch.tensor(prior_std, dtype=torch.float32).to(self.device)
-                self.prior_var_inv = 1/prior_std_ts**2
+                self.prior_var = 1/prior_std_ts**2
                 if type(val) is np.ndarray:
                     val = prior_mean + prior_std * torch.randn_like(torch.tensor(val, dtype=torch.float32)).detach().numpy()
                 else:
@@ -71,7 +72,7 @@ class par:
                 self.prior_mean = prior_mean_ts
                 prior_std = np.abs(val)/10
                 prior_std_ts = torch.tensor(prior_std, dtype=torch.float32).to(self.device)
-                self.prior_var_inv = 1/prior_std_ts**2
+                self.prior_var = 1/prior_std_ts**2
                 if type(val) is np.ndarray:
                     val = prior_mean + prior_std * torch.randn_like(torch.tensor(val, dtype=torch.float32)).detach().numpy()
                 else:
