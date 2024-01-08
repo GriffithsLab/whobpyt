@@ -24,7 +24,7 @@ sys.path.append('..')
 import whobpyt
 from whobpyt.datatypes import par, Recording
 from whobpyt.data import dataloader
-from whobpyt.models.JansenRit import RNNJANSEN, ParamsJR
+from whobpyt.models.CBNet import RNNCBNET, ParamsCBnet
 from whobpyt.optimization.custom_cost_JR import CostsJR
 from whobpyt.run import Model_fitting
 
@@ -76,11 +76,11 @@ sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 # %%
 # define options for JR model
 node_size = sc.shape[0]
-
+pop_size =3
 output_size = eeg_data.shape[0]
 TPperWindow = 20
 step_size = 0.0001
-num_epochs = 20
+num_epochs = 150
 tr = 0.001
 state_size = 6
 base_batch_num = 200
@@ -94,7 +94,7 @@ hidden_size = int(tr/step_size)
 # prepare data structure of the model
 print(eeg_data.shape)
 EEGstep = tr
-data_mean = dataloader(eeg_sub.T, num_epoches, batch_size)
+data_mean = dataloader(eeg_data.T, num_epochs, TPperWindow)
 #data_mean = Recording(eeg_data, EEGstep) #dataloader(eeg_data.T, num_epochs, batch_size)
 
 # %%
@@ -114,7 +114,7 @@ params = ParamsCBnet( g= par(400), g_f = par(10), g_b=par(10),\
                    cy0 = par(50, 50, 1, True), ki=par(ki0), \
                    lm=par(lm, lm, .1 * np.ones((output_size, node_size))+lm_v, True))
 
-model = RNNCBNET(node_size, pop_size,batch_size, step_size, output_size, tr, sc, lm, dist, True, params)
+model = RNNCBNET(node_size, pop_size,TPperWindow, step_size, output_size, tr, sc, lm, dist, True, params)
 # %%
 # create objective function
 ObjFun = CostsJR(model)
@@ -127,9 +127,9 @@ F = Model_fitting(model, ObjFun)
 # Model Training
 # ---------------------------------------------------
 #
-u = np.zeros((node_size,hidden_size,time_dim))
-u[:,:,110:120]= 200
-F.train(u = u, empRecs = [data_mean], num_epochs = num_epochs, TPperWindow = TPperWindow)
+u = np.zeros((node_size,hidden_size,time_dim, pop_size))
+u[:,:,110:120, 2]= 1000
+F.train(u = u, empRec = data_mean, num_epochs = num_epochs, TPperWindow = TPperWindow)
 
 # %%
 # Plots of loss over Training
