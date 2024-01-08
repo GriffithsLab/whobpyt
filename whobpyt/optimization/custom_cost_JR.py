@@ -11,26 +11,49 @@ from whobpyt.datatypes.AbstractLoss import AbstractLoss
 from whobpyt.optimization.cost_TS import CostsTS
 from whobpyt.functions.arg_type_check import method_arg_type_check
 
-class CostsTS(AbstractLoss):
-    def __init__(self, simKey):
-        super(CostsTS, self).__init__(simKey)
-        self.simKey = simKey
+class CostsJR(AbstractLoss):
+    def __init__(self, model):
+        self.mainLoss = CostsTS("eeg")
+        self.simKey = "eeg"
+        self.model = model
 
     def loss(self, simData: dict, empData: torch.Tensor):
-        """
-        Calculate the Pearson Correlation between the simFC and empFC.
-        From there, compute the probability and negative log-likelihood.
 
-        Parameters
-        ----------
-        simData: dict of tensor with node_size X datapoint
-            simulated EEG
-        empData: tensor with node_size X datapoint
-            empirical EEG
-        """
         method_arg_type_check(self.loss) # Check that the passed arguments (excluding self) abide by their expected data types
-        sim = simData[self.simKey]
+        sim = simData
         emp = empData
 
-        losses = torch.sqrt(torch.mean((sim - emp) ** 2))  #
-        return losses
+        model = self.model
+
+        # define some constants
+        lb = 0.001
+
+        w_cost = 10
+
+        # define the relu function
+        m = torch.nn.ReLU()
+
+        exclude_param = []
+        if model.use_fit_gains:
+            exclude_param.append('gains_con') #TODO: Is this correct?
+
+
+
+        loss_main = self.mainLoss.loss(sim, emp)
+
+        loss_EI = 0
+        loss_prior = []
+
+        variables_p = [a for a in dir(model.params) if (type(getattr(model.params, a)) == par)]
+
+        for var_name in variables_p:
+            var = getattr(model.params, var_name)
+            if var.fit_par and \
+                        var_name not in exclude_param:
+                loss_prior.append(torch.sum(( m(var.prior_var_inv)) * \
+                                            (m(var.val) - m(var.prior_mean)) ** 2) \
+                                  + torch.sum(-torch.log( m(var.prior_var_inv))))
+
+        # total loss
+        loss = 0.1 * w_cost * loss_main + 1 * sum(loss_prior) + 1 * loss_EI
+        return loss, loss_main
