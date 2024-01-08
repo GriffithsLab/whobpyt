@@ -76,11 +76,11 @@ sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 # %%
 # define options for JR model
 node_size = sc.shape[0]
-
+pop_size = 3
 output_size = eeg_data.shape[0]
 TPperWindow = 20
 step_size = 0.0001
-num_epochs = 20
+num_epochs = 150
 tr = 0.001
 state_size = 6
 base_batch_num = 200
@@ -94,7 +94,7 @@ hidden_size = int(tr/step_size)
 # prepare data structure of the model
 print(eeg_data.shape)
 EEGstep = tr
-data_mean = dataloader(eeg_sub.T, num_epoches, batch_size)
+data_mean = dataloader(eeg_data.T, num_epochs, TPperWindow)
 #data_mean = Recording(eeg_data, EEGstep) #dataloader(eeg_data.T, num_epochs, batch_size)
 
 # %%
@@ -113,7 +113,7 @@ params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(
 
 # %%
 # call model want to fit
-model = RNNJANSEN(node_size, batch_size, step_size, output_size, tr, sc, lm, dist, True, params)
+model = RNNJANSEN(node_size, TPperWindow, step_size, output_size, tr, sc, lm, dist, True, params)
 
 # %%
 # create objective function
@@ -127,9 +127,10 @@ F = Model_fitting(model, ObjFun)
 # Model Training
 # ---------------------------------------------------
 #
-u = np.zeros((node_size,hidden_size,time_dim))
-u[:,:,110:120]= 200
-F.train(u = u, empRecs = [data_mean], num_epochs = num_epochs, TPperWindow = TPperWindow)
+
+u = np.zeros((node_size,hidden_size,time_dim, pop_size))
+u[:,:,110:120,0]= 1000
+F.train(u = u, empRec = data_mean, num_epochs = num_epochs, TPperWindow = TPperWindow,  warmupWindow=10)
 
 # %%
 # Plots of loss over Training
@@ -151,7 +152,7 @@ plt.title("Select Variables Changing Over Training Epochs")
 # Model Evaluation (with 20 window for warmup)
 # ---------------------------------------------------
 #
-F.evaluate(u = u, empRec = data_mean, TPperWindow = TPperWindow, base_window_num = 20)
+F.evaluate(u = u, empRec = data_mean, TPperWindow = TPperWindow, base_window_num = 100)
 
 # %%
 # Plot SC and fitted SC
