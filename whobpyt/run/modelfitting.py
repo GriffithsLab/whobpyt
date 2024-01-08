@@ -229,7 +229,7 @@ class Model_fitting(AbstractFitting):
                         trackedParam[par_name] = var.value().detach().cpu().numpy().copy()
 
                         trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().cpu().numpy().copy()
-                        trackedParam[par_name + "_prior_var_inv"] = var.prior_var_inv.detach().cpu().numpy().copy()
+                        trackedParam[par_name + "_prior_var"] = var.prior_var.detach().cpu().numpy().copy()
             for key, value in self.model.state_dict().items():
                 if key not in exclude_param:
                     trackedParam[key] = value.detach().cpu().numpy().ravel().copy()
@@ -322,5 +322,3 @@ class Model_fitting(AbstractFitting):
         # Saving the last recording of training as a Model_fitting attribute
         self.trainingStats.updateOutputs(windListDict[self.model.output_names[0]], 'testing')
         self.trainingStats.updateStates(windListDict['states'], 'testing')
-
-
