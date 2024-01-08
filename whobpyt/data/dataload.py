@@ -7,7 +7,7 @@ emp: length_ts x node_size or data_size x length_ts x node_size
 """
 
 
-'''
+
 import numpy as np
 
 
@@ -33,4 +33,3 @@ def dataloader(emp, epoch_size, TRperwindow):
                 data_out[i_epoch, i_win, :, :] = \
                     emp[i_epoch % data_size, i_win * TRperwindow:(i_win + 1) * TRperwindow, :].T
     return data_out
-'''
