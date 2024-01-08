@@ -231,18 +231,18 @@ class RNNJANSEN(AbstractNMM):
                     size = var.val.shape
                     var.val = Parameter(- 1 * torch.ones((size[0], size[1]))) # TODO: This is not consistent with what user would expect giving a variance
                     var.prior_mean = Parameter(var.prior_mean)
-                    var.prior_var_inv = Parameter(var.prior_var_inv)
+                    var.prior_var = Parameter(var.prior_var)
                     param_reg.append(var.val)
                     param_hyper.append(var.prior_mean)
-                    param_hyper.append(var.prior_var_inv)
+                    param_hyper.append(var.prior_var)
                     self.track_params.append(var_name)
                 else:
                     var.val = Parameter(var.val) # TODO: This is not consistent with what user would expect giving a variance
                     var.prior_mean = Parameter(var.prior_mean)
-                    var.prior_var_inv = Parameter(var.prior_var_inv)
+                    var.prior_var = Parameter(var.prior_var)
                     param_reg.append(var.val)
                     param_hyper.append(var.prior_mean)
-                    param_hyper.append(var.prior_var_inv)
+                    param_hyper.append(var.prior_var)
                     self.track_params.append(var_name)
 
 
