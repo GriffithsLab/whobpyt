@@ -21,6 +21,7 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.datatypes import par, Recording
+from whobpyt.data import dataloader
 from whobpyt.models.RWW import RNNRWW, ParamsRWW
 from whobpyt.optimization.custom_cost_RWW import CostsRWW
 from whobpyt.run import Model_fitting
