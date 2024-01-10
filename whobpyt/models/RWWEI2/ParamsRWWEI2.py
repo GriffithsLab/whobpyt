@@ -1,7 +1,7 @@
 import torch
 from whobpyt.datatypes import AbstractParams, par
 
-class ParamsRWW2(AbstractParams):
+class ParamsRWWEI2(AbstractParams):
     ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
     #
     # Deco G, Ponce-Alvarez A, Hagmann P, Romani GL, Mantini D, Corbetta M. How local excitationâ€“inhibition ratio impacts the whole brain dynamics. Journal of Neuroscience. 2014 Jun 4;34(23):7886-98.

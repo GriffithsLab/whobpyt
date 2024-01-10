@@ -11,7 +11,7 @@ Models
    :undoc-members:
    :special-members: __init__
 
-.. autoclass:: whobpyt.models.RWW2.RWW2
+.. autoclass:: whobpyt.models.RWWEI2.RWWEI2
    :members: info, createIC, setModelParameters, forward
    :undoc-members:
    :special-members: __init__

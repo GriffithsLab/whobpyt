@@ -1,22 +1,24 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather
-Neural Mass Model fitting
-module for model fitting using pytorch
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
+Neural Mass Model fitting module for model fitting using pytorch
 """
 
 import numpy as np  # for numerical operations
 import torch
 import torch.optim as optim
 from whobpyt.datatypes import Recording
+from whobpyt.datatypes.AbstractFitting import AbstractFitting
+from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.datatypes.AbstractLoss import AbstractLoss
 from whobpyt.datatypes.outputs import TrainingStats
 from whobpyt.models.RWW.RWW_np import RWW_np #This should be removed and made general
+from whobpyt.functions.arg_type_check import method_arg_type_check
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-class Model_fitting:
+class Model_fitting(AbstractFitting):
     """
-    
     This Model_fitting class is able to fit resting state data or evoked potential data 
     for which the input training data is empty or some stimulus to one or more NMM nodes,
     and the label is an associated empirical neuroimaging recording.
@@ -34,10 +36,11 @@ class Model_fitting:
         Information about objective function loss and parameter values over training windows/epochs
     lastRec: Recording
         The last simulation of fitting(), evaluation(), or simulation()
-    
+    device : torch.device
+        Whether the fitting is to run on CPU or GPU
     """
 
-    def __init__(self, model, cost):
+    def __init__(self, model: AbstractNMM, cost: AbstractLoss, device = torch.device('cpu')):
         """
         Parameters
         ----------
@@ -45,10 +48,15 @@ class Model_fitting:
             Whole Brain Model to Simulate
         cost: AbstractLoss
             A particular objective function which the model will be optimized for. 
+        device : torch.device
+            Whether the fitting is to run on CPU or GPU
         """
+        method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
         self.model = model
         self.cost = cost
+        
+        self.device = device
         
         self.trainingStats = TrainingStats(self.model)
         self.lastRec = None #A dictionary or Recordings of the last simulation preformed (either training or evaluation)
@@ -66,29 +74,29 @@ class Model_fitting:
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
 
-    def train(self, u, empRecs, num_epochs, TPperWindow, learningrate = 0.05, lr_2ndLevel = 0.05, lr_scheduler = False):
+    def train(self, u, empRecs: list, 
+              num_epochs: int, TPperWindow: int, learningrate: float = 0.05, lr_2ndLevel: float = 0.05, lr_scheduler: bool = False):
         """
-        
         Parameters
         ----------
         u: type
            This stimulus is the ML "Training Input" 
-        empRec: List of Recording
+        empRec: list of Recording
             This is the ML "Training Labels"
         num_epochs: int
             the number of times to go through the entire training data set
         TPperWindow: int
             Number of Empirical Time Points per window. model.forward does one window at a time.             
-        learningrate : double
+        learningrate: float
             rate of gradient descent
-        lr_2ndLevel :
+        lr_2ndLevel: float
             learning rate for priors of model parameters, and possibly others
-        lr_scheduler : Bool
+        lr_scheduler: bool
             Whether to use the learning rate scheduler
         """            
+        method_arg_type_check(self.train, exclude = ['u']) # Check that the passed arguments (excluding self) abide by their expected data types
 
-
-        #Define two different optimizers for each group
+        # Define two different optimizers for each group
         modelparameter_optimizer = optim.Adam(self.model.params_fitted['modelparameter'], lr=learningrate, eps=1e-7)
         hyperparameter_optimizer = optim.Adam(self.model.params_fitted['hyperparameter'], lr=lr_2ndLevel, eps=1e-7)
 
@@ -99,10 +107,16 @@ class Model_fitting:
             for empRec in empRecs:
                 total_steps += int(empRec.length/TPperWindow)*num_epochs
         
-            #total_steps = self.num_windows*num_epochs
-            hyperparameter_scheduler = optim.lr_scheduler.OneCycleLR(hyperparameter_optimizer, lr_hyper, total_steps, anneal_strategy = "cos")
+            # total_steps = self.num_windows*num_epochs
+            hyperparameter_scheduler = optim.lr_scheduler.OneCycleLR(hyperparameter_optimizer, 
+                                                                     lr_hyper, 
+                                                                     total_steps, 
+                                                                     anneal_strategy = "cos")
             hlrs = []
-            modelparameter_scheduler = optim.lr_scheduler.OneCycleLR(modelparameter_optimizer, learningrate, total_steps, anneal_strategy = "cos")
+            modelparameter_scheduler = optim.lr_scheduler.OneCycleLR(modelparameter_optimizer, 
+                                                                     learningrate, 
+                                                                     total_steps, 
+                                                                     anneal_strategy = "cos")
             mlrs = []
         
         # initial state
@@ -156,15 +170,14 @@ class Model_fitting:
                     ts_window = torch.tensor(windowedTS[win_idx, :, :], dtype=torch.float32)
 
                     # calculating loss
-                    sim = next_window[self.cost.simKey]
-                    loss = self.cost.loss(sim, ts_window, self.model, next_window)
+                    loss = self.cost.loss(next_window, ts_window)
                     
                     # TIME SERIES: Put the window of simulated forward model.
                     for name in set(self.model.state_names + self.model.output_names):
-                        windListDict[name].append(next_window[name].detach().numpy())
+                        windListDict[name].append(next_window[name].detach().cpu().numpy())
 
                     # TRAINING_STATS: Adding Loss for every training window (corresponding to one backpropagation)
-                    loss_his.append(loss.detach().numpy())
+                    loss_his.append(loss.detach().cpu().numpy())
 
                     # Calculate gradient using backward (backpropagation) method of the loss function.
                     loss.backward(retain_graph=True)
@@ -184,8 +197,8 @@ class Model_fitting:
 
                     # last update current state using next state...
                     # (no direct use X = X_next, since gradient calculation only depends on one batch no history)
-                    X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
-                    hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
+                    X = next_window['current_state'].detach().clone() # dtype=torch.float32
+                    hE = hE_new.detach().clone() #dtype=torch.float32
 
                 ts_emp = np.concatenate(list(windowedTS),1) #TODO: Check this code
                 fc = np.corrcoef(ts_emp)
@@ -198,7 +211,7 @@ class Model_fitting:
                 fc_sim = np.corrcoef(ts_sim[:, 10:])
 
                 print('epoch: ', i_epoch, 
-                      'loss:', loss.detach().numpy(),
+                      'loss:', loss.detach().cpu().numpy(),
                       'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
                       'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
                       
@@ -216,33 +229,33 @@ class Model_fitting:
                 for par_name in self.model.track_params:
                     var = getattr(self.model.params, par_name)
                     if (var.fit_par):
-                        trackedParam[par_name] = var.value().detach().numpy().copy()
+                        trackedParam[par_name] = var.value().detach().cpu().numpy().copy()
                     if (var.fit_hyper):
-                        trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().numpy().copy()
-                        trackedParam[par_name + "_prior_var"] = var.prior_var.detach().numpy().copy()
+                        trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().cpu().numpy().copy()
+                        trackedParam[par_name + "_prior_var"] = var.prior_var.detach().cpu().numpy().copy()
             for key, value in self.model.state_dict().items():
                 if key not in exclude_param:
-                    trackedParam[key] = value.detach().numpy().ravel().copy()
+                    trackedParam[key] = value.detach().cpu().numpy().ravel().copy()
             self.trainingStats.appendParam(trackedParam)
             # Saving the SC and/or Lead Field State at Every Epoch
             if self.model.use_fit_gains:
-                self.trainingStats.appendSC(self.model.sc_fitted.detach().numpy())
+                self.trainingStats.appendSC(self.model.sc_fitted.detach().cpu().numpy())
             if self.model.use_fit_lfm:
-                self.trainingStats.appendLF(self.model.lm.detach().numpy())
+                self.trainingStats.appendLF(self.model.lm.detach().cpu().numpy())
         
         # Saving the last recording of training as a Model_fitting attribute
         self.lastRec = {}
         for name in set(self.model.state_names + self.model.output_names):
             self.lastRec[name] = Recording(windListDict[name], step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
 
-    def evaluate(self, u, empRec, TPperWindow, base_window_num = 0, transient_num = 10): 
+    def evaluate(self, u, empRec: list, TPperWindow: int, base_window_num: int = 0, transient_num: int = 10): 
         """
         Parameters
         ----------
         u : int or Tensor
             external or stimulus
-        num_windows : int
-            Number of time windows to simulate
+        empRec: list of Recording
+            This is the ML "Training Labels"
         TPperWindow: int
             Number of Empirical Time Points per window. model.forward does one window at a time.  
         base_window_num : int
@@ -251,7 +264,7 @@ class Model_fitting:
             The number of initial time points to exclude from some metrics
         -----------
         """
-
+        method_arg_type_check(self.evaluate, exclude = ['u']) # Check that the passed arguments (excluding self) abide by their expected data types
         #TODO: Should be updated to take a list of u and empRec
 
         # initial state
@@ -288,12 +301,12 @@ class Model_fitting:
             # TIME SERIES: Put the window of simulated forward model.
             if win_idx > base_window_num - 1:
                 for name in set(self.model.state_names + self.model.output_names):
-                    windListDict[name].append(next_window[name].detach().numpy())
+                    windListDict[name].append(next_window[name].detach().cpu().numpy())
 
             # last update current state using next state...
             # (no direct use X = X_next, since gradient calculation only depends on one batch no history)
-            X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
-            hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
+            X = next_window['current_state'].detach().clone() # dtype=torch.float32
+            hE = hE_new.detach().clone() #dtype=torch.float32
         
         windowedTS = empRec.windowedTensor(TPperWindow)
         ts_emp = np.concatenate(list(windowedTS),1) #TODO: Check this code
@@ -314,7 +327,7 @@ class Model_fitting:
         for name in set(self.model.state_names + self.model.output_names):
             self.lastRec[name] = Recording(windListDict[name], step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
 
-    def simulate(self, u, numTP, base_window_num = 0, transient_num = 10):
+    def simulate(self, u, numTP: int, base_window_num: int = 0, transient_num: int = 10):
         """
         Parameters
         ----------
@@ -328,6 +341,7 @@ class Model_fitting:
             The number of initial time points to exclude from some metrics
         -----------
         """
+        method_arg_type_check(self.simulate, exclude = ['u']) # Check that the passed arguments (excluding self) abide by their expected data types
 
         num_windows = 1
         TPperWindow = numTP #TODO: May want to go back to TPperWindow so base_window_num is used correctly, but also should be made consistent with train
@@ -365,12 +379,12 @@ class Model_fitting:
             # TIME SERIES: Put the window of simulated forward model.
             if win_idx > base_window_num - 1:
                 for name in set(self.model.state_names + self.model.output_names):
-                    windListDict[name].append(next_window[name].detach().numpy())
+                    windListDict[name].append(next_window[name].detach().cpu().numpy())
 
             # last update current state using next state...
             # (no direct use X = X_next, since gradient calculation only depends on one batch no history)
-            X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
-            hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
+            X = next_window['current_state'].detach().clone() # dtype=torch.float32
+            hE = hE_new.detach().clone() #dtype=torch.float32
         
         # TIME SERIES: Concatenate all windows together to get one recording
         for name in set(self.model.state_names + self.model.output_names):

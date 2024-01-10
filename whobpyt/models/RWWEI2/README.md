@@ -1,4 +1,4 @@
-# Reduced Wong Wang Neural Mass Model (Implementation 2)
+# Reduced Wong Wang Excitatory Inhibitory Neural Mass Model (Implementation 2)
 
 ## Description:
 

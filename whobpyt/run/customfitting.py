@@ -7,8 +7,9 @@ import torch
 import numpy as np
 from whobpyt.datatypes import Recording
 from whobpyt.datatypes import TrainingStats
+from whobpyt.datatypes.AbstractFitting import AbstractFitting
 
-class Fitting_FNGFPG:
+class Fitting_FNGFPG(AbstractFitting):
     """
     Fitting Forward No Gradient Forward Parallel Gradient (FNG-FPG)
     
@@ -29,12 +30,16 @@ class Fitting_FNGFPG:
         The simulated data from the last serial run (FNG)
     lastRec :  Recording   
         The simulated data from the last parallel run (FPG)
+    device : torch.device
+        Whether the fitting is to run on CPU or GPU
     """
     
-    def __init__(self, model, cost):
+    def __init__(self, model, cost, device = torch.device('cpu')):
         
         self.model = model
         self.cost = cost
+        
+        self.device = device
         
         self.trainingStats = TrainingStats(self.model)
         self.lastSerial = None #The last FNG run
@@ -87,10 +92,10 @@ class Fitting_FNGFPG:
                     delayHist = self.model.createDelayIC(ver = 0) #TODO: Delays are currently is not implemented in various places
                 else:
                     firstIC = self.model.next_start_state
-                    delayHist = torch.tensor(1.0) # TODO: Delays are currently is not implemented in various places
+                    delayHist = torch.tensor(1.0, device = self.device) # TODO: Delays are currently is not implemented in various places
 
                 # initial the external inputs
-                external = torch.tensor([0]) # TODO: Currenlty this code only works for resting state
+                external = torch.tensor([0], device = self.device) # TODO: Currenlty this code only works for resting state
                 
                 num_blocks = int(self.model.sim_len/block_len)
             
@@ -104,16 +109,15 @@ class Fitting_FNGFPG:
                 if e == (num_epochs - 1):
                     lastSerial = {}
                     for simKey in set(self.model.state_names + self.model.output_names):
-                        lastSerial[simKey] = Recording(sim_vals[simKey].detach().numpy().copy(), step_size = self.model.step_size) 
+                        lastSerial[simKey] = Recording(sim_vals[simKey].detach().cpu().numpy().copy(), step_size = self.model.step_size) 
 
                 print("Serial Finished")
-
     
                 # STEP 2/2 FPG (Forward in "Parallel" with Gradients)
                 # Using initial conditions acquired for serial run and with the same noise
                 
                 #print(blockNoise['E'].shape) # Time x Nodes x Blocks
-                newICs = torch.zeros(self.model.node_size, len(self.model.state_names), num_blocks) # nodes x state_variables x blocks
+                newICs = torch.zeros(self.model.node_size, len(self.model.state_names), num_blocks).to(self.device) # nodes x state_variables x blocks
                 idx = 0
                 for name in (self.model.state_names): #WARNING: Cannot use set() here as it does not preserve order, also this code assumes order of model.state_names is correct
                     newICs[:, idx, :] = sim_vals[name][:,(int(block_len/self.model.step_size)-1)::int(block_len/self.model.step_size)]
@@ -131,7 +135,7 @@ class Fitting_FNGFPG:
                 
                 
                 # calculating loss
-                loss = self.cost.calcLoss(sim_vals, empData)
+                loss = self.cost.loss(sim_vals, empData)
                 
                 optim.zero_grad()
                 loss.backward()
@@ -140,7 +144,7 @@ class Fitting_FNGFPG:
                 print("Params Updated")
                                                 
                 # TRAINING_STATS: Adding Loss for every training backpropagation
-                loss_his.append(loss.detach().numpy())
+                loss_his.append(loss.detach().cpu().numpy().copy())
                 
             self.trainingStats.appendLoss(np.mean(loss_his))
             trackedParams = {}
@@ -148,14 +152,14 @@ class Fitting_FNGFPG:
                 for parKey in self.model.track_params:
                     var = getattr(self.model.params, parKey)
                     if (var.fit_par):
-                        trackedParams[parKey] = var.value().detach().numpy().copy()
+                        trackedParams[parKey] = var.value().detach().cpu().numpy().copy()
             self.trainingStats.appendParam(trackedParams)
     
         # Saving the last recording of training as a Model_fitting attribute
         self.lastSerial = lastSerial
         self.lastRec = {}
         for simKey in set(self.model.state_names + self.model.output_names):
-            self.lastRec[simKey] = Recording(sim_vals[simKey].detach().numpy().copy(), step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
+            self.lastRec[simKey] = Recording(sim_vals[simKey].detach().cpu().numpy().copy(), step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
         
         
     def evaluate(self, stim, empData):

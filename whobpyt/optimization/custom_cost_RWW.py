@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappisan, Hussain Ather
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
 Neural Mass Model fitting
 module for cost calculation
 """
@@ -8,15 +8,25 @@ import numpy as np  # for numerical operations
 import torch
 from whobpyt.datatypes.parameter import par
 from whobpyt.datatypes.AbstractLoss import AbstractLoss
+from whobpyt.datatypes.AbstractNMM import AbstractNMM
 from whobpyt.optimization.cost_FC import CostsFC
+from whobpyt.functions.arg_type_check import method_arg_type_check
 
 class CostsRWW(AbstractLoss):
-    def __init__(self):
-        super(CostsRWW, self).__init__()
+    def __init__(self, model : AbstractNMM):
         self.mainLoss = CostsFC("bold")
         self.simKey = "bold"
+        self.model = model
 
-    def loss(self, sim, emp, model: torch.nn.Module, state_vals):
+    def loss(self, simData: dict, empData: torch.Tensor):
+        
+        method_arg_type_check(self.loss) # Check that the passed arguments (excluding self) abide by their expected data types
+        sim = simData
+        emp = empData
+        
+        model = self.model
+        state_vals = sim
+        
         # define some constants
         lb = 0.001
 

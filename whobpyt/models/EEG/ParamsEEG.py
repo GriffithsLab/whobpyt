@@ -1,8 +1,7 @@
 import numpy as np
+from whobpyt.datatypes import AbstractParams, par
 
-import numpy
-
-class EEG_Params():
+class EEG_Params(AbstractParams):
     def __init__(self, Lead_Field):
         
         #############################################
