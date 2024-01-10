@@ -57,7 +57,6 @@ class JansenRit_np():
         g_f = self.params.g_f.npValue()
         g_b = self.params.g_b.npValue()
 
-
         # Sigmoid function
         def sigmoid(x, vmax, v0, r):
             return vmax / (1 + np.exp(r * (v0 - x)))
@@ -133,6 +132,12 @@ class JansenRit_np():
             dIv = dt * (B*b*(rI + c4*sigmoid(vmax,v0,r,(c3*M))) - (2*b*Iv) - (b**(2)*I))
 
             # Update the state
+            dM = dM.detach().numpy()
+            dE = dE.detach().numpy()
+            dI = dI.detach().numpy()
+            dMv = dMv.detach().numpy()
+            dEv = dEv.detach().numpy()
+            dIv = dIv.detach().numpy()
             M = M + dM
             E = E + dE
             I = I + dI
