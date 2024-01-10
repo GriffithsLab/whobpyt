@@ -35,6 +35,7 @@ import scipy.io
 
 # viz stuff
 import matplotlib.pyplot as plt
+import mne
 
 #gdown
 import gdown
@@ -160,12 +161,36 @@ fig.colorbar(im1, ax=ax[1], fraction=0.046, pad=0.04)
 plt.show()
 
 # %%
-# Plot the EEG
-fig, ax = plt.subplots(1,3, figsize=(12,8))
-ax[0].plot(F.lastRec['P'].npTS().T)
-ax[0].set_title('Test: sourced EEG')
-ax[1].plot(F.lastRec["eeg"].npTS().T)
-ax[1].set_title('Test')
-ax[2].plot(eeg_data.T)
-ax[2].set_title('empirical')
-plt.show()
+# Plotting the timeseries of the fitted model and the empirical data using mne package
+
+# import a 64 channel montage for visualization
+montage = mne.channels.make_standard_montage('biosemi64')
+# create info object based on the montage
+info = mne.create_info(ch_names = montage.ch_names, sfreq = 1000, ch_types = 'eeg')
+
+# create mne.evoked objects
+evoked_emp = mne.EvokedArray(eeg_data, info)
+evoked_emp.set_montage(montage)
+evoked_fit = mne.EvokedArray(F.lastRec["eeg"].npTS()/1e6, info)
+evoked_fit.set_montage(montage)
+
+plt.plot(F.lastRec['P'].npTS().T, linewidth = 0.5)
+# resize plot
+plt.rcParams["figure.figsize"] = (8, 3)
+plt.title('Simulated - Source Activity (200 Parcels)');
+plt.ylim(-.3, .3);
+# add x label
+plt.xlabel('Time (ms)');
+# add bar between 110 and 120 for stimulus
+plt.axvspan(110, 120, alpha=0.5, color='red');
+# add label for stimulus
+plt.text(115, .25, 'Stimulation ON', color='black', fontsize=8, horizontalalignment='right', verticalalignment='center');
+
+fig = evoked_emp.plot(gfp=True, time_unit='s', show=False, titles='Empirical - Channel EEG')
+for ax in fig.axes:
+    ax.axvspan(0.11, 0.12, alpha=0.5, color='red');
+    
+
+fig = evoked_fit.plot(gfp=True, time_unit='s', show=False, titles='Simulated - Channel EEG');
+for ax in fig.axes:
+    ax.axvspan(0.11, 0.12, alpha=0.5, color='red');
