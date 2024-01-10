@@ -51,7 +51,7 @@ class Model_fitting(AbstractFitting):
         device : torch.device
             Whether the fitting is to run on CPU or GPU
         """
-        method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
+        #method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
 
         self.model = model
         self.cost = cost
@@ -120,7 +120,7 @@ class Model_fitting(AbstractFitting):
 
             # Perform the training in windows.
             if i_epoch == 0:
-                warmup_windows = 100
+                warmup_windows = 10
 
             else:
                 warmup_windows = warmupWindow
@@ -145,17 +145,18 @@ class Model_fitting(AbstractFitting):
                 np.zeros([self.model.node_size, self.model.steps_per_TR, self.model.TRs_per_window, self.model.pop_size]),
                 dtype=torch.float32)
 
-
+            windowedTS = empRec[i_epoch]
             for TR_i in range(warmup_windows):
-                windowedTS = empRec[i_epoch]
+                
 
 
 
                 # Use the model.forward() function to update next state and get simulated EEG in this batch.
                 next_window, hE_new = self.model(external, X, hE)
+                #print(next_window['current_state'])
                 X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
                 hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
-
+            print(X.shape)
             # LOOP 3/4: Number of windowed segments for the recording
             for win_idx in range(windowedTS.shape[0]):
 
@@ -174,7 +175,7 @@ class Model_fitting(AbstractFitting):
 
                 # Get the batch of empirical signal.
                 ts_window = torch.tensor(windowedTS[win_idx, :, :], dtype=torch.float32)
-
+                #print(next_window['bold'].shape)
                 # calculating loss
                 loss, loss_main = self.cost.loss(next_window, ts_window)
 
@@ -259,7 +260,7 @@ class Model_fitting(AbstractFitting):
             The number of initial time points to exclude from some metrics
         -----------
         """
-        method_arg_type_check(self.evaluate, exclude = ['u']) # Check that the passed arguments (excluding self) abide by their expected data types
+        #method_arg_type_check(self.evaluate, exclude = ['u']) # Check that the passed arguments (excluding self) abide by their expected data types
         #TODO: Should be updated to take a list of u and empRec
 
         # initial state
