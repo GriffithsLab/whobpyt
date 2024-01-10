@@ -23,7 +23,7 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.datatypes import par, Recording
-from whobpyt.models.JansenRit import RNNJANSEN, ParamsJR
+from whobpyt.models.JansenRit import RNNJANSEN, ParamsJR, JansenRit_np
 from whobpyt.optimization.custom_cost_JR import CostsJR
 from whobpyt.run import Model_fitting
 
