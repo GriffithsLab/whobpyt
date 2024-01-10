@@ -4,7 +4,7 @@ import numpy as np
 
 class JansenRit_np():
 
-    def __init__(self, node_size, step_size, output_size, sc, lm, dist, params):      
+     def __init__(self, node_size, step_size, output_size, tr, sc, lm, dist, params):      
 
         
         # Initialize the JR Model 
