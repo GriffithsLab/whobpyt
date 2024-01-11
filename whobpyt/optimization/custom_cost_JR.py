@@ -48,11 +48,11 @@ class CostsJR(AbstractLoss):
 
         for var_name in variables_p:
             var = getattr(model.params, var_name)
-            if var.fit_par and \
+            if var.fit_hyper and \
                         var_name not in exclude_param:
-                loss_prior.append(torch.sum(( m(var.prior_var)) * \
+                loss_prior.append(torch.sum(( m(var.prior_var_inv)) * \
                                             (m(var.val) - m(var.prior_mean)) ** 2) \
-                                  + torch.sum(-torch.log( m(var.prior_var))))
+                                  + torch.sum(-torch.log( m(var.prior_var_inv))))
 
         # total loss
         loss = 0.1 * w_cost * loss_main + 1 * sum(loss_prior) + 1 * loss_EI
