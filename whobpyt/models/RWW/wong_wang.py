@@ -434,7 +434,7 @@ class RNNRWW(AbstractNMM):
                   f[:,:, np.newaxis], v[:,:, np.newaxis], q[:,:, np.newaxis]], dim=2)
         next_state['current_state'] = current_state
         next_state['bold'] = torch.cat(bold_window, dim =1)
-        next_state['states'] = states_hist.mean(3)
+        next_state['states'] = states_hist.mean(4)
         
         return next_state, hE
         
