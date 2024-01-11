@@ -27,6 +27,8 @@ class RNNRWW(AbstractNMM):
     
     state_names: list
         A list of model state variable names
+    pop_names: list
+        A list of population names
     output_names: list
         A list of model output variable names
     model_name: string
@@ -43,22 +45,14 @@ class RNNRWW(AbstractNMM):
         The number of BOLD TRs to simulate in one forward call
     node_size: int
         The number of ROIs
-    sampling_size: int
-        This is related to an averaging of NMM values before inputing into hemodynamic equaitons. This is non-standard.        
+         
     sc: float node_size x node_size array
         The structural connectivity matrix
     sc_fitted: bool
         The fitted structural connectivity
     use_fit_gains: tensor with node_size x node_size (grad on depends on fit_gains)
         Whether to fit the structural connectivity, will fit via connection gains: exp(gains_con)*sc
-    use_Laplacian: bool
-        Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
-    use_Bifurcation: bool
-        Use a custom objective function component
-    use_Gaussian_EI: bool
-        Use a custom objective function component
-    use_dynamic_boundary: bool
-        Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size. 
+    
     params: ParamsRWW
         A object that contains the parameters for the RWW nodes
     params_fitted: dictionary
@@ -92,12 +86,10 @@ class RNNRWW(AbstractNMM):
         std for state noise and output noise
 
     """
-    use_fit_lfm = False
-    #input_size = 2
+    
 
-    def __init__(self, node_size: int,
-                 TRs_per_window: int, step_size: float,  tr: float, sc: float, use_fit_gains: bool,
-                 params: ParamsRWW) -> None:
+    def __init__(self, params: ParamsRWW, node_size = 68, TRs_per_window = 20, step_size = 0.05,  \
+                   tr=1.0, sc=np.ones((68,68)), use_fit_gains= True):
         """
         Parameters
         ----------
@@ -108,8 +100,6 @@ class RNNRWW(AbstractNMM):
             The number of BOLD TRs to simulate in one forward call    
         step_size: float
             Integration step for forward model
-        sampling_size:
-            This is related to an averaging of NMM values before inputing into hemodynamic equaitons. This is non-standard. 
         tr : float
             tr of fMRI image. That is, the spacing betweeen images in the time series. 
         sc: float node_size x node_size array
@@ -117,24 +107,16 @@ class RNNRWW(AbstractNMM):
         use_fit_gains: bool
             Whether to fit the structural connectivity, will fit via connection gains: exp(gains_con)*sc
         params: ParamsRWW
-            A object that contains the parameters for the RWW nodes
-        use_Bifurcation: bool
-            Use a custom objective function component
-        use_Gaussian_EI: bool
-            Use a custom objective function component
-        use_Laplacian: bool
-            Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
-        use_dynamic_boundary: bool
-            Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size.
+            A object that contains the parameters for the RWW nodes.
         """        
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
-        super(RNNRWW, self).__init__()
+        super(RNNRWW, self).__init__(params)
         
-        self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
+        self.state_names = np.array(['E', 'I', 'x', 'f', 'v', 'q'])
         self.output_names = ["bold"]
-        self.track_params = [] #Is populated during setModelParameters()
-        self.pop_names =['E']
+        
+        self.pop_names = np.array(['E'])
         self.pop_size = 1
         self.model_name = "RWW"
         self.state_size = 6  # 6 states WWD model
@@ -148,35 +130,12 @@ class RNNRWW(AbstractNMM):
         self.sc_fitted = torch.tensor(sc, dtype=torch.float32)  # placeholder
         self.use_fit_gains = use_fit_gains  # flag for fitting gains
         
-        self.params = params
-        
-        self.params_fitted = {}
-
         self.output_size = node_size
         
         self.setModelParameters()
+        self.setModelSCParameters()
     
-    def info(self):
-        """
-        
-        A function that returns a dictionary with model information.
-        
-        Parameters
-        ----------
-        
-        None
-        
-        
-        Returns
-        ----------
-        
-        Dictionary of Lists
-            The List contain State Names and Output Names 
-        
-        
-        """
     
-        return {"pop_names":['E'], "state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold"]}
     
     def createIC(self, ver):
         """
@@ -225,42 +184,22 @@ class RNNRWW(AbstractNMM):
 
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  delays_max)), dtype=torch.float32)
     
-    def setModelParameters(self):
+    def setModelSCParameters(self):
         
         """
         Sets the parameters of the model.
         """
 
-        param_reg = []
-        param_hyper = []
+        
 
         # Set w_bb, w_ff, and w_ll as attributes as type Parameter if use_fit_gains is True
         if self.use_fit_gains:
             
             self.w_ll = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the lateral gains
                                                 dtype=torch.float32))
-            param_reg.append(self.w_ll)
+            self.params_fitted['modelparameter'].append(self.w_ll)
         else:
             self.w_ll = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
-
-
-
-        var_names = [a for a in dir(self.params) if (type(getattr(self.params, a)) == par)]
-        for var_name in var_names:
-            var = getattr(self.params, var_name)
-            if (var.fit_par):
-                
-                var.val = Parameter(var.val) # TODO: This is not consistent with what user would expect giving a variance
-                var.prior_mean = Parameter(var.prior_mean)
-                var.prior_var = Parameter(var.prior_var)
-                param_reg.append(var.val)
-                param_hyper.append(var.prior_mean)
-                param_hyper.append(var.prior_var)
-                self.track_params.append(var_name)
-
-
-
-        self.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
         
     def forward(self, external, hx, hE):
         """
