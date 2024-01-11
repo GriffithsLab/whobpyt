@@ -11,7 +11,9 @@ class ParamsRWW(AbstractParams):
     
     def __init__(self, **kwargs):
         
-        param = {
+        super(ParamsRWW, self).__init__(**kwargs)
+        
+        params = {
 
             "std_in": par(0.02),  # standard deviation of the Gaussian noise
             "std_out": par(0.02),  # standard deviation of the Gaussian noise
@@ -58,8 +60,8 @@ class ParamsRWW(AbstractParams):
 
         }
 
-        for var in param:
-            setattr(self, var, param[var])
+        for var in params:
+            if var not in self.params:
+                self.params[var] = params[var]
 
-        for var in kwargs:
-            setattr(self, var, kwargs[var])
+        self.setParamsAsattr()
