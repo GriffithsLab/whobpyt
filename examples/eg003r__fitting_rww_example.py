@@ -112,7 +112,7 @@ params = ParamsRWW(g=par(400, 400, 1/np.sqrt(10), True), g_EE=par(1.5, 1.5, 1/np
 
 # %%
 # call model want to fit
-model = RNNRWW(node_size, TPperWindow, step_size, tr, sc, True, params)
+model = RNNRWW(params, node_size =node_size, TRs_per_window =TPperWindow, step_size=step_size, tr=tr, sc=sc, use_fit_gains=True)
 
 # %%
 # create objective function
