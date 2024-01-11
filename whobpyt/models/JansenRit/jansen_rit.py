@@ -87,9 +87,8 @@ class RNNJANSEN(AbstractNMM):
 
     """
 
-    def __init__(self, node_size: int,
-                 TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: np.ndarray, lm: np.ndarray, dist: np.ndarray,
-                 use_fit_gains: bool,  params: ParamsJR) -> None:
+    def __init__(self, params: ParamsJR, node_size=200,
+                 TRs_per_window=20, step_size=0.0001, output_size= 62, tr=0.001, sc=np.ones((200,200)), lm=np.ones((62,200)), dist=np.ones((200,200)), use_fit_gains=True):
         """
         Parameters
         ----------
@@ -111,14 +110,13 @@ class RNNJANSEN(AbstractNMM):
             Distance matrix
         use_fit_gains: bool
             Flag for fitting gains. 1: fit, 0: not fit
-        use_fit_lfm: bool
-            Flag for fitting the leadfield matrix. 1: fit, 0: not fit
         params: ParamsJR
             Model parameters object.
         """
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
 
-        super(RNNJANSEN, self).__init__()
+        super(RNNJANSEN, self).__init__(params)
+        
         self.pop_names = np.array(['P', 'E', 'I'])
         self.state_names = np.array(['current', 'voltage'])
         self.output_names = ["eeg"]
@@ -142,18 +140,7 @@ class RNNJANSEN(AbstractNMM):
         self.output_size = lm.shape[0]  # number of EEG channels
 
         self.setModelParameters()
-
-    def info(self):
-        # TODO: Make sure this method is useful
-        """
-        Returns a dictionary with the names of the states and the output.
-
-        Returns
-        -------
-        Dict[str, List[str]]
-        """
-
-        return {"pop_names": self.pop_names, "state_names": self.state_names, "output_names": self.output_names}
+        self.setModelSCParameters()
 
     def createIC(self, ver):
         """
@@ -197,13 +184,10 @@ class RNNJANSEN(AbstractNMM):
 
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  delays_max)), dtype=torch.float32)
 
-    def setModelParameters(self):
+    def setModelSCParameters(self):
         """
         Sets the parameters of the model.
         """
-
-        param_reg = []
-        param_hyper = []
 
         # Set w_bb, w_ff, and w_ll as attributes as type Parameter if use_fit_gains is True
         if self.use_fit_gains:
@@ -213,43 +197,15 @@ class RNNJANSEN(AbstractNMM):
                                                 dtype=torch.float32))
             self.w_ll = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the lateral gains
                                                 dtype=torch.float32))
-            param_reg.append(self.w_ll)
-            param_reg.append(self.w_ff)
-            param_reg.append(self.w_bb)
+            self.params_fitted['modelparameter'].append(self.w_ll)
+            self.params_fitted['modelparameter'].append(self.w_ff)
+            self.params_fitted['modelparameter'].append(self.w_bb)
         else:
             self.w_bb = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
             self.w_ff = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
             self.w_ll = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
 
-
-
-        var_names = [a for a in dir(self.params) if (type(getattr(self.params, a)) == par)]
-        for var_name in var_names:
-            var = getattr(self.params, var_name)
-            if (var.fit_par):
-                if var_name == 'lm':
-                    size = var.val.shape
-                    var.val = Parameter(- 1 * torch.ones((size[0], size[1]))) # TODO: This is not consistent with what user would expect giving a variance
-                    var.prior_mean = Parameter(var.prior_mean)
-                    var.prior_var = Parameter(var.prior_var)
-                    param_reg.append(var.val)
-                    param_hyper.append(var.prior_mean)
-                    param_hyper.append(var.prior_var)
-                    self.track_params.append(var_name)
-                else:
-                    var.val = Parameter(var.val) # TODO: This is not consistent with what user would expect giving a variance
-                    var.prior_mean = Parameter(var.prior_mean)
-                    var.prior_var = Parameter(var.prior_var)
-                    param_reg.append(var.val)
-                    param_hyper.append(var.prior_mean)
-                    param_hyper.append(var.prior_var)
-                    self.track_params.append(var_name)
-
-
-
-        self.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
-
-
+        
     def forward(self, external, hx, hE):
         """
         This function carries out the forward Euler integration method for the JR neural mass model,
