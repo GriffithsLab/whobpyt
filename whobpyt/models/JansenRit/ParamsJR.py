@@ -51,7 +51,9 @@ class ParamsJR(AbstractParams):
         Returns:
             None
         """
-        param = {
+        
+        super(ParamsJR, self).__init__(**kwargs)
+        params = {
             "A ": par(3.25), 
             "a": par(100), 
             "B": par(22), 
@@ -74,9 +76,8 @@ class ParamsJR(AbstractParams):
             "cy0": par(5), 
             "ki": par(1)
         }
+        for var in params:
+            if var not in self.params:
+                self.params[var] = params[var]
         
-        for var in param:
-            setattr(self, var, param[var])
-
-        for var in kwargs:
-            setattr(self, var, kwargs[var])
+        self.setParamsAsattr()
