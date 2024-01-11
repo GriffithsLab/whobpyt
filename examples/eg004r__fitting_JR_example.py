@@ -58,7 +58,7 @@ eeg_data_all = np.load(eeg_file)
 eeg_data = eeg_data_all.mean(0) 
 
 eeg_data = eeg_data[:,700:1100] / 12
-
+print(np.abs(eeg_data).max())
 # %%
 # get stimulus weights on regions
 ki0 =np.loadtxt(base_dir + 'stim_weights.txt')[:,np.newaxis]
@@ -105,7 +105,7 @@ params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(
                   g=par(400), g_f=par(10), g_b=par(10), \
                   c1 = par(135, 135, 1, True), c2 = par(135*0.8, 135*0.8, 1, True), \
                   c3 = par(135*0.25, 135*0.25, 1, True), c4 = par(135*0.25, 135*0.25, 1, True),\
-                  std_in= par(10,10, 0.2, True), vmax= par(5), v0=par(6), r=par(0.56), y0=par(-2, -2, 1, True),\
+                  std_in= par(10,10, 0.2, True), vmax= par(5), v0=par(6), r=par(0.56), y0=par(2, 2, 0.2, True),\
                   mu = par(np.log(1.5), np.log(1.5), 0.1, True, True), k = par(10,10, 0.2, True),
                   #cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \
                   cy0 = par(50, 50, 1, True), ki=par(ki0), \
