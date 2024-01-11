@@ -21,6 +21,7 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.datatypes import par, Recording
+from whobpyt.data import dataloader
 from whobpyt.models.RWW import RNNRWW, ParamsRWW
 from whobpyt.optimization.custom_cost_RWW import CostsRWW
 from whobpyt.run import Model_fitting
@@ -78,7 +79,7 @@ TPperWindow = 20
 step_size = 0.05
 input_size = 2
 tr = 0.75
-repeat_size = 5
+
 
 
 # %%
@@ -100,17 +101,18 @@ fc_emp = np.corrcoef(ts.T)
 # %%
 # prepare data structure of the model
 print(ts.T.shape)
-fMRIstep = tr
-data_mean = Recording(ts.T, fMRIstep) #dataloader(ts, num_epoches, TPperWindow)
+data_mean = dataloader(ts, num_epochs, TPperWindow)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
-params = ParamsRWW(g=par(400, 400, 1/np.sqrt(10), True, True), g_EE=par(1.5, 1.5, 1/np.sqrt(50), True, True), g_EI =par(0.8, 0.8, 1/np.sqrt(50), True, True), \
-                   g_IE=par(0.6, 0.6, 1/np.sqrt(50), True, True), I_0 =par(0.2), std_in=par(0.0), std_out=par(0.00))
+params = ParamsRWW(g=par(400, 400, 1/np.sqrt(10), True), g_EE=par(1.5, 1.5, 1/np.sqrt(50), True), \
+                   g_EI =par(0.8, 0.8, 1/np.sqrt(50), True), \
+                  g_IE=par(np.log(0.6), np.log(0.6), 0.1, True, True), I_0 =par(0.2), \
+                   std_in=par(np.log(0.2), np.log(0.2), 0.1, True, True), std_out=par(0.00))
 
 # %%
 # call model want to fit
-model = RNNRWW(node_size, TPperWindow, step_size, repeat_size, tr, sc, True, params)
+model = RNNRWW(params, node_size =node_size, TRs_per_window =TPperWindow, step_size=step_size, tr=tr, sc=sc, use_fit_gains=True)
 
 # %%
 # create objective function
@@ -124,7 +126,7 @@ F = Model_fitting(model, ObjFun)
 # Model Training
 # ---------------------------------------------------
 #
-F.train(u = 0, empRecs = [data_mean], num_epochs = num_epochs, TPperWindow = TPperWindow, learningrate = 0.05)
+F.train(u = 0, empRec = data_mean, num_epochs = num_epochs, TPperWindow = TPperWindow, warmupWindow=5, learningrate = 0.05)
 
 # %%
 # Plots of loss over Training
@@ -160,11 +162,11 @@ plt.show()
 # %%
 # Plot E I and simulated BOLD
 fig, ax = plt.subplots(1, 3, figsize=(12, 8))
-ax[0].plot(F.lastRec['E'].npTS().T)
+ax[0].plot(F.trainingStats.states['testing'][:,0,0].T)
 ax[0].set_title('Test: E')
-ax[1].plot(F.lastRec['I'].npTS().T)
+ax[1].plot(F.trainingStats.states['testing'][:,0,1].T)
 ax[1].set_title('Test: I')
-ax[2].plot(F.lastRec['bold'].npTS().T)
+ax[2].plot(F.trainingStats.outputs['testing'].T)
 ax[2].set_title('Test: BOLD')
 plt.show()
 
@@ -174,7 +176,7 @@ fig, ax = plt.subplots(1, 2, figsize=(5, 4))
 im0 = ax[0].imshow(fc_emp, cmap='bwr')
 ax[0].set_title('The empirical FC')
 fig.colorbar(im0, ax=ax[0], fraction=0.046, pad=0.04)
-im1 = ax[1].imshow(np.corrcoef(F.lastRec['bold'].npTS()), cmap='bwr')
+im1 = ax[1].imshow(np.corrcoef(F.trainingStats.outputs['testing']), cmap='bwr')
 ax[1].set_title('The simulated FC')
 fig.colorbar(im1, ax=ax[1], fraction=0.046, pad=0.04)
 plt.show()

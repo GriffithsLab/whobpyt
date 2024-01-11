@@ -27,8 +27,6 @@ class RNNRWW(AbstractNMM):
     
     state_names: list
         A list of model state variable names
-    pop_names: list
-        A list of population names
     output_names: list
         A list of model output variable names
     model_name: string
@@ -45,14 +43,22 @@ class RNNRWW(AbstractNMM):
         The number of BOLD TRs to simulate in one forward call
     node_size: int
         The number of ROIs
-         
+    sampling_size: int
+        This is related to an averaging of NMM values before inputing into hemodynamic equaitons. This is non-standard.        
     sc: float node_size x node_size array
         The structural connectivity matrix
     sc_fitted: bool
         The fitted structural connectivity
     use_fit_gains: tensor with node_size x node_size (grad on depends on fit_gains)
         Whether to fit the structural connectivity, will fit via connection gains: exp(gains_con)*sc
-    
+    use_Laplacian: bool
+        Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
+    use_Bifurcation: bool
+        Use a custom objective function component
+    use_Gaussian_EI: bool
+        Use a custom objective function component
+    use_dynamic_boundary: bool
+        Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size. 
     params: ParamsRWW
         A object that contains the parameters for the RWW nodes
     params_fitted: dictionary
@@ -86,10 +92,12 @@ class RNNRWW(AbstractNMM):
         std for state noise and output noise
 
     """
-    
+    use_fit_lfm = False
+    #input_size = 2
 
-    def __init__(self, params: ParamsRWW, node_size = 68, TRs_per_window = 20, step_size = 0.05,  \
-                   tr=1.0, sc=np.ones((68,68)), use_fit_gains= True):
+    def __init__(self, node_size: int,
+                 TRs_per_window: int, step_size: float,  tr: float, tr_eeg: float, sc: float, use_fit_gains: bool,
+                 params: ParamsRWW) -> None:
         """
         Parameters
         ----------
@@ -100,6 +108,8 @@ class RNNRWW(AbstractNMM):
             The number of BOLD TRs to simulate in one forward call    
         step_size: float
             Integration step for forward model
+        sampling_size:
+            This is related to an averaging of NMM values before inputing into hemodynamic equaitons. This is non-standard. 
         tr : float
             tr of fMRI image. That is, the spacing betweeen images in the time series. 
         sc: float node_size x node_size array
@@ -107,35 +117,70 @@ class RNNRWW(AbstractNMM):
         use_fit_gains: bool
             Whether to fit the structural connectivity, will fit via connection gains: exp(gains_con)*sc
         params: ParamsRWW
-            A object that contains the parameters for the RWW nodes.
+            A object that contains the parameters for the RWW nodes
+        use_Bifurcation: bool
+            Use a custom objective function component
+        use_Gaussian_EI: bool
+            Use a custom objective function component
+        use_Laplacian: bool
+            Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
+        use_dynamic_boundary: bool
+            Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size.
         """        
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
-        super(RNNRWW, self).__init__(params)
+        super(RNNRWW, self).__init__()
         
-        self.state_names = np.array(['E', 'I', 'x', 'f', 'v', 'q'])
+        self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
         self.output_names = ["bold"]
-        
-        self.pop_names = np.array(['E'])
+        self.track_params = [] #Is populated during setModelParameters()
+        self.pop_names =['E']
         self.pop_size = 1
         self.model_name = "RWW"
         self.state_size = 6  # 6 states WWD model
         # self.input_size = input_size  # 1 or 2
         self.tr = tr  # tr fMRI image
+        self.tr_eeg = tr_eeg  # tr fMRI image
         self.step_size = step_size  # integration step 0.05
-        self.steps_per_TR = int(tr / step_size)
+        self.steps_per_TR = int(tr/ step_size)
+        self.steps_per_TR_bold = int(tr/1000 / step_size)
+        self.time_diff = int(1000/step_size)
+        self.steps_per_TR_eeg = int(tr_eeg/ step_size)
         self.TRs_per_window = TRs_per_window  # size of the batch used at each step
         self.node_size = node_size  # num of ROI
         self.sc = sc  # matrix node_size x node_size structure connectivity
         self.sc_fitted = torch.tensor(sc, dtype=torch.float32)  # placeholder
         self.use_fit_gains = use_fit_gains  # flag for fitting gains
         
+        self.params = params
+        
+        self.params_fitted = {}
+
         self.output_size = node_size
         
         self.setModelParameters()
-        self.setModelSCParameters()
     
+    def info(self):
+        """
+        
+        A function that returns a dictionary with model information.
+        
+        Parameters
+        ----------
+        
+        None
+        
+        
+        Returns
+        ----------
+        
+        Dictionary of Lists
+            The List contain State Names and Output Names 
+        
+        
+        """
     
+        return {"pop_names":['E'], "state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold"]}
     
     def createIC(self, ver):
         """
@@ -184,22 +229,42 @@ class RNNRWW(AbstractNMM):
 
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  delays_max)), dtype=torch.float32)
     
-    def setModelSCParameters(self):
+    def setModelParameters(self):
         
         """
         Sets the parameters of the model.
         """
 
-        
+        param_reg = []
+        param_hyper = []
 
         # Set w_bb, w_ff, and w_ll as attributes as type Parameter if use_fit_gains is True
         if self.use_fit_gains:
             
             self.w_ll = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the lateral gains
                                                 dtype=torch.float32))
-            self.params_fitted['modelparameter'].append(self.w_ll)
+            param_reg.append(self.w_ll)
         else:
             self.w_ll = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
+
+
+
+        var_names = [a for a in dir(self.params) if (type(getattr(self.params, a)) == par)]
+        for var_name in var_names:
+            var = getattr(self.params, var_name)
+            if (var.fit_par):
+                
+                var.val = Parameter(var.val) # TODO: This is not consistent with what user would expect giving a variance
+                var.prior_mean = Parameter(var.prior_mean)
+                var.prior_var = Parameter(var.prior_var)
+                param_reg.append(var.val)
+                param_hyper.append(var.prior_mean)
+                param_hyper.append(var.prior_var)
+                self.track_params.append(var_name)
+
+
+
+        self.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
         
     def forward(self, external, hx, hE):
         """
@@ -208,7 +273,7 @@ class RNNRWW(AbstractNMM):
         
         Parameters
         ----------
-        external: tensor with node_size x pop_size x steps_per_TR x TRs_per_window x input_size
+        external: tensor with node_size x steps_per_TR x TRs_per_window x input_size
             noise for states
         
         hx: tensor with node_size x state_size
@@ -304,47 +369,46 @@ class RNNRWW(AbstractNMM):
         bold_window = []
         
     
-        states_hist = torch.zeros((self.node_size, self.pop_size, self.state_size, self.TRs_per_window,self.steps_per_TR))
+        states_hist = torch.zeros((self.node_size, self.pop_size, 2, self.TRs_per_window*self.steps_per_TR))
         
         E = hx[:,:,0]
         I = hx[:,:,1]
         #print(E.shape)
         # Use the forward model to get neural activity at ith element in the window.
         
+        for step_i in range(self.TRs_per_window*self.steps_per_TR):
+
+            
+                
+            # Calculate the input recurrent.
+            IE = torch.tanh(m(W_E * I_0 + g_EE * E + g * torch.matmul(lap_adj, E) - g_IE * I))  # input currents for E
+            II = torch.tanh(m(W_I * I_0 + g_EI * E - I))  # input currents for I
+
+            # Calculate the firing rates.
+            rE = h_tf(aE, bE, dE, IE)  # firing rate for E
+            rI = h_tf(aI, bI, dI, II)  # firing rate for I
+            
+            # Update the states by step-size 0.05.
+            E_next = E + dt * (-E * torch.reciprocal(tau_E) + gamma_E * (1. - E) * rE) \
+                     + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in  
+            I_next = I + dt * (-I * torch.reciprocal(tau_I) + gamma_I * rI) \
+                     + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in
+
+            # Calculate the saturation for model states (for stability and gradient calculation).
+
+            # E_next[E_next>=0.9] = torch.tanh(1.6358*E_next[E_next>=0.9])
+            E = torch.tanh(0.0000 + m(1.0 * E_next))
+            I = torch.tanh(0.0000 + m(1.0 * I_next))
+
+            
+
+            states_hist[:, :,0,step_i] = E
+            states_hist[:, :,1,step_i] = I
+
         for TR_i in range(self.TRs_per_window):
 
-            # Since tr is about second we need to use a small step size like 0.05 to integrate the model states.
-            for step_i in range(self.steps_per_TR):
-                
-                # Calculate the input recurrent.
-                IE = torch.tanh(m(W_E * I_0 + g_EE * E + g * torch.matmul(lap_adj, E) - g_IE * I))  # input currents for E
-                II = torch.tanh(m(W_I * I_0 + g_EI * E - I))  # input currents for I
-
-                # Calculate the firing rates.
-                rE = h_tf(aE, bE, dE, IE)  # firing rate for E
-                rI = h_tf(aI, bI, dI, II)  # firing rate for I
-                
-                # Update the states by step-size 0.05.
-                E_next = E + dt * (-E * torch.reciprocal(tau_E) + gamma_E * (1. - E) * rE) \
-                         + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in  
-                I_next = I + dt * (-I * torch.reciprocal(tau_I) + gamma_I * rI) \
-                         + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in
-
-                # Calculate the saturation for model states (for stability and gradient calculation).
-
-                # E_next[E_next>=0.9] = torch.tanh(1.6358*E_next[E_next>=0.9])
-                E = torch.tanh(0.0000 + m(1.0 * E_next))
-                I = torch.tanh(0.0000 + m(1.0 * I_next))
-
-                
-
-                states_hist[:, :,0,TR_i, step_i] = E
-                states_hist[:, :,1,TR_i, step_i] = I
-
-        for TR_i in range(self.TRs_per_window):
-
-            for step_i in range(self.steps_per_TR):
-                x_next = x + 1 * dt * (1 * states_hist[:, :,0,TR_i, step_i] - torch.reciprocal(tau_s) * x \
+            for step_i in range(self.steps_per_TR_bold):
+                x_next = x + 1 * dt * (1 * states_hist[:, :,0,TR_i, self.time_diff*step_i] - torch.reciprocal(tau_s) * x \
                          - torch.reciprocal(tau_f) * (f - 1))
                 f_next = f + 1 * dt * x
                 v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(alpha))) * torch.reciprocal(tau_0)
@@ -373,7 +437,7 @@ class RNNRWW(AbstractNMM):
                   f[:,:, np.newaxis], v[:,:, np.newaxis], q[:,:, np.newaxis]], dim=2)
         next_state['current_state'] = current_state
         next_state['bold'] = torch.cat(bold_window, dim =1)
-        next_state['states'] = states_hist.mean(4)
+        next_state['states'] = states_hist[:,:,:,::self.steps_per_TR_eeg]
         
         return next_state, hE
         
