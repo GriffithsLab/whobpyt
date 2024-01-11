@@ -18,18 +18,15 @@ class par:
         The parameter value (or an array of node specific parameter values)
     prior_mean : Tensor
         Prior mean of the data value
-    prior_var : Tensor
-        Prior variance of the value
-    has_prior : Bool
-        Whether the user provided a prior mean and variance
+    prior_var_inv : Tensor
+        Prior inverse of variance of the value
+    
     fit_par: Bool
         Whether the parameter value should be set to as a PyTorch Parameter
     fit_hyper : Bool
         Whether the parameter prior mean and prior variance should be set as a PyTorch Parameter
     asLog : Bool
         Whether the log of the parameter value will be stored instead of the parameter itself (will prevent parameter from being negative).
-    isPlastic : Bool
-        Not yet implemented
     '''
 
     def __init__(self, val, prior_mean = None, prior_std = None, fit_par = False, asLog = False, device = torch.device('cpu')):
@@ -51,6 +48,7 @@ class par:
         self.fit_par = fit_par
         self.device = device
         self.asLog = asLog
+        self.fit_hyper = False
 
         if self.fit_par:
             if np.all(prior_mean != None) & np.all(prior_std != None):
@@ -58,31 +56,18 @@ class par:
                 prior_mean_ts = torch.tensor(prior_mean, dtype=torch.float32).to(self.device)
                 self.prior_mean = prior_mean_ts
                 prior_std_ts = torch.tensor(prior_std, dtype=torch.float32).to(self.device)
-                self.prior_var = 1/prior_std_ts**2
+                self.prior_var_inv = 1/prior_std_ts**2
                 if type(val) is np.ndarray:
                     val = prior_mean + prior_std * torch.randn_like(torch.tensor(val, dtype=torch.float32)).detach().numpy()
                 else:
                     val = prior_mean + prior_std * np.random.randn(1,)
                 val_ts = torch.tensor(val, dtype=torch.float32).to(self.device)
                 self.val = val_ts
+                self.fit_hyper = True
 
             else:
-                prior_mean = val
-                prior_mean_ts = torch.tensor(prior_mean, dtype=torch.float32).to(self.device)
-                self.prior_mean = prior_mean_ts
-                prior_std = np.abs(val)/10
-                prior_std_ts = torch.tensor(prior_std, dtype=torch.float32).to(self.device)
-                self.prior_var = 1/prior_std_ts**2
-                if type(val) is np.ndarray:
-                    val = prior_mean + prior_std * torch.randn_like(torch.tensor(val, dtype=torch.float32)).detach().numpy()
-                else:
-                    val = prior_mean + prior_std * np.random.randn(1,)
                 val_ts = torch.tensor(val, dtype=torch.float32).to(self.device)
                 self.val = val_ts
-
-
-
-
         else:
             self.val = torch.tensor(val, dtype=torch.float32).to(self.device)
 
