@@ -120,7 +120,7 @@ class Model_fitting(AbstractFitting):
 
             # Perform the training in windows.
             if i_epoch == 0:
-                warmup_windows = 10
+                warmup_windows = 100
 
             else:
                 warmup_windows = warmupWindow
