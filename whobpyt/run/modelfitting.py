@@ -228,9 +228,10 @@ class Model_fitting(AbstractFitting):
                     var = getattr(self.model.params, par_name)
                     if (var.fit_par):
                         trackedParam[par_name] = var.value().detach().cpu().numpy().copy()
+                        if var.fit_hyper:
 
-                        trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().cpu().numpy().copy()
-                        trackedParam[par_name + "_prior_var"] = var.prior_var.detach().cpu().numpy().copy()
+                            trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().cpu().numpy().copy()
+                            trackedParam[par_name + "_prior_var_inv"] = var.prior_var_inv.detach().cpu().numpy().copy()
             for key, value in self.model.state_dict().items():
                 if key not in exclude_param:
                     trackedParam[key] = value.detach().cpu().numpy().ravel().copy()
