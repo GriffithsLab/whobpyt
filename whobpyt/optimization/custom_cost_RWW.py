@@ -41,14 +41,14 @@ class CostsRWW(AbstractLoss):
         
         loss_prior = []
 
-        variables_p = [a for a in dir(model.params) if not a.startswith('__') and (type(getattr(model.params, a)) == par)]
+        variables_p = [a for a in dir(model.params) if type(getattr(model.params, a)) == par]
         # get penalty on each model parameters due to prior distribution
         for var_name in variables_p:
             # print(var)
             var = getattr(model.params, var_name)
-            if var.fit_par:
-                loss_prior.append(torch.sum((lb + m(var.prior_var)) * \
+            if var.fit_hyper:
+                loss_prior.append(torch.sum((lb + m(var.prior_var_inv)) * \
                                                 (m(var.val) - m(var.prior_mean)) ** 2) \
-                                      + torch.sum(-torch.log(lb + m(var.prior_var)))) #TODO: Double check about converting _v_inv 
+                                      + torch.sum(-torch.log(lb + m(var.prior_var_inv)))) #TODO: Double check about converting _v_inv 
         loss = w_cost * loss_main + sum(loss_prior) 
         return loss, loss_main
