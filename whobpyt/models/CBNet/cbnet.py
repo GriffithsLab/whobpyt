@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Davide Momi, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak
+Authors: Milad Soltanzadeh, Zheng Wang, John Griffiths, Andrew Clappison,Davide Momi, Sorenza Bastiaens, Kevin Kadak, Parsa Oveisi, Taha Morshedzadeh, Shreyas Harita 
 Neural Mass Model fitting module for JR with forward, backward, and lateral connection for EEG
 """
 

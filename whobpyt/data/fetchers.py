@@ -1,3 +1,10 @@
+"""
+Authors: Andrew Clappison, John Griffiths, Zheng Wang, Davide Momi, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
+
+"""
+
+
+
 # ------------------------------------
 # WhobPyT Data Fetcher Functionalities
 # ------------------------------------
