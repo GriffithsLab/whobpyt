@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Davide Momi, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
 Neural Mass Model fitting
 function for data preparation
 

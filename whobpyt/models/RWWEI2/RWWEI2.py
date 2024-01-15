@@ -1,5 +1,6 @@
 import torch
 from whobpyt.datatypes import AbstractNMM, AbstractParams, par
+from torch.nn.parameter import Parameter
 from math import sqrt
 
 class RWWEI2(AbstractNMM):
@@ -100,8 +101,9 @@ class RWWEI2(AbstractNMM):
         self.useBC = False
         
         self.output_size = num_regions
-        
-        self.state_names = ['E', 'I']
+        self.pop_size = 2
+        self.state_size = 1
+        self.pop_names = ['E', 'I']
         self.output_names = ['E']
         self.track_params = []  #Is populated during setModelParameters()
         
@@ -115,7 +117,7 @@ class RWWEI2(AbstractNMM):
         return setModelParameters(self)
         
     def createIC(self, ver):
-        self.next_start_state = torch.tensor(0.1) + 0.2 * torch.rand((self.node_size, 2, self.num_blocks))
+        self.next_start_state = torch.tensor(0.1) + 0.2 * torch.rand((self.node_size, self.pop_size, self.state_size))
         self.next_start_state = self.next_start_state.to(self.device)
         
         return self.next_start_state
@@ -165,7 +167,13 @@ def setModelParameters(self):
     for var_name in vars_names:
         var = getattr(self.params, var_name)
         if (var.fit_par):
+            var.val = Parameter(var.val) # TODO: This is not consistent with what user would expect giving a variance
+            var.prior_mean = Parameter(var.prior_mean)
+            var.prior_var = Parameter(var.prior_var)
             param_reg.append(var.val)
+            param_hyper.append(var.prior_mean)
+            param_hyper.append(var.prior_var)
+            
             self.track_params.append(var_name)
     self.params_fitted = {'modelparameter': param_reg, 'hyperparameter': param_hyper}
     
@@ -370,8 +378,9 @@ def forward(self, external, hx, hE, setNoise, batched):
     
     sim_vals = {}
     sim_vals["NMM_state"] = state_vals
-    sim_vals["E"] = layer_hist[:,:,0,:].permute((1,0,2))
-    sim_vals["I"] = layer_hist[:,:,1,:].permute((1,0,2))
+    sim_vals["states"] = state_vals
+    """sim_vals["E"] = layer_hist[:,:,0,:].permute((1,0,2))
+    sim_vals["I"] = layer_hist[:,:,1,:].permute((1,0,2))"""
     
     return sim_vals, hE
 

@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Clemens Pellengahr, Hussain Ather, Davide Momi, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
 Neural Mass Model fitting
 module for linear model
 """

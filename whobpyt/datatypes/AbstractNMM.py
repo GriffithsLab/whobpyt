@@ -1,3 +1,7 @@
+"""
+Authors: Andrew Clappison, John Griffiths, Zheng Wang, Davide Momi, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
+"""
+
 import torch
 from whobpyt.datatypes.parameter import par
 from torch.nn.parameter import Parameter

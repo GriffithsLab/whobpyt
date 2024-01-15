@@ -1,6 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
-Neural Mass Model fitting
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Davide Momi, Sorenza Bastiaens, Taha Morshedzadeh, Kevin Kadak, Parsa Oveisi, Shreyas Harita
 module for cost calculation
 """
 

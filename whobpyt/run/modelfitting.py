@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Clemens Pellengahr, Davide Momi, Sorenza Bastiaens, Kevin Kadak, Taha Morshedzadeh, Parsa Oveisi, Shreyas Harita
 Neural Mass Model fitting module for model fitting using pytorch
 """
 

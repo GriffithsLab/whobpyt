@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Clemens Pellengahr, Hussain Ather, Davide Momi, Sorenza Bastiaens, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
 Neural Mass Model fitting module for Wong-Wang model
 """
 
@@ -95,9 +95,8 @@ class RNNRWW(AbstractNMM):
     use_fit_lfm = False
     #input_size = 2
 
-    def __init__(self, node_size: int,
-                 TRs_per_window: int, step_size: float,  tr: float, tr_eeg: float, sc: float, use_fit_gains: bool,
-                 params: ParamsRWW) -> None:
+    def __init__(self, params: ParamsRWW, node_size = 68, TRs_per_window = 20, step_size = 0.1,  \
+                   tr=1.0, tr_eeg= 0.001, sc=np.ones((68,68)), use_fit_gains= True):
         """
         Parameters
         ----------
@@ -129,7 +128,7 @@ class RNNRWW(AbstractNMM):
         """        
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
-        super(RNNRWW, self).__init__()
+        super(RNNRWW, self).__init__(params)
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
         self.output_names = ["bold"]
@@ -144,7 +143,6 @@ class RNNRWW(AbstractNMM):
         self.step_size = step_size  # integration step 0.05
         self.steps_per_TR = int(tr/ step_size)
         self.steps_per_TR_bold = int(tr/1000 / step_size)
-        self.time_diff = int(1000/step_size)
         self.steps_per_TR_eeg = int(tr_eeg/ step_size)
         self.TRs_per_window = TRs_per_window  # size of the batch used at each step
         self.node_size = node_size  # num of ROI
@@ -159,28 +157,9 @@ class RNNRWW(AbstractNMM):
         self.output_size = node_size
         
         self.setModelParameters()
+        self.setModelSCParameters()
     
-    def info(self):
-        """
-        
-        A function that returns a dictionary with model information.
-        
-        Parameters
-        ----------
-        
-        None
-        
-        
-        Returns
-        ----------
-        
-        Dictionary of Lists
-            The List contain State Names and Output Names 
-        
-        
-        """
     
-        return {"pop_names":['E'], "state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold"]}
     
     def createIC(self, ver):
         """
@@ -229,42 +208,22 @@ class RNNRWW(AbstractNMM):
 
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  delays_max)), dtype=torch.float32)
     
-    def setModelParameters(self):
+    def setModelSCParameters(self):
         
         """
         Sets the parameters of the model.
         """
 
-        param_reg = []
-        param_hyper = []
+        
 
         # Set w_bb, w_ff, and w_ll as attributes as type Parameter if use_fit_gains is True
         if self.use_fit_gains:
             
             self.w_ll = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the lateral gains
                                                 dtype=torch.float32))
-            param_reg.append(self.w_ll)
+            self.params_fitted['modelparameter'].append(self.w_ll)
         else:
             self.w_ll = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
-
-
-
-        var_names = [a for a in dir(self.params) if (type(getattr(self.params, a)) == par)]
-        for var_name in var_names:
-            var = getattr(self.params, var_name)
-            if (var.fit_par):
-                
-                var.val = Parameter(var.val) # TODO: This is not consistent with what user would expect giving a variance
-                var.prior_mean = Parameter(var.prior_mean)
-                var.prior_var = Parameter(var.prior_var)
-                param_reg.append(var.val)
-                param_hyper.append(var.prior_mean)
-                param_hyper.append(var.prior_var)
-                self.track_params.append(var_name)
-
-
-
-        self.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
         
     def forward(self, external, hx, hE):
         """
@@ -367,65 +326,59 @@ class RNNRWW(AbstractNMM):
         # placeholders for output BOLD, history of E I x f v and q
         # placeholders for output BOLD, history of E I x f v and q
         bold_window = []
-        
+        E_window = []
     
-        states_hist = torch.zeros((self.node_size, self.pop_size, 2, self.TRs_per_window*self.steps_per_TR))
         
         E = hx[:,:,0]
         I = hx[:,:,1]
         #print(E.shape)
         # Use the forward model to get neural activity at ith element in the window.
         
-        for step_i in range(self.TRs_per_window*self.steps_per_TR):
-
+        for TR_i in range(self.TRs_per_window):
+            E_holder = []
+            for step_i in range(self.steps_per_TR):
+                
             
                 
-            # Calculate the input recurrent.
-            IE = torch.tanh(m(W_E * I_0 + g_EE * E + g * torch.matmul(lap_adj, E) - g_IE * I))  # input currents for E
-            II = torch.tanh(m(W_I * I_0 + g_EI * E - I))  # input currents for I
-
-            # Calculate the firing rates.
-            rE = h_tf(aE, bE, dE, IE)  # firing rate for E
-            rI = h_tf(aI, bI, dI, II)  # firing rate for I
-            
-            # Update the states by step-size 0.05.
-            E_next = E + dt * (-E * torch.reciprocal(tau_E) + gamma_E * (1. - E) * rE) \
-                     + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in  
-            I_next = I + dt * (-I * torch.reciprocal(tau_I) + gamma_I * rI) \
-                     + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in
-
-            # Calculate the saturation for model states (for stability and gradient calculation).
-
-            # E_next[E_next>=0.9] = torch.tanh(1.6358*E_next[E_next>=0.9])
-            E = torch.tanh(0.0000 + m(1.0 * E_next))
-            I = torch.tanh(0.0000 + m(1.0 * I_next))
-
-            
-
-            states_hist[:, :,0,step_i] = E
-            states_hist[:, :,1,step_i] = I
-
-        for TR_i in range(self.TRs_per_window):
-
-            for step_i in range(self.steps_per_TR_bold):
-                x_next = x + 1 * dt * (1 * states_hist[:, :,0,TR_i, self.time_diff*step_i] - torch.reciprocal(tau_s) * x \
-                         - torch.reciprocal(tau_f) * (f - 1))
-                f_next = f + 1 * dt * x
-                v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(alpha))) * torch.reciprocal(tau_0)
-                q_next = q + 1 * dt * (f * (1 - torch.pow(1 - rho, torch.reciprocal(f))) * torch.reciprocal(rho) \
-                         - q * torch.pow(v, torch.reciprocal(alpha)) * torch.reciprocal(v)) * torch.reciprocal(tau_0)
+                # Calculate the input recurrent.
+                IE = torch.tanh(m(W_E * I_0 + g_EE * E + g * torch.matmul(lap_adj, E) - g_IE * I))  # input currents for E
+                II = torch.tanh(m(W_I * I_0 + g_EI * E - I))  # input currents for I
     
-                x = torch.tanh(x_next)
-                f = (1 + torch.tanh(f_next - 1))
-                v = (1 + torch.tanh(v_next - 1))
-                q = (1 + torch.tanh(q_next - 1))
+                # Calculate the firing rates.
+                rE = h_tf(aE, bE, dE, IE)  # firing rate for E
+                rI = h_tf(aI, bI, dI, II)  # firing rate for I
+                
+                # Update the states by step-size 0.05.
+                E_next = E + dt * (-E * torch.reciprocal(tau_E) + gamma_E * (1. - E) * rE) \
+                         + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in  
+                I_next = I + dt * (-I * torch.reciprocal(tau_I) + gamma_I * rI) \
+                         + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in
+    
+                # Calculate the saturation for model states (for stability and gradient calculation).
+    
+                # E_next[E_next>=0.9] = torch.tanh(1.6358*E_next[E_next>=0.9])
+                E = torch.tanh(0.0000 + m(1.0 * E_next))
+                I = torch.tanh(0.0000 + m(1.0 * I_next))
+                E_holder.append(E)
+                if (step_i+1) % self.steps_per_TR_eeg == 0:
+                    E_window.append(torch.matmul(lm, E))
+                if (step_i+1) % 1000 == 0:
+                    E_mean = torch.mean(E_holder)
+                    E_holder = []
+                    
+                    x_next = x + 1 * dt * (1 * E_mean - torch.reciprocal(tau_s) * x \
+                             - torch.reciprocal(tau_f) * (f - 1))
+                    f_next = f + 1 * dt * x
+                    v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(alpha))) * torch.reciprocal(tau_0)
+                    q_next = q + 1 * dt * (f * (1 - torch.pow(1 - rho, torch.reciprocal(f))) * torch.reciprocal(rho) \
+                             - q * torch.pow(v, torch.reciprocal(alpha)) * torch.reciprocal(v)) * torch.reciprocal(tau_0)
+        
+                    x = torch.tanh(x_next)
+                    f = (1 + torch.tanh(f_next - 1))
+                    v = (1 + torch.tanh(v_next - 1))
+                    q = (1 + torch.tanh(q_next - 1))
             
-            """# Put x f v q from each tr to the placeholders for checking them visually.
-            states_hist[:,:,2, TR_i, :] = x
-            states_hist[:,:,3, TR_i, ] = f
-            states_hist[:,:,4, TR_i, step_i] = v
-            states_hist[:,:,5, TR_i, step_i] = q"""
-
+            
             # Put the BOLD signal each tr to the placeholder being used in the cost calculation.
             bold_window.append((0.01 * torch.randn(self.node_size, 1) +
                                     100.0 * V * torch.reciprocal(E0) *
@@ -437,7 +390,7 @@ class RNNRWW(AbstractNMM):
                   f[:,:, np.newaxis], v[:,:, np.newaxis], q[:,:, np.newaxis]], dim=2)
         next_state['current_state'] = current_state
         next_state['bold'] = torch.cat(bold_window, dim =1)
-        next_state['states'] = states_hist[:,:,:,::self.steps_per_TR_eeg]
+        next_state['states'] = torch.cat(E_window, dim =1)
         
         return next_state, hE
         

@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Clemens Pellengahr, Hussain Ather, Davide Momi, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
 Neural Mass Model fitting module for Wong-Wang model
 """
 
@@ -25,14 +25,16 @@ class RNNRWW(AbstractNMM):
     Attributes
     ---------
     
-    state_names: list
-        A list of model state variable names
-    pop_names: list
-        A list of population names
+    state_names: an array of the list
+        An array of list of model state variable names
+    pop_names: an array of list
+        An array of list of population names
     output_names: list
         A list of model output variable names
     model_name: string
         The name of the model itself
+    pop_size : int in this model just one
+        The number of population in the WWD model
     state_size : int
         The number of states in the WWD model
     tr : float
@@ -219,7 +221,7 @@ class RNNRWW(AbstractNMM):
         next_state: dictionary with Tensors
             Tensor dimension [Num_Time_Points, Num_Regions]
         
-        with keys: 'current_state''bold_window''E_window''I_window''x_window''f_window''v_window''q_window'
+        with keys: 'current_state''states_window''bold_window'
             record new states and BOLD
             
         """
@@ -228,7 +230,7 @@ class RNNRWW(AbstractNMM):
     
     
         # Defining NMM Parameters to simplify later equations
-        std_in =  0.02+m(self.params.std_in.value())  # standard deviation of the Gaussian noise
+        std_in =  0.02+m(self.params.std_in.value())  # 0.02 the lower bound (standard deviation of the Gaussian noise)
         
         # Parameters for the ODEs
         # Excitatory population

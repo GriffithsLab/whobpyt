@@ -1,3 +1,6 @@
+"""
+Authors: Andrew Clappison, John Griffiths, Zheng Wang, Davide Momi, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
+"""
 import torch
 import numpy as np
 
