@@ -21,6 +21,11 @@ What is being modeled:
 # ---------------------------------------------------
 #
 
+# os stuff
+import os
+import sys
+sys.path.append('..')
+
 # whobpyt stuff
 import whobpyt
 from whobpyt.datatypes import par, Recording
