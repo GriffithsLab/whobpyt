@@ -1,7 +1,7 @@
 import torch
 from whobpyt.datatypes import AbstractMode
    
-class BOLD_Layer(AbstractMode):
+class BOLD_Layer(torch.nn.Module):
     '''
     Balloon-Windkessel Hemodynamic Response Function Forward Model
     
@@ -29,7 +29,10 @@ class BOLD_Layer(AbstractMode):
         self.device = device
         
         self.num_blocks = 1
-        
+        self.params_fitted = {}
+        self.params_fitted['modelparameter'] =[]
+        self.params_fitted['hyperparameter'] =[]
+        self.track_params = []
         self.params = params
         
         self.setModelParameters()

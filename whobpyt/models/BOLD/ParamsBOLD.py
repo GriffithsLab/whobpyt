@@ -30,3 +30,12 @@ class BOLD_Params(AbstractParams):
         self.k_1 = par(7*self.ro.npValue())
         self.k_2 = par(2)
         self.k_3 = par(2*self.ro.npValue() - 0.2)
+        
+    def to(self, device):
+        # Moves all parameters between CPU and GPU
+        
+        vars_names = [a for a in dir(self) if not a.startswith('__')]
+        for var_name in vars_names:
+            var = getattr(self, var_name)
+            if (type(var) == par):
+                var.to(device)
