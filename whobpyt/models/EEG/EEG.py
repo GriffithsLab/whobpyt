@@ -1,7 +1,7 @@
 import torch
 from whobpyt.datatypes import AbstractMode
 
-class EEG_Layer(AbstractMode):
+class EEG_Layer(torch.nn.Module):
     '''
     
     Lead Field Matrix multiplication which converts Source Space EEG to Channel Space EEG
@@ -21,7 +21,11 @@ class EEG_Layer(AbstractMode):
         
         self.num_regions = num_regions
         self.num_channels = num_channels
+        self.params_fitted = {}
+        self.params_fitted['modelparameter'] =[]
+        self.params_fitted['hyperparameter'] =[]
         
+        self.track_params = []
         self.device = device
         
         self.num_blocks = 1
@@ -34,44 +38,39 @@ class EEG_Layer(AbstractMode):
         return {"state_names": ["None"], "output_name": "eeg"}
             
     def setModelParameters(self):
-        return setModelParameters(self)
+        self.LF = self.params.LF.to(self.device)
         
     def createIC(self, ver):
         pass
     
     def forward(self, step_size, sim_len, node_history, device = torch.device('cpu')):
-        return forward(self, step_size, sim_len, node_history)   
+        hE = torch.tensor(1.0).to(self.device) #Dummy variable
+    
+        # Runs the EEG Model
+        #
+        # INPUT
+        #  step_size: Float - The step size in msec which must match node_history step size.
+        #  sim_len: Int - The amount of EEG to simulate in msec, and should match time simulated in node_history. 
+        #  node_history: Tensor - [time_points, regions, num_blocks] # This would be input coming from NMM
+        #  device: torch.device - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network_NMM code
+        #
+        # OUTPUT
+        #  layer_history: Tensor - [time_steps, regions, num_blocks]
+        #
+        
+        layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_channels, self.num_blocks).to(self.device)
+        print(layer_hist.shape)
+        num_steps = int((sim_len/step_size)/self.num_blocks)
+        for i in range(num_steps):
+            layer_hist[i, :, :] = torch.matmul(self.LF, node_history[i, :, :]) # TODO: Check dimensions and if correct transpose of LF
+        
+        sim_vals = {}
+        sim_vals["eeg"] = layer_hist.permute((1,0,2)) # time x node x batch -> node x time x batch
+    
+        return sim_vals, hE   
 
-def setModelParameters(self):
-    #############################################
-    ## EEG Lead Field
-    #############################################
-    
-    self.LF = self.params.LF.to(self.device)
-    
-def forward(self, step_size, sim_len, node_history):
-    
-    hE = torch.tensor(1.0).to(self.device) #Dummy variable
-    
-    # Runs the EEG Model
-    #
-    # INPUT
-    #  step_size: Float - The step size in msec which must match node_history step size.
-    #  sim_len: Int - The amount of EEG to simulate in msec, and should match time simulated in node_history. 
-    #  node_history: Tensor - [time_points, regions, num_blocks] # This would be input coming from NMM
-    #  device: torch.device - Whether to run on GPU or CPU - default is CPU and GPU has not been tested for Network_NMM code
-    #
-    # OUTPUT
-    #  layer_history: Tensor - [time_steps, regions, num_blocks]
-    #
-    
-    layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_channels, self.num_blocks).to(self.device)
 
-    num_steps = int((sim_len/step_size)/self.num_blocks)
-    for i in range(num_steps):
-        layer_hist[i, :, :] = torch.matmul(self.LF, node_history[i, :, :]) # TODO: Check dimensions and if correct transpose of LF
     
-    sim_vals = {}
-    sim_vals["eeg"] = layer_hist.permute((1,0,2)) # time x node x batch -> node x time x batch
 
-    return sim_vals, hE
+    
+    
