@@ -49,3 +49,12 @@ class ParamsRWWEI2(AbstractParams):
         
         self.gammaI = par(1/1000) #Zheng suggested this to get oscillations
         self.J_new = par(1)
+        
+    def to(self, device):
+        # Moves all parameters between CPU and GPU
+        
+        vars_names = [a for a in dir(self) if not a.startswith('__')]
+        for var_name in vars_names:
+            var = getattr(self, var_name)
+            if (type(var) == par):
+                var.to(device)
