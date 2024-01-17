@@ -198,7 +198,7 @@ plt.title("J_{i} Values Changing Over Training Epochs")
 # Model Simulation
 # ---------------------------------------------------
 #
-F.evaluate(u=0, empRec=randTS1, TPperWindow=TPperWindow , base_window_num=2, transient_num: int = 10)
+F.evaluate(u=0, empRec=randTS1, TPperWindow=TPperWindow , base_window_num=2, transient_num = 10)
 
 
 # %%

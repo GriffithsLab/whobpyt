@@ -16,6 +16,10 @@ This code is set to run on CPU by default, and then GPU can be tested by updatin
 # Importage
 # ---------------------------------------------------
 #
+# os stuff
+import os
+import sys
+sys.path.append('..')
 
 # whobpyt stuff
 import whobpyt
