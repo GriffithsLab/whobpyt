@@ -37,6 +37,7 @@ import scipy.io
 
 # viz stuff
 import matplotlib.pyplot as plt
+import mne
 
 #gdown
 import gdown
