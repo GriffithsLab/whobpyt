@@ -26,6 +26,8 @@ from whobpyt.datatypes import par, Recording
 from whobpyt.models.JansenRit import RNNJANSEN, ParamsJR
 from whobpyt.optimization.custom_cost_JR import CostsJR
 from whobpyt.run import Model_fitting
+import mne
+
 
 # array and pd stuff
 import numpy as np
