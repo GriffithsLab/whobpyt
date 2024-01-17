@@ -6,7 +6,7 @@ Fitting S_E Mean to 0.164 using default RWW Parameters
 
 What is being modeled:
 
-- Created a Sphere'd Cube (chosen points on cube projected onto radius = 1 sphere), so that regions were more evently distributed. All corners of cube chosen as regions, thus there are 8 regions. 
+- Created a Sphered Cube (chosen points on cube projected onto radius = 1 sphere), so that regions were more evently distributed. All corners of cube chosen as regions, thus there are 8 regions. 
 
 - EEG channels located on the center of each face of the cube. Thus there are 6 EEG channels.
 
