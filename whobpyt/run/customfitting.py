@@ -127,7 +127,7 @@ class Fitting_FNGFPG(AbstractFitting):
                 nextICs = ICs[:,:,[-1]] #Brackets are to keep the dimension
 
                 self.model.setBlocks(num_blocks)
-                self.model.next_start_state = newICs
+                self.model.NMM.next_start_state = newICs
                 sim_vals, delayHist = self.model.forward(external, newICs, delayHist, blockNoise)
                 self.model.next_start_state = nextICs #TODO: Update to deal with delays as well
                 
