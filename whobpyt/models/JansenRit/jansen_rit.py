@@ -332,20 +332,20 @@ class RNNJANSEN(AbstractNMM):
             # Update the Laplacian based on the updated connection gains w_bb.
             w_b = torch.exp(self.w_bb) * torch.tensor(self.sc, dtype=torch.float32)
             w_n_b = w_b / torch.linalg.norm(w_b)
-            self.sc_m_b = w_n_b
+            self.sc_p_i = w_n_b
             dg_b = -torch.diag(torch.sum(w_n_b, dim=1))
 
             # Update the Laplacian based on the updated connection gains w_ff.
             w_f = torch.exp(self.w_ff) * torch.tensor(self.sc, dtype=torch.float32)
             w_n_f = w_f / torch.linalg.norm(w_f)
-            self.sc_m_f = w_n_f
+            self.sc_p_e = w_n_f
             dg_f = -torch.diag(torch.sum(w_n_f, dim=1))
 
             # Update the Laplacian based on the updated connection gains w_ll.
             w_l = torch.exp(self.w_ll) * torch.tensor(self.sc, dtype=torch.float32)
             w_n_l = (0.5 * (w_l + torch.transpose(w_l, 0, 1))) / torch.linalg.norm(
                 0.5 * (w_l + torch.transpose(w_l, 0, 1)))
-            self.sc_fitted = w_n_l
+            self.sc_p_p = w_n_l
             dg_l = -torch.diag(torch.sum(w_n_l, dim=1))
         else:
             l_s = torch.tensor(np.zeros((1, 1)), dtype=torch.float32) #TODO: This is not being called anywhere
