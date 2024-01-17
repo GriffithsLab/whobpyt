@@ -19,7 +19,7 @@ from whobpyt.datatypes.AbstractParams import AbstractParams
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
 import numpy as np  # for numerical operations
 
-class ParamsCT(AbstractParams):
+class ParamsRobinsonTime(AbstractParams):
 
     def __init__(self, **kwargs):
 

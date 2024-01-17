@@ -16,7 +16,7 @@ import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes.AbstractParams import AbstractParams
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
-from whobpyt.models.Robinson.ParamsRobinson import ParamsRobinson
+from whobpyt.models.robinson.params_robinson import ParamsRobinsonTime
 from whobpyt.datatypes.parameter import par
 import numpy as np  # for numerical operations
 

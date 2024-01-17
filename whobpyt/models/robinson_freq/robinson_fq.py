@@ -8,7 +8,7 @@ import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes.AbstractParams import AbstractParams
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
-from whobpyt.models.robinson_freq.ParamsRobinsonFreq import ParamsRobinsonFreq
+from whobpyt.models.robinson_freq.params_robinson_freq import ParamsRobinsonFreq
 from whobpyt.datatypes.parameter import par
 import numpy as np
 

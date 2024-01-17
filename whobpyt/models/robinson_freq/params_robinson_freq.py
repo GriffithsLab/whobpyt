@@ -11,7 +11,7 @@ from whobpyt.datatypes.AbstractParams import AbstractParams
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
 import numpy as np  # for numerical operations
 
-class ParamsCT_fq(AbstractParams):
+class ParamsRobinsonFreq(AbstractParams):
 
     def __init__(self, **kwargs):
         param = {
