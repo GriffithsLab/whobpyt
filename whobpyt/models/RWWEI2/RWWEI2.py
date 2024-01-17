@@ -1,5 +1,6 @@
 import torch
 from whobpyt.datatypes import AbstractNMM, AbstractParams, par
+from torch.nn.parameter import Parameter
 from math import sqrt
 
 class RWWEI2(torch.nn.Module):
@@ -121,8 +122,25 @@ class RWWEI2(torch.nn.Module):
         for var_name in vars_names:
             var = getattr(self.params, var_name)
             if (var.fit_par):
-                param_reg.append(var.val)
-                self.track_params.append(var_name)
+                if var_name == 'lm':
+                    size = var.val.shape
+                    var.val = Parameter(- 1 * torch.ones((size[0], size[1]))) 
+                    var.prior_mean = Parameter(var.prior_mean)
+                    var.prior_var = Parameter(var.prior_var)
+                    param_reg.append(var.val)
+                    if var.fit_hyper:
+                        param_hyper.append(var.prior_mean)
+                        param_hyper.append(var.prior_var)
+                    self.track_params.append(var_name)
+                else:
+                    var.val = Parameter(var.val) # TODO: This is not consistent with what user would expect giving a variance
+                    var.prior_mean = Parameter(var.prior_mean)
+                    var.prior_var = Parameter(var.prior_var)
+                    param_reg.append(var.val)
+                    if var.fit_hyper:
+                        param_hyper.append(var.prior_mean)
+                        param_hyper.append(var.prior_var)
+                    self.track_params.append(var_name)
         self.params_fitted = {'modelparameter': param_reg, 'hyperparameter': param_hyper}
         
     def createIC(self, ver):
@@ -130,6 +148,10 @@ class RWWEI2(torch.nn.Module):
         self.next_start_state = self.next_start_state.to(self.device)
         
         return self.next_start_state
+    def createDelayIC(self, ver):
+        # Creates a time series of state variables to represent their past values as needed when delays are used. 
+        
+        return torch.tensor(1.0) #Dummy variable if delays are not used
         
     def setBlocks(self, num_blocks):
         self.num_blocks = num_blocks
