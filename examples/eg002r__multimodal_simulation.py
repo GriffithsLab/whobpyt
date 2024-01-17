@@ -198,7 +198,7 @@ plt.title("J_{i} Values Changing Over Training Epochs")
 # Model Simulation
 # ---------------------------------------------------
 #
-F.simulate(u = 0, numTP = randTS1.length)
+F.evaluate(u=0, empRec=randTS1, TPperWindow=TPperWindow , base_window_num=2, transient_num: int = 10)
 
 
 # %%
@@ -234,7 +234,7 @@ plt.title("Simulated EEG PSD: After Training")
 # Plots of BOLD FC
 #
 
-sim_FC = np.corrcoef(F.lastRec['bold'].npTS()[:,skip_trans:])
+"""sim_FC = np.corrcoef(F.lastRec['bold'].npTS()[:,skip_trans:])
 
 plt.figure(figsize = (8, 8))
 plt.title("Simulated BOLD FC: After Training")
@@ -296,4 +296,4 @@ sim_FC = np.corrcoef((sim_vals['bold'].T)[:,skip_trans:])
 plt.figure(figsize = (8, 8))
 plt.title("Simulated BOLD FC: After Training")
 mask = np.eye(num_regions)
-sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
+sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)"""
