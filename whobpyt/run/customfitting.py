@@ -100,7 +100,7 @@ class Fitting_FNGFPG(AbstractFitting):
                 num_blocks = int(self.model.sim_len/block_len)
             
                 ## Noise for the epoch (which has 1 batch)
-                [serialNoise, blockNoise] = self.model.genNoise(block_len)
+                [serialNoise, blockNoise] = self.model.NMM.genNoise(block_len)
 
                 with torch.no_grad():
                     sim_vals, delayHist = self.model.forward(external, firstIC, delayHist, serialNoise)
