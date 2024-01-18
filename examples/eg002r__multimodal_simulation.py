@@ -213,28 +213,15 @@ plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(
 plt.legend()
 
 
-# %%
-# Plots of EEG PSD
-#
 
-sampleFreqHz = 1000*(1/step_size)
-sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(F.lastRec['eeg'].npTS().T), sampleFreqHz, minFreq = 2, maxFreq = 40)
-sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
-sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
-
-plt.figure()
-for n in range(num_channels):
-    plt.plot(sdAxis_dS, sdValues_dS_scaled.detach()[:,n])
-plt.xlabel('Hz')
-plt.ylabel('PSD')
-plt.title("Simulated EEG PSD: After Training")
 
 
 # %%
 # Plots of BOLD FC
 #
 
-"""sim_FC = np.corrcoef(F.lastRec['bold'].npTS()[:,skip_trans:])
+r"""
+sim_FC = np.corrcoef(F.lastRec['bold'].npTS()[:,skip_trans:])
 
 plt.figure(figsize = (8, 8))
 plt.title("Simulated BOLD FC: After Training")
@@ -297,4 +284,19 @@ plt.figure(figsize = (8, 8))
 plt.title("Simulated BOLD FC: After Training")
 mask = np.eye(num_regions)
 sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)"""
-# done 
+
+# %%
+# Plots of EEG PSD
+#
+
+sampleFreqHz = 1000*(1/step_size)
+sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(F.lastRec['eeg'].npTS().T), sampleFreqHz, minFreq = 2, maxFreq = 40)
+sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
+sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
+
+plt.figure()
+for n in range(num_channels):
+    plt.plot(sdAxis_dS, sdValues_dS_scaled.detach()[:,n])
+plt.xlabel('Hz')
+plt.ylabel('PSD')
+plt.title("Simulated EEG PSD: After Training")

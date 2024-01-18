@@ -116,10 +116,6 @@ F.train(stim = 0, empDatas = [empSubject], num_epochs = num_epochs, batch_size =
 end_time = time.time()
 print(str((end_time - start_time)/60) + " minutes")
 
-# %%
-# Plots of loss over Training
-plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
-plt.title("Total Loss over Training Epochs")
 
 
 # %%
@@ -128,7 +124,10 @@ plt.title("Total Loss over Training Epochs")
 #
 
 # Simulation Length
-"""step_size = 0.1 # Step Size in msecs
+
+
+r"""
+step_size = 0.1 # Step Size in msecs
 sim_len = 5000 # Simulation length in msecs
 model = RWWEI2_EEG_BOLD(num_regions, num_channels, model.params, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device)
 
@@ -157,14 +156,16 @@ print(str((end_time - start_time)/60) + " minutes")
 plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
 plt.title("Total Loss over Training Epochs")
 
-"""
+
 # %%
 # CNMM Verification Model
 # ---------------------------------------------------
 #
 # The Multi-Modal Model
 
-"""model.eeg.params.LF = model.eeg.params.LF.cpu()
+
+
+model.eeg.params.LF = model.eeg.params.LF.cpu()
 
 val_sim_len = 20*1000 # Simulation length in msecs
 model_validate = RWWEI2_EEG_BOLD_np(num_regions, num_channels, model.params, model.eeg.params, model.bold.params, Con_Mtx.detach().cpu().numpy(), dist_mtx.detach().cpu().numpy(), step_size, val_sim_len)
@@ -214,3 +215,8 @@ plt.figure(figsize = (8, 8))
 plt.title("Simulated BOLD FC: After Training")
 mask = np.eye(num_regions)
 sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)"""
+
+# %%
+# Plots of loss over Training
+plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
+plt.title("Total Loss over Training Epochs")
