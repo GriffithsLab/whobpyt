@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
+
 r"""
 =================================
 Fitting S_E Mean to 0.164 using default RWW Parameters
 =================================
 
 What is being modeled:
-
-- Created a Sphered Cube (chosen points on cube projected onto radius = 1 sphere), so that regions were more evently distributed. All corners of cube chosen as regions, thus there are 8 regions. 
-
-- EEG channels located on the center of each face of the cube. Thus there are 6 EEG channels.
-
-- Added some randomness to initial values - to decorrelate the signals a bit. Looking for FC matrix to look similar to SC matrix.
-
+Created a Sphered Cube chosen points on cube projected onto radius = 1 sphere, so that regions were more evently distributed. All corners of cube chosen as regions, thus there are 8 regions. 
+EEG channels located on the center of each face of the cube. Thus there are 6 EEG channels.
+Added some randomness to initial values - to decorrelate the signals a bit. Looking for FC matrix to look similar to SC matrix.
 """  
 
 # sphinx_gallery_thumbnail_number = 1
@@ -211,79 +208,6 @@ for n in range(num_regions):
 
 plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
 plt.legend()
-
-
-
-
-
-# %%
-# Plots of BOLD FC
-#
-
-r"""
-sim_FC = np.corrcoef(F.lastRec['bold'].npTS()[:,skip_trans:])
-
-plt.figure(figsize = (8, 8))
-plt.title("Simulated BOLD FC: After Training")
-mask = np.eye(num_regions)
-sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
-
-
-# %%
-# CNMM Validation Model
-# ---------------------------------------------------
-#
-# The Multi-Modal Model
-
-model.eeg.params.LF = model.eeg.params.LF.cpu()
-
-val_sim_len = 20*1000 # Simulation length in msecs
-model_validate = RWWEI2_EEG_BOLD_np(num_regions, num_channels, model.params, model.eeg.params, model.bold.params, Con_Mtx.detach().cpu().numpy(), dist_mtx.detach().cpu().numpy(), step_size, val_sim_len)
-
-sim_vals, hE = model_validate.forward(external = 0, hx = model_validate.createIC(ver = 0), hE = 0)
-
-
-# %%
-# Plots of S_E and S_I Validation
-#
-
-plt.figure(figsize = (16, 8))
-plt.title("S_E and S_I")
-for n in range(num_regions):
-    plt.plot(sim_vals['E'], label = "S_E Node = " + str(n))
-    plt.plot(sim_vals['I'], label = "S_I Node = " + str(n))
-
-plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
-plt.legend()
-
-
-# %%
-# Plots of EEG PSD Validation
-#
-
-sampleFreqHz = 1000*(1/step_size)
-sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(sim_vals['eeg']), sampleFreqHz, minFreq = 2, maxFreq = 40)
-sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
-sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
-
-plt.figure()
-for n in range(num_channels):
-    plt.plot(sdAxis_dS, sdValues_dS_scaled.detach()[:,n])
-plt.xlabel('Hz')
-plt.ylabel('PSD')
-plt.title("Simulated EEG PSD: After Training")
-
-
-# %%
-# Plots of BOLD FC Validation
-#
-
-sim_FC = np.corrcoef((sim_vals['bold'].T)[:,skip_trans:])
-
-plt.figure(figsize = (8, 8))
-plt.title("Simulated BOLD FC: After Training")
-mask = np.eye(num_regions)
-sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)"""
 
 # %%
 # Plots of EEG PSD
