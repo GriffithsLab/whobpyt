@@ -10,6 +10,7 @@ from whobpyt.datatypes.parameter import par
 from whobpyt.datatypes.AbstractLoss import AbstractLoss
 from whobpyt.datatypes.AbstractNMM import AbstractNMM
 from whobpyt.optimization.cost_FC import CostsFC
+from whobpyt.optimization.cost_TS import CostsTS
 from whobpyt.functions.arg_type_check import method_arg_type_check
 
 class CostsRWW2(AbstractLoss):
@@ -18,7 +19,7 @@ class CostsRWW2(AbstractLoss):
         self.simKey = "bold"
         self.simKeyeeg = "states"
         self.mainLoss = CostsFC(self.simKey)
-        self.secondLoss = CostsTS(self.simKeyeeg)
+        self.secondLoss = CostsFC(self.simKeyeeg)
         self.model = model
 
     def loss(self, simData: dict, empData: torch.Tensor, empEEG: torch.Tensor):
@@ -39,7 +40,7 @@ class CostsRWW2(AbstractLoss):
 
         
 
-        loss_main = self.mainLoss.loss(simData, empData) + self.mainLoss.loss(sim, empEEG)
+        loss_main = self.mainLoss.loss(simData, empData) + self.secondLoss.loss(simData, empEEG)
 
         
         loss_prior = []
@@ -50,10 +51,12 @@ class CostsRWW2(AbstractLoss):
 
         for var_name in variables_p:
             var = getattr(model.params, var_name)
+            #print(var)
             if var.fit_par:
-                loss_prior.append(torch.sum(( m(var.prior_var)) * \
+                loss_prior.append(torch.sum(( m(var.prior_var_inv)) * \
                                             (m(var.val) - m(var.prior_mean)) ** 2) \
-                                  + torch.sum(-torch.log( m(var.prior_var))))
+                                  + torch.sum(-torch.log( m(var.prior_var_inv))))
         # total loss
         loss = w_cost * loss_main + sum(loss_prior) 
-        return loss
+        #print(loss)
+        return loss, loss_main
