@@ -10,7 +10,7 @@ from whobpyt.models.RWW import ParamsRWW
 from whobpyt.functions.arg_type_check import method_arg_type_check
 import numpy as np # for numerical operations
 
-class RNNRWW(AbstractNMM):
+class RNNRWWMM(AbstractNMM):
     """
     Reduced Wong Wang Excitatory Inhibitory (RWWExcInb) Model with integrated BOLD dynamics
     
@@ -92,10 +92,9 @@ class RNNRWW(AbstractNMM):
         std for state noise and output noise
 
     """
-    use_fit_lfm = False
-    #input_size = 2
+    
 
-    def __init__(self, params: ParamsRWW, node_size = 68, TRs_per_window = 20, step_size = 0.1,  \
+    def __init__(self, params: ParamsRWW, node_size = 68, output_size = 64, TRs_per_window = 20, step_size = 0.1,  \
                    tr=1.0, tr_eeg= 0.001, sc=np.ones((68,68)), use_fit_gains= True):
         """
         Parameters
@@ -128,21 +127,22 @@ class RNNRWW(AbstractNMM):
         """        
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
-        super(RNNRWW, self).__init__(params)
+        super(RNNRWWMM, self).__init__(params)
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
         self.output_names = ["bold"]
         self.track_params = [] #Is populated during setModelParameters()
         self.pop_names =['E']
         self.pop_size = 1
-        self.model_name = "RWW"
+        self.model_name = "RWWMM"
         self.state_size = 6  # 6 states WWD model
         # self.input_size = input_size  # 1 or 2
         self.tr = tr  # tr fMRI image
         self.tr_eeg = tr_eeg  # tr fMRI image
         self.step_size = step_size  # integration step 0.05
+        
         self.steps_per_TR = int(tr/ step_size)
-        self.steps_per_TR_bold = int(tr/1000 / step_size)
+        
         self.steps_per_TR_eeg = int(tr_eeg/ step_size)
         self.TRs_per_window = TRs_per_window  # size of the batch used at each step
         self.node_size = node_size  # num of ROI
@@ -154,7 +154,7 @@ class RNNRWW(AbstractNMM):
         
         self.params_fitted = {}
 
-        self.output_size = node_size
+        self.output_size = output_size
         
         self.setModelParameters()
         self.setModelSCParameters()
@@ -294,6 +294,7 @@ class RNNRWW(AbstractNMM):
         tau_f = self.params.tau_f.value()
         tau_0 = self.params.tau_0.value()
         mu = self.params.mu.value()
+        lm = self.params.lm.value()
     
     
         next_state = {}
@@ -359,24 +360,22 @@ class RNNRWW(AbstractNMM):
                 # E_next[E_next>=0.9] = torch.tanh(1.6358*E_next[E_next>=0.9])
                 E = torch.tanh(0.0000 + m(1.0 * E_next))
                 I = torch.tanh(0.0000 + m(1.0 * I_next))
-                E_holder.append(E)
+                
                 if (step_i+1) % self.steps_per_TR_eeg == 0:
                     E_window.append(torch.matmul(lm, E))
-                if (step_i+1) % 1000 == 0:
-                    E_mean = torch.mean(E_holder)
-                    E_holder = []
+                
                     
-                    x_next = x + 1 * dt * (1 * E_mean - torch.reciprocal(tau_s) * x \
-                             - torch.reciprocal(tau_f) * (f - 1))
-                    f_next = f + 1 * dt * x
-                    v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(alpha))) * torch.reciprocal(tau_0)
-                    q_next = q + 1 * dt * (f * (1 - torch.pow(1 - rho, torch.reciprocal(f))) * torch.reciprocal(rho) \
-                             - q * torch.pow(v, torch.reciprocal(alpha)) * torch.reciprocal(v)) * torch.reciprocal(tau_0)
-        
-                    x = torch.tanh(x_next)
-                    f = (1 + torch.tanh(f_next - 1))
-                    v = (1 + torch.tanh(v_next - 1))
-                    q = (1 + torch.tanh(q_next - 1))
+                x_next = x + 1 * dt * (1 * E - torch.reciprocal(tau_s) * x \
+                         - torch.reciprocal(tau_f) * (f - 1))
+                f_next = f + 1 * dt * x
+                v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(alpha))) * torch.reciprocal(tau_0)
+                q_next = q + 1 * dt * (f * (1 - torch.pow(1 - rho, torch.reciprocal(f))) * torch.reciprocal(rho) \
+                         - q * torch.pow(v, torch.reciprocal(alpha)) * torch.reciprocal(v)) * torch.reciprocal(tau_0)
+    
+                x = torch.tanh(x_next)
+                f = (1 + torch.tanh(f_next - 1))
+                v = (1 + torch.tanh(v_next - 1))
+                q = (1 + torch.tanh(q_next - 1))
             
             
             # Put the BOLD signal each tr to the placeholder being used in the cost calculation.
