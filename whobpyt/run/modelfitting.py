@@ -75,7 +75,7 @@ class Model_fitting(AbstractFitting):
             pickle.dump(self, f)
 
     def train(self, u, empRec,
-              num_epochs: int, TPperWindow: int, warmupWindow: int = 0, learningrate: float = 0.05, lr_2ndLevel: float = 0.05, lr_scheduler: bool = False):
+              num_epochs: int, TPperWindow: int, warmupWindow: int = 0, learningrate: float = 0.05, lr_2ndLevel: float = 0.05, lr_scheduler: bool = False, empRecSec = None):
         """
         Parameters
         ----------
@@ -146,6 +146,8 @@ class Model_fitting(AbstractFitting):
                 dtype=torch.float32)
 
             windowedTS = empRec[i_epoch]
+            if empRecSec is not None:
+                windowedTS_sec = empRecSec[i_epoch]
             for TR_i in range(warmup_windows):
                 
 
@@ -175,9 +177,14 @@ class Model_fitting(AbstractFitting):
 
                 # Get the batch of empirical signal.
                 ts_window = torch.tensor(windowedTS[win_idx, :, :], dtype=torch.float32)
-                #print(next_window['bold'].shape)
+                if self.model.model_name == 'RWWMM':
+                    ts_sec_window = torch.tensor(windowedTS_sec[win_idx, :, :], dtype=torch.float32)
+                #print(next_window['bold'].shape, next_window['states'].shape)
                 # calculating loss
-                loss, loss_main = self.cost.loss(next_window, ts_window)
+                if self.model.model_name == 'RWWMM':
+                    loss, loss_main = self.cost.loss(next_window, ts_window, ts_sec_window)
+                else:
+                    loss, loss_main = self.cost.loss(next_window, ts_window)
 
                 # TIME SERIES: Put the window of simulated forward model.
                 for name in ['states', self.model.output_names[0]]:
@@ -212,8 +219,19 @@ class Model_fitting(AbstractFitting):
 
             print('epoch: ', i_epoch,
                   'loss:', loss_main.detach().cpu().numpy(),
-                  'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
+                  'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask], fc[mask])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
                   'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
+            if self.model.model_name == 'RWWMM':
+                ts_eeg_emp = np.concatenate(list(windowedTS_sec),1)
+                ts_eeg_sim = windListDict['states']
+                print(ts_eeg_emp.shape, ts_eeg_sim.shape)
+                fc_eeg_sim = np.corrcoef(ts_eeg_sim[:, 10:])
+                fc_eeg = np.corrcoef(ts_eeg_emp)
+                print(fc_eeg.shape, fc_eeg_sim.shape)
+                print('epoch: ', i_epoch,
+                  'loss:', loss_main.detach().cpu().numpy(),
+                  'Pseudo FC_cor: ', np.corrcoef(fc_eeg_sim[mask_e], fc_eeg[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
+                  'cos_sim: ', np.diag(cosine_similarity(ts_eeg_sim, ts_eeg_emp)).mean())
 
 
 
@@ -245,7 +263,7 @@ class Model_fitting(AbstractFitting):
         self.trainingStats.updateOutputs(windListDict[self.model.output_names[0]], 'training')
         self.trainingStats.updateStates(windListDict['states'], 'training')
 
-    def evaluate(self, u, empRec, TPperWindow: int, base_window_num: int = 0, transient_num: int = 10):
+    def evaluate(self, u, empRec, TPperWindow: int, base_window_num: int = 0, transient_num = 10, empRecSec = None):
         """
         Parameters
         ----------
@@ -307,6 +325,8 @@ class Model_fitting(AbstractFitting):
             hE = hE_new.detach().clone() #dtype=torch.float32
 
         windowedTS = empRec[-1]
+        if empRecSec is not None:
+            windowedTS_sec = empRecSec[-1]
         ts_emp = np.concatenate(list(windowedTS),1) #TODO: Check this code
         fc = np.corrcoef(ts_emp)
 
@@ -318,8 +338,18 @@ class Model_fitting(AbstractFitting):
         ts_sim = windListDict[self.model.output_names[0]]
         fc_sim = np.corrcoef(ts_sim[:, transient_num:])
 
-        print('FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1],
+        print('FC_cor: ', np.corrcoef(fc_sim[mask], fc[mask])[0, 1],
               'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
+              
+        if self.model.model_name == 'RWWMM':
+            ts_eeg_emp = np.concatenate(list(windowedTS_sec),1)
+            ts_eeg_sim = windListDict['states']
+            print(ts_eeg_emp.shape, ts_eeg_sim.shape)
+            fc_eeg_sim = np.corrcoef(ts_eeg_sim[:, 10:])
+            fc_eeg = np.corrcoef(ts_eeg_emp)
+            print(fc_eeg.shape, fc_eeg_sim.shape)
+            print('EEG Pseudo FC_cor: ', np.corrcoef(fc_eeg_sim[mask_e], fc_eeg[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
+              'cos_sim: ', np.diag(cosine_similarity(ts_eeg_sim, ts_eeg_emp)).mean())
 
         # Saving the last recording of training as a Model_fitting attribute
         self.trainingStats.updateOutputs(windListDict[self.model.output_names[0]], 'testing')
