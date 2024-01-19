@@ -30,15 +30,13 @@ sys.path.append('..')
 import whobpyt
 from whobpyt.datatypes import par, Recording
 from whobpyt.data import dataloader
-from whobpyt.models.RWWEI2 import RWWEI2_EEG_BOLD, RWWEI2_EEG_BOLD_np, RWWEI2, RWWEI2_np, ParamsRWWEI2
-from whobpyt.models.BOLD import BOLD_Layer, BOLD_np, BOLD_Params
-from whobpyt.models.EEG import EEG_Layer, EEG_np, EEG_Params
-from whobpyt.optimization import CostsFC, CostsPSD, CostsMean, CostsFixedFC, CostsFixedPSD
+from whobpyt.models.RWW import ParamsRWW
+from whobpyt.models.RWW.wong_wang_rt import RNNRWWMM
+from whobpyt.optimization.custom_cost_RWW2 import CostsRWW2
 from whobpyt.run import Model_fitting
-from whobpyt.data.generators import gen_cube
+from whobpyt.data import fetch_hcpl2k8
 
-# general python stuff
-import torch
+# array and pd stuff
 import numpy as np
 import pandas as pd
 
@@ -46,210 +44,110 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-print("Is cuda avaliable?")
-print(torch.cuda.is_available())
+#gdown
+import gdown
+# %%
+# define destination path and download data
 
-device = torch.device("cpu") #Options: "cpu" or "cuda"
+
+des_dir = '../'
+if not os.path.exists(des_dir):
+    os.makedirs(des_dir)  # create folder if it does not exist
+url = "https://drive.google.com/drive/folders/1fCmBKkvbWKZZqx36jviIi7B2PWhq7lI8"
+os.chdir(des_dir)
+gdown.download_folder(url, remaining_ok = True)
+
+# Go to examples folder
+os.chdir('examples')
+
+base_dir = '../EEG_BOLD/'
+
+sub_ID ='32'
+eeg_file = base_dir+'sub-'+ sub_ID + '_eeg.npy'
+bold_file = base_dir+'sub-'+ sub_ID + '_fmri.npy'
+
+eeg = np.load(eeg_file)
+bold = np.load(bold_file)
+eeg_data = eeg[1:,:,::10]*1e5
 
 # %%
-# Defining Model Parameters
-# ---------------------------------------------------
-#
-
-num_regions = 8
-num_channels = 6
-
-# Simulation Length
-step_size = 0.1 # Step Size in msecs
-sim_len = 1500 # Simulation length in msecs
-
-skip_trans = int(500/step_size)
-
-# Initial Conditions
-S_E = 0.6; S_I = 0.1; x = 0.0000; f = 2.4286; v = 1.3283; q = 0.6144 # x,f,v,q might be choosen for different initial S_E
-init_state = torch.tensor([[S_E, S_I, x, f, v, q]]).repeat(num_regions, 1)
-
-# Add randomness
-init_state = (init_state + torch.randn_like(init_state)/30).to(device) # Randomizing initial values
-
-# Create a RWW Params
-paramsNode = ParamsRWWEI2(num_regions)
-
-#Create #EEG Params
-paramsEEG = EEG_Params(torch.eye(num_regions))
-paramsEEG.to(device)
-
-#Create BOLD Params
-paramsBOLD = BOLD_Params()
-paramsBOLD.to(device)
-
-paramsNode.J = par((0.15  * np.ones(num_regions)), (0.15  * np.ones(num_regions)), (0.1  * np.ones(num_regions)), fit_par = True, asLog = True) #This is a parameter that will be updated during training
-paramsNode.to(device)
+# get SC and distance template
+sc_file = base_dir + 'Schaefer2018_200Parcels_7Networks_count.csv'
+dist_file = base_dir + 'Schaefer2018_200Parcels_7Networks_distance.csv'
+sc_df = pd.read_csv(sc_file, header=None, sep=' ')
+sc = sc_df.values
+dist_df = pd.read_csv(dist_file, header=None, sep=' ')
+dist = dist_df.values
+sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 
 # %%
-# Using the Synthetic Cube Data For Demo Purposes
-# ---------------------------------------------------
-#
+# define options for RWW2 (multimodal)
+step_size = 0.05
+tr = 0.25*25
+tr_eeg = 0.25
+node_size = sc.shape[0]
+pop_size = 1
+output_size = eeg_data.shape[1]
+TPperWindow = 37
 
-syntheticCubeInfo = gen_cube(device)
+num_epochs = 50
 
-Con_Mtx = syntheticCubeInfo["SC"]
-dist_mtx = syntheticCubeInfo["dist"]
-LF_Norm = syntheticCubeInfo["LF"]
+state_size = 6
 
-print(max(abs(torch.linalg.eig(Con_Mtx).eigenvalues)))
-mask = np.eye(num_regions)
-sns.heatmap(Con_Mtx.to(torch.device("cpu")), mask = mask, center=0, cmap='RdBu_r', vmin=-0.1, vmax = 0.25)
-plt.title("SC of Artificial Data")
-
-paramsEEG.LF = LF_Norm
-
-# %%
-# Defining the CNMM Model
-# ---------------------------------------------------
-#
-# The Multi-Modal Model
-
-
-model = RWWEI2_EEG_BOLD(num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device = device)
-
+bold_mean = dataloader(bold, num_epochs, TPperWindow)
+eeg_mean =dataloader(np.concatenate(list(eeg_data), 1).T, num_epochs, 37*eeg_data.shape[2])
+lm = np.zeros((output_size,200))
+lm_v = np.zeros((output_size,200))
+params = ParamsRWW(g=par(400, 400, 1/np.sqrt(10), True), g_EE=par(1.5, 1.5, 1/np.sqrt(50), True), \
+                   g_EI =par(0.8, 0.8, 1/np.sqrt(50), True), \
+                  g_IE=par(np.log(0.6), np.log(0.6), 0.1, True, True), I_0 =par(0.2), \
+                   std_in=par(np.log(0.2), np.log(0.2), 0.1, True, True), std_out=par(0.00), \
+                   lm=par(lm, lm, 0.1 * np.ones((output_size, node_size))+lm_v, True))
 
 # %%
-# Defining the Objective Function
-# ---------------------------------------------------
-#
-# Written in such as way as to be able to adjust the relative importance of components that make up the objective function.
-# Also, written in such a way as to be able to track and plot indiviual components losses over time. 
-
-class mmObjectiveFunction():
-    def __init__(self):
-        self.simKey = "E"
-    
-        # Weights of Objective Function Components
-        self.S_E_mean_weight = 1
-        self.S_I_mean_weight = 0 # Not Currently Used
-        self.EEG_PSD_weight = 0 # Not Currently Used
-        self.EEG_FC_weight = 0 # Not Currently Used
-        self.BOLD_PSD_weight = 0 # Not Currently Used
-        self.BOLD_FC_weight = 0 # Not Currently Used
-        
-        # Functions of the various Objective Function Components
-        self.S_E_mean = CostsMean(num_regions, simKey = "E", targetValue = torch.tensor([0.164]), device = device)
-        #self.S_I_mean = CostsMean(...) # Not Currently Used
-        #self.EEG_PSD = CostsPSD(num_channels, varIdx = 0, sampleFreqHz = 1000*(1/step_size), targetValue = targetEEG)
-        #self.EEG_FC = CostsFC(...) # Not Currently Used
-        #self.BOLD_PSD = CostsPSD(...) # Not Currently Used
-        #self.BOLD_FC = CostsFC(num_regions, varIdx = 4, targetValue = SC_mtx_norm)
-                
-    def loss(self, simData, empData = None, returnLossComponents = False):
-        # sim, ts_window, self.model, next_window
-        
-        S_E_mean_loss = self.S_E_mean.loss(simData) 
-        S_I_mean_loss = torch.tensor([0]).to(device) #self.S_I_mean.loss(simData)
-        EEG_PSD_loss = torch.tensor([0]).to(device) #self.EEG_PSD.loss(simData) 
-        EEG_FC_loss = torch.tensor([0]).to(device) #self.EEG_FC.loss(simData)
-        BOLD_PSD_loss = torch.tensor([0]).to(device) #self.BOLD_PS.loss(simData)
-        BOLD_FC_loss = torch.tensor([0]).to(device) #self.BOLD_FC.loss(simData)
-                
-        totalLoss = self.S_E_mean_weight*S_E_mean_loss + self.S_I_mean_weight*S_I_mean_loss \
-                  + self.EEG_PSD_weight*EEG_PSD_loss   + self.EEG_FC_weight*EEG_FC_loss \
-                  + self.BOLD_PSD_weight*BOLD_PSD_loss + self.BOLD_FC_weight*BOLD_FC_loss
-                 
-        if returnLossComponents:
-            return totalLoss, (S_E_mean_loss.item(), S_I_mean_loss.item(), EEG_PSD_loss.item(), EEG_FC_loss.item(), BOLD_PSD_loss.item(), BOLD_FC_loss.item())
-        else:
-            return totalLoss, S_E_mean_loss
-
-ObjFun = mmObjectiveFunction()
+# call model want to fit
+model = RNNRWWMM(params, node_size =node_size, output_size=output_size, TRs_per_window =TPperWindow, step_size=step_size, \
+                   tr=tr, tr_eeg= tr_eeg, sc=sc, use_fit_gains=True)
 
 # %%
-# Training The Model
-# ---------------------------------------------------
-#
+# create objective function
+ObjFun = CostsRWW2(model)
 
-randData1 = np.random.rand(8, 15000)
-randData2 = np.random.rand(8, 15000)
-num_epochs = 3
-num_recordings = 2
-TPperWindow = 15000
-
-print(randData1.shape)
-randTS1 = dataloader(randData1.T, num_epochs, TPperWindow)#Recording(randData1, step_size)
-print(randTS1.shape)
-#randTS2 = Recording(randData2, step_size)
-
+# %%
 # call model fit
-F = Model_fitting(model, ObjFun, device = device)
+F = Model_fitting(model, ObjFun)
 
 # %%
-# model training
-F.train(u = 0, empRec = randTS1, num_epochs = num_epochs, TPperWindow = TPperWindow, learningrate = 0.1)
+# Model Training
+# ---------------------------------------------------
+#
+F.train(u = 0, empRec = bold_mean, empRecSec=eeg_mean, num_epochs = num_epochs, TPperWindow = TPperWindow, warmupWindow=5, learningrate = 0.05)
+
+F.evaluate(u = 0, empRec = bold_mean, empRecSec=eeg_mean, TPperWindow = TPperWindow, base_window_num = 5)
 
 # %%
 # Plots of loss over Training
 plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
-plt.title("Total Loss over Training Epochs")
+plt.title("Main Loss over Training Epochs")
 
-# %%
-# Plots of J values over Training
-plt.plot(F.trainingStats.fit_params['J'])
-plt.title("J_{i} Values Changing Over Training Epochs")
-
-
-# %%
-# Model Simulation
-# ---------------------------------------------------
-#
-F.evaluate(u = 0, empRec = randTS1, TPperWindow = TPperWindow, base_window_num = 2)
-
-"""# %%
-# Plots of S_E and S_I
-plt.figure(figsize = (16, 8))
-plt.title("S_E and S_I")
-for n in range(num_regions):
-    plt.plot(F.lastRec['E'].npTS()[n,:], label = "S_E Node = " + str(n))
-    plt.plot(F.lastRec['I'].npTS()[n,:], label = "S_I Node = " + str(n))
-
-plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
-plt.legend()"""
-fig, ax = plt.subplots(1,3, figsize=(12,8))
-ax[0].plot(F.trainingStats.states['testing'].T)
-ax[0].set_title('Test:  EEG')
-ax[1].plot(F.trainingStats.outputs['testing'].T)
-ax[1].set_title('Test: BOLD')
-
-plt.show()
-
-# %%
-# Plots of EEG PSD
-#
-
-sampleFreqHz = 1000*(1/step_size)
-sdAxis, sdValues = CostsPSD.calcPSD(torch.tensor(F.trainingStats.states['testing'].T), sampleFreqHz, minFreq = 2, maxFreq = 40)
-sdAxis_dS, sdValues_dS = CostsPSD.downSmoothPSD(sdAxis, sdValues, 32)
-sdAxis_dS, sdValues_dS_scaled = CostsPSD.scalePSD(sdAxis_dS, sdValues_dS)
-
-plt.figure()
-for n in range(num_channels):
-    plt.plot(sdAxis_dS, sdValues_dS_scaled.detach()[:,n])
-plt.xlabel('Hz')
-plt.ylabel('PSD')
-plt.title("Simulated EEG PSD: After Training")
-
-
-# %%
 # Plots of BOLD FC
-#
+sim_FC = np.corrcoef(F.trainingStats.outputs['training'])
+emp_FC = np.corrcoef(bold.T)
+fig, ax = plt.subplots(1,2,figsize = (8, 8))
+plt.suptitle("Simulated BOLD FC: After Training")
+mask = np.eye(200)
+sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0, ax=ax[0])
+ax[0].set_title('simulated')
+sns.heatmap(emp_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0, ax=ax[1])
+ax[1].set_title('empirical')
 
-sim_FC = np.corrcoef(F.trainingStats.outputs['testing'][:,skip_trans:])
-
-plt.figure(figsize = (8, 8))
-plt.title("Simulated BOLD FC: After Training")
-mask = np.eye(num_regions)
-sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0)
-
-
-# %%
-# CNMM Validation Model
-# ---------------------------------------------------
-#
+#EEG FC
+sim_FC = np.corrcoef(F.trainingStats.states['training'])
+emp_FC = np.corrcoef(np.concatenate(list(eeg_data),1))
+fig, ax = plt.subplots(1,2,figsize = (8, 8))
+plt.suptitle("Simulated EEG FC: After Training")
+mask = np.eye(output_size)
+sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0, ax=ax[0])
+ax[0].set_title('simulated')
+sns.heatmap(emp_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0, ax=ax[1])
+ax[1].set_title('empirical')
