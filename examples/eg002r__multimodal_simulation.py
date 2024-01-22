@@ -25,7 +25,11 @@ import whobpyt
 from whobpyt.datatypes import par, Recording
 from whobpyt.data import dataloader
 from whobpyt.models.RWW import ParamsRWW
+from whobpyt.models.EEG import ParamsEEG
+from whobpyt.models.BOLD import ParamsBOLD
 from whobpyt.models.RWW.wong_wang_rt import RNNRWWMM
+from whobpyt.models.RWWNEURO.ParamsRWWNEU import ParamsRWWNEU
+from whobpyt.models.RWWEI2 import RWW_EEG_BOLD
 from whobpyt.optimization.custom_cost_RWW2 import CostsRWW2
 from whobpyt.run import Model_fitting
 from whobpyt.data import fetch_hcpl2k8
@@ -84,7 +88,7 @@ pop_size = 1
 output_size = eeg_data.shape[1]
 TPperWindow = 37
 
-num_epochs = 50
+num_epochs = 2
 
 state_size = 6
 
