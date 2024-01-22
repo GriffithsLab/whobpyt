@@ -1,17 +1,17 @@
 import torch
-from whobpyt.datatypes import AbstractMode
+from whobpyt.datatypes import AbstractNMM
 
-class EEG_Layer(torch.nn.Module):
+class RNNEEG(AbstractNMM):
     '''
     
     Lead Field Matrix multiplication which converts Source Space EEG to Channel Space EEG
     
     '''
 
-    def __init__(self, num_regions, params, num_channels, device = torch.device('cpu')): 
+    def __init__(self, params, node_size = 200, output_size = 64): 
         '''
         '''
-        super(EEG_Layer, self).__init__() # To inherit parameters attribute
+        super(RNNEEG, self).__init__(params) # To inherit parameters attribute
                 
         # Initialize the EEG Model 
         #
@@ -19,33 +19,19 @@ class EEG_Layer(torch.nn.Module):
         #  num_regions: Int - Number of nodes in network to model
         #  params: EEG_Params - This contains the EEG Parameters, to maintain a consistent paradigm
         
-        self.num_regions = num_regions
-        self.num_channels = num_channels
-        self.params_fitted = {}
-        self.params_fitted['modelparameter'] =[]
-        self.params_fitted['hyperparameter'] =[]
+        self.node_size = node_size
+        self.output_size = output_size
+        self.output_names = ['eeg']
         
-        self.track_params = []
-        self.device = device
-        
-        self.num_blocks = 1
-        
-        self.params = params
         
         self.setModelParameters()
     
-    def info(self):
-        return {"state_names": ["None"], "output_name": "eeg"}
+    
             
-    def setModelParameters(self):
-        self.LF = self.params.LF.to(self.device)
+    
         
-    def createIC(self, ver):
-        pass
-    
-    def forward(self, step_size, sim_len, node_history, device = torch.device('cpu')):
-        hE = torch.tensor(1.0).to(self.device) #Dummy variable
-    
+    def forward(self, neuroAct: torch.tensor):
+       
         # Runs the EEG Model
         #
         # INPUT
@@ -57,17 +43,11 @@ class EEG_Layer(torch.nn.Module):
         # OUTPUT
         #  layer_history: Tensor - [time_steps, regions, num_blocks]
         #
+        lm = self.params.lm.value()
         
-        layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_channels, self.num_blocks).to(self.device)
-        print(layer_hist.shape)
-        num_steps = int((sim_len/step_size)/self.num_blocks)
-        for i in range(num_steps):
-            layer_hist[i, :, :] = torch.matmul(self.LF, node_history[i, :, :]) # TODO: Check dimensions and if correct transpose of LF
-        
-        sim_vals = {}
-        sim_vals["eeg"] = layer_hist.permute((1,0,2)) # time x node x batch -> node x time x batch
+        output_eeg =  torch.matmul(lm, neuroAct) # time x node x batch -> node x time x batch
     
-        return sim_vals, hE   
+        return output_eeg  
 
 
     

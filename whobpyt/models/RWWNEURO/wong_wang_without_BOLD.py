@@ -1,16 +1,16 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Clemens Pellengahr, Hussain Ather, Davide Momi, Sorenza Bastiaens, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Clemens Pellengahr, Hussain Ather, Davide Momi, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
 Neural Mass Model fitting module for Wong-Wang model
 """
 
 import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes import AbstractNMM, AbstractParams, par
-from whobpyt.models.RWW import ParamsRWW
+from whobpyt.models.RWWNEURO import ParamsRWWNEU
 from whobpyt.functions.arg_type_check import method_arg_type_check
 import numpy as np # for numerical operations
 
-class RNNRWWMM(AbstractNMM):
+class RNNRWWNEU(AbstractNMM):
     """
     Reduced Wong Wang Excitatory Inhibitory (RWWExcInb) Model with integrated BOLD dynamics
     
@@ -25,12 +25,16 @@ class RNNRWWMM(AbstractNMM):
     Attributes
     ---------
     
-    state_names: list
-        A list of model state variable names
+    state_names: an array of the list
+        An array of list of model state variable names
+    pop_names: an array of list
+        An array of list of population names
     output_names: list
         A list of model output variable names
     model_name: string
         The name of the model itself
+    pop_size : int in this model just one
+        The number of population in the WWD model
     state_size : int
         The number of states in the WWD model
     tr : float
@@ -43,23 +47,15 @@ class RNNRWWMM(AbstractNMM):
         The number of BOLD TRs to simulate in one forward call
     node_size: int
         The number of ROIs
-    sampling_size: int
-        This is related to an averaging of NMM values before inputing into hemodynamic equaitons. This is non-standard.        
+         
     sc: float node_size x node_size array
         The structural connectivity matrix
     sc_fitted: bool
         The fitted structural connectivity
     use_fit_gains: tensor with node_size x node_size (grad on depends on fit_gains)
         Whether to fit the structural connectivity, will fit via connection gains: exp(gains_con)*sc
-    use_Laplacian: bool
-        Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
-    use_Bifurcation: bool
-        Use a custom objective function component
-    use_Gaussian_EI: bool
-        Use a custom objective function component
-    use_dynamic_boundary: bool
-        Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size. 
-    params: ParamsRWW
+    
+    params: ParamsRWWNEU
         A object that contains the parameters for the RWW nodes
     params_fitted: dictionary
         A dictionary containg fitted parameters and fitted hyper_parameters
@@ -94,8 +90,8 @@ class RNNRWWMM(AbstractNMM):
     """
     
 
-    def __init__(self, params: ParamsRWW, node_size = 68, output_size = 64, TRs_per_window = 20, step_size = 0.1,  \
-                   tr=1.0, tr_eeg= 0.001, sc=np.ones((68,68)), use_fit_gains= True):
+    def __init__(self, params: ParamsRWWNEU, node_size = 68, TRs_per_window = 20, step_size = 0.05,  \
+                   tr=1.0, sc=np.ones((68,68)), use_fit_gains= True):
         """
         Parameters
         ----------
@@ -106,8 +102,6 @@ class RNNRWWMM(AbstractNMM):
             The number of BOLD TRs to simulate in one forward call    
         step_size: float
             Integration step for forward model
-        sampling_size:
-            This is related to an averaging of NMM values before inputing into hemodynamic equaitons. This is non-standard. 
         tr : float
             tr of fMRI image. That is, the spacing betweeen images in the time series. 
         sc: float node_size x node_size array
@@ -115,46 +109,30 @@ class RNNRWWMM(AbstractNMM):
         use_fit_gains: bool
             Whether to fit the structural connectivity, will fit via connection gains: exp(gains_con)*sc
         params: ParamsRWW
-            A object that contains the parameters for the RWW nodes
-        use_Bifurcation: bool
-            Use a custom objective function component
-        use_Gaussian_EI: bool
-            Use a custom objective function component
-        use_Laplacian: bool
-            Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
-        use_dynamic_boundary: bool
-            Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size.
+            A object that contains the parameters for the RWW nodes.
         """        
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
-        super(RNNRWWMM, self).__init__(params)
+        super(RNNRWWNEU, self).__init__(params)
         
-        self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-        self.output_names = ["bold", "eeg"]
-        self.track_params = [] #Is populated during setModelParameters()
-        self.pop_names =['E']
+        self.state_names = np.array(['E', 'I', 'x', 'f', 'v', 'q'])
+        self.output_names = ["bold"]
+        
+        self.pop_names = np.array(['E'])
         self.pop_size = 1
-        self.model_name = "RWWMM"
-        self.state_size = 6  # 6 states WWD model
+        self.model_name = "RWW"
+        self.state_size = 2  # 6 states WWD model
         # self.input_size = input_size  # 1 or 2
         self.tr = tr  # tr fMRI image
-        self.tr_eeg = tr_eeg  # tr fMRI image
         self.step_size = step_size  # integration step 0.05
-        
-        self.steps_per_TR = int(tr/ step_size)
-        
-        self.steps_per_TR_eeg = int(tr_eeg/ step_size)
+        self.steps_per_TR = int(tr / step_size)
         self.TRs_per_window = TRs_per_window  # size of the batch used at each step
         self.node_size = node_size  # num of ROI
         self.sc = sc  # matrix node_size x node_size structure connectivity
         self.sc_fitted = torch.tensor(sc, dtype=torch.float32)  # placeholder
         self.use_fit_gains = use_fit_gains  # flag for fitting gains
         
-        self.params = params
-        
-        self.params_fitted = {}
-
-        self.output_size = output_size
+        self.output_size = node_size
         
         self.setModelParameters()
         self.setModelSCParameters()
@@ -184,7 +162,7 @@ class RNNRWWMM(AbstractNMM):
         
         # initial state
         return torch.tensor(0.2 * np.random.uniform(0, 1, (self.node_size, self.pop_size, self.state_size)) + np.array(
-                [0, 0, 0, 1.0, 1.0, 1.0]), dtype=torch.float32)
+                [0, 0]), dtype=torch.float32)
 
     
     def createDelayIC(self, ver):
@@ -232,7 +210,7 @@ class RNNRWWMM(AbstractNMM):
         
         Parameters
         ----------
-        external: tensor with node_size x steps_per_TR x TRs_per_window x input_size
+        external: tensor with node_size x pop_size x steps_per_TR x TRs_per_window x input_size
             noise for states
         
         hx: tensor with node_size x state_size
@@ -243,7 +221,7 @@ class RNNRWWMM(AbstractNMM):
         next_state: dictionary with Tensors
             Tensor dimension [Num_Time_Points, Num_Regions]
         
-        with keys: 'current_state''bold_window''E_window''I_window''x_window''f_window''v_window''q_window'
+        with keys: 'current_state''states_window''bold_window'
             record new states and BOLD
             
         """
@@ -252,7 +230,7 @@ class RNNRWWMM(AbstractNMM):
     
     
         # Defining NMM Parameters to simplify later equations
-        std_in =  0.02+m(self.params.std_in.value())  # standard deviation of the Gaussian noise
+        std_in =  0.02+m(self.params.std_in.value())  # 0.02 the lower bound (standard deviation of the Gaussian noise)
         
         # Parameters for the ODEs
         # Excitatory population
@@ -282,29 +260,13 @@ class RNNRWWMM(AbstractNMM):
         bI = self.params.bI.value()
         dI = self.params.dI.value()
     
-        # Output (BOLD signal)
-        alpha = self.params.alpha.value()
-        rho = self.params.rho.value()
-        k1 = self.params.k1.value()
-        k2 = self.params.k2.value()
-        k3 = self.params.k3.value()  # adjust this number from 0.48 for BOLD fluctruate around zero
-        V = self.params.V.value()
-        E0 = self.params.E0.value()
-        tau_s = self.params.tau_s.value()
-        tau_f = self.params.tau_f.value()
-        tau_0 = self.params.tau_0.value()
+        
         mu = self.params.mu.value()
-        lm = self.params.lm.value()
     
     
         next_state = {}
     
-        # hx is current state (6) 0: E 1:I (neural activities) 2:x 3:f 4:v 5:f (BOLD)
-    
-        x = hx[:,:,2]
-        f = hx[:,:,3]
-        v = hx[:,:,4]
-        q = hx[:,:,5]
+        
     
         dt = torch.tensor(self.step_size, dtype=torch.float32)
     
@@ -327,8 +289,9 @@ class RNNRWWMM(AbstractNMM):
         # placeholders for output BOLD, history of E I x f v and q
         # placeholders for output BOLD, history of E I x f v and q
         bold_window = []
-        E_window = []
+        
     
+        states_hist = torch.zeros((self.node_size, self.pop_size, self.state_size, self.TRs_per_window,self.steps_per_TR))
         
         E = hx[:,:,0]
         I = hx[:,:,1]
@@ -336,15 +299,14 @@ class RNNRWWMM(AbstractNMM):
         # Use the forward model to get neural activity at ith element in the window.
         
         for TR_i in range(self.TRs_per_window):
-            E_holder = []
+
+            # Since tr is about second we need to use a small step size like 0.05 to integrate the model states.
             for step_i in range(self.steps_per_TR):
-                
-            
                 
                 # Calculate the input recurrent.
                 IE = torch.tanh(m(W_E * I_0 + g_EE * E + g * torch.matmul(lap_adj, E) - g_IE * I))  # input currents for E
                 II = torch.tanh(m(W_I * I_0 + g_EI * E - I))  # input currents for I
-    
+
                 # Calculate the firing rates.
                 rE = h_tf(aE, bE, dE, IE)  # firing rate for E
                 rI = h_tf(aI, bI, dI, II)  # firing rate for I
@@ -354,43 +316,25 @@ class RNNRWWMM(AbstractNMM):
                          + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in  
                 I_next = I + dt * (-I * torch.reciprocal(tau_I) + gamma_I * rI) \
                          + torch.sqrt(dt) * torch.randn(self.node_size, self.pop_size) * std_in
-    
+
                 # Calculate the saturation for model states (for stability and gradient calculation).
-    
+
                 # E_next[E_next>=0.9] = torch.tanh(1.6358*E_next[E_next>=0.9])
                 E = torch.tanh(0.0000 + m(1.0 * E_next))
                 I = torch.tanh(0.0000 + m(1.0 * I_next))
+
                 
-                if (step_i+1) % self.steps_per_TR_eeg == 0:
-                    E_window.append(torch.matmul(lm, E))
-                
-                    
-                x_next = x + 1 * dt * (1 * E - torch.reciprocal(tau_s) * x \
-                         - torch.reciprocal(tau_f) * (f - 1))
-                f_next = f + 1 * dt * x
-                v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(alpha))) * torch.reciprocal(tau_0)
-                q_next = q + 1 * dt * (f * (1 - torch.pow(1 - rho, torch.reciprocal(f))) * torch.reciprocal(rho) \
-                         - q * torch.pow(v, torch.reciprocal(alpha)) * torch.reciprocal(v)) * torch.reciprocal(tau_0)
-    
-                x = torch.tanh(x_next)
-                f = (1 + torch.tanh(f_next - 1))
-                v = (1 + torch.tanh(v_next - 1))
-                q = (1 + torch.tanh(q_next - 1))
-            
-            
-            # Put the BOLD signal each tr to the placeholder being used in the cost calculation.
-            bold_window.append((0.01 * torch.randn(self.node_size, 1) +
-                                    100.0 * V * torch.reciprocal(E0) *
-                                    (k1 * (1 - q) + k2 * (1 - q * torch.reciprocal(v)) + k3 * (1 - v))))
+
+                states_hist[:, :,0,TR_i, step_i] = E
+                states_hist[:, :,1,TR_i, step_i] = I
+
+        
         
     
         # Update the current state.
-        current_state = torch.cat([E[:,:, np.newaxis], I[:,:, np.newaxis], x[:,:, np.newaxis],\
-                  f[:,:, np.newaxis], v[:,:, np.newaxis], q[:,:, np.newaxis]], dim=2)
+        current_state = torch.cat([E[:,:, np.newaxis], I[:,:, np.newaxis]], dim=2)
         next_state['current_state'] = current_state
-        next_state['bold'] = torch.cat(bold_window, dim =1)
-        next_state['states'] = torch.cat(E_window, dim =1)
-        next_state['eeg'] = torch.cat(E_window, dim =1)
+        next_state['states'] = states_hist
         
         return next_state, hE
         

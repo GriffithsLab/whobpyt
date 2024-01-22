@@ -13,29 +13,33 @@ from whobpyt.datatypes import AbstractParams, par
 
 import numpy
 
-class BOLD_Params(AbstractParams):
-    def __init__(self):
+class ParamsBOLD(AbstractParams):
+    def __init__(self, **kwargs):
         #############################################
         ## BOLD Constants
         #############################################
         
         #Friston 2003 - Table 1 - Priors on biophysical parameters
-        self.kappa = par(0.65) # Rate of signal decay (1/s)
-        self.gammaB = par(0.42) # Rate of flow-dependent elimination (1/s)
-        self.tao = par(0.98) # Hemodynamic transit time (s)
-        self.alpha = par(0.32) # Grubb's exponent
-        self.ro = par(0.34) #Resting oxygen extraction fraction
+        super(ParamsBOLD, self).__init__(**kwargs)
         
-        self.V_0 = par(0.02)
-        self.k_1 = par(7*self.ro.npValue())
-        self.k_2 = par(2)
-        self.k_3 = par(2*self.ro.npValue() - 0.2)
-        
-    def to(self, device):
-        # Moves all parameters between CPU and GPU
-        
-        vars_names = [a for a in dir(self) if not a.startswith('__')]
-        for var_name in vars_names:
-            var = getattr(self, var_name)
-            if (type(var) == par):
-                var.to(device)
+        params = {
+
+            # Output (BOLD signal)
+            "alpha": par(0.32),
+            "rho": par(0.34),
+            "k1": par(2.38),
+            "k2": par(2.0),
+            "k3": par(0.48),  # adjust this number from 0.48 for BOLD fluctruate around zero
+            "V": par(.02),
+            "E0": par(0.34),
+            "tau_s": par(1 / 0.65),
+            "tau_f": par(1 / 0.41),
+            "tau_0": par(0.98)
+
+        }
+
+        for var in params:
+            if var not in self.params:
+                self.params[var] = params[var]
+
+        self.setParamsAsattr()

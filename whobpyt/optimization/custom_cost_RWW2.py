@@ -17,7 +17,7 @@ class CostsRWW2(AbstractLoss):
     def __init__(self, model : AbstractNMM):
         
         self.simKey = "bold"
-        self.simKeyeeg = "states"
+        self.simKeyeeg = "eeg"
         self.mainLoss = CostsFC(self.simKey)
         self.secondLoss = CostsFC(self.simKeyeeg)
         self.model = model

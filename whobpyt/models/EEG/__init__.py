@@ -1,3 +1,3 @@
-from .EEG import EEG_Layer
-from .ParamsEEG import EEG_Params
+from .EEG import RNNEEG
+from .ParamsEEG import ParamsEEG
 from .EEG_validate import EEG_np

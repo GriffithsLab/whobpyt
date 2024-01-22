@@ -3,8 +3,8 @@
 import numpy as np
 from whobpyt.datatypes import AbstractNMM, AbstractMode, AbstractParams
 from whobpyt.models.RWWEI2 import RWWEI2_np, ParamsRWWEI2
-from whobpyt.models.BOLD import BOLD_np, BOLD_Params
-from whobpyt.models.EEG import EEG_np, EEG_Params
+from whobpyt.models.BOLD import BOLD_np, ParamsBOLD
+from whobpyt.models.EEG import EEG_np, ParamsEEG
 
 class RWWEI2_EEG_BOLD_np(RWWEI2_np):
 
