@@ -1,21 +1,27 @@
 import numpy as np
 from whobpyt.datatypes import AbstractParams, par
 
-class EEG_Params(AbstractParams):
-    def __init__(self, Lead_Field):
+class ParamsEEG(AbstractParams):
+    
+    def __init__(self, **kwargs):
+        """
+        Initializes the ParamsCB object.
+
+        Args:
+            **kwargs: Keyword arguments for the model parameters.
+
+        Returns:
+            None
+        """
+        super(ParamsEEG, self).__init__(**kwargs)
+        params = {
+            
+            "lm": par(1)
+        }
+
+        for var in params:
+            if var not in self.params:
+                self.params[var] = params[var]
         
-        #############################################
-        ## EEG Lead Field
-        #############################################
-        
-        self.LF = Lead_Field # This should be [num_regions, num_channels]
-        
-    def to(self, device):
-        # Moves all parameters between CPU and GPU
-        
-        vars_names = [a for a in dir(self) if not a.startswith('__')]
-        for var_name in vars_names:
-            var = getattr(self, var_name)
-            if (type(var) == par):
-                var.to(device)
+        self.setParamsAsattr()
         
