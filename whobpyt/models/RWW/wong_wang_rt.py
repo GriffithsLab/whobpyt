@@ -130,7 +130,7 @@ class RNNRWWMM(AbstractNMM):
         super(RNNRWWMM, self).__init__(params)
         
         self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-        self.output_names = ["bold"]
+        self.output_names = ["bold", "eeg"]
         self.track_params = [] #Is populated during setModelParameters()
         self.pop_names =['E']
         self.pop_size = 1
@@ -390,6 +390,7 @@ class RNNRWWMM(AbstractNMM):
         next_state['current_state'] = current_state
         next_state['bold'] = torch.cat(bold_window, dim =1)
         next_state['states'] = torch.cat(E_window, dim =1)
+        next_state['eeg'] = torch.cat(E_window, dim =1)
         
         return next_state, hE
         
