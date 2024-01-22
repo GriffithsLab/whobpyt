@@ -1,7 +1,10 @@
 import torch
-from whobpyt.datatypes import AbstractMode
+from whobpyt.datatypes import AbstractNMM
+from whobpyt.models.BOLD import ParamsBOLD
+import numpy as np
+from whobpyt.functions.arg_type_check import method_arg_type_check
    
-class BOLD_Layer(torch.nn.Module):
+class RNNBOLD(AbstractNMM):
     '''
     Balloon-Windkessel Hemodynamic Response Function Forward Model
     
@@ -12,133 +15,172 @@ class BOLD_Layer(torch.nn.Module):
     Deco G, Ponce-Alvarez A, Mantini D, Romani GL, Hagmann P, Corbetta M. Resting-state functional connectivity emerges from structurally and dynamically shaped slow linear fluctuations. Journal of Neuroscience. 2013 Jul 3;33(27):11239-52.
     '''
 
-    def __init__(self, num_regions, params, useBC = False, device = torch.device('cpu')):        
-        super(BOLD_Layer, self).__init__() # To inherit parameters attribute
-                
-        # Initialize the BOLD Model 
-        #
-        # INPUT
-        #  num_regions: Int - Number of nodes in network to model
-        #  params: BOLD_Params - The parameters that all nodes in the network will share
-        #  useBC: Boolean - Whether to use extra boundary conditions to make more numerically stable. Not fully tested.
-        #                   NOTE: This is discouraged as it will likely influence results. Instead, choose a smaller step size. 
+    def __init__(self, params: ParamsBOLD, node_size = 68, TRs_per_window = 20, step_size = 0.05,  \
+                   tr=1.0):
+        """
+        Parameters
+        ----------
+            
+        node_size: int
+            The number of ROIs
+        TRs_per_window: int
+            The number of BOLD TRs to simulate in one forward call    
+        step_size: float
+            Integration step for forward model
+        tr : float
+            tr of fMRI image. That is, the spacing betweeen images in the time series. 
         
-        self.num_regions = num_regions
-        self.useBC = useBC   #useBC: is if we want the model to use boundary conditions
+            Whether to fit the structural connectivity, will fit via connection gains: exp(gains_con)*sc
+        params: ParamsRWW
+            A object that contains the parameters for the RWW nodes.
+        """        
+        method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
-        self.device = device
+        super(RNNBOLD, self).__init__(params)
         
-        self.num_blocks = 1
-        self.params_fitted = {}
-        self.params_fitted['modelparameter'] =[]
-        self.params_fitted['hyperparameter'] =[]
-        self.track_params = []
-        self.params = params
+        self.state_names = np.array(['x', 'f', 'v', 'q'])
+        self.output_names = ["bold"]
+        
+        
+        self.model_name = "RNNBOLD"
+        self.state_size = 4  # 6 states WWD model
+        # self.input_size = input_size  # 1 or 2
+        self.tr = tr  # tr fMRI image
+        self.step_size = step_size  # integration step 0.05
+        self.steps_per_TR = int(tr / step_size)
+        self.TRs_per_window = TRs_per_window  # size of the batch used at each step
+        self.node_size = node_size  # num of ROI
+       
+        
+        self.output_size = node_size
         
         self.setModelParameters()
-    
-    def info(self):
-        '''
-        '''
-        return {"state_names": ['x', 'f', 'v', 'q'], "output_name": "bold"}
-            
-    def setModelParameters(self):
-        return setModelParameters(self)
         
+    
+    
+    
     def createIC(self, ver):
-        #Starting Condition
-        #x = 1   # vasodilatory signal
-        #f = 1   # inflow
-        #v = 1   # blood volumne
-        #q = 1   # deoxyhemoglobin content 
-        pass
-    
-    def forward(self, init_state, step_size, sim_len, node_history):
-        return forward(self, init_state, step_size, sim_len, node_history)    
+        """
+        
+            A function to return an initial state tensor for the model.    
+        
+        Parameters
+        ----------
+        
+        ver: int
+            Ignored Parameter
+        
+        
+        Returns
+        ----------
+        
+        Tensor
+            Random Initial Conditions for RWW & BOLD 
+        
+        
+        """
+        
+        # initial state
+        return torch.tensor(0.2 * np.random.uniform(0, 1, (self.node_size, self.pop_size, self.state_size)) + np.array(
+                [1.0, 1.0, 1.0]), dtype=torch.float32)
 
-def setModelParameters(self):
-    pass
     
-def forward(self, init_state, step_size, sim_len, node_history):
     
-    hE = torch.tensor(1.0).to(self.device) #Dummy variable
     
-    # Runs the BOLD Model
-    #
-    # INPUT
-    #  init_state: Tensor [regions, state_vars] # Number of regions should match node_history. There are 4 state variables. 
-    #  step_size: Float - The step size in msec which must match node_history step size.
-    #                     (NOTE: bold equations are in sec so step_size will be divide by 1000)
-    #  sim_len: Int - The amount of BOLD to simulate in msec, and should match time simulated in node_history. 
-    #  node_history: Tensor - [time_points, regions] # This would be S_E if input coming from RWW
-    #
-    # OUTPUT
-    #  state_vars: Tensor - [regions, state_vars]
-    #  layer_history: Tensor - [time_steps, regions, state_vars + 1 (BOLD)]
-    #
+        
+    def forward(self, external, hx):
+        """
+        
+        Forward step in simulating the BOLD signal.
+        
+        Parameters
+        ----------
+        
+        
+        hx: tensor with node_size x state_size
+            states of Ballon model
+        
+        Returns
+        -------
+        next_state: dictionary with Tensors
+            Tensor dimension [Num_Time_Points, Num_Regions]
+        
+        with keys: 'current_state''states_window''bold_window'
+            record new states and BOLD
+            
+        """
+        # Generate the ReLU module for model parameters gEE gEI and gIE
+        m = torch.nn.ReLU()
     
-    # Defining parameters to simplify later equations
-    kappa = self.params.kappa.value()    # Rate of signal decay (1/s)
-    gammaB = self.params.gammaB.value()  # Rate of flow-dependent elimination (1/s)
-    tao = self.params.tao.value()        # Hemodynamic transit time (s)
-    alpha = self.params.alpha.value()    # Grubb's exponent
-    ro = self.params.ro.value()          #Resting oxygen extraction fraction
-    V_0 = self.params.V_0.value()
-    k_1 = self.params.k_1.value()
-    k_2 = self.params.k_2.value()
-    k_3 = self.params.k_3.value()
     
-    layer_hist = torch.zeros(int((sim_len/step_size)/self.num_blocks), self.num_regions, 4 + 1, self.num_blocks).to(self.device)
+        
     
-    # BOLD State Values
-    x = init_state[:, 0, :]
-    f = init_state[:, 1, :]
-    v = init_state[:, 2, :]
-    q = init_state[:, 3, :]
+        # Output (BOLD signal)
+        alpha = self.params.alpha.value()
+        rho = self.params.rho.value()
+        k1 = self.params.k1.value()
+        k2 = self.params.k2.value()
+        k3 = self.params.k3.value()  # adjust this number from 0.48 for BOLD fluctruate around zero
+        V = self.params.V.value()
+        E0 = self.params.E0.value()
+        tau_s = self.params.tau_s.value()
+        tau_f = self.params.tau_f.value()
+        tau_0 = self.params.tau_0.value()
+        
+    
+    
+        next_state = {}
+    
+        # hx is current state (6) 0: E 1:I (neural activities) 2:x 3:f 4:v 5:f (BOLD)
+    
+        x = hx[:,:,0]
+        f = hx[:,:,1]
+        v = hx[:,:,2]
+        q = hx[:,:,3]
+    
+        dt = torch.tensor(self.step_size, dtype=torch.float32)
+    
+        
+        bold_window = []
+        states_window = []
+        
+        
+        # Use the forward model to get neural activity at ith element in the window.
+        
+        
 
-    num_steps = int((sim_len/step_size)/self.num_blocks)
-    for i in range(num_steps):
-        
-        z = node_history[i, :, :] 
-        
-        #BOLD State Variables
-        dx = z - kappa*x - gammaB*(f - 1)
-        df = x
-        dv = (f - v**(1/alpha))/tao
-        dq = ((f/ro) * (1 - (1 - ro)**(1/f)) - q*v**(1/alpha - 1))/tao
-        
-        # UPDATE VALUES
-        # NOTE: bold equations are in sec so step_size will be divide by 1000
-        x = x + step_size/1000*dx
-        f = f + step_size/1000*df
-        v = v + step_size/1000*dv
-        q = q + step_size/1000*dq
-        
-        # Bound the possible values of state variables (From fit.py code for numerical stability)
-        if(self.useBC):
-            x = torch.tanh(x)
-            f = (1 + torch.tanh(f - 1))
-            v = (1 + torch.tanh(v - 1))
-            q = (1 + torch.tanh(q - 1))
-        
-        #BOLD Calculation
-        BOLD = V_0*(k_1*(1 - q) + k_2*(1 - q/v) + k_3*(1 - v))
-                
-        layer_hist[i, :, 0, :] = x
-        layer_hist[i, :, 1, :] = f
-        layer_hist[i, :, 2, :] = v
-        layer_hist[i, :, 3, :] = q
-        layer_hist[i, :, 4, :] = BOLD
-        
-    state_vals = torch.cat((torch.unsqueeze(x, 1), torch.unsqueeze(f, 1), torch.unsqueeze(v, 1), torch.unsqueeze(q, 1)),1)
+        for TR_i in range(self.TRs_per_window):
+
+            for step_i in range(self.steps_per_TR):
+                x_next = x + 1 * dt * (external[:, :, TR_i, step_i] - torch.reciprocal(tau_s) * x \
+                         - torch.reciprocal(tau_f) * (f - 1))
+                f_next = f + 1 * dt * x
+                v_next = v + 1 * dt * (f - torch.pow(v, torch.reciprocal(alpha))) * torch.reciprocal(tau_0)
+                q_next = q + 1 * dt * (f * (1 - torch.pow(1 - rho, torch.reciprocal(f))) * torch.reciprocal(rho) \
+                         - q * torch.pow(v, torch.reciprocal(alpha)) * torch.reciprocal(v)) * torch.reciprocal(tau_0)
     
-    sim_vals = {}
-    sim_vals["BOLD_state"] = state_vals
-    sim_vals["x"]    = layer_hist[:, :, 0, :].permute((1,0,2))
-    sim_vals["f"]    = layer_hist[:, :, 1, :].permute((1,0,2))
-    sim_vals["v"]    = layer_hist[:, :, 2, :].permute((1,0,2))
-    sim_vals["q"]    = layer_hist[:, :, 3, :].permute((1,0,2))
-    sim_vals["bold"] = layer_hist[:, :, 4, :].permute((1,0,2)) # Post Permute: Nodes x Time x Batch
-    
-    return sim_vals, hE
+                x = torch.tanh(x_next)
+                f = (1 + torch.tanh(f_next - 1))
+                v = (1 + torch.tanh(v_next - 1))
+                q = (1 + torch.tanh(q_next - 1))
+            
+            
+
+            # Put the BOLD signal each tr to the placeholder being used in the cost calculation.
+            bold_window.append((0.01 * torch.randn(self.node_size, 1) +
+                                    100.0 * V * torch.reciprocal(E0) *
+                                    (k1 * (1 - q) + k2 * (1 - q * torch.reciprocal(v)) + k3 * (1 - v))))
+        
+            states_window.append(torch.cat([x[:,:,np.newaxis] , f[:,:,np.newaxis], v[:,:,np.newaxis],\
+                                            q[:,:,np.newaxis]], dim =len(x.shape))[:,:,:,np.newaxis])
+                                            
+        # Update the current state.
+        current_state = torch.cat([x[:,:, np.newaxis],\
+                  f[:,:, np.newaxis], v[:,:, np.newaxis], q[:,:, np.newaxis]], dim=len(x.shape))
+        next_state['current_state'] = current_state
+        next_state['bold'] = torch.cat(bold_window, dim =len(x.shape)-1)
+        next_state['states'] = torch.cat(states_window, dim=len(current_state.shape))
+        
+        
+        return next_state
 

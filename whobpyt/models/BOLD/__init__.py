@@ -1,3 +1,3 @@
-from .BOLD import BOLD_Layer
-from .ParamsBOLD import BOLD_Params
+from .BOLD import RNNBOLD
+from .ParamsBOLD import ParamsBOLD
 from .BOLD_validate import BOLD_np
