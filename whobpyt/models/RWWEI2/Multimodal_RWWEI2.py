@@ -1,134 +1,145 @@
 ## Multi-modal Reduce Wong Wang Neural Mass model with BOLD and EEG
 
 import torch
-from whobpyt.datatypes import AbstractNMM, AbstractMode, AbstractParams
-from whobpyt.models.RWWEI2 import RWWEI2, ParamsRWWEI2
-from whobpyt.models.BOLD import BOLD_Layer, BOLD_Params
-from whobpyt.models.EEG import EEG_Layer, EEG_Params
+from torch.nn.parameter import Parameter
+from whobpyt.datatypes import par, AbstractNMM, AbstractParams
+from whobpyt.models.RWWNEURO.wong_wang_without_BOLD import RNNRWWNEU
+from whobpyt.models.RWWNEURO.ParamsRWWNEU import ParamsRWWNEU
+from whobpyt.models.BOLD import RNNBOLD, ParamsBOLD
+from whobpyt.models.EEG import RNNEEG, ParamsEEG
+import numpy as np
+class RWW_EEG_BOLD(torch.nn.Module):
 
-class RWWEI2_EEG_BOLD(torch.nn.Module):
-
-    model_name = "RWWEI2_EEG_BOLD"
+    model_name = "RWW_EEG_BOLD"
     
-    def __init__(self, num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device = torch.device('cpu')):
-        super(RWWEI2_EEG_BOLD, self).__init__() # To inherit parameters attribute
-        self.eeg = EEG_Layer(num_regions, paramsEEG, num_channels, device = device)
-        self.bold = BOLD_Layer(num_regions, paramsBOLD, device = device)
-        self.NMM = RWWEI2(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, sim_len=sim_len, useBC = False, device = device)
-        self.params = paramsNode
-        self.node_size = num_regions
+    def __init__(self, paramsRWWNEU, paramsEEG, paramsBOLD, node_size = 68, output_size = 64, TRs_per_window = 20, \
+        step_size = 0.05, tr=1.0, tr_eeg= 0.001, sc=np.ones((68,68)), use_fit_gains= True):
+        super(RWW_EEG_BOLD, self).__init__() # To inherit parameters attribute
+        self.eeg = RNNEEG(paramsEEG, node_size = node_size, output_size = output_size)
+        self.bold = RNNBOLD(paramsBOLD, TRs_per_window = TRs_per_window, node_size = node_size, step_size = step_size,  tr=tr)
+        self.NMM = RNNRWWNEU(paramsRWWNEU, node_size = node_size, TRs_per_window = TRs_per_window, step_size = step_size,  \
+                   tr=tr, sc=sc, use_fit_gains= use_fit_gains)
+        self.params = AbstractParams()
+        self.state_size = 6
+        self.node_size = node_size
         self.step_size = step_size
-        self.sim_len = sim_len
-        self.output_size = num_regions
-        self.device = device
+        self.output_size = output_size
+        self.pop_size =1
         
-        self.batch_size = 1
-        self.use_fit_gains = self.NMM.use_fit_gains  # flag for fitting gains
-        self.use_fit_lfm = self.NMM.use_fit_lfm
-        self.useBC =self.NMM.useBC
-        self.tr = sim_len
-        self.steps_per_TR = 1
-        self.TRs_per_window = 1
+        self.TRs_per_window = TRs_per_window
+        self.use_fit_gains = use_fit_gains  # flag for fitting gains
         
-        self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-        self.output_names = ["bold", "eeg"]
-        self.track_params = []  #Is populated during setModelParameters()
-        self.params_fitted={}
-        self.params_fitted['modelparameter'] =[]
-        self.params_fitted['hyperparameter'] =[]
-        self.pop_size = self.NMM.num_blocks
-        self.NMM.setModelParameters()
+        self.tr = tr
+        self.tr_eeg = tr_eeg
+        self.steps_per_TR = int(tr/ step_size)
         
-        self.eeg.setModelParameters()
-        self.bold.setModelParameters()
+        self.steps_per_TR_eeg = int(tr_eeg/ step_size)
         
-        self.params_fitted['modelparameter'] = self.NMM.params_fitted['modelparameter'] + self.eeg.params_fitted['modelparameter'] +self.bold.params_fitted['modelparameter']
-        self.params_fitted['hyperparameter'] = self.NMM.params_fitted['hyperparameter'] + self.eeg.params_fitted['hyperparameter'] +self.bold.params_fitted['hyperparameter']
-        self.track_params = self.NMM.track_params + self.eeg.track_params +self.bold.track_params
+        self.sc_fitted = self.NMM.sc_fitted
+        
+        self.state_names = np.concatenate([self.NMM.state_names, self.bold.state_names])
+        self.output_names = self.bold.output_names+self.eeg.output_names
+        self.track_params = self.NMM.track_params + self.eeg.track_params + self.bold.track_params
+        self.params_fitted ={}
+        self.params_fitted['modelparameter']=[]
+        self.params_fitted['hyperparameter']=[]
+        
+        self.setParamsAsattr(paramsRWWNEU, paramsEEG, paramsBOLD)
+        self.set_params_fitted()
+        
+    def set_params_fitted(self):
+        for key in self.NMM.params_fitted:
+            self.params_fitted[key].extend(self.NMM.params_fitted[key])
+            self.params_fitted[key].extend(self.eeg.params_fitted[key])
+            self.params_fitted[key].extend(self.bold.params_fitted[key])
+        
     def info(self):
-        return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold", "eeg"]} #TODO: Update to take multiple output names
+        # Information about the model, which may be used by other classes to know which variables to use. 
+        
+        return {"state_names": self.state_names, 
+                "output_names": self.output_names,
+                "track_params": self.track_params}    
+        
+    def setParamsAsattr(self,paramsRWWNEU, paramsEEG, paramsBOLD):
+        # Returns a named list of paramters that are being fitted
+        # Assumes the par datastructure is being used for parameters
+        
+        for var in paramsRWWNEU.params:
+            setattr(self.params, var, getattr(paramsRWWNEU,var))
+        
+        for var in paramsEEG.params:
+            setattr(self.params, var, getattr(paramsEEG,var))
+        
+        for var in paramsBOLD.params:
+            setattr(self.params, var, getattr(paramsBOLD,var))
+    
             
     
         
     def createIC(self, ver):
-        self.NMM.next_start_state = 0.2 * torch.rand((self.node_size, 6, self.batch_size)) \
-        + torch.tensor([[0], [0], [0], [1.0], [1.0], [1.0]]).repeat(self.node_size, 1, self.batch_size)
-        self.NMM.next_start_state = self.NMM.next_start_state.to(self.device)
-    
-        return self.NMM.next_start_state
+        """
         
+            A function to return an initial state tensor for the model.    
+        
+        Parameters
+        ----------
+        
+        ver: int
+            Ignored Parameter
+        
+        
+        Returns
+        ----------
+        
+        Tensor
+            Random Initial Conditions for RWW & BOLD 
+        
+        
+        """
+        
+        # initial state
+        return torch.tensor(0.2 * np.random.uniform(0, 1, (self.node_size, self.pop_size, self.state_size)) + np.array(
+                [0, 0, 0, 1.0, 1.0, 1.0]), dtype=torch.float32)
+
+    
     def createDelayIC(self, ver):
-        # Creates a time series of state variables to represent their past values as needed when delays are used. 
-        
-        return torch.tensor(1.0) #Dummy variable if delays are not used
+        """
+        Creates the initial conditions for the delays.
+
+        Parameters
+        ----------
+        ver : int
+            Initial condition version. (in the JR model, the version is not used. It is just for consistency with other models)
+
+        Returns
+        -------
+        torch.Tensor
+            Tensor of shape (node_size, delays_max) with random values between `state_lb` and `state_ub`.
+        """
+
+        delays_max = 500
+        state_ub = 0.5
+        state_lb = 0.1
+
+        return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  delays_max)), dtype=torch.float32)
     
-        
-    def setBlocks(self, num_blocks):
-        self.num_blocks = num_blocks
-        self.eeg.num_blocks = num_blocks
-        self.bold.num_blocks = num_blocks
     
     def forward(self, external, hx, hE, setNoise=None):
         
-        NMM_vals, hE = self.NMM.forward(external, self.NMM.next_start_state[:, 0:2, :], hE, setNoise) #TODO: Fix the hx in the future
-        print(NMM_vals['E'].shape)
-        EEG_vals, hE = self.eeg.forward(self.step_size, self.sim_len, NMM_vals["E"].permute((1,0,2)))
-        BOLD_vals, hE = self.bold.forward(self.NMM.next_start_state[:, 2:6, :], self.step_size, self.sim_len, NMM_vals["E"].permute((1,0,2)))
+        NMM_vals, hE = self.NMM.forward(external, hx[:,:,:2], hE) #TODO: Fix the hx in the future
+        #print(NMM_vals["states"].shape)
+        EEG_vals = self.eeg.forward((NMM_vals["states"][:,0,0,:,::self.steps_per_TR_eeg]).reshape((self.node_size,-1)))
+        BOLD_vals = self.bold.forward(NMM_vals["states"][:,:,0], hx[:,:,2:])
         
-        self.NMM.next_start_state = torch.cat((NMM_vals["NMM_state"], BOLD_vals["BOLD_state"]), dim=1).detach()
         
-        sim_vals = {**NMM_vals, **EEG_vals, **BOLD_vals}
-        sim_vals['current_state'] = torch.tensor(1.0, device = self.device) #Dummy variable
-        
-        # Reshape if Blocking is being Used
-        if self.NMM.num_blocks > 1:
-            for simKey in set(self.state_names + self.output_names):
-                #print(sim_vals[simKey].shape) # Nodes x Time x Blocks
-                #print(torch.unsqueeze(sim_vals[simKey].permute((1,0,2)),2).shape) #Time x Nodes x SV x Blocks
-                if simKey == "eeg":
-                    sim_vals['states'] = serializeTS(torch.unsqueeze(sim_vals[simKey].permute((1,0,2)),2), sim_vals[simKey].shape[0], 1).permute((1,0,2))[:,:,0]
-                else:
-                    sim_vals[simKey] = serializeTS(torch.unsqueeze(sim_vals[simKey].permute((1,0,2)),2), sim_vals[simKey].shape[0], 1).permute((1,0,2))[:,:,0]
-        else:
-            for simKey in set(self.state_names + self.output_names):
-                if simKey == "eeg":
-                    sim_vals['states'] = sim_vals[simKey][:,:,0]
-                else:
-                    sim_vals[simKey] = sim_vals[simKey][:,:,0]
-                
-        return sim_vals, hE
+        next_state = {}
+        next_state['current_state'] = torch.cat([NMM_vals['current_state'], BOLD_vals['current_state']], dim=2)
+        next_state['eeg'] = EEG_vals
+        next_state['bold'] = BOLD_vals['bold']
+        next_state['states'] = NMM_vals['states']
+        #print(EEG_vals.shape, BOLD_vals['bold'].shape)
+        return next_state, hE
     
     
     
     
-def blockTS(data, blocks, numNodes, numSV):
-    # data: time x nodes x state_variables
-    # return: time x nodes x state_variables x blocks
-    
-    n = torch.numel(data)
-    
-    if (not (n%blocks == 0)):
-        print("ERROR: data is not divisable by blocks")
-        return 
-    
-    newTimeDim = int(n/(blocks*numNodes*numSV))
-    
-    data_p = data.permute((2,1,0)) # state_vars x nodes x time
-    data_r = torch.reshape(data_p, (numSV, numNodes, blocks, newTimeDim))
-    data_p2 = data_r.permute((3, 1, 0, 2))
-    
-    return data_p2
-    
-    
-def serializeTS(data, numNodes, numSV):
-    # data: time x nodes x state_variables x blocks
-    # return: time x nodes x state_variables
-
-    n = torch.numel(data)
-    newTimeDim = int(n/(numNodes*numSV))
-    
-    data_p = data.permute((2,1,3,0))
-    data_r = torch.reshape(data_p, (numSV, numNodes, newTimeDim))
-    data_p2 = data_r.permute((2,1,0))
-    
-    return data_p2
