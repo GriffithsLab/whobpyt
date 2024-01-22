@@ -95,7 +95,10 @@ class Model_fitting(AbstractFitting):
             Whether to use the learning rate scheduler
         """
         method_arg_type_check(self.train, exclude = ['u', 'empRec']) # Check that the passed arguments (excluding self) abide by their expected data types
-
+        emp = []
+        emp.append(empRec)
+        if empRecSec is not None:
+            emp.append(empRecSec)
         # Define two different optimizers for each group
         modelparameter_optimizer = optim.Adam(self.model.params_fitted['modelparameter'], lr=learningrate, eps=1e-7)
         hyperparameter_optimizer = optim.Adam(self.model.params_fitted['hyperparameter'], lr=lr_2ndLevel, eps=1e-7)
@@ -133,7 +136,7 @@ class Model_fitting(AbstractFitting):
 
             # TIME SERIES: Create placeholders for the simulated states and outputs of entire time series corresponding to one recording
             windListDict = {} # A Dictionary with a List of windowed time series
-            for name in ['states', self.model.output_names[0]]:
+            for name in ['states'] + self.model.output_names:
                 windListDict[name] = []
 
 
@@ -177,17 +180,17 @@ class Model_fitting(AbstractFitting):
 
                 # Get the batch of empirical signal.
                 ts_window = torch.tensor(windowedTS[win_idx, :, :], dtype=torch.float32)
-                if self.model.model_name == 'RWWMM':
+                if self.model.model_name in  ['RWWMM', 'RWW_EEG_BOLD']:
                     ts_sec_window = torch.tensor(windowedTS_sec[win_idx, :, :], dtype=torch.float32)
                 #print(next_window['bold'].shape, next_window['states'].shape)
                 # calculating loss
-                if self.model.model_name == 'RWWMM':
+                if self.model.model_name in  ['RWWMM', 'RWW_EEG_BOLD']:
                     loss, loss_main = self.cost.loss(next_window, ts_window, ts_sec_window)
                 else:
                     loss, loss_main = self.cost.loss(next_window, ts_window)
 
                 # TIME SERIES: Put the window of simulated forward model.
-                for name in ['states', self.model.output_names[0]]:
+                for name in ['states'] + self.model.output_names:
                     windListDict[name].append(next_window[name].detach().cpu().numpy())
 
                 # TRAINING_STATS: Adding Loss for every training window (corresponding to one backpropagation)
@@ -207,31 +210,27 @@ class Model_fitting(AbstractFitting):
                 X = next_window['current_state'].detach().clone() # dtype=torch.float32
                 hE = hE_new.detach().clone() #dtype=torch.float32
 
-            ts_emp = np.concatenate(list(windowedTS),1) #TODO: Check this code
-            fc = np.corrcoef(ts_emp)
-
+            
             # TIME SERIES: Concatenate all windows together to get one recording
-            for name in ['states', self.model.output_names[0]]:
+            for name in ['states'] + self.model.output_names:
                     windListDict[name] = np.concatenate(windListDict[name], axis=len(windListDict[name][0].shape)-1)
 
-            ts_sim = windListDict[self.model.output_names[0]]
-            fc_sim = np.corrcoef(ts_sim[:, 10:])
-
-            print('epoch: ', i_epoch,
-                  'loss:', loss_main.detach().cpu().numpy(),
-                  'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask], fc[mask])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
-                  'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
-            if self.model.model_name == 'RWWMM':
-                ts_eeg_emp = np.concatenate(list(windowedTS_sec),1)
-                ts_eeg_sim = windListDict['states']
-                print(ts_eeg_emp.shape, ts_eeg_sim.shape)
-                fc_eeg_sim = np.corrcoef(ts_eeg_sim[:, 10:])
-                fc_eeg = np.corrcoef(ts_eeg_emp)
-                print(fc_eeg.shape, fc_eeg_sim.shape)
-                print('epoch: ', i_epoch,
-                  'loss:', loss_main.detach().cpu().numpy(),
-                  'Pseudo FC_cor: ', np.corrcoef(fc_eeg_sim[mask_e], fc_eeg[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
-                  'cos_sim: ', np.diag(cosine_similarity(ts_eeg_sim, ts_eeg_emp)).mean())
+            
+            for i_ts in range(len(emp)):
+                ts_sim = windListDict[self.model.output_names[i_ts]]
+                fc_sim = np.corrcoef(ts_sim[:, 10:])
+                ts_emp = np.concatenate(list(emp[i_ts][-1]),1) #TODO: Check this code
+                fc = np.corrcoef(ts_emp)
+                if self.model.output_names[i_ts] == 'bold':
+                    print(self.model.output_names[i_ts], 'epoch: ', i_epoch,
+                          'loss:', loss_main.detach().cpu().numpy(),
+                          'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask], fc[mask])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
+                          'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
+                else:
+                    print(self.model.output_names[i_ts], 'epoch: ', i_epoch,
+                          'loss:', loss_main.detach().cpu().numpy(),
+                          'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
+                          'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
 
 
 
@@ -260,7 +259,8 @@ class Model_fitting(AbstractFitting):
             """if self.model.use_fit_lfm:
                 self.trainingStats.appendLF(self.model.lm.detach().cpu().numpy())"""
 
-        self.trainingStats.updateOutputs(windListDict[self.model.output_names[0]], 'training')
+        for i_out in range(len(self.model.output_names)):
+            self.trainingStats.updateOutputs(windListDict[self.model.output_names[i_out]], self.model.output_names[i_out]+'_training')
         self.trainingStats.updateStates(windListDict['states'], 'training')
 
     def evaluate(self, u, empRec, TPperWindow: int, base_window_num: int = 0, transient_num = 10, empRecSec = None):
@@ -286,14 +286,18 @@ class Model_fitting(AbstractFitting):
         X = self.model.createIC(ver = 1)
         # initials of history of E
         hE = self.model.createDelayIC(ver = 1)
-
+        
+        emp = []
+        emp.append(empRec)
+        if empRecSec is not None:
+            emp.append(empRecSec)
         # define mask for getting lower triangle matrix
         mask = np.tril_indices(self.model.node_size, -1)
         mask_e = np.tril_indices(self.model.output_size, -1)
 
         # Create placeholders for the simulated states and outputs of entire time series corresponding to one recording
         windListDict = {} # A Dictionary with a List of windowed time series
-        for name in ['states', self.model.output_names[0]]:
+        for name in ['states'] + self.model.output_names:
             windListDict[name] = []
 
         num_windows = empRec.shape[1]
@@ -315,7 +319,7 @@ class Model_fitting(AbstractFitting):
 
             # TIME SERIES: Put the window of simulated forward model.
             if win_idx > base_window_num - 1:
-                for name in ['states', self.model.output_names[0]]:
+                for name in ['states'] + self.model.output_names:
 
                     windListDict[name].append(next_window[name].detach().cpu().numpy())
 
@@ -324,33 +328,32 @@ class Model_fitting(AbstractFitting):
             X = next_window['current_state'].detach().clone() # dtype=torch.float32
             hE = hE_new.detach().clone() #dtype=torch.float32
 
-        windowedTS = empRec[-1]
-        if empRecSec is not None:
-            windowedTS_sec = empRecSec[-1]
-        ts_emp = np.concatenate(list(windowedTS),1) #TODO: Check this code
-        fc = np.corrcoef(ts_emp)
+        
 
         # TIME SERIES: Concatenate all windows together to get one recording
-        for name in ['states', self.model.output_names[0]]:
+        for name in ['states'] + self.model.output_names:
             print(windListDict[name][0].shape)
             windListDict[name] = np.concatenate(windListDict[name], axis=len(windListDict[name][0].shape)-1)
 
-        ts_sim = windListDict[self.model.output_names[0]]
-        fc_sim = np.corrcoef(ts_sim[:, transient_num:])
-
-        print('FC_cor: ', np.corrcoef(fc_sim[mask], fc[mask])[0, 1],
-              'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
-              
-        if self.model.model_name == 'RWWMM':
-            ts_eeg_emp = np.concatenate(list(windowedTS_sec),1)
-            ts_eeg_sim = windListDict['states']
-            print(ts_eeg_emp.shape, ts_eeg_sim.shape)
-            fc_eeg_sim = np.corrcoef(ts_eeg_sim[:, 10:])
-            fc_eeg = np.corrcoef(ts_eeg_emp)
-            print(fc_eeg.shape, fc_eeg_sim.shape)
-            print('EEG Pseudo FC_cor: ', np.corrcoef(fc_eeg_sim[mask_e], fc_eeg[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
-              'cos_sim: ', np.diag(cosine_similarity(ts_eeg_sim, ts_eeg_emp)).mean())
+        
+        
+        for i_ts in range(len(emp)):
+            ts_sim = windListDict[self.model.output_names[i_ts]]
+            fc_sim = np.corrcoef(ts_sim[:, 10:])
+            windowedTS = empRec[-1]
+        
+            ts_emp = np.concatenate(list(emp[i_ts][-1]),1) #TODO: Check this code
+            fc = np.corrcoef(ts_emp)
+            if self.model.output_names[i_ts] == 'bold':
+                print(self.model.output_names[i_ts],
+                      'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask], fc[mask])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
+                      'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
+            else:
+                print(self.model.output_names[i_ts],
+                      'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
+                      'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
 
         # Saving the last recording of training as a Model_fitting attribute
-        self.trainingStats.updateOutputs(windListDict[self.model.output_names[0]], 'testing')
+        for i_out in range(len(self.model.output_names)):
+            self.trainingStats.updateOutputs(windListDict[self.model.output_names[i_out]], self.model.output_names[i_out]+'_testing')
         self.trainingStats.updateStates(windListDict['states'], 'testing')
