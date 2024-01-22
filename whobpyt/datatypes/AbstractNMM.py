@@ -16,8 +16,6 @@ class AbstractNMM(torch.nn.Module):
         self.output_names = ["None"] # The variable to be used as output from the NMM, for purposes such as the input to an objective function
         self.track_params = [] # Which NMM Parameters to track over training
         
-        self.use_fit_gains = False # Whether to fit the Connectivity Matrix
-        self.use_fit_lfm = False # Whether to fit the Lead Field Matrix
         
     def info(self):
         # Information about the model, which may be used by other classes to know which variables to use. 
