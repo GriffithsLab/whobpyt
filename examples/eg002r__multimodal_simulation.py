@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 r"""
 =================================
-Fitting S_E Mean to 0.164 using default RWW Parameters
+Fitting Concurrent EEG and BOLD data using RWW
 =================================
 
-What is being modeled:
 
-- Created a Sphere'd Cube (chosen points on cube projected onto radius = 1 sphere), so that regions were more evently distributed. All corners of cube chosen as regions, thus there are 8 regions. 
-
-- EEG channels located on the center of each face of the cube. Thus there are 6 EEG channels.
-
-- Added some randomness to initial values - to decorrelate the signals a bit. Looking for FC matrix to look similar to SC matrix.
 
 """  
 
@@ -131,7 +125,7 @@ plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
 plt.title("Main Loss over Training Epochs")
 
 # Plots of BOLD FC
-sim_FC = np.corrcoef(F.trainingStats.outputs['training'])
+sim_FC = np.corrcoef(F.trainingStats.outputs['bold_testing'])
 emp_FC = np.corrcoef(bold.T)
 fig, ax = plt.subplots(1,2,figsize = (8, 8))
 plt.suptitle("Simulated BOLD FC: After Training")
@@ -142,7 +136,71 @@ sns.heatmap(emp_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0,
 ax[1].set_title('empirical')
 
 #EEG FC
-sim_FC = np.corrcoef(F.trainingStats.states['training'])
+#EEG FC
+sim_FC = np.corrcoef(F.trainingStats.outputs['eeg_testing'])
+emp_FC = np.corrcoef(np.concatenate(list(eeg_data),1))
+fig, ax = plt.subplots(1,2,figsize = (8, 8))
+plt.suptitle("Simulated EEG FC: After Training")
+mask = np.eye(output_size)
+sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0, ax=ax[0])
+ax[0].set_title('simulated')
+sns.heatmap(emp_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0, ax=ax[1])
+ax[1].set_title('empirical')
+
+
+#################################################
+#using EEG BOLD RWW saparate models
+
+bold_mean = dataloader(bold, num_epochs, TPperWindow)
+eeg_mean =dataloader(np.concatenate(list(eeg_data), 1).T, num_epochs, 37*eeg_data.shape[2])
+lm = np.zeros((output_size,200))
+lm_v = np.zeros((output_size,200))
+params_rww = ParamsRWWNEU(g=par(400, 400, 1/np.sqrt(10), True), g_EE=par(1.5, 1.5, 1/np.sqrt(50), True), \
+                   g_EI =par(0.8, 0.8, 1/np.sqrt(50), True), \
+                  g_IE=par(np.log(0.6), np.log(0.6), 0.1, True, True), I_0 =par(0.2), \
+                   std_in=par(np.log(0.2), np.log(0.2), 0.1, True, True), std_out=par(0.00))
+params_bold = ParamsBOLD()
+params_eeg = ParamsEEG(lm=par(lm, lm, 0.1 * np.ones((output_size, node_size))+lm_v, True))
+# %%
+# call model want to fit
+model = RWW_EEG_BOLD(params_rww,params_eeg, params_bold, node_size =node_size, output_size=output_size, TRs_per_window =TPperWindow, step_size=step_size, \
+                   tr=tr, tr_eeg= tr_eeg, sc=sc, use_fit_gains=True)
+
+# %%
+# create objective function
+ObjFun = CostsRWW2(model)
+
+# %%
+# call model fit
+F = Model_fitting(model, ObjFun)
+
+# %%
+# Model Training
+# ---------------------------------------------------
+#
+F.train(u = 0, empRec = bold_mean, empRecSec=eeg_mean, num_epochs = num_epochs, TPperWindow = TPperWindow, warmupWindow=5, learningrate = 0.05)
+
+F.evaluate(u = 0, empRec = bold_mean, empRecSec=eeg_mean, TPperWindow = TPperWindow, base_window_num = 5)
+
+# %%
+# Plots of loss over Training
+plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
+plt.title("Main Loss over Training Epochs")
+
+# Plots of BOLD FC
+sim_FC = np.corrcoef(F.trainingStats.outputs['bold_testing'])
+emp_FC = np.corrcoef(bold.T)
+fig, ax = plt.subplots(1,2,figsize = (8, 8))
+plt.suptitle("Simulated BOLD FC: After Training")
+mask = np.eye(200)
+sns.heatmap(sim_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0, ax=ax[0])
+ax[0].set_title('simulated')
+sns.heatmap(emp_FC, mask = mask, center=0, cmap='RdBu_r', vmin=-1.0, vmax = 1.0, ax=ax[1])
+ax[1].set_title('empirical')
+
+#EEG FC
+#EEG FC
+sim_FC = np.corrcoef(F.trainingStats.outputs['eeg_testing'])
 emp_FC = np.corrcoef(np.concatenate(list(eeg_data),1))
 fig, ax = plt.subplots(1,2,figsize = (8, 8))
 plt.suptitle("Simulated EEG FC: After Training")
