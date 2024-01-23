@@ -20,6 +20,8 @@ Welcome to WhoBPyT documentation!
    getting_started/installation
    getting_started/running_in_colab
    getting_started/running_in_codespaces
+   getting_started/how_to_contribute
+   getting_started/reviewing_PRs
 
 .. toctree::
    :maxdepth: 2
