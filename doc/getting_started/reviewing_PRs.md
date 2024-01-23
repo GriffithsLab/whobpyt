@@ -21,15 +21,13 @@ Here is the process for reviewing a PR locally. It is the same, with perhaps sma
 
 First - read [this github info page on checking out PRs locally](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/checking-out-pull-requests-locally)
 
-Here is the version of this I (JG) currently use in codespaces:
+Here is the version of this I (JG) currently use in codespaces (AC edited):
 
 1. Pull the PR
 
 ```bash
-git clone git@github.com:johngriffiths/whobpyt whobpyt_PR666
-cd whobpyt_PR666
-git fetch origin pull/666/head:PR_666
-git checkout PR_666
+git fetch upstream pull/<<pull_request_number>>/head:<<pull_request_branch_name>>
+git checkout <<pull_request_branch_name>>
 ```
 
 2. Install whobpyt
@@ -50,14 +48,15 @@ python new_example_script.py # For example
 ```bash
 cd ..
 cd doc
-mkdir _static 
+mkdir _static
+make clean 
 make html
 ```
 
 5. Review the docs build website
 
 ```bash
-cd build/html
+cd _build/html
 python -m http.server
 ```
 
