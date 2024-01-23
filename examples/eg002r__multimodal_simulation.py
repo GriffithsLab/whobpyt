@@ -28,7 +28,7 @@ from whobpyt.models.RWW import ParamsRWW
 from whobpyt.models.EEG import ParamsEEG
 from whobpyt.models.BOLD import ParamsBOLD
 from whobpyt.models.RWW.wong_wang_rt import RNNRWWMM
-from whobpyt.models.RWWNEURO.ParamsRWWNEU import ParamsRWWNEU
+from whobpyt.models.RWWNEURO import ParamsRWWNEU
 from whobpyt.models.RWWEI2 import RWW_EEG_BOLD
 from whobpyt.optimization.custom_cost_RWW2 import CostsRWW2
 from whobpyt.run import Model_fitting
