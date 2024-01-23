@@ -3,8 +3,8 @@
 import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes import par, AbstractNMM, AbstractParams
-from whobpyt.models.RWWNEURO import RNNRWWNEU
-from whobpyt.models.RWWNEURO import ParamsRWWNEU
+from whobpyt.models.RWWNEURO.wong_wang_without_BOLD import RNNRWWNEU
+from whobpyt.models.RWWNEURO.ParamsRWWNEU import ParamsRWWNEU
 from whobpyt.models.BOLD import RNNBOLD, ParamsBOLD
 from whobpyt.models.EEG import RNNEEG, ParamsEEG
 import numpy as np
