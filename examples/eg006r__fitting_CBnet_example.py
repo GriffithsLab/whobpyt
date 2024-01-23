@@ -80,7 +80,7 @@ pop_size =3
 output_size = eeg_data.shape[0]
 TPperWindow = 20
 step_size = 0.0001
-num_epochs = 150
+num_epochs = 20
 tr = 0.001
 state_size = 6
 base_batch_num = 200
@@ -169,7 +169,7 @@ plt.show()
 fig, ax = plt.subplots(1,3, figsize=(12,8))
 ax[0].plot(F.trainingStats.states['testing'][:,2,0].T)
 ax[0].set_title('Test: sourced EEG')
-ax[1].plot(F.trainingStats.outputs['testing'].T)
+ax[1].plot(F.trainingStats.outputs['eeg_testing'].T)
 ax[1].set_title('Test')
 ax[2].plot(eeg_data.T)
 ax[2].set_title('empirical')

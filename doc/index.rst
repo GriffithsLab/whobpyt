@@ -40,5 +40,5 @@ Welcome to WhoBPyT documentation!
    auto_examples/eg002r__multimodal_simulation
    auto_examples/eg003r__fitting_rww_example
    auto_examples/eg004r__fitting_JR_example
-   auto_examples/eg005r__gpu_support
+   auto_examples/eg006r__fitting_CBnet_example
    
