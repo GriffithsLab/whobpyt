@@ -203,21 +203,21 @@ class RNNJANSEN(AbstractNMM):
         param_reg = []
         param_hyper = []
 
-        # Set w_bb, w_ff, and w_ll as attributes as type Parameter if use_fit_gains is True
+        # Set w_pi, w_pe, and w_pp as attributes as type Parameter if use_fit_gains is True
         if self.use_fit_gains:
-            self.w_bb = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the backwards gains
+            self.w_pi = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the backwards gains
                                                 dtype=torch.float32))
-            self.w_ff = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the forward gains
+            self.w_pe = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the forward gains
                                                 dtype=torch.float32))
-            self.w_ll = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the lateral gains
+            self.w_pp = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the lateral gains
                                                 dtype=torch.float32))
-            param_reg.append(self.w_ll)
-            param_reg.append(self.w_ff)
-            param_reg.append(self.w_bb)
+            param_reg.append(self.w_pp)
+            param_reg.append(self.w_pe)
+            param_reg.append(self.w_pi)
         else:
-            self.w_bb = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
-            self.w_ff = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
-            self.w_ll = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
+            self.w_pi = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
+            self.w_pe = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
+            self.w_pp = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
 
         # If use_fit_lfm is True, set lm as an attribute as type Parameter (containing variance information)
         if self.use_fit_lfm:
@@ -329,32 +329,32 @@ class RNNJANSEN(AbstractNMM):
 
         if self.sc.shape[0] > 1:
 
-            # Update the Laplacian based on the updated connection gains w_bb.
-            w_b = torch.exp(self.w_bb) * torch.tensor(self.sc, dtype=torch.float32)
-            w_n_b = w_b / torch.linalg.norm(w_b)
-            self.sc_m_b = w_n_b
-            dg_b = -torch.diag(torch.sum(w_n_b, dim=1))
+            # Update the Laplacian based on the updated connection gains w_pi.
+            w_i= torch.exp(self.w_pi) * torch.tensor(self.sc, dtype=torch.float32)
+            w_n_pi = w_i/ torch.linalg.norm(w_i)
+            self.sc_p_i = w_n_pi
+            dg_b = -torch.diag(torch.sum(w_n_pi, dim=1))
 
-            # Update the Laplacian based on the updated connection gains w_ff.
-            w_f = torch.exp(self.w_ff) * torch.tensor(self.sc, dtype=torch.float32)
-            w_n_f = w_f / torch.linalg.norm(w_f)
-            self.sc_m_f = w_n_f
-            dg_f = -torch.diag(torch.sum(w_n_f, dim=1))
+            # Update the Laplacian based on the updated connection gains w_pe.
+            w_e = torch.exp(self.w_pe) * torch.tensor(self.sc, dtype=torch.float32)
+            w_n_pe = w_e / torch.linalg.norm(w_e)
+            self.sc_p_e = w_n_pe
+            dg_f = -torch.diag(torch.sum(w_n_pe, dim=1))
 
-            # Update the Laplacian based on the updated connection gains w_ll.
-            w_l = torch.exp(self.w_ll) * torch.tensor(self.sc, dtype=torch.float32)
-            w_n_l = (0.5 * (w_l + torch.transpose(w_l, 0, 1))) / torch.linalg.norm(
-                0.5 * (w_l + torch.transpose(w_l, 0, 1)))
-            self.sc_fitted = w_n_l
-            dg_l = -torch.diag(torch.sum(w_n_l, dim=1))
+            # Update the Laplacian based on the updated connection gains w_pp.
+            w_p = torch.exp(self.w_pp) * torch.tensor(self.sc, dtype=torch.float32)
+            w_n_pp = (0.5 * (w_p + torch.transpose(w_p, 0, 1))) / torch.linalg.norm(
+                0.5 * (w_p + torch.transpose(w_p, 0, 1)))
+            self.sc_p_p = w_n_pp
+            dg_l = -torch.diag(torch.sum(w_n_pp, dim=1))
         else:
             l_s = torch.tensor(np.zeros((1, 1)), dtype=torch.float32) #TODO: This is not being called anywhere
             dg_l = 0
             dg_b = 0
             dg_f = 0
-            w_n_l = 0
-            w_n_b = 0
-            w_n_f = 0
+            w_n_pp = 0
+            w_n_pi = 0
+            w_n_pe = 0
 
         self.delays = (self.dist / mu).type(torch.int64)
 
@@ -376,11 +376,11 @@ class RNNJANSEN(AbstractNMM):
                 Ed = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)  # delayed E
                 hE_new = hE.clone()
                 Ed = hE_new.gather(1, self.delays)
-                LEd_b = torch.reshape(torch.sum(w_n_b * torch.transpose(Ed, 0, 1), 1),
+                LEd_b = torch.reshape(torch.sum(w_n_pi * torch.transpose(Ed, 0, 1), 1),
                                     (self.node_size, 1))
-                LEd_f = torch.reshape(torch.sum(w_n_f * torch.transpose(Ed, 0, 1), 1),
+                LEd_f = torch.reshape(torch.sum(w_n_pe * torch.transpose(Ed, 0, 1), 1),
                                     (self.node_size, 1))
-                LEd_l = torch.reshape(torch.sum(w_n_l * torch.transpose(Ed, 0, 1), 1),
+                LEd_l = torch.reshape(torch.sum(w_n_pp * torch.transpose(Ed, 0, 1), 1),
                                     (self.node_size, 1))
                 
                 # TMS (or external) input
