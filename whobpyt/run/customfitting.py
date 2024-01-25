@@ -91,7 +91,7 @@ class Fitting_FNGFPG(AbstractFitting):
                     # initials of history of E
                     delayHist = self.model.createDelayIC(ver = 0) #TODO: Delays are currently is not implemented in various places
                 else:
-                    firstIC = self.model.NMM.next_start_state
+                    firstIC = self.model.next_start_state
                     delayHist = torch.tensor(1.0, device = self.device) # TODO: Delays are currently is not implemented in various places
 
                 # initial the external inputs
@@ -100,7 +100,7 @@ class Fitting_FNGFPG(AbstractFitting):
                 num_blocks = int(self.model.sim_len/block_len)
             
                 ## Noise for the epoch (which has 1 batch)
-                [serialNoise, blockNoise] = self.model.NMM.genNoise(block_len)
+                [serialNoise, blockNoise] = self.model.genNoise(block_len)
 
                 with torch.no_grad():
                     sim_vals, delayHist = self.model.forward(external, firstIC, delayHist, serialNoise)
@@ -127,9 +127,9 @@ class Fitting_FNGFPG(AbstractFitting):
                 nextICs = ICs[:,:,[-1]] #Brackets are to keep the dimension
 
                 self.model.setBlocks(num_blocks)
-                self.model.NMM.next_start_state = newICs
+                self.model.next_start_state = newICs
                 sim_vals, delayHist = self.model.forward(external, newICs, delayHist, blockNoise)
-                self.model.NMM.next_start_state = nextICs #TODO: Update to deal with delays as well
+                self.model.next_start_state = nextICs #TODO: Update to deal with delays as well
                 
                 print("Blocked Finished")
                 
@@ -174,4 +174,3 @@ class Fitting_FNGFPG(AbstractFitting):
         Not implemented yet.
         '''
         pass
-    
