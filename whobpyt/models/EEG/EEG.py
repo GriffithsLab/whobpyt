@@ -44,8 +44,8 @@ class RNNEEG(AbstractNMM):
         #  layer_history: Tensor - [time_steps, regions, num_blocks]
         #
         lm = self.params.lm.value()
-        
-        output_eeg =  torch.matmul(lm, neuroAct) # time x node x batch -> node x time x batch
+        lm_t = (lm.T / torch.sqrt(lm ** 2).sum(1)).T
+        output_eeg =  torch.matmul(lm_t, neuroAct) # time x node x batch -> node x time x batch
     
         return output_eeg  
 
