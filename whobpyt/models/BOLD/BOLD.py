@@ -29,10 +29,7 @@ class BOLD_Layer(torch.nn.Module):
         self.device = device
         
         self.num_blocks = 1
-        self.params_fitted = {}
-        self.params_fitted['modelparameter'] =[]
-        self.params_fitted['hyperparameter'] =[]
-        self.track_params = []
+        
         self.params = params
         
         self.setModelParameters()
@@ -141,4 +138,3 @@ def forward(self, init_state, step_size, sim_len, node_history):
     sim_vals["bold"] = layer_hist[:, :, 4, :].permute((1,0,2)) # Post Permute: Nodes x Time x Batch
     
     return sim_vals, hE
-
