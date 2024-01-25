@@ -87,9 +87,10 @@ class RNNJANSEN(AbstractNMM):
     
     """
 
-    def __init__(self, node_size: int,
-                 TRs_per_window: int, step_size: float, output_size: int, tr: float, sc: np.ndarray, lm: np.ndarray, dist: np.ndarray,
-                 use_fit_gains: bool, use_fit_lfm: bool, params: ParamsJR) -> None:               
+    def __init__(self, params: ParamsJR, node_size=200,
+                 TRs_per_window= 20, step_size=0.0001, output_size=64, tr=0.001, sc=np.ones((200,200)), \
+                 lm=np.ones((64,200)), dist=np.ones((200,200)),
+                 use_fit_gains=True, use_fit_lfm=False):               
         """
         Parameters
         ----------
@@ -118,7 +119,7 @@ class RNNJANSEN(AbstractNMM):
         """
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
-        super(RNNJANSEN, self).__init__()
+        super(RNNJANSEN, self).__init__(params)
         self.state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
         self.output_names = ["eeg"]
         self.track_params = [] #Is populated during setModelParameters()
@@ -140,18 +141,9 @@ class RNNJANSEN(AbstractNMM):
         self.output_size = lm.shape[0]  # number of EEG channels
         
         self.setModelParameters()
+        self.setModelSCParameters()
 
-    def info(self):
-        # TODO: Make sure this method is useful
-        """
-        Returns a dictionary with the names of the states and the output.
-
-        Returns
-        -------
-        Dict[str, List[str]]
-        """
-
-        return {"state_names": ['E', 'Ev', 'I', 'Iv', 'P', 'Pv'], "output_names": ["eeg"]}
+    
     
     def createIC(self, ver):
         """
@@ -195,14 +187,11 @@ class RNNJANSEN(AbstractNMM):
 
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size, delays_max)), dtype=torch.float32)
     
-    def setModelParameters(self):
+    def setModelSCParameters(self):
         """
         Sets the parameters of the model.
         """
-
-        param_reg = []
-        param_hyper = []
-
+        
         # Set w_bb, w_ff, and w_ll as attributes as type Parameter if use_fit_gains is True
         if self.use_fit_gains:
             self.w_bb = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the backwards gains
@@ -211,45 +200,15 @@ class RNNJANSEN(AbstractNMM):
                                                 dtype=torch.float32))
             self.w_ll = Parameter(torch.tensor(np.zeros((self.node_size, self.node_size)) + 0.05, # the lateral gains
                                                 dtype=torch.float32))
-            param_reg.append(self.w_ll)
-            param_reg.append(self.w_ff)
-            param_reg.append(self.w_bb)
+            self.params_fitted['modelparameter'].append(self.w_ll)
+            self.params_fitted['modelparameter'].append(self.w_ff)
+            self.params_fitted['modelparameter'].append(self.w_bb)
         else:
             self.w_bb = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
             self.w_ff = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
             self.w_ll = torch.tensor(np.zeros((self.node_size, self.node_size)), dtype=torch.float32)
 
-        # If use_fit_lfm is True, set lm as an attribute as type Parameter (containing variance information)
-        if self.use_fit_lfm:
-            self.lm = Parameter(torch.tensor(self.lm, dtype=torch.float32))  # leadfield matrix from sourced data to eeg
-            param_reg.append(self.lm)
-        else:
-            self.lm = torch.tensor(self.lm, dtype=torch.float32)
-
-        var_names = [a for a in dir(self.params) if (type(getattr(self.params, a)) == par)]
-        for var_name in var_names:
-            var = getattr(self.params, var_name)
-            if (var.fit_hyper):
-                if var_name == 'lm':
-                    size = var.prior_var.shape
-                    var.val = Parameter(var.val.detach() - 1 * torch.ones((size[0], size[1]))) # TODO: This is not consistent with what user would expect giving a variance 
-                    param_hyper.append(var.prior_mean)
-                    param_hyper.append(var.prior_var)
-                elif (var != 'std_in'):
-                    var.randSet() #TODO: This should be done before giving params to model class
-                    param_hyper.append(var.prior_mean)
-                    param_hyper.append(var.prior_var)
-
-            if (var.fit_par):
-                param_reg.append(var.val) #TODO: This should got before fit_hyper, but need to change where randomness gets added in the code first 
-                
-            if (var.fit_par | var.fit_hyper):
-                self.track_params.append(var_name) #NMM Parameters
-            
-            if var_name == 'lm':
-                setattr(self, var_name, var.val)
-            
-        self.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
+        
 
 
     def forward(self, external, hx, hE):
@@ -313,6 +272,8 @@ class RNNJANSEN(AbstractNMM):
         
         g_f = (lb * con_1 + m(self.params.g_f.value()))
         g_b = (lb * con_1 + m(self.params.g_b.value()))
+        
+        lm = self.params.lm.value()
 
 
         next_state = {}
@@ -424,9 +385,9 @@ class RNNJANSEN(AbstractNMM):
             hE = torch.cat([M, hE[:, :-1]], dim=1)  # update placeholders for pyramidal buffer
 
             # Capture the states at every tr in the placeholders which is then used in the cost calculation.
-            lm_t = (self.lm.T / torch.sqrt(self.lm ** 2).sum(1)).T
+            lm_t = (lm.T / torch.sqrt(lm ** 2).sum(1)).T
             self.lm_t = (lm_t - 1 / self.output_size * torch.matmul(torch.ones((1, self.output_size)), lm_t))
-            temp = cy0 * torch.matmul(self.lm_t, M[:200, :]) - 1 * y0
+            temp = cy0 * torch.matmul(self.lm_t, E-I) - 1 * y0
             eeg_window.append(temp)
 
         # Update the current state.
