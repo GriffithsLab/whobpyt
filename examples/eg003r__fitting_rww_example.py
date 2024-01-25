@@ -22,7 +22,8 @@ sys.path.append('..')
 import whobpyt
 from whobpyt.datatypes import par, Recording
 from whobpyt.data import dataloader
-from whobpyt.models.RWW import RNNRWW, ParamsRWW
+from whobpyt.models.RWW import RNNRWW
+from whobpyt.models.RWW.ParamsRWWinSec import ParamsRWW
 from whobpyt.optimization.custom_cost_RWW import CostsRWW
 from whobpyt.run import Model_fitting
 from whobpyt.data import fetch_hcpl2k8
@@ -76,7 +77,7 @@ node_size = 83
 mask = np.tril_indices(node_size, -1)
 num_epochs = 5
 TPperWindow = 20
-step_size = 0.05
+step_size = 0.005
 input_size = 2
 tr = 0.75
 
