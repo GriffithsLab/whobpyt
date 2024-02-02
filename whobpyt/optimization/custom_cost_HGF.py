@@ -1,6 +1,7 @@
 import torch
 from whobpyt.datatypes.parameter import par
 from whobpyt.datatypes.AbstractLoss import AbstractLoss
+from whobpyt.optimization.cost_TS import CostsTS
 
 class CostsHGF(AbstractLoss):
     def __init__(self, model):
@@ -43,3 +44,4 @@ class CostsHGF(AbstractLoss):
 
         # total loss
         loss = 1*loss_main +  1*sum(loss_prior) + 0* loss_EI
+        return loss, loss_main
