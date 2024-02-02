@@ -2,6 +2,7 @@ import torch
 from torch.nn.parameter import Parameter
 from whobpyt.datatypes import AbstractNMM, AbstractParams, par
 from whobpyt.models.HGF import ParamsHGF
+import numpy as np
 
 class HGF(AbstractNMM):
     def __init__(self, paramsHGF, TRperWindow = 20, node_size =1, tr=1, step_size = .05,  use_fit_gains = False, output_size=1) -> None:
