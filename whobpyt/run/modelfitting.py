@@ -105,22 +105,20 @@ class Model_fitting(AbstractFitting):
 
 
 
-        # initial state
-        X = self.model.createIC(ver = 0)
-        #print(X.shape)
-        # initials of history of E
-        hE = self.model.createDelayIC(ver = 0)
-        #print(hE.shape)
+        
 
         # define masks for getting lower triangle matrix indices
         mask = np.tril_indices(self.model.node_size, -1)
         mask_e = np.tril_indices(self.model.output_size, -1)
 
-
+        # initial state
+        X = self.model.createIC(ver = 0)
+        # initials of history of E
+        hE = self.model.createDelayIC(ver = 0)
 
         # LOOP 1/4: Number of Training Epochs
         for i_epoch in range(num_epochs):
-
+            
             if self.model.model_name == "HGF":
                 # initial state
                 X = self.model.createIC(ver = 0)
@@ -128,10 +126,9 @@ class Model_fitting(AbstractFitting):
                 # initials of history of E
                 hE = self.model.createDelayIC(ver = 0)
                 #print(hE.shape)
-
             # Perform the training in windows.
             if i_epoch == 0:
-                warmup_windows = 2
+                warmup_windows = 0
 
             else:
                 warmup_windows = warmupWindow
@@ -218,7 +215,24 @@ class Model_fitting(AbstractFitting):
                 X = next_window['current_state'].detach().clone() # dtype=torch.float32
                 hE = hE_new.detach().clone() #dtype=torch.float32
 
-            
+                trackedParam = {}
+                exclude_param = ['gains_con'] #This stores SC and LF which are saved seperately
+                if(self.model.track_params):
+                    for par_name in self.model.track_params:
+                        var = getattr(self.model.params, par_name)
+                        if (var.fit_par):
+                            trackedParam[par_name] = var.value().detach().cpu().numpy().copy()
+                            if var.fit_hyper:
+    
+                                trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().cpu().numpy().copy()
+                                trackedParam[par_name + "_prior_var_inv"] = var.prior_var_inv.detach().cpu().numpy().copy()
+                for key, value in self.model.state_dict().items():
+                    if key not in exclude_param:
+                        trackedParam[key] = value.detach().cpu().numpy().ravel().copy()
+                self.trainingStats.appendParam(trackedParam)
+                # Saving the SC and/or Lead Field State at Every Epoch
+                if self.model.use_fit_gains:
+                    self.trainingStats.appendSC(self.model.sc_fitted.detach().cpu().numpy())
             # TIME SERIES: Concatenate all windows together to get one recording
             for name in ['states'] + self.model.output_names:
                     windListDict[name] = np.concatenate(windListDict[name], axis=len(windListDict[name][0].shape)-1)
@@ -231,39 +245,27 @@ class Model_fitting(AbstractFitting):
                 fc = np.corrcoef(ts_emp)
                 if self.model.output_names[i_ts] == 'bold':
                     print(self.model.output_names[i_ts], 'epoch: ', i_epoch,
-                          'loss:', loss_main.detach().cpu().numpy(),
+                          'loss:', 1/windowedTS.shape[0]*sum(loss_his),
                           'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask], fc[mask])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
                           'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
-                else:
+                elif self.model.output_names[i_ts] == 'eeg':
                     print(self.model.output_names[i_ts], 'epoch: ', i_epoch,
-                          'loss:', loss_main.detach().cpu().numpy(),
+                          'loss:', 1/windowedTS.shape[0]*sum(loss_his),
                           'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
                           'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
 
-
+                else:
+                    print(self.model.output_names[i_ts], 'epoch: ', i_epoch,
+                          'loss:', 1/windowedTS.shape[0]*sum(loss_his))
+                
+                # NMM/Other Parameter info for the Epoch (a list where a number is recorded every window of every record)
+                
+                 
 
             # TRAINING_STATS: Put the updated model parameters into the history placeholders at the end of every epoch.
             # Additing Mean Loss for the Epoch
-            self.trainingStats.appendLoss(np.mean(loss_his))
-            # NMM/Other Parameter info for the Epoch (a list where a number is recorded every window of every record)
-            trackedParam = {}
-            exclude_param = ['gains_con'] #This stores SC and LF which are saved seperately
-            if(self.model.track_params):
-                for par_name in self.model.track_params:
-                    var = getattr(self.model.params, par_name)
-                    if (var.fit_par):
-                        trackedParam[par_name] = var.value().detach().cpu().numpy().copy()
-                        if var.fit_hyper:
-
-                            trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().cpu().numpy().copy()
-                            trackedParam[par_name + "_prior_var_inv"] = var.prior_var_inv.detach().cpu().numpy().copy()
-            for key, value in self.model.state_dict().items():
-                if key not in exclude_param:
-                    trackedParam[key] = value.detach().cpu().numpy().ravel().copy()
-            self.trainingStats.appendParam(trackedParam)
-            # Saving the SC and/or Lead Field State at Every Epoch
-            if self.model.use_fit_gains:
-                self.trainingStats.appendSC(self.model.sc_fitted.detach().cpu().numpy())
+            self.trainingStats.appendLoss(loss_his)
+            
             """if self.model.use_fit_lfm:
                 self.trainingStats.appendLF(self.model.lm.detach().cpu().numpy())"""
 
@@ -356,10 +358,12 @@ class Model_fitting(AbstractFitting):
                 print(self.model.output_names[i_ts],
                       'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask], fc[mask])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
                       'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
-            else:
+            elif self.model.output_names[i_ts] == 'eeg':
                 print(self.model.output_names[i_ts],
                       'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
                       'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
+            else:
+                print('ok')
 
         # Saving the last recording of training as a Model_fitting attribute
         for i_out in range(len(self.model.output_names)):
