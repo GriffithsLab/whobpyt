@@ -121,6 +121,14 @@ class Model_fitting(AbstractFitting):
         # LOOP 1/4: Number of Training Epochs
         for i_epoch in range(num_epochs):
 
+            if self.model.model_name == "HGF":
+                # initial state
+                X = self.model.createIC(ver = 0)
+                #print(X.shape)
+                # initials of history of E
+                hE = self.model.createDelayIC(ver = 0)
+                #print(hE.shape)
+
             # Perform the training in windows.
             if i_epoch == 0:
                 warmup_windows = 2
