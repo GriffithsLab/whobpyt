@@ -1,8 +1,9 @@
 import torch
 from whobpyt.datatypes import AbstractNMM, AbstractParams, par
+from torch.nn.parameter import Parameter
 from math import sqrt
 
-class RWWEI2(AbstractNMM):
+class RWWEI2(torch.nn.Module):
     '''
     Reduced Wong Wang Excitatory Inhibatory (RWWEXcInh) Model - Version 2
     
@@ -119,7 +120,12 @@ class RWWEI2(AbstractNMM):
         self.next_start_state = self.next_start_state.to(self.device)
         
         return self.next_start_state
+
+    def createDelayIC(self, ver):
+        # Creates a time series of state variables to represent their past values as needed when delays are used. 
         
+        return torch.tensor(1.0) #Dummy variable if delays are not used
+
     def setBlocks(self, num_blocks):
         self.num_blocks = num_blocks
     

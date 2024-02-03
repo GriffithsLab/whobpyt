@@ -174,4 +174,3 @@ class Fitting_FNGFPG(AbstractFitting):
         Not implemented yet.
         '''
         pass
-    

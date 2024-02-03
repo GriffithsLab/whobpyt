@@ -49,42 +49,7 @@ class CostsRWW(AbstractLoss):
         v_window = state_vals['v']
         x_window = state_vals['x']
         q_window = state_vals['q']
-        if model.use_Gaussian_EI and model.use_Bifurcation:
-            loss_EI = torch.mean(model.E_v_inv * (E_window - model.E_m) ** 2) \
-                      + torch.mean(-torch.log(model.E_v_inv)) + \
-                      torch.mean(model.I_v_inv * (I_window - model.I_m) ** 2) \
-                      + torch.mean(-torch.log(model.I_v_inv)) + \
-                      torch.mean(model.q_v_inv * (q_window - model.q_m) ** 2) \
-                      + torch.mean(-torch.log(model.q_v_inv)) + \
-                      torch.mean(model.v_v_inv * (v_window - model.v_m) ** 2) \
-                      + torch.mean(-torch.log(model.v_v_inv)) \
-                      + 5.0 * (m(model.sup_ca) * m(model.g_IE) ** 2
-                               - m(model.sup_cb) * m(model.params.g_IE.value())
-                               + m(model.sup_cc) - m(model.params.g_EI.value())) ** 2
-        if model.use_Gaussian_EI and not model.use_Bifurcation:
-            loss_EI = torch.mean(model.E_v_inv * (E_window - model.E_m) ** 2) \
-                      + torch.mean(-torch.log(model.E_v_inv)) + \
-                      torch.mean(model.I_v_inv * (I_window - model.I_m) ** 2) \
-                      + torch.mean(-torch.log(model.I_v_inv)) + \
-                      torch.mean(model.q_v_inv * (q_window - model.q_m) ** 2) \
-                      + torch.mean(-torch.log(model.q_v_inv)) + \
-                      torch.mean(model.v_v_inv * (v_window - model.v_m) ** 2) \
-                      + torch.mean(-torch.log(model.v_v_inv))
-
-        if not model.use_Gaussian_EI and model.use_Bifurcation:
-            loss_EI = .1 * torch.mean(
-                torch.mean(E_window * torch.log(E_window) + (1 - E_window) * torch.log(1 - E_window) \
-                           + 0.5 * I_window * torch.log(I_window) + 0.5 * (1 - I_window) * torch.log(
-                    1 - I_window), dim=1)) + \
-                      + 5.0 * (m(model.sup_ca) * m(model.params.g_IE.value()) ** 2
-                               - m(model.sup_cb) * m(model.params.g_IE.value())
-                               + m(model.sup_cc) - m(model.params.g_EI.value())) ** 2
-
-        if not model.use_Gaussian_EI and not model.use_Bifurcation:
-            loss_EI = .1 * torch.mean(
-                torch.mean(E_window * torch.log(E_window) + (1 - E_window) * torch.log(1 - E_window) \
-                           + 0.5 * I_window * torch.log(I_window) + 0.5 * (1 - I_window) * torch.log(
-                    1 - I_window), dim=1))
+        
 
         loss_prior = []
 
@@ -93,19 +58,10 @@ class CostsRWW(AbstractLoss):
         for var_name in variables_p:
             # print(var)
             var = getattr(model.params, var_name)
-            if model.use_Bifurcation:
-                if var.has_prior and var_name not in ['std_in', 'g_EI', 'g_IE'] and \
-                        var_name not in exclude_param:
-                    loss_prior.append(torch.sum((lb + m(var.prior_var)) * \
-                                                (m(var.val) - m(var.prior_mean)) ** 2) \
-                                      + torch.sum(-torch.log(lb + m(var.prior_var)))) #TODO: Double check about converting _v_inv to just variance representation
-            else:
-                if var.has_prior and var_name not in ['std_in'] and \
-                        var_name not in exclude_param:
-                    loss_prior.append(torch.sum((lb + m(var.prior_var)) * \
-                                                (m(var.val) - m(var.prior_mean)) ** 2) \
-                                      + torch.sum(-torch.log(lb + m(var.prior_var)))) #TODO: Double check about converting _v_inv to just variance representation
+            if var.has_prior and var_name not in ['std_in'] and var_name not in exclude_param:
+                loss_prior.append(torch.sum((lb + m(var.prior_var)) * (m(var.val) - m(var.prior_mean)) ** 2) \
+                + torch.sum(-torch.log(lb + m(var.prior_var)))) #TODO: Double check about converting _v_inv to just variance representation
           
         # total loss
-        loss = w_cost * loss_main + sum(loss_prior) + 1 * loss_EI
+        loss = w_cost * loss_main + sum(loss_prior) 
         return loss

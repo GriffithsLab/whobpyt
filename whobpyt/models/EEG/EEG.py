@@ -1,7 +1,7 @@
 import torch
 from whobpyt.datatypes import AbstractMode
 
-class EEG_Layer(AbstractMode):
+class EEG_Layer(torch.nn.Module):
     '''
     
     Lead Field Matrix multiplication which converts Source Space EEG to Channel Space EEG

@@ -8,14 +8,15 @@ from whobpyt.models.EEG import EEG_Layer, EEG_Params
 
 class RWWEI2_EEG_BOLD(RWWEI2):
 
-    model_name = "RWWEI2_EEG_BOLD"
+    
     
     def __init__(self, num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device = torch.device('cpu')):
 
+        
+        super(RWWEI2_EEG_BOLD, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False, device = device)
+        self.model_name = "RWWEI2_EEG_BOLD"
         self.eeg = EEG_Layer(num_regions, paramsEEG, num_channels, device = device)
         self.bold = BOLD_Layer(num_regions, paramsBOLD, device = device)
-        super(RWWEI2_EEG_BOLD, self).__init__(num_regions, paramsNode, Con_Mtx, dist_mtx, step_size, useBC = False, device = device)
-        
         self.node_size = num_regions
         self.step_size = step_size
         self.sim_len = sim_len
@@ -32,13 +33,13 @@ class RWWEI2_EEG_BOLD(RWWEI2):
         self.output_names = ["bold", "eeg"]
         self.track_params = []  #Is populated during setModelParameters()
         
-        self.setModelParameters()
+        self.setModelParameters_here()
 
     def info(self):
         return {"state_names": ['E', 'I', 'x', 'f', 'v', 'q'], "output_names": ["bold", "eeg"]} #TODO: Update to take multiple output names
             
-    def setModelParameters(self):
-        return setModelParameters(self)
+    def setModelParameters_here(self):
+        return setModelParameters_here(self)
         
     def createIC(self, ver):
         return createIC(self, ver)
@@ -51,8 +52,8 @@ class RWWEI2_EEG_BOLD(RWWEI2):
     def forward(self, external, hx, hE, setNoise = None):
         return forward(self, external, hx, hE, setNoise)
 
-def setModelParameters(self):
-    super(RWWEI2_EEG_BOLD, self).setModelParameters() # Currently this is the only one with parameters being fitted
+def setModelParameters_here(self):
+    self.setModelParameters() # Currently this is the only one with parameters being fitted
     self.eeg.setModelParameters()
     self.bold.setModelParameters()    
 

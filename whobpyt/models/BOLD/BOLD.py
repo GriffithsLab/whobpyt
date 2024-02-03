@@ -1,7 +1,7 @@
 import torch
 from whobpyt.datatypes import AbstractMode
    
-class BOLD_Layer(AbstractMode):
+class BOLD_Layer(torch.nn.Module):
     '''
     Balloon-Windkessel Hemodynamic Response Function Forward Model
     
@@ -138,4 +138,3 @@ def forward(self, init_state, step_size, sim_len, node_history):
     sim_vals["bold"] = layer_hist[:, :, 4, :].permute((1,0,2)) # Post Permute: Nodes x Time x Batch
     
     return sim_vals, hE
-

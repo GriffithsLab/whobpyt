@@ -108,7 +108,7 @@ params = ParamsJR(A = par(3.25), a= par(100,100, 2, True, True), B = par(22), b 
 
 # %%
 # call model want to fit
-model = RNNJANSEN(node_size, TPperWindow, step_size, output_size, tr, sc, lm, dist, True, False, params)
+model = RNNJANSEN(params, node_size=node_size, TRs_per_window=TPperWindow, step_size=step_size, output_size=output_size, tr=tr, sc=sc, lm=lm, dist=dist, use_fit_gains=True, use_fit_lfm = False)
 
 # %%
 # create objective function
