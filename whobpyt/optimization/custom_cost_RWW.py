@@ -48,4 +48,4 @@ class CostsRWW(AbstractLoss):
           
         # total loss
         loss = w_cost * loss_main + sum(loss_prior) 
-        return loss
+        return loss, loss_main
