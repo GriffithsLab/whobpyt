@@ -75,7 +75,7 @@ class Model_fitting(AbstractFitting):
             pickle.dump(self, f)
 
     def train(self, u, empRecs: list, 
-              num_epochs: int, TPperWindow: int, learningrate: float = 0.05, lr_2ndLevel: float = 0.05, lr_scheduler: bool = False):
+              num_epochs: int, TPperWindow: int, warmupWindow: int = 0, learningrate: float = 0.05, lr_2ndLevel: float = 0.05, lr_scheduler: bool = False):
         """
         Parameters
         ----------
@@ -130,6 +130,13 @@ class Model_fitting(AbstractFitting):
         
         # LOOP 1/4: Number of Training Epochs
         for i_epoch in range(num_epochs):
+            
+            # Perform the training in windows.
+            if i_epoch == 0:
+                warmup_windows = 100
+
+            else:
+                warmup_windows = warmupWindow
         
             # TRAINING_STATS: placeholders for the history of trainingStats
             loss_his = []  # loss placeholder to take the average for the epoch at the end of the epoch
@@ -149,7 +156,16 @@ class Model_fitting(AbstractFitting):
                 external = torch.tensor(
                     np.zeros([self.model.node_size, self.model.steps_per_TR, self.model.TRs_per_window]),
                     dtype=torch.float32)
+                for TR_i in range(warmup_windows):
+                
 
+
+
+                    # Use the model.forward() function to update next state and get simulated EEG in this batch.
+                    next_window, hE_new = self.model(external, X, hE)
+                    #print(next_window['current_state'])
+                    X = torch.tensor(next_window['current_state'].detach().numpy(), dtype=torch.float32)
+                    hE = torch.tensor(hE_new.detach().numpy(), dtype=torch.float32)
                 # LOOP 3/4: Number of windowed segments for the recording
                 for win_idx in range(windowedTS.shape[0]):
 
@@ -170,14 +186,14 @@ class Model_fitting(AbstractFitting):
                     ts_window = torch.tensor(windowedTS[win_idx, :, :], dtype=torch.float32)
 
                     # calculating loss
-                    loss = self.cost.loss(next_window, ts_window)
+                    loss, loss_main = self.cost.loss(next_window, ts_window)
                     
                     # TIME SERIES: Put the window of simulated forward model.
                     for name in set(self.model.state_names + self.model.output_names):
                         windListDict[name].append(next_window[name].detach().cpu().numpy())
 
                     # TRAINING_STATS: Adding Loss for every training window (corresponding to one backpropagation)
-                    loss_his.append(loss.detach().cpu().numpy())
+                    loss_his.append(loss_main.detach().cpu().numpy())
 
                     # Calculate gradient using backward (backpropagation) method of the loss function.
                     loss.backward(retain_graph=True)
@@ -211,7 +227,7 @@ class Model_fitting(AbstractFitting):
                 fc_sim = np.corrcoef(ts_sim[:, 10:])
 
                 print('epoch: ', i_epoch, 
-                      'loss:', loss.detach().cpu().numpy(),
+                      'loss:', loss_main.detach().cpu().numpy(),
                       'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
                       'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
                       
@@ -232,7 +248,7 @@ class Model_fitting(AbstractFitting):
                         trackedParam[par_name] = var.value().detach().cpu().numpy().copy()
                     if (var.fit_hyper):
                         trackedParam[par_name + "_prior_mean"] = var.prior_mean.detach().cpu().numpy().copy()
-                        trackedParam[par_name + "_prior_var"] = var.prior_var.detach().cpu().numpy().copy()
+                        trackedParam[par_name + "_prior_precision"] = var.prior_precision.detach().cpu().numpy().copy()
             for key, value in self.model.state_dict().items():
                 if key not in exclude_param:
                     trackedParam[key] = value.detach().cpu().numpy().ravel().copy()
@@ -240,8 +256,8 @@ class Model_fitting(AbstractFitting):
             # Saving the SC and/or Lead Field State at Every Epoch
             if self.model.use_fit_gains:
                 self.trainingStats.appendSC(self.model.sc_fitted.detach().cpu().numpy())
-            if self.model.use_fit_lfm:
-                self.trainingStats.appendLF(self.model.lm.detach().cpu().numpy())
+            #if self.model.use_fit_lfm:
+                #self.trainingStats.appendLF(self.model.lm.detach().cpu().numpy())
         
         # Saving the last recording of training as a Model_fitting attribute
         self.lastRec = {}
