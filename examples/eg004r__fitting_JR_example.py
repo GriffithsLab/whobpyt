@@ -79,7 +79,7 @@ node_size = sc.shape[0]
 output_size = eeg_data.shape[0]
 TPperWindow = 20
 step_size = 0.0001
-num_epochs = 20
+num_epochs = 50
 tr = 0.001
 state_size = 6
 base_batch_num = 200
@@ -99,12 +99,15 @@ data_mean = Recording(eeg_data, EEGstep) #dataloader(eeg_data.T, num_epochs, bat
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
 lm = np.zeros((output_size,200))
 lm_v = np.zeros((output_size,200))
-params = ParamsJR(A = par(3.25), a= par(100,100, 2, True, True), B = par(22), b = par(50, 50, 1, True, True), g=par(40,40,2, True, True), g_f=par(1), g_b=par(1), \
-                  c1 = par(135, 135, 1, True, True), c2 = par(135*0.8, 135*0.8, 1, True, True), c3 = par(135*0.25, 135*0.25, 1, True, True), c4 = par(135*0.25, 135*0.25, 1, True, True),\
-                  std_in= par(1,1, 1/10, True, True), vmax= par(5), v0=par(6), r=par(0.56), y0=par(2, 2, 1/4, True, True),\
-                  mu = par(1., 1., 0.4, True, True), #k = [10, .3],
+params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True), \
+                  g=par(400), g_f=par(10), g_b=par(10), \
+                  c1 = par(135, 135, 1, True), c2 = par(135*0.8, 135*0.8, 1, True), \
+                  c3 = par(135*0.25, 135*0.25, 1, True), c4 = par(135*0.25, 135*0.25, 1, True),\
+                  std_in= par(10,10, 0.2, True), vmax= par(5), v0=par(6), r=par(0.56), y0=par(2, 2, 0.2, True),\
+                  mu = par(np.log(1.5), np.log(1.5), 0.1, True, True, lb=0.1), k = par(10,10, 0.2, True, lb =1),
                   #cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \
-                  cy0 = par(50, 50, 1, True, True), ki=par(ki0), lm=par(lm, lm, 5 * np.ones((output_size, node_size))+lm_v, True, True))
+                  cy0 = par(50, 50, 1, True), ki=par(ki0), \
+                  lm=par(lm, lm, 0.1 * np.ones((output_size, node_size))+lm_v, True))
 
 # %%
 # call model want to fit
@@ -123,7 +126,7 @@ F = Model_fitting(model, ObjFun)
 # ---------------------------------------------------
 #
 u = np.zeros((node_size,hidden_size,time_dim))
-u[:,:,110:120]= 200
+u[:,:,110:120]= 1000
 F.train(u = u, empRecs = [data_mean], num_epochs = num_epochs, TPperWindow = TPperWindow)
 
 # %%

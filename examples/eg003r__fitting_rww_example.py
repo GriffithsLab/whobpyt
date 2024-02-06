@@ -105,8 +105,10 @@ data_mean = Recording(ts.T, fMRIstep) #dataloader(ts, num_epoches, TPperWindow)
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
-params = ParamsRWW(g=par(400, 400, 1/np.sqrt(10), True, True), g_EE=par(1.5, 1.5, 1/np.sqrt(50), True, True), g_EI =par(0.8, 0.8, 1/np.sqrt(50), True, True), \
-                   g_IE=par(0.6, 0.6, 1/np.sqrt(50), True, True), I_0 =par(0.2), std_in=par(0.0), std_out=par(0.00))
+params = ParamsRWW(g=par(400, 400, 1/np.sqrt(10), True), g_EE=par(1.5, 1.5, 1/np.sqrt(50), True), \
+g_EI =par(0.8, 0.8, 1/np.sqrt(50), True), \
+                   g_IE=par(0.6, 0.6, 1/np.sqrt(50), True), I_0 =par(0.2), \
+                   std_in=par(np.log(0.1), np.log(0.1), 0.1, True, True, lb =0.02))
 
 # %%
 # call model want to fit
