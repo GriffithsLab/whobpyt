@@ -241,40 +241,36 @@ class RNNJANSEN(AbstractNMM):
         m = torch.nn.ReLU()
         
         # Define some constants        
+        # Define some constants
         con_1 = torch.tensor(1.0, dtype=torch.float32) # Define constant 1 tensor
-        conduct_lb = 1.5  # lower bound for conduct velocity
+       
         u_2ndsys_ub = 500  # the bound of the input for second order system
-        noise_std_lb = 20  # lower bound of std of noise
-        lb = 0.01  # lower bound of local gains
-        k_lb = 0.5  # lower bound of coefficient of external inputs
-
+        
 
         # Defining NMM Parameters to simplify later equations
         #TODO: Change code so that params returns actual value used without extras below
-        A = 0 * con_1 + m(self.params.A.value()) 
-        a = 1 * con_1 + m(self.params.a.value())
-        B = 0 * con_1 + m(self.params.B.value())
-        b = 1 * con_1 + m(self.params.b.value())
-        g = (lb * con_1 + m(self.params.g.value()))
-        c1 = (lb * con_1 + m(self.params.c1.value()))
-        c2 = (lb * con_1 + m(self.params.c2.value()))
-        c3 = (lb * con_1 + m(self.params.c3.value()))
-        c4 = (lb * con_1 + m(self.params.c4.value()))
-        std_in = (noise_std_lb * con_1 + m(self.params.std_in.value()))
+        A = self.params.A.value()
+        a = self.params.a.value()
+        B = self.params.B.value()
+        b = self.params.b.value()
+        g = self.params.g.value()
+        c1 = self.params.c1.value()
+        c2 = self.params.c2.value()
+        c3 = self.params.c3.value()
+        c4 = self.params.c4.value()
+        std_in = self.params.std_in.value() #around 20
         vmax = self.params.vmax.value()
         v0 = self.params.v0.value()
         r = self.params.r.value()
         y0 = self.params.y0.value()
-        mu = (conduct_lb * con_1 + m(self.params.mu.value()))
-        k = (k_lb * con_1 + m(self.params.k.value()))
+        mu = self.params.mu.value()
+        k =  self.params.k.value()
         cy0 = self.params.cy0.value()
         ki = self.params.ki.value()
-        
-        g_f = (lb * con_1 + m(self.params.g_f.value()))
-        g_b = (lb * con_1 + m(self.params.g_b.value()))
-        
-        lm = self.params.lm.value()
 
+        g_f = self.params.g_f.value()
+        g_b = self.params.g_b.value()
+        lm = self.params.lm.value()
 
         next_state = {}
 
@@ -285,7 +281,7 @@ class RNNJANSEN(AbstractNMM):
         Mv = hx[:, 3:4]  # voltage of pyramidal population
         Ev = hx[:, 4:5]  # voltage of exictory population
         Iv = hx[:, 5:6]  # voltage of inhibitory population
-
+        #print(M.shape)
         dt = self.step_size
 
         if self.sc.shape[0] > 1:
@@ -330,6 +326,7 @@ class RNNJANSEN(AbstractNMM):
         Ev_window = []
         Iv_window = []
         Mv_window = []
+        states_window = []
 
         # Use the forward model to get EEG signal at the i-th element in the window.
         for i_window in range(self.TRs_per_window):
@@ -343,9 +340,11 @@ class RNNJANSEN(AbstractNMM):
                                     (self.node_size, 1))
                 LEd_l = torch.reshape(torch.sum(w_n_l * torch.transpose(Ed, 0, 1), 1),
                                     (self.node_size, 1))
-                
+
                 # TMS (or external) input
                 u_tms = external[:, step_i:step_i + 1, i_window]
+                
+                #print('u',u_tms.shape)
                 rM = k * ki * u_tms + std_in * torch.randn(self.node_size, 1) + \
                     1 * g * (LEd_l + 1 * torch.matmul(dg_l, M)) + \
                     sigmoid(E - I, vmax, v0, r)  # firing rate for pyramidal population
@@ -371,10 +370,10 @@ class RNNJANSEN(AbstractNMM):
                 Ev = 1000*torch.tanh(ddEv/1000)
                 Iv = 1000*torch.tanh(ddIv/1000)
                 Mv = 1000*torch.tanh(ddMv/1000)
-
+                #print('after M', M.shape)
                 # Update placeholders for pyramidal buffer
                 hE[:, 0] = M[:, 0]
-                
+            
             # Capture the states at every tr in the placeholders for checking them visually.
             M_window.append(M)
             I_window.append(I)
@@ -382,12 +381,14 @@ class RNNJANSEN(AbstractNMM):
             Mv_window.append(Mv)
             Iv_window.append(Iv)
             Ev_window.append(Ev)
+            # Capture the states at every tr in the placeholders for checking them visually.
+
             hE = torch.cat([M, hE[:, :-1]], dim=1)  # update placeholders for pyramidal buffer
 
             # Capture the states at every tr in the placeholders which is then used in the cost calculation.
             lm_t = (lm.T / torch.sqrt(lm ** 2).sum(1)).T
             self.lm_t = (lm_t - 1 / self.output_size * torch.matmul(torch.ones((1, self.output_size)), lm_t))
-            temp = cy0 * torch.matmul(self.lm_t, E-I) - 1 * y0
+            temp = cy0 * torch.matmul(self.lm_t, E -I) - 1 * y0
             eeg_window.append(temp)
 
         # Update the current state.
