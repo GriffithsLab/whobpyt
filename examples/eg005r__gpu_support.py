@@ -72,9 +72,9 @@ plt.title("SC of Artificial Data")
 # Create a RWW Params
 paramsNode = ParamsRWWEI2(num_regions)
 
-paramsNode.J = par((0.15 * np.ones(num_regions)), fit_par = True, asLog = True) #This is a parameter that will be updated during training
-paramsNode.G = par(torch.tensor(1.0), None, None, True, False, False)
-paramsNode.sig = par(torch.tensor(0.01), None, None, True, False, False)
+paramsNode.J = par((0.15 * np.ones(num_regions)),0.15 * np.ones(num_regions),0.01 * np.ones(num_regions), fit_par = True, asLog = True) #This is a parameter that will be updated during training
+paramsNode.G = par(1,1,0.1, True)
+paramsNode.sig = par(np.log(0.01),np.log(0.01), 0.1, True, True)
 paramsNode.to(device)
 
 #Create #EEG Params
