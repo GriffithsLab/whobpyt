@@ -46,5 +46,5 @@ class CostsmmRWWEI2(AbstractLoss):
         if returnLossComponents:
             return totalLoss, (S_E_mean_loss.item(), S_I_mean_loss.item(), EEG_PSD_loss.item(), EEG_FC_loss.item(), BOLD_PSD_loss.item(), BOLD_FC_loss.item())
         else:
-            return totalLoss
+            return totalLoss, totalLoss
             
