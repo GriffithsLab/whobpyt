@@ -166,8 +166,8 @@ class RNNCBNET(AbstractNMM):
             Tensor of shape (node_size, state_size) with random values between `state_lb` and `state_ub`.
         """
 
-        state_lb = -0.5
-        state_ub = 0.5
+        state_lb = -0.1
+        state_ub = 0.1
 
         return torch.tensor(np.random.uniform(-1, 1, (self.node_size, self.pop_size, self.state_size))\
                              + np.array([-60, 64, 64, 64]), dtype=torch.float32)
@@ -188,8 +188,8 @@ class RNNCBNET(AbstractNMM):
         """
 
         delays_max = 500
-        state_ub = 0.2
-        state_lb = -0.2
+        state_ub = 20
+        state_lb = -20
 
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  delays_max)), dtype=torch.float32)
 
@@ -360,7 +360,7 @@ class RNNCBNET(AbstractNMM):
                 # LEd+torch.matmul(dg,E): Laplacian on delayed E
                 rV = gL*(VL) + gE*VE +gI*VI \
                           + gNMDA*self.m_nmda(alpha_mg,V)*(VNMDA)-(0.1+m(gL + gE +gI + gNMDA*self.m_nmda(alpha_mg,V)))*V\
-                          + u_tms + sigma_V*torch.randn(self.node_size, self.pop_size)
+                          + k*ki*u_tms + sigma_V*torch.randn(self.node_size, self.pop_size)
                 #print((LEd_f + 1 * torch.matmul(dg_f, (V[:,self.pop_names == 'E']- V[:,self.pop_names == 'I']))).shape)
                 rV[:,P_ind] += g * (
                           LEd_l + 1 * torch.matmul(dg_l, (V[:,P_ind])))
@@ -411,7 +411,7 @@ class RNNCBNET(AbstractNMM):
             self.lm_t = (lm_t - 1 / self.output_size * torch.matmul(torch.ones((1, self.output_size)),
                                                                       lm_t))  # s2o_coef *
             #print(V[:,E_ind].shape)
-            temp = cy0 * torch.matmul(self.lm_t, (V[:,E_ind]-1*V[:,I_ind].mean())) - 1 * y0
+            temp = cy0 * torch.matmul(self.lm_t, (V[:,E_ind]-1*V[:,I_ind])) - 1 * y0
             eeg_window.append(temp)  # torch.abs(E) - torch.abs(I) + 0.0*noiseEEG)
 
         # Update the current state.
