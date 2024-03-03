@@ -101,17 +101,22 @@ data_mean = dataloader(eeg_data.T, num_epochs, TPperWindow)
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
 lm = np.zeros((output_size,200))
 lm_v = np.zeros((output_size,200))
-params = ParamsCBnet( g= par(400), g_f = par(10), g_b=par(10),\
-                  sigma_V=par(np.log(50), np.log(50), 1, True, True),\
-                   sigma_g=par(np.log(1), np.log(1), .1, True, True), \
-                  y0=par(-2,-2, .2, True),  \
+params = ParamsCBnet( g= par(100,100,1), g_f = par(10, 10,1, True), g_b=par(10, 10,1, True),\
+                  sigma_V=par(np.log(5), np.log(5), .1, True, True),\
+                   sigma_g=par(np.log(1), np.log(1.1), .1, True, True), \
+                  y0=par(2,2, .2, True),  \
                    pi_sigma=par(np.log(32)*np.ones((3,1)), np.log(32)*np.ones((3,1)), 0.1*np.ones((3,1)), True, True),\
                    mu = par(np.log(1.5), np.log(1.5), 0.1, True, True), k = par(10, 10, 1, True), \
-                  gamma_gE= par(.5*np.ones((3,3)), .5*np.ones((3,3)),  0.1*np.ones((3,3)), True, True), \
-                  gamma_gI = par(.5*np.ones((3,3)), .5*np.ones((3,3)),  0.1*np.ones((3,3)), True, True), \
+                  gamma_gE= par(np.log(.5*np.ones((3,3))), np.log(.5*np.ones((3,3))),  0.1*np.ones((3,3)), True, True), \
+                  gamma_gI = par(np.log(.5*np.ones((3,3))), np.log(.5*np.ones((3,3))),  0.1*np.ones((3,3)), True, True), \
                    gamma_k = par(30),\
-                   gamma_gNMDA = par(.5*np.ones((3,3)), .5*np.ones((3,3)), 0.1*np.ones((3,3)), True, True),\
-                   cy0 = par(50, 50, 1, True), ki=par(ki0), \
+                      C= par(np.array([np.log(8/1000), np.log(8/1000), np.log(8/1000)]), \
+                          np.array([np.log(8/1000), np.log(8/1000), np.log(8/1000)]), 0.01*np.ones((3,)),  True, True),
+                kappa=par(np.array([1000/4, 1000/16, 1000/100]),\
+                          np.array([1000/4, 1000/16, 1000/100]),\
+                          np.array([10, 1, 0.2]), True),
+                   gamma_gNMDA = par(np.log(.5*np.ones((3,3))), np.log(.5*np.ones((3,3))), 0.1*np.ones((3,3)), True, True),\
+                   cy0 = par(50, 50, 1, True),  ki=par(ki0), \
                    lm=par(lm, lm, .1 * np.ones((output_size, node_size))+lm_v, True))
 
 model = RNNCBNET(params, node_size=node_size, pop_size=pop_size,TRs_per_window = TPperWindow, step_size=step_size, output_size=output_size, tr=tr, sc=sc, lm=lm, dist=dist, use_fit_gains=True)
