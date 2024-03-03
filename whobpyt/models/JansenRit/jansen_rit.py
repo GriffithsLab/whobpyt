@@ -277,7 +277,7 @@ class RNNJANSEN(AbstractNMM):
 
         Mv = hx[:, 0:1, 1]  # voltage of pyramidal population
         Ev = hx[:, 1:2, 1]  # voltage of exictory population
-        Iv = hx[:, 2:3, 0]  # voltage of inhibitory population
+        Iv = hx[:, 2:3, 1]  # voltage of inhibitory population
         #print(M.shape)
         dt = self.step_size
 
