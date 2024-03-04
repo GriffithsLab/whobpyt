@@ -160,9 +160,9 @@ plt.show()
 # %%
 # Plot E I and simulated BOLD
 fig, ax = plt.subplots(1, 3, figsize=(12, 8))
-ax[0].plot(F.lastRec['E'].npTS().T)
+ax[0].plot(F.lastRec['popE'].npTS().T)
 ax[0].set_title('Test: E')
-ax[1].plot(F.lastRec['I'].npTS().T)
+ax[1].plot(F.lastRec['popI'].npTS().T)
 ax[1].set_title('Test: I')
 ax[2].plot(F.lastRec['bold'].npTS().T)
 ax[2].set_title('Test: BOLD')
