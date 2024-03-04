@@ -142,7 +142,10 @@ class Model_fitting(AbstractFitting):
 
                 # TIME SERIES: Create placeholders for the simulated states and outputs of entire time series corresponding to one recording
                 windListDict = {} # A Dictionary with a List of windowed time series
-                for name in set(self.model.state_names + self.model.output_names):
+                for name_pop in list(self.model.pop_names):
+                    for name_state in list(self.model.state_names):
+                        windListDict[name_pop+name_state] = []
+                for name in list(self.model.output_names):
                     windListDict[name] = []
                 
                 # initial the external inputs
@@ -173,7 +176,10 @@ class Model_fitting(AbstractFitting):
                     loss = self.cost.loss(next_window, ts_window)
                     
                     # TIME SERIES: Put the window of simulated forward model.
-                    for name in set(self.model.state_names + self.model.output_names):
+                    for name_pop in list(self.model.pop_names):
+                        for name_state in list(self.model.state_names):
+                            windListDict[name_pop+name_state].append(next_window[name_pop+name_state].detach().cpu().numpy())
+                    for name in list(self.model.output_names):
                         windListDict[name].append(next_window[name].detach().cpu().numpy())
 
                     # TRAINING_STATS: Adding Loss for every training window (corresponding to one backpropagation)
@@ -204,8 +210,11 @@ class Model_fitting(AbstractFitting):
                 fc = np.corrcoef(ts_emp)
 
                 # TIME SERIES: Concatenate all windows together to get one recording
-                for name in set(self.model.state_names + self.model.output_names):
-                        windListDict[name] = np.concatenate(windListDict[name], axis=1)
+                for name_pop in list(self.model.pop_names):
+                    for name_state in list(self.model.state_names):
+                        windListDict[name_pop+name_state] = np.concatenate(windListDict[name_pop+name_state], axis=1)
+                for name in list(self.model.output_names):
+                    windListDict[name] = np.concatenate(windListDict[name], axis=1)
 
                 ts_sim = windListDict[self.model.output_names[0]]
                 fc_sim = np.corrcoef(ts_sim[:, 10:])
@@ -245,7 +254,11 @@ class Model_fitting(AbstractFitting):
         
         # Saving the last recording of training as a Model_fitting attribute
         self.lastRec = {}
-        for name in set(self.model.state_names + self.model.output_names):
+        for name_pop in list(self.model.pop_names):
+            for name_state in list(self.model.state_names):
+                self.lastRec[name_pop+name_state] = Recording(windListDict[name_pop+name_state], step_size = self.model.step_size)
+        
+        for name in list(self.model.output_names):
             self.lastRec[name] = Recording(windListDict[name], step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
 
     def evaluate(self, u, empRec: list, TPperWindow: int, base_window_num: int = 0, transient_num: int = 10): 
@@ -278,7 +291,10 @@ class Model_fitting(AbstractFitting):
         
         # Create placeholders for the simulated states and outputs of entire time series corresponding to one recording
         windListDict = {} # A Dictionary with a List of windowed time series
-        for name in set(self.model.state_names + self.model.output_names):
+        for name_pop in list(self.model.pop_names):
+            for name_state in list(self.model.state_names):
+                windListDict[name_pop+name_state] = []
+        for name in list(self.model.output_names):
             windListDict[name] = []
 
         num_windows = int(empRec.length/TPperWindow)
@@ -300,7 +316,10 @@ class Model_fitting(AbstractFitting):
 
             # TIME SERIES: Put the window of simulated forward model.
             if win_idx > base_window_num - 1:
-                for name in set(self.model.state_names + self.model.output_names):
+                for name_pop in list(self.model.pop_names):
+                    for name_state in list(self.model.state_names):
+                        windListDict[name_pop+name_state].append(next_window[name_pop+name_state].detach().cpu().numpy())
+                for name in list(self.model.output_names):
                     windListDict[name].append(next_window[name].detach().cpu().numpy())
 
             # last update current state using next state...
@@ -313,7 +332,10 @@ class Model_fitting(AbstractFitting):
         fc = np.corrcoef(ts_emp)
         
         # TIME SERIES: Concatenate all windows together to get one recording
-        for name in set(self.model.state_names + self.model.output_names):
+        for name_pop in list(self.model.pop_names):
+            for name_state in list(self.model.state_names):
+                windListDict[name_pop+name_state] = np.concatenate(windListDict[name_pop+name_state], axis=1)
+        for name in list(self.model.output_names):
             windListDict[name] = np.concatenate(windListDict[name], axis=1)
         
         ts_sim = windListDict[self.model.output_names[0]]
@@ -324,8 +346,12 @@ class Model_fitting(AbstractFitting):
         
         # Saving the last recording of training as a Model_fitting attribute
         self.lastRec = {}
-        for name in set(self.model.state_names + self.model.output_names):
-            self.lastRec[name] = Recording(windListDict[name], step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
+        for name_pop in list(self.model.pop_names):
+            for name_state in list(self.model.state_names):
+                self.lastRec[name_pop+name_state] = Recording(windListDict[name_pop+name_state], step_size = self.model.step_size)
+        
+        for name in list(self.model.output_names):
+            self.lastRec[name] = Recording(windListDict[name], step_size = self.model.step_size)
 
     def simulate(self, u, numTP: int, base_window_num: int = 0, transient_num: int = 10):
         """
