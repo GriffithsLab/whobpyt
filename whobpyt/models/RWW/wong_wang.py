@@ -90,7 +90,7 @@ class RNNRWW(AbstractNMM):
     """
     
 
-    def __init__(self, params: ParamsRWW, node_size = 68, TRs_per_window = 20, step_size = 0.05,  \
+    def __init__(self, params: ParamsRWW, node_size = 68, TRs_per_window = 20, step_size = 0.05, batch_size =1, \
                    tr=1.0, sc=np.ones((68,68)), use_fit_gains= True):
         """
         Parameters
@@ -115,9 +115,10 @@ class RNNRWW(AbstractNMM):
         
         super(RNNRWW, self).__init__(params)
         
-        self.state_names = ['E', 'I', 'x', 'f', 'v', 'q']
-        self.output_names = ["bold"]
+        self.state_names = np.array(['E', 'I', 'x', 'f', 'v', 'q'])
+        self.output_names = np.array(["bold"])
         
+        self.pop_names = np.array(["pop"])
         self.model_name = "RWW"
         self.state_size = 6  # 6 states WWD model
         # self.input_size = input_size  # 1 or 2
@@ -126,6 +127,8 @@ class RNNRWW(AbstractNMM):
         self.steps_per_TR = int(tr / step_size)
         self.TRs_per_window = TRs_per_window  # size of the batch used at each step
         self.node_size = node_size  # num of ROI
+        self.pop_size =1
+        self.batch_size = batch_size
         self.sc = sc  # matrix node_size x node_size structure connectivity
         self.sc_fitted = torch.tensor(sc, dtype=torch.float32)  # placeholder
         self.use_fit_gains = use_fit_gains  # flag for fitting gains
@@ -159,7 +162,7 @@ class RNNRWW(AbstractNMM):
         """
         
         # initial state
-        return torch.tensor(0.2 * np.random.uniform(0, 1, (self.node_size, self.state_size)) + np.array(
+        return torch.tensor(0.2 * np.random.uniform(0, 1, (self.node_size,  self.batch_size, self.pop_size, self.state_size)) + np.array(
                 [0, 0, 0, 1.0, 1.0, 1.0]), dtype=torch.float32)
 
     
@@ -182,7 +185,7 @@ class RNNRWW(AbstractNMM):
         state_ub = 0.5
         state_lb = 0.1
 
-        return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  delays_max)), dtype=torch.float32)
+        return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  delays_max)),dtype=torch.float32)
     
     def setModelSCParameters(self):
         
@@ -276,10 +279,10 @@ class RNNRWW(AbstractNMM):
     
         # hx is current state (6) 0: E 1:I (neural activities) 2:x 3:f 4:v 5:f (BOLD)
     
-        x = hx[:,2:3]
-        f = hx[:,3:4]
-        v = hx[:,4:5]
-        q = hx[:,5:6]
+        x = hx[:,:,0,2]
+        f = hx[:,:,0,3]
+        v = hx[:,:,0,4]
+        q = hx[:,:,0,5]
     
         dt = torch.tensor(self.step_size, dtype=torch.float32)
     
@@ -311,8 +314,8 @@ class RNNRWW(AbstractNMM):
     
         
         
-        E = hx[:,0:1]
-        I = hx[:,1:2]
+        E = hx[:,:,0,0]
+        I = hx[:,:,0,1]
         #print(E.shape)
         # Use the forward model to get neural activity at ith element in the window.
         
@@ -371,16 +374,16 @@ class RNNRWW(AbstractNMM):
         
     
         # Update the current state.
-        current_state = torch.cat([E, I, x,\
-                  f, v, q], dim=1)
+        current_state = torch.cat([E[:,:,np.newaxis,np.newaxis], I[:,:,np.newaxis,np.newaxis], x[:,:,np.newaxis,np.newaxis],\
+        f[:,:,np.newaxis, np.newaxis], v[:,:,np.newaxis,np.newaxis], q[:,:,np.newaxis,np.newaxis]], dim=3)
         next_state['current_state'] = current_state
         next_state['bold'] = torch.cat(bold_window, dim =1)
-        next_state['E'] = torch.cat(E_window, dim =1)
-        next_state['I'] = torch.cat(I_window, dim =1)
-        next_state['x'] = torch.cat(x_window, dim =1)
-        next_state['f'] = torch.cat(f_window, dim =1)
-        next_state['v'] = torch.cat(v_window, dim =1)
-        next_state['q'] = torch.cat(q_window, dim =1)
+        next_state['popE'] = torch.cat(E_window, dim =1)
+        next_state['popI'] = torch.cat(I_window, dim =1)
+        next_state['popx'] = torch.cat(x_window, dim =1)
+        next_state['popf'] = torch.cat(f_window, dim =1)
+        next_state['popv'] = torch.cat(v_window, dim =1)
+        next_state['popq'] = torch.cat(q_window, dim =1)
         
         return next_state, hE
         

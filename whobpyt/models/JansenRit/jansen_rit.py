@@ -88,7 +88,7 @@ class RNNJANSEN(AbstractNMM):
     """
 
     def __init__(self, params: ParamsJR, node_size=200,
-                 TRs_per_window= 20, step_size=0.0001, output_size=64, tr=0.001, sc=np.ones((200,200)), \
+                 TRs_per_window= 20, step_size=0.0001, output_size=64, batch_size = 1,tr=0.001, sc=np.ones((200,200)), \
                  lm=np.ones((64,200)), dist=np.ones((200,200)),
                  use_fit_gains=True, use_fit_lfm=False):               
         """
@@ -120,12 +120,16 @@ class RNNJANSEN(AbstractNMM):
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
         super(RNNJANSEN, self).__init__(params)
-        self.state_names = ['E', 'Ev', 'I', 'Iv', 'P', 'Pv']
+        self.pop_names = np.array(['P', 'E', 'I'])
+        self.state_names = np.array(['current', 'voltage'])
         self.output_names = ["eeg"]
+        
         self.track_params = [] #Is populated during setModelParameters()
         
         self.model_name = "JR"
-        self.state_size = 6  # 6 states JR model
+        self.pop_size = 3  # 3 populations JR
+        self.state_size = 2  # 2 states in each population
+        self.batch_size = batch_size
         self.tr = tr  # tr ms (integration step 0.1 ms)
         self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.1 ms
         self.steps_per_TR = int(tr / step_size)
@@ -163,8 +167,7 @@ class RNNJANSEN(AbstractNMM):
         state_lb = -0.5
         state_ub = 0.5
         
-        return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size, self.state_size)),
-                             dtype=torch.float32)
+        return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  self.batch_size, self.pop_size, self.state_size)),dtype=torch.float32)
                              
     def createDelayIC(self, ver):
         """
@@ -278,13 +281,13 @@ class RNNJANSEN(AbstractNMM):
 
         next_state = {}
 
-        M = hx[:, 0:1]  # current of pyramidal population
-        E = hx[:, 1:2]  # current of excitory population
-        I = hx[:, 2:3]  # current of inhibitory population
+        M = hx[:,:, 0, 0]  # current of pyramidal population
+        E = hx[:,:, 1, 0]  # current of excitory population
+        I = hx[:,:, 2, 0]  # current of inhibitory population
 
-        Mv = hx[:, 3:4]  # voltage of pyramidal population
-        Ev = hx[:, 4:5]  # voltage of exictory population
-        Iv = hx[:, 5:6]  # voltage of inhibitory population
+        Mv = hx[:,:, 0, 1]  # voltage of pyramidal population
+        Ev = hx[:,:, 1, 1]  # voltage of exictory population
+        Iv = hx[:,:, 2, 1]  # voltage of inhibitory population
 
         dt = self.step_size
 
@@ -376,12 +379,12 @@ class RNNJANSEN(AbstractNMM):
                 hE[:, 0] = M[:, 0]
                 
             # Capture the states at every tr in the placeholders for checking them visually.
-            M_window.append(M)
-            I_window.append(I)
-            E_window.append(E)
-            Mv_window.append(Mv)
-            Iv_window.append(Iv)
-            Ev_window.append(Ev)
+            M_window.append(M[:,:,np.newaxis])
+            I_window.append(I[:,:,np.newaxis])
+            E_window.append(E[:,:,np.newaxis])
+            Mv_window.append(Mv[:,:,np.newaxis])
+            Iv_window.append(Iv[:,:,np.newaxis])
+            Ev_window.append(Ev[:,:,np.newaxis])
             hE = torch.cat([M, hE[:, :-1]], dim=1)  # update placeholders for pyramidal buffer
 
             # Capture the states at every tr in the placeholders which is then used in the cost calculation.
@@ -391,15 +394,16 @@ class RNNJANSEN(AbstractNMM):
             eeg_window.append(temp)
 
         # Update the current state.
-        current_state = torch.cat([M, E, I, Mv, Ev, Iv], dim=1)
+        current_state = torch.cat([torch.cat([M[:,:,np.newaxis], E[:,:,np.newaxis], I[:,:,np.newaxis]], dim=2)[:,:,:,np.newaxis], \
+                                   torch.cat([Mv[:,:,np.newaxis], Ev[:,:,np.newaxis], Iv[:,:,np.newaxis]], dim=2)[:,:,:,np.newaxis]], dim=3)
         next_state['current_state'] = current_state
         next_state['eeg'] = torch.cat(eeg_window, dim=1)
-        next_state['E'] = torch.cat(E_window, dim=1)
-        next_state['I'] = torch.cat(I_window, dim=1)
-        next_state['P'] = torch.cat(M_window, dim=1)
-        next_state['Ev'] = torch.cat(Ev_window, dim=1)
-        next_state['Iv'] = torch.cat(Iv_window, dim=1)
-        next_state['Pv'] = torch.cat(Mv_window, dim=1)
+        next_state['Ecurrent'] = torch.cat(E_window, dim=1)
+        next_state['Icurrent'] = torch.cat(I_window, dim=1)
+        next_state['Pcurrent'] = torch.cat(M_window, dim=1)
+        next_state['Evoltage'] = torch.cat(Ev_window, dim=1)
+        next_state['Ivoltage'] = torch.cat(Iv_window, dim=1)
+        next_state['Pvoltage'] = torch.cat(Mv_window, dim=1)
 
         return next_state, hE
 
