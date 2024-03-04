@@ -162,7 +162,7 @@ plt.show()
 # %%
 # Plot the EEG
 fig, ax = plt.subplots(1,3, figsize=(12,8))
-ax[0].plot(F.lastRec['P'].npTS().T)
+ax[0].plot(F.lastRec['Pcurrent'].npTS().T)
 ax[0].set_title('Test: sourced EEG')
 ax[1].plot(F.lastRec["eeg"].npTS().T)
 ax[1].set_title('Test')
