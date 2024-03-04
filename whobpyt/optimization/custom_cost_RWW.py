@@ -43,12 +43,12 @@ class CostsRWW(AbstractLoss):
 
         loss_EI = 0
 
-        E_window = state_vals['E']
+        """E_window = state_vals['E']
         I_window = state_vals['I']
         f_window = state_vals['f']
         v_window = state_vals['v']
         x_window = state_vals['x']
-        q_window = state_vals['q']
+        q_window = state_vals['q']"""
         
 
         loss_prior = []
