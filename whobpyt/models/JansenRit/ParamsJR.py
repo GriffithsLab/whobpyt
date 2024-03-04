@@ -52,7 +52,7 @@ class ParamsJR(AbstractParams):
             None
         """
         param = {
-            "A ": par(3.25), 
+            "A": par(3.25), 
             "a": par(100), 
             "B": par(22), 
             "b": par(50), 

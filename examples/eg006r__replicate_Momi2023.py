@@ -20,6 +20,11 @@ The code includes data fetching, model fitting, and result visualization based o
 # %%
 # Importage
 # --------------------------------------------------
+# os stuff
+import os
+import sys
+sys.path.append('..')
+
 
 # whobpyt stuff
 import whobpyt
@@ -122,12 +127,12 @@ data_mean = Recording(eeg_data, num_epoches, batch_size)
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
 lm = np.zeros((output_size,200))
 lm_v = np.zeros((output_size,200))
-params = ParamsJR(A = par(3.25), a= par(100,100, 2, True, True), B = par(22), b = par(50, 50, 1, True, True),
-               g=par(500,500,2, True, True), g_f=par(10,10,1, True, True), g_b=par(10,10,1, True, True),
-               c1 = par(135, 135, 1, True, True), c2 = par(135*0.8, 135*0.8, 1, True, True), c3 = par(135*0.25, 135*0.25, 1, True, True),
-               c4 = par(135*0.25, 135*0.25, 1, True, True), std_in= par(0,0, 1, True, True), vmax= par(5), v0=par(6), r=par(0.56),
-               y0=par(-2, -2, 1/4, True, True),mu = par(1., 1., 0.4, True, True), k =par(5., 5., 0.2, True, True), k0=par(0),
-               cy0 = par(50, 50, 1, True, True), ki=par(ki0), lm=par(lm, lm, 1 * np.ones((output_size, node_size))+lm_v, True, True))
+params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True),
+               g=par(500,500,2, True), g_f=par(10,10,1, True), g_b=par(10,10,1, True),
+               c1 = par(135, 135, 1, True), c2 = par(135*0.8, 135*0.8, 1, True), c3 = par(135*0.25, 135*0.25, 1, True),
+               c4 = par(135*0.25, 135*0.25, 1, True), std_in= par(np.log(10),np.log(10), .1, True, True), vmax= par(5), v0=par(6), r=par(0.56),
+               y0=par(-2, -2, 1/4, True),mu = par(np.log(1.5),np.log(1.5), .1, True, True, lb=0.1), k =par(5., 5., 0.2, True, lb=1), k0=par(0),
+               cy0 = par(50, 50, 1, True), ki=par(ki0), lm=par(lm, lm, 1 * np.ones((output_size, node_size))+lm_v, True))
 
 
 # %%

@@ -14,9 +14,8 @@ from whobpyt.functions.arg_type_check import method_arg_type_check
 
 class CostsRWW(AbstractLoss):
     def __init__(self, model : AbstractNMM):
-        self.mainLoss = CostsFC("bold")
-        self.simKey = "bold"
-        self.model = model
+        self.simKey = model.output_names[0]
+        self.mainLoss = CostsFC(simKey = self.simKey, model = model)
 
     def loss(self, simData: dict, empData: torch.Tensor):
         
@@ -24,22 +23,14 @@ class CostsRWW(AbstractLoss):
         sim = simData
         emp = empData
         
-        model = self.model
+        
         state_vals = sim
         
         # define some constants
-        lb = 0.001
-
         w_cost = 10
 
-        # define the relu function
-        m = torch.nn.ReLU()
-
-        exclude_param = []
-        if model.use_fit_gains:
-            exclude_param.append('gains_con')
-
-        loss_main = self.mainLoss.loss(sim, emp)
+        
+        loss_main = self.mainLoss.main_loss(sim, emp)
 
         loss_EI = 0
 
@@ -51,17 +42,10 @@ class CostsRWW(AbstractLoss):
         q_window = state_vals['q']
         
 
-        loss_prior = []
+        loss_prior = self.mainLoss.prior_loss()
 
-        variables_p = [a for a in dir(model.params) if not a.startswith('__') and (type(getattr(model.params, a)) == par)]
-        # get penalty on each model parameters due to prior distribution
-        for var_name in variables_p:
-            # print(var)
-            var = getattr(model.params, var_name)
-            if var.has_prior and var_name not in ['std_in'] and var_name not in exclude_param:
-                loss_prior.append(torch.sum((lb + m(var.prior_var)) * (m(var.val) - m(var.prior_mean)) ** 2) \
-                + torch.sum(-torch.log(lb + m(var.prior_var)))) #TODO: Double check about converting _v_inv to just variance representation
+        #print(loss_main)
           
         # total loss
         loss = w_cost * loss_main + sum(loss_prior) 
-        return loss
+        return loss, loss_main

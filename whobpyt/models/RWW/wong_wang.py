@@ -228,7 +228,7 @@ class RNNRWW(AbstractNMM):
     
     
         # Defining NMM Parameters to simplify later equations
-        std_in =  0.02+m(self.params.std_in.value())  # 0.02 the lower bound (standard deviation of the Gaussian noise)
+        std_in =  self.params.std_in.value()  # 0.02 the lower bound (standard deviation of the Gaussian noise)
         
         # Parameters for the ODEs
         # Excitatory population
@@ -247,9 +247,9 @@ class RNNRWW(AbstractNMM):
     
         # Coupling parameters
         g = self.params.g.value()  # global coupling (from all nodes E_j to single node E_i)
-        g_EE =  m(self.params.g_EE.value())  # local self excitatory feedback (from E_i to E_i)
-        g_IE = m(self.params.g_IE.value())  # local inhibitory coupling (from I_i to E_i)
-        g_EI = m(self.params.g_EI.value())  # local excitatory coupling (from E_i to I_i)
+        g_EE =  self.params.g_EE.value()  # local self excitatory feedback (from E_i to E_i)
+        g_IE = self.params.g_IE.value()  # local inhibitory coupling (from I_i to E_i)
+        g_EI = self.params.g_EI.value()  # local excitatory coupling (from E_i to I_i)
     
         aE = self.params.aE.value()
         bE = self.params.bE.value()

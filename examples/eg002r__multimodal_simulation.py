@@ -80,7 +80,7 @@ paramsEEG.to(device)
 paramsBOLD = BOLD_Params()
 paramsBOLD.to(device)
 
-paramsNode.J = par((0.15  * np.ones(num_regions)), fit_par = True, asLog = True) #This is a parameter that will be updated during training
+paramsNode.J = par((0.15  * np.ones(num_regions)), (0.15  * np.ones(num_regions)), (0.01  * np.ones(num_regions)), fit_par = True, asLog = True) #This is a parameter that will be updated during training
 paramsNode.to(device)
 
 # %%
@@ -155,7 +155,7 @@ class mmObjectiveFunction():
         if returnLossComponents:
             return totalLoss, (S_E_mean_loss.item(), S_I_mean_loss.item(), EEG_PSD_loss.item(), EEG_FC_loss.item(), BOLD_PSD_loss.item(), BOLD_FC_loss.item())
         else:
-            return totalLoss
+            return totalLoss, totalLoss
 
 ObjFun = mmObjectiveFunction()
 

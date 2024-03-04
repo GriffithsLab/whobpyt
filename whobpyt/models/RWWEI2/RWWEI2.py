@@ -171,6 +171,7 @@ def setModelParameters(self):
     for var_name in vars_names:
         var = getattr(self.params, var_name)
         if (var.fit_par):
+            var.val = Parameter(var.val)
             param_reg.append(var.val)
             self.track_params.append(var_name)
     self.params_fitted = {'modelparameter': param_reg, 'hyperparameter': param_hyper}
