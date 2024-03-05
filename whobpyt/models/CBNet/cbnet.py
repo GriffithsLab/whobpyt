@@ -362,24 +362,32 @@ class RNNCBNET(AbstractNMM):
                           + gNMDA*self.m_nmda(alpha_mg,V)*(VNMDA)-(0.1+m(gL + gE +gI + gNMDA*self.m_nmda(alpha_mg,V)))*V\
                           + k*ki*u_tms + sigma_V*torch.randn(self.node_size, self.pop_size)
                 #print((LEd_f + 1 * torch.matmul(dg_f, (V[:,self.pop_names == 'E']- V[:,self.pop_names == 'I']))).shape)
-                rV[:,P_ind] += g * (
+                """rV[:,P_ind] += g * (
                           LEd_l + 1 * torch.matmul(dg_l, (V[:,P_ind])))
                 rV[:,E_ind] += g_f * \
                       (LEd_f + 1 * torch.matmul(dg_f, (V[:,E_ind]- V[:,I_ind])))
                 rV[:,I_ind] += g_b * \
-                      (-LEd_b - 1 * torch.matmul(dg_b, (V[:,E_ind]- V[:,I_ind])))
-                xi = torch.cat([norm[j].cdf(V[:,:,np.newaxis].mean(0)[j]).float() for j in range(self.pop_size)])
+                      (-LEd_b - 1 * torch.matmul(dg_b, (V[:,E_ind]- V[:,I_ind])))"""
+                      
+                Vin = torch.zeros_like(V)
+                Vin[:,P_ind] = V[:,P_ind]-g * (
+                          LEd_l + 0 * torch.matmul(dg_l, (V[:,P_ind])))
+                Vin[:,E_ind] = V[:,E_ind]-g_f * \
+                      (LEd_f + 0 * torch.matmul(dg_f, (V[:,E_ind]- V[:,I_ind])))
+                Vin[:,I_ind] = V[:,I_ind] - g_b * \
+                      (-LEd_b - 0 * torch.matmul(dg_b, (V[:,E_ind]- V[:,I_ind])))
+                xi = torch.cat([norm[j].cdf(Vin[:,j:j+1]).float() for j in range(self.pop_size)], dim=1)
                 #print(xi.shape)
-                rgE = gamma_k *torch.matmul(1*(gamma_gE*gamma_gE_sc)/max_xi, xi) - gE\
+                rgE = gamma_k *(torch.matmul(1*(gamma_gE*gamma_gE_sc)/max_xi, xi.T)).T - gE\
                         +1*sigma_g*torch.randn(self.node_size, self.pop_size)
 
                 #xi = torch.concatenate([norm[j].cdf(V[:,j]).float()[:,np.newaxis] for j in range(self.pop_size)], dim=1)
-                rgI = gamma_k *torch.matmul(1*(gamma_gI*gamma_gI_sc)/max_xi, xi) -gI\
+                rgI = gamma_k *(torch.matmul(1*(gamma_gI*gamma_gI_sc)/max_xi, xi.T)).T -gI\
                         +sigma_g*torch.randn(self.node_size, self.pop_size)
 
 
                 #xi_gNMDA = torch.concatenate([norm[j].cdf(gNMDA[:,j]).float()[:,np.newaxis] for j in range(self.pop_size)], dim=1)
-                rgNMDA = gamma_k *torch.matmul(1*(gamma_gNMDA*gamma_gE_sc)/max_xi, xi) - gNMDA\
+                rgNMDA = gamma_k *(torch.matmul(1*(gamma_gNMDA*gamma_gE_sc)/max_xi, xi.T)).T - gNMDA\
                         +sigma_g*torch.randn(self.node_size, self.pop_size)
                 # Update the states by step-size.
 
