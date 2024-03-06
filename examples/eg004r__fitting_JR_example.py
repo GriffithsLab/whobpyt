@@ -23,7 +23,7 @@ sys.path.append('..')
 # whobpyt stuff
 import whobpyt
 from whobpyt.datatypes import par, Recording
-from whobpyt.models.JansenRit import RNNJANSEN, ParamsJR
+from whobpyt.models.JansenRit import RNNJANSEN, ParamsJR, JansenRit_np
 from whobpyt.optimization.custom_cost_JR import CostsJR
 from whobpyt.run import Model_fitting
 
@@ -172,3 +172,25 @@ ax[1].set_title('Test')
 ax[2].plot(eeg_data.T)
 ax[2].set_title('empirical')
 plt.show()
+
+
+# %%
+# Modified JR Validation Model
+# ---------------------------------------------------
+#
+# The modified JR model
+
+val_sim_len = 20 # Simulation length in secs
+model_validate = JansenRit_np(model.node_size, model.step_size, model.output_size, model.tr, model.sc, model.lm.detach().numpy(), model.dist.detach().numpy(), model.params)
+
+state_hist, hE = model_validate.forward(external = u, hx = model_validate.createIC(ver = 0), hE = np.zeros((model.node_size,500)), sim_len=val_sim_len)
+# %%
+# Plot the EEG
+plt.figure(figsize = (16, 8))
+plt.title("M")
+for n in range(model.node_size):
+    plt.plot(state_hist[0:2000, n, 0:1], label = "M Node = " + str(n)) # Plotting EEG window
+    #plt.plot(state_hist[0:200, n, 1:2] - state_hist[0:200, n, 2:3], label = "EEG Node = " + str(n)) # plotting E-I
+
+plt.xlabel('Time Steps (multiply by step_size to get msec), step_size = ' + str(step_size))
+#plt.legend()
