@@ -100,17 +100,16 @@ data_mean = dataloader(eeg_data.T, num_epochs, TPperWindow)
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
 lm = np.zeros((output_size,200))
-lm_v = np.zeros((output_size,200))
-params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True), \
-                  g=par(400), g_f=par(10), g_b=par(10), \
+lm = np.random.rand(output_size,200)
+    params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True), \
+                  g=par(40), g_f=par(10), g_b=par(10), \
                   c1 = par(135, 135, 1, True), c2 = par(135*0.8, 135*0.8, 1, True), \
                   c3 = par(135*0.25, 135*0.25, 1, True), c4 = par(135*0.25, 135*0.25, 1, True),\
-                  std_in= par(10,10, 0.2, True), vmax= par(5), v0=par(6), r=par(0.56), y0=par(2, 2, 0.2, True),\
+                  std_in= par(np.log(1.1),np.log(1.1), 0.1, True, True), vmax= par(5), v0=par(6), r=par(0.56), y0=par(2, 2, 0.2, True),\
                   mu = par(np.log(1.5), np.log(1.5), 0.1, True, True), k = par(10,10, 0.2, True),
                   #cy0 = [5, 0], ki=[ki0, 0], k_aud=[k_aud0, 0], lm=[lm, 1.0 * np.ones((output_size, 200))+lm_v], \
-                  cy0 = par(50, 50, 1, True), ki=par(ki0), \
+                  cy0 = par(50), ki=par(ki0), \
                   lm=par(lm, lm, 0.1 * np.ones((output_size, node_size))+lm_v, True))
-
 # %%
 # call model want to fit
 model = RNNJANSEN(params, node_size=node_size, TRs_per_window=TPperWindow, step_size=step_size, output_size=output_size, tr=tr, sc=sc, lm=lm, dist=dist, use_fit_gains=True)
@@ -129,7 +128,7 @@ F = Model_fitting(model, ObjFun)
 #
 
 u = np.zeros((node_size,hidden_size,time_dim, pop_size))
-u[:,:,110:120,0]= 1000
+u[:,:,80:100,0]= 40
 F.train(u = u, empRec = data_mean, num_epochs = num_epochs, TPperWindow = TPperWindow,  warmupWindow=10)
 
 # %%

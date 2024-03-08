@@ -157,8 +157,8 @@ class RNNJANSEN(AbstractNMM):
             Tensor of shape (node_size, state_size) with random values between `state_lb` and `state_ub`.
         """
 
-        state_lb = -0.5
-        state_ub = 0.5
+        state_lb = -0.1
+        state_ub = 0.1
 
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size, self.pop_size, self.state_size)),
                              dtype=torch.float32)
@@ -180,7 +180,7 @@ class RNNJANSEN(AbstractNMM):
 
         delays_max = 500
         state_ub = 0.5
-        state_lb = -0.5
+        state_lb = 0
 
         return torch.tensor(np.random.uniform(state_lb, state_ub, (self.node_size,  delays_max)), dtype=torch.float32)
 
@@ -341,14 +341,15 @@ class RNNJANSEN(AbstractNMM):
                 # TMS (or external) input
                 u_tms = external[:, step_i:step_i + 1, i_window, 0]
                 #print('u',u_tms.shape)
-                rM = k * ki * u_tms + std_in * torch.randn(self.node_size, 1) + \
-                    1 * g * (LEd_l + 1 * torch.matmul(dg_l, M)) + \
-                    sigmoid(E - I, vmax, v0, r)  # firing rate for pyramidal population
-                rE = std_in * torch.randn(self.node_size, 1) + \
-                    1 * g_f * (LEd_f + 1 * torch.matmul(dg_f, E - I)) + \
+                rM =  k * ki * u_tms +  (0+std_in) * torch.randn(self.node_size, 1) + \
+                    1 * (lb * con_1 + m(g)) * (
+                             LEd_l + 1 * torch.matmul(dg_l, M)) + \
+                    +sigmoid(E - I, vmax, v0, r)  # firing rate for pyramidal population
+                rE = (0+std_in)  * torch.randn(self.node_size, 1) + \
+                    1 * (lb * con_1 + m(g_f)) * (LEd_f + 1 * torch.matmul(dg_f, E-I)) + \
                     c2 * sigmoid(c1 * M, vmax, v0, r)  # firing rate for excitatory population
-                rI = std_in * torch.randn(self.node_size, 1) + \
-                    1 * g_b * (-LEd_b - 1 * torch.matmul(dg_b, E - I)) + \
+                rI =  (0+std_in)  * torch.randn(self.node_size, 1) + \
+                    1 * (lb * con_1 + m(g_b)) * (-LEd_b - 1 * torch.matmul(dg_b,  E-I)) + \
                     c4 * sigmoid(c3 * M, vmax, v0, r)  # firing rate for inhibitory population
 
                 # Update the states with every step size.
@@ -360,6 +361,7 @@ class RNNJANSEN(AbstractNMM):
                 ddIv = Iv + dt * sys2nd(B, b, u_2ndsys_ub * torch.tanh(rI / u_2ndsys_ub), I, Iv)
 
                 # Calculate the saturation for model states (for stability and gradient calculation).
+                
                 E = 1000*torch.tanh(ddE/1000)
                 I = 1000*torch.tanh(ddI/1000)
                 M = 1000*torch.tanh(ddM/1000)
@@ -368,16 +370,16 @@ class RNNJANSEN(AbstractNMM):
                 Mv = 1000*torch.tanh(ddMv/1000)
                 #print('after M', M.shape)
                 # Update placeholders for pyramidal buffer
-                hE[:, 0] = M[:, 0]
+                hE[:, 0] =sigmoid(M[:, 0], vmax, v0, r)
 
             # Capture the states at every tr in the placeholders for checking them visually.
 
-            hE = torch.cat([M, hE[:, :-1]], dim=1)  # update placeholders for pyramidal buffer
+            hE = torch.cat([sigmoid(M, vmax, v0, r), hE[:, :-1]], dim=1)  # update placeholders for pyramidal buffer
 
             # Capture the states at every tr in the placeholders which is then used in the cost calculation.
             lm_t = (lm.T / torch.sqrt(lm ** 2).sum(1)).T
             self.lm_t = (lm_t - 1 / self.output_size * torch.matmul(torch.ones((1, self.output_size)), lm_t))
-            temp = cy0 * torch.matmul(self.lm_t, E -I) - 1 * y0
+            temp = cy0 * torch.matmul(self.lm_t, sigmoid(E-I, vmax, v0, r)) - 1 * y0
             eeg_window.append(temp)
             states_window.append(torch.cat([torch.cat([M, E, I], dim=1)[:,:,np.newaxis], \
                                    torch.cat([Mv, Ev, Iv], dim=1)[:,:,np.newaxis]], dim=2)[:,:,:,np.newaxis])
