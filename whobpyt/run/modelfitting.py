@@ -75,7 +75,7 @@ class Model_fitting(AbstractFitting):
             pickle.dump(self, f)
 
     def train(self, u, empRec,
-              num_epochs: int, TPperWindow: int, warmupWindow: int = 0, learningrate: float = 0.05, lr_2ndLevel: float = 0.05, lr_scheduler: bool = False, empRecSec = None):
+              num_epochs: int, TPperWindow: int, warmupWindow: int = 0, learningrate: float = 0.05, lr_2ndLevel: float = 0.05, lr_scheduler: bool = False, empRecSec = None, X=None, hE=None):
         """
         Parameters
         ----------
@@ -112,9 +112,11 @@ class Model_fitting(AbstractFitting):
         mask_e = np.tril_indices(self.model.output_size, -1)
 
         # initial state
-        X = self.model.createIC(ver = 0)
+        if X is None:
+            X = self.model.createIC(ver = 0)
         # initials of history of E
-        hE = self.model.createDelayIC(ver = 0)
+        if hE is None:
+            hE = self.model.createDelayIC(ver = 0)
 
         # LOOP 1/4: Number of Training Epochs
         for i_epoch in range(num_epochs):
@@ -273,7 +275,7 @@ class Model_fitting(AbstractFitting):
             self.trainingStats.updateOutputs(windListDict[self.model.output_names[i_out]], self.model.output_names[i_out]+'_training')
         self.trainingStats.updateStates(windListDict['states'], 'training')
 
-    def evaluate(self, u, empRec, TPperWindow: int, base_window_num: int = 0, transient_num = 10, empRecSec = None):
+    def evaluate(self, u, empRec, TPperWindow: int, base_window_num: int = 0, transient_num = 10, empRecSec = None, X =None, hE = None):
         """
         Parameters
         ----------
@@ -293,9 +295,11 @@ class Model_fitting(AbstractFitting):
         #TODO: Should be updated to take a list of u and empRec
 
         # initial state
-        X = self.model.createIC(ver = 1)
+        if X is None:
+            X = self.model.createIC(ver = 0)
         # initials of history of E
-        hE = self.model.createDelayIC(ver = 1)
+        if hE is None:
+            hE = self.model.createDelayIC(ver = 0)
         
         emp = []
         emp.append(empRec)
