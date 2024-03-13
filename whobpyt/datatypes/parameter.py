@@ -2,7 +2,6 @@
 Authors: Andrew Clappison, John Griffiths, Zheng Wang, Davide Momi, Sorenza Bastiaens, Parsa Oveisi, Kevin Kadak, Taha Morshedzadeh, Shreyas Harita
 """
 
-
 import torch
 import numpy
 import numpy as np
@@ -25,13 +24,16 @@ class par:
         Prior mean of the data value
     prior_precision : Tensor
         Prior inverse of variance of the value
-    
     fit_par: Bool
         Whether the parameter value should be set to as a PyTorch Parameter
-    fit_hyper : Bool
-        Whether the parameter prior mean and prior variance should be set as a PyTorch Parameter
-    asLog : Bool
+    asLog: Bool
         Whether the log of the parameter value will be stored instead of the parameter itself (will prevent parameter from being negative).
+    asRand : Bool
+        Whether the parameter is randomly sampled
+    lb : Tensor
+        Value of the parameter lower bound
+    device: torch.device
+        Whether to run on CPU or GPU
     '''
 
     def __init__(self, val, prior_mean = None, prior_std = None, fit_par = False, asLog = False, asRand = True, lb = 0, device = torch.device('cpu')):
@@ -47,8 +49,25 @@ class par:
             Prior std of the value
         fit_par: Bool
             Whether the parameter value should be set to as a PyTorch Parameter
+        fit_hyper : Bool
+            Whether the parameter prior mean and prior variance should be set as a PyTorch Parameter
         device: torch.device
             Whether to run on CPU or GPU
+        asLog: Bool
+            Whether the log of the parameter value will be stored instead of the parameter itself (will prevent parameter from being negative).
+        asRand : Bool
+            Whether the parameter is randomly sampled
+        lb : Tensor
+            Value of the parameter lower bound.
+
+        val_ts : Tensor 
+            The parameter value as a tensor
+        prior_mean_ts : Tensor
+            Prior mean as a tensor
+        prior_std_ts : Tensor
+            Prior std as a tensore
+        prior_precision : Tensor
+            Prior inverse of variance of the value
         '''
         self.fit_par = fit_par
         self.device = device
