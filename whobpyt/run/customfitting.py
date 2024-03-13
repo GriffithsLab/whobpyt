@@ -35,6 +35,16 @@ class Fitting_FNGFPG(AbstractFitting):
     """
     
     def __init__(self, model, cost, device = torch.device('cpu')):
+        """
+        Parameters
+        ----------
+        model: AbstractNMM 
+            Whole Brain Model to Simulate
+        cost: AbstractLoss
+            A particular objective function which the model will be optimized for. 
+        device : torch.device
+            Whether the fitting is to run on CPU or GPU
+        """
         
         self.model = model
         self.cost = cost
