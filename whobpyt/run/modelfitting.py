@@ -1,5 +1,5 @@
 """
-Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak
+Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak, Parsa Oveisi
 Neural Mass Model fitting module for model fitting using pytorch
 """
 
@@ -86,7 +86,9 @@ class Model_fitting(AbstractFitting):
         num_epochs: int
             the number of times to go through the entire training data set
         TPperWindow: int
-            Number of Empirical Time Points per window. model.forward does one window at a time.             
+            Number of Empirical Time Points per window. model.forward does one window at a time.
+	warmupWindow: int
+	    Number of Time Points to use as warmup (not used for training).             
         learningrate: float
             rate of gradient descent
         lr_2ndLevel: float
@@ -217,14 +219,14 @@ class Model_fitting(AbstractFitting):
                     hE = hE_new.detach().clone() #dtype=torch.float32
 
                 ts_emp = np.concatenate(list(windowedTS),1) #TODO: Check this code
-                fc = np.corrcoef(ts_emp)
+                fc = np.corrcoef(ts_emp) # calculating the Pearson correlation for measure of functional connectivity
 
                 # TIME SERIES: Concatenate all windows together to get one recording
                 for name in set(self.model.state_names + self.model.output_names):
                         windListDict[name] = np.concatenate(windListDict[name], axis=1)
 
                 ts_sim = windListDict[self.model.output_names[0]]
-                fc_sim = np.corrcoef(ts_sim[:, 10:])
+                fc_sim = np.corrcoef(ts_sim[:, 10:]) # disregarding the first few timepoints as the model stabilizes
 
                 print('epoch: ', i_epoch, 
                       'loss:', loss_main.detach().cpu().numpy(),
@@ -407,7 +409,7 @@ class Model_fitting(AbstractFitting):
             windListDict[name] = np.concatenate(windListDict[name], axis=1)
         
         ts_sim = windListDict[self.model.output_names[0]]
-        fc_sim = np.corrcoef(ts_sim[:, transient_num:])
+        fc_sim = np.corrcoef(ts_sim[:, transient_num:]) # disregarding the first few timepoints as the model stabilizes
         
         # Saving the last recording of training as a Model_fitting attribute
         self.lastRec = {}
