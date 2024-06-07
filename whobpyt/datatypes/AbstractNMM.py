@@ -42,7 +42,7 @@ class AbstractNMM(torch.nn.Module):
             if (var.fit_par):
                 if var_name == 'lm':
                     size = var.val.shape
-                    var.val = Parameter(- 1 * torch.ones((size[0], size[1])) + 0.1*torch.randn(size[0], size[1])) 
+                    var.val = Parameter(var.val) 
                     var.prior_mean = Parameter(var.prior_mean)
                     var.prior_precision = Parameter(var.prior_precision)
                     param_reg.append(var.val)
