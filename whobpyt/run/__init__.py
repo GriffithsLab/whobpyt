@@ -1,3 +1,3 @@
-from .modelfitting import Model_fitting
-from .customfitting import Fitting_FNGFPG
-from .batchfitting import Fitting_Batch
+from .model_fitting import ModelFitting
+from .custom_fitting import FittingFNGFPG
+from .batch_fitting import FittingBatch
