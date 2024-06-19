@@ -6,16 +6,16 @@ module for cost calculation
 
 import numpy as np  # for numerical operations
 import torch
-from whobpyt.datatypes.AbstractLoss import AbstractLoss
-from whobpyt.functions.arg_type_check import method_arg_type_check
+from ..datatypes import AbstractLoss 
+from ..functions.arg_type_check import method_arg_type_check
 
 
 class CostsTS(AbstractLoss):
-    def __init__(self, simKey):
-        super(CostsTS, self).__init__(simKey)
+    def __init__(self, simKey = None, model = None):
+        super(CostsTS, self).__init__(simKey = simKey, model=model)
         self.simKey = simKey
 
-    def loss(self, simData: dict, empData: torch.Tensor):
+    def main_loss(self, simData: dict, empData: torch.Tensor):
         """
         Calculate the Pearson Correlation between the simFC and empFC.
         From there, compute the probability and negative log-likelihood.
@@ -27,7 +27,7 @@ class CostsTS(AbstractLoss):
         empData: tensor with node_size X datapoint
             empirical EEG
         """
-        method_arg_type_check(self.loss) # Check that the passed arguments (excluding self) abide by their expected data types
+        method_arg_type_check(self.main_loss) # Check that the passed arguments (excluding self) abide by their expected data types
         sim = simData[self.simKey]
         emp = empData
 

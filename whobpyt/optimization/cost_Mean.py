@@ -1,5 +1,7 @@
-import torch
-from whobpyt.datatypes.AbstractLoss import AbstractLoss
+from torch import (device as ptdevice, numel as ptnumel, mean as ptmean)
+import torch.nn.functional.mse_loss as ptmse_loss
+
+from ..datatypes import AbstractLoss
 
 
 class CostsMean(AbstractLoss):
@@ -20,7 +22,7 @@ class CostsMean(AbstractLoss):
         Whether the objective function is to run on GPU
     '''
         
-    def __init__(self, num_regions, simKey, targetValue = None, empiricalData = None, batch_size = 1, device = torch.device('cpu')):
+    def __init__(self, num_regions, simKey, targetValue = None, empiricalData = None, batch_size = 1, device = ptdevice('cpu')):
         '''
         Parameters
         -----------------
@@ -40,7 +42,7 @@ class CostsMean(AbstractLoss):
         self.device = device
         
         # Target can be specific to each region, or can have a single number that is repeated for each region
-        if torch.numel(targetValue) == 1:
+        if ptnumel(targetValue) == 1:
             if self.batch_size == 1:
                 self.targetValue = targetValue.repeat(num_regions).to(device)
             else:
@@ -73,7 +75,6 @@ class CostsMean(AbstractLoss):
         
         sim = simData[self.simKey]
         
-        meanVar = torch.mean(sim, 1)
+        meanVar = ptmean(sim, 1)
         
-        return torch.nn.functional.mse_loss(meanVar, self.targetValue)
-        
+        return ptmse_loss(meanVar, self.targetValue)
