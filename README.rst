@@ -17,7 +17,7 @@ Rationale
 
 As open source and open science advocates, we have elected to pursue a
 ‘fully open’ and public development approach here. A chief motivation
-behind this is to bring in contributors and collabo                                                                    vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv                                                                                                                                                                             rators who are
+behind this is to bring in contributors and collaborators who are
 interested in working together to move things forward more quickly that
 any of us would be able to individually. So, if you are interested in
 getting involved, don’t hesitate to reach out to John ( j dot
