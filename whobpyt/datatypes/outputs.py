@@ -53,6 +53,9 @@ class TrainingStats:
         self.loss = []
 
         self.connectivity = []
+        self.connectivity_p2p = []
+        self.connectivity_p2i = []
+        self.connectivity_p2e = []
         self.leadfield = []
 
         self.fit_params = {}
@@ -105,7 +108,41 @@ class TrainingStats:
         
         """
         self.connectivity.append(newValue)
+    def appendSC_p2i(self, newValue):
+        """ 
+        Append Network Connections 
         
+        Parameters
+        -----------
+        newValue : Array
+            Current state of the structural connectivity being tracked. 
+        
+        """
+        self.connectivity_p2i.append(newValue)
+    def appendSC_p2e(self, newValue):
+        """ 
+        Append Network Connections 
+        
+        Parameters
+        -----------
+        newValue : Array
+            Current state of the structural connectivity being tracked. 
+        
+        """
+        self.connectivity_p2e.append(newValue)
+        
+    def appendSC_p2p(self, newValue):
+        """ 
+        Append Network Connections 
+        
+        Parameters
+        -----------
+        newValue : Array
+            Current state of the structural connectivity being tracked. 
+        
+        """
+        self.connectivity_p2p.append(newValue)
+
     def appendLF(self, newValue):
         """ 
         Append Lead Field Loss 

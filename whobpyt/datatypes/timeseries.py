@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 
-class Recording():
+class Timeseries():
     '''    
     This class is responsible for holding timeseries of empirical and simulated data. It is: 
         - Part of the input and output of Model_fitting and Model_simulation[future]. 

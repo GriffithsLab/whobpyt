@@ -1,6 +1,6 @@
 import torch
 
-class AbstractMode:
+class AbstractMeasurementModel:
     # Neuroimaging Modalities such as EEG and fMRI BOLD may be seperate from the NMM model
     # and implemented by inheriting from this class.
     # Going forward, the recommendation is to have the modalities integrated with the model.

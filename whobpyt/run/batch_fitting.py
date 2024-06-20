@@ -4,11 +4,10 @@
 
 import torch
 import numpy as np
-from whobpyt.datatypes import Recording
-from whobpyt.datatypes import TrainingStats
-from whobpyt.datatypes.AbstractFitting import AbstractFitting
+from ..datatypes import Timeseries as Recording # JG: switch this to Timeseries soon
+from ..datatypes import TrainingStats, AbstractFitting
 
-class Fitting_Batch(AbstractFitting):
+class FittingBatch(AbstractFitting):
     """
     Fitting Batch
     

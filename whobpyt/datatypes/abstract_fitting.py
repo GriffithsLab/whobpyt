@@ -1,14 +1,14 @@
 import torch
 import pickle
 
-from whobpyt.datatypes.AbstractNMM import AbstractNMM
-from whobpyt.datatypes.AbstractLoss import AbstractLoss
-from whobpyt.datatypes.outputs import TrainingStats
+from .abstract_neural_model import AbstractNeuralModel
+from .abstract_loss import AbstractLoss
+from .outputs import TrainingStats
 
 class AbstractFitting():
     # AbstractFitting is a template class for different parameter optimization or machine learning paradigms to inherit from. 
 
-    def __init__(self, model: AbstractNMM, cost: AbstractLoss, device = torch.device('cpu')):
+    def __init__(self, model: AbstractNeuralModel, cost: AbstractLoss, device = torch.device('cpu')):
         # Initializing the class
         
         self.model = model

@@ -1,7 +1,8 @@
 import torch
-from whobpyt.datatypes.parameter import par
+from .parameter import Parameter as par
 
 class AbstractParams:
+
     # This class stores the parameters used by a model. The parameters may be for the Neural Mass Model and/or Neuroimaging Modality.
     # It should be useable by both the pytorch model for training and a numpy model for parameter verification. 
 

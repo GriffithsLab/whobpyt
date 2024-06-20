@@ -1,6 +1,6 @@
 import torch
 from warnings import warn
-from whobpyt.datatypes.AbstractLoss import AbstractLoss
+from ..datatypes import AbstractLoss
 
 class CostsPSD(AbstractLoss):
     '''

@@ -5,9 +5,13 @@ module for cost calculation
 """
 
 import numpy as np  # for numerical operations
-import torch
-from whobpyt.datatypes.AbstractLoss import AbstractLoss
-from whobpyt.functions.arg_type_check import method_arg_type_check
+from torch import (Tensor as ptTensor, reshape as ptreshape, mean as ptmean, matmul as ptmatmul, transpose as pttranspose, 
+                   diag as ptdiag, reciprocal as ptreciprocal, sqrt as ptsqrt, tril as pttril, ones_like as ptones_like, 
+                   zeros_like as ptzeros_like, greater as ptgreater, masked_select as ptmasked_select, sum as ptsum, 
+                   multiply as ptmultiply, log as ptlog, device as ptdevice)
+
+from ..datatypes import AbstractLoss 
+from ..functions.arg_type_check import method_arg_type_check
 
 
 class CostsFC(AbstractLoss):
@@ -25,17 +29,17 @@ class CostsFC(AbstractLoss):
     loss: function
         calculates functional connectivity and uses it to calculate the loss
     """
-    def __init__(self, simKey):
+    def __init__(self, simKey=None, model=None):
         """
         Parameters
         ----------
         simKey: str
             type of cost function to be used
         """
-        super(CostsFC, self).__init__(simKey)
+        super(CostsFC, self).__init__(simKey =simKey, model = model)
         self.simKey = simKey
 
-    def loss(self, simData: dict, empData: torch.Tensor):
+    def main_loss(self, simData: dict, empData: ptTensor):
         """Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.
 
         Parameters
@@ -50,7 +54,7 @@ class CostsFC(AbstractLoss):
         losses_corr: torch.tensor
             cost function value
         """
-        method_arg_type_check(self.loss) # Check that the passed arguments (excluding self) abide by their expected data types
+        method_arg_type_check(self.main_loss) # Check that the passed arguments (excluding self) abide by their expected data types
         
         sim = simData[self.simKey]
         
@@ -61,41 +65,42 @@ class CostsFC(AbstractLoss):
         truncated_backprop_length = logits_series_tf.shape[1]
 
         # remove mean across time
-        labels_series_tf_n = labels_series_tf - torch.reshape(torch.mean(labels_series_tf, 1),
-                                                              [node_size, 1])  # - torch.matmul(
+        labels_series_tf_n = labels_series_tf - ptreshape(ptmean(labels_series_tf, 1),
+                                                          [node_size, 1])  # - torch.matmul(
 
-        logits_series_tf_n = logits_series_tf - torch.reshape(torch.mean(logits_series_tf, 1),
-                                                              [node_size, 1])  # - torch.matmul(
+        logits_series_tf_n = logits_series_tf - ptreshape(ptmean(logits_series_tf, 1),
+                                                          [node_size, 1])  # - torch.matmul(
 
         # correlation
-        cov_sim = torch.matmul(logits_series_tf_n, torch.transpose(logits_series_tf_n, 0, 1))
-        cov_def = torch.matmul(labels_series_tf_n, torch.transpose(labels_series_tf_n, 0, 1))
+        cov_sim = ptmatmul(logits_series_tf_n, pttranspose(logits_series_tf_n, 0, 1))
+        cov_def = ptmatmul(labels_series_tf_n, pttranspose(labels_series_tf_n, 0, 1))
 
         # Getting the FC matrix for the simulated and empirical BOLD signals
-        FC_sim_T = torch.matmul(torch.matmul(torch.diag(torch.reciprocal(torch.sqrt(
-            torch.diag(cov_sim)))), cov_sim),
-            torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_sim))))) # SIMULATED FC
-        FC_T = torch.matmul(torch.matmul(torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_def)))), cov_def), torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_def))))) # EMPIRICAL FC
+        FC_sim_T = ptmatmul(ptmatmul(ptdiag(ptreciprocal(ptsqrt(
+            ptdiag(cov_sim)))), cov_sim),
+            ptdiag(ptreciprocal(ptsqrt(ptdiag(cov_sim))))) # SIMULATED FC
+        FC_T = ptmatmul(ptmatmul(ptdiag(ptreciprocal(ptsqrt(ptdiag(cov_def)))), cov_def),
+                        ptdiag(ptreciprocal(ptsqrt(ptdiag(cov_def))))) # EMPIRICAL FC
 
         # Masking out the upper triangle of the FC matrix and keeping the lower triangle
-        ones_tri = torch.tril(torch.ones_like(FC_T), -1)
-        zeros = torch.zeros_like(FC_T)  # create a tensor all ones
-        mask = torch.greater(ones_tri, zeros)  # boolean tensor, mask[i] = True iff x[i] > 1
+        ones_tri = pttril(ptones_like(FC_T), -1)
+        zeros = ptzeros_like(FC_T)  # create a tensor all ones
+        mask = ptgreater(ones_tri, zeros)  # boolean tensor, mask[i] = True iff x[i] > 1
 
-        FC_tri_v = torch.masked_select(FC_T, mask)
-        FC_sim_tri_v = torch.masked_select(FC_sim_T, mask)
+        FC_tri_v = ptmasked_select(FC_T, mask)
+        FC_sim_tri_v = ptmasked_select(FC_sim_T, mask)
 
         # Bring the FC mean to zero
-        FC_v = FC_tri_v - torch.mean(FC_tri_v)
-        FC_sim_v = FC_sim_tri_v - torch.mean(FC_sim_tri_v)
+        FC_v = FC_tri_v - ptmean(FC_tri_v)
+        FC_sim_v = FC_sim_tri_v - ptmean(FC_sim_tri_v)
 
         # Calculate the correlation coefficient between the simulated FC and empirical FC
-        corr_FC = torch.sum(torch.multiply(FC_v, FC_sim_v)) \
-                  * torch.reciprocal(torch.sqrt(torch.sum(torch.multiply(FC_v, FC_v)))) \
-                  * torch.reciprocal(torch.sqrt(torch.sum(torch.multiply(FC_sim_v, FC_sim_v))))
+        corr_FC = ptsum(ptmultiply(FC_v, FC_sim_v)) \
+                  * ptreciprocal(ptsqrt(ptsum(ptmultiply(FC_v, FC_v)))) \
+                  * ptreciprocal(ptsqrt(ptsum(ptmultiply(FC_sim_v, FC_sim_v))))
 
         # Bringing the corr-FC to the 0-1 range, and calculating the negative log-likelihood
-        losses_corr = -torch.log(0.5000 + 0.5 * corr_FC)  # torch.mean((FC_v -FC_sim_v)**2)#
+        losses_corr = -ptlog(0.5000 + 0.5 * corr_FC)  # ptmean((FC_v -FC_sim_v)**2)#
         return losses_corr
 
 
@@ -119,7 +124,7 @@ class CostsFixedFC(AbstractLoss):
     loss: function
         calculates functional connectivity and uses it to calculate the loss
     """
-    def __init__(self, simKey, device = torch.device('cpu')):
+    def __init__(self, simKey, device = ptdevice('cpu')):
         """
         Parameters
         ----------
@@ -161,33 +166,33 @@ class CostsFixedFC(AbstractLoss):
         truncated_backprop_length = logits_series_tf.shape[1]
 
         # remove mean across time
-        logits_series_tf_n = logits_series_tf - torch.reshape(torch.mean(logits_series_tf, 1), [node_size, 1])
+        logits_series_tf_n = logits_series_tf - ptreshape(ptmean(logits_series_tf, 1), [node_size, 1])
 
         # correlation
-        cov_sim = torch.matmul(logits_series_tf_n, torch.transpose(logits_series_tf_n, 0, 1))
+        cov_sim = ptmatmul(logits_series_tf_n, pttranspose(logits_series_tf_n, 0, 1))
 
         # Getting the FC matrix for the simulated and empirical BOLD signals
-        FC_sim_T = torch.matmul(torch.matmul(torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_sim)))), cov_sim),
-                                             torch.diag(torch.reciprocal(torch.sqrt(torch.diag(cov_sim))))) # SIMULATED FC
+        FC_sim_T = ptmatmul(ptmatmul(ptdiag(ptreciprocal(ptsqrt(ptdiag(cov_sim)))), cov_sim),
+                                             ptdiag(ptreciprocal(ptsqrt(ptdiag(cov_sim))))) # SIMULATED FC
 
         # Masking out the upper triangle of the FC matrix and keeping the lower triangle
-        ones_tri = torch.tril(torch.ones_like(empFC).to(self.device), -1)
-        zeros = torch.zeros_like(empFC).to(self.device)  # create a tensor all ones
-        mask = torch.greater(ones_tri, zeros)  # boolean tensor, mask[i] = True iff x[i] > 1
+        ones_tri = pttril(ptones_like(empFC).to(self.device), -1)
+        zeros = ptzeros_like(empFC).to(self.device)  # create a tensor all ones
+        mask = ptgreater(ones_tri, zeros)  # boolean tensor, mask[i] = True iff x[i] > 1
 
-        FC_tri_v = torch.masked_select(empFC, mask)
-        FC_sim_tri_v = torch.masked_select(FC_sim_T, mask)
+        FC_tri_v = ptmasked_select(empFC, mask)
+        FC_sim_tri_v = ptmasked_select(FC_sim_T, mask)
 
         # Bring the FC mean to zero
-        FC_v = FC_tri_v - torch.mean(FC_tri_v)
-        FC_sim_v = FC_sim_tri_v - torch.mean(FC_sim_tri_v)
+        FC_v = FC_tri_v - ptmean(FC_tri_v)
+        FC_sim_v = FC_sim_tri_v - ptmean(FC_sim_tri_v)
 
         # Calculate the correlation coefficient between the simulated FC and empirical FC
-        corr_FC = torch.sum(torch.multiply(FC_v, FC_sim_v)) \
-                  * torch.reciprocal(torch.sqrt(torch.sum(torch.multiply(FC_v, FC_v)))) \
-                  * torch.reciprocal(torch.sqrt(torch.sum(torch.multiply(FC_sim_v, FC_sim_v))))
+        corr_FC = ptsum(ptmultiply(FC_v, FC_sim_v)) \
+                  * ptreciprocal(ptsqrt(ptsum(ptmultiply(FC_v, FC_v)))) \
+                  * ptreciprocal(ptsqrt(ptsum(ptmultiply(FC_sim_v, FC_sim_v))))
 
         # Bringing the corr-FC to the 0-1 range, and calculating the negative log-likelihood
-        losses_corr = -torch.log(0.5000 + 0.5 * corr_FC) 
+        losses_corr = -ptlog(0.5000 + 0.5 * corr_FC) 
         
-        return losses_corr      
+        return losses_corr     

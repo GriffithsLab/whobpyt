@@ -5,11 +5,10 @@
 
 import torch
 import numpy as np
-from whobpyt.datatypes import Recording
-from whobpyt.datatypes import TrainingStats
-from whobpyt.datatypes.AbstractFitting import AbstractFitting
+from ..datatypes import Timeseries 
+from ..datatypes import TrainingStats,AbstractFitting
 
-class Fitting_FNGFPG(AbstractFitting):
+class FittingFNGFPG(AbstractFitting):
     """
     Fitting Forward No Gradient Forward Parallel Gradient (FNG-FPG)
     
@@ -109,7 +108,7 @@ class Fitting_FNGFPG(AbstractFitting):
                 if e == (num_epochs - 1):
                     lastSerial = {}
                     for simKey in set(self.model.state_names + self.model.output_names):
-                        lastSerial[simKey] = Recording(sim_vals[simKey].detach().cpu().numpy().copy(), step_size = self.model.step_size) 
+                        lastSerial[simKey] = Timeseries(sim_vals[simKey].detach().cpu().numpy().copy(), step_size = self.model.step_size) 
 
                 print("Serial Finished")
     
@@ -159,7 +158,7 @@ class Fitting_FNGFPG(AbstractFitting):
         self.lastSerial = lastSerial
         self.lastRec = {}
         for simKey in set(self.model.state_names + self.model.output_names):
-            self.lastRec[simKey] = Recording(sim_vals[simKey].detach().cpu().numpy().copy(), step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
+            self.lastRec[simKey] = Timeseries(sim_vals[simKey].detach().cpu().numpy().copy(), step_size = self.model.step_size) #TODO: This won't work if different variables have different step sizes
         
         
     def evaluate(self, stim, empData):
@@ -174,4 +173,3 @@ class Fitting_FNGFPG(AbstractFitting):
         Not implemented yet.
         '''
         pass
-    
