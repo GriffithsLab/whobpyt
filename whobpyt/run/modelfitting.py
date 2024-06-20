@@ -334,7 +334,7 @@ class Model_fitting(AbstractFitting):
         u : int or Tensor
             external or stimulus
         numTP : int
-            The number of time points ot simulate
+            The number of time points to simulate
         base_window_num : int
             length of num_windows for resting
         transient_num : int

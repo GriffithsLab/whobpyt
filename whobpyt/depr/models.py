@@ -1136,7 +1136,7 @@ class RNNJANSEN(torch.nn.Module):
         self.delays = (self.dist / (conduct_lb * con_1 + m(self.mu))).type(torch.int64)
         # print(torch.max(self.delays), self.delays.shape)
 
-        # placeholder for the updated corrent state
+        # placeholder for the updated current state
         current_state = torch.zeros_like(hx)
 
         # placeholders for output BOLD, history of E I x f v and q
@@ -1516,7 +1516,7 @@ class RNNWWD(torch.nn.Module):
             l_s = torch.tensor(np.zeros((1, 1)), dtype=torch.float32)
 
         
-        # placeholder for the updated corrent state
+        # placeholder for the updated current state
         current_state = torch.zeros_like(hx)
 
         # placeholders for output BOLD, history of E I x f v and q
