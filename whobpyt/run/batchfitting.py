@@ -89,7 +89,7 @@ class Fitting_Batch(AbstractFitting):
                     delayHist = dummyVal # TODO: Delays are currently is not implemented in various places
 
                 # initial the external inputs
-                external = dummyVal # TODO: Currenlty this code only works for resting state
+                external = dummyVal # TODO: Currently this code only works for resting state
                 
                 num_blocks = batch_size
                 

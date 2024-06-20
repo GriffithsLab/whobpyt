@@ -4,7 +4,7 @@ r"""
 Evaluating CPU vs. GPU Performance
 =================================
 
-GPU Support has been added to mutiple classes in WhoBPyT. This code is for evaluating the difference in speed between CPU and GPU. The relative performance will depend on the hardware being used. 
+GPU Support has been added to multiple classes in WhoBPyT. This code is for evaluating the difference in speed between CPU and GPU. The relative performance will depend on the hardware being used. 
 
 This code is set to run on CPU by default, and then GPU can be tested by updating the device (See Importage Section).
 
@@ -38,7 +38,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-print("Is cuda avaliable?")
+print("Is cuda available?")
 print(torch.cuda.is_available())
 
 device = torch.device("cpu") #Options: "cpu" or "cuda"

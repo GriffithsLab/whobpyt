@@ -8,7 +8,7 @@ import re
 # build, prefer to use the version of the theme in this repo, not the installed
 # version of the theme.
 def is_development_build():
-    # PR builds have an interger version
+    # PR builds have an integer version
     re_version = re.compile(r'^[\d]+$')
     if 'READTHEDOCS' in os.environ:
         version = os.environ.get('READTHEDOCS_VERSION', '')

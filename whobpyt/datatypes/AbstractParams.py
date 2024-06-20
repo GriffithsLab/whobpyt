@@ -3,14 +3,14 @@ from whobpyt.datatypes.parameter import par
 
 class AbstractParams:
     # This class stores the parameters used by a model. The parameters may be for the Neural Mass Model and/or Neuroimaging Modality.
-    # It should be useable by both the pytorch model for training and a numpy model for parameter verification. 
+    # It should be usable by both the pytorch model for training and a numpy model for parameter verification. 
 
     def __init__(self, **kwargs):
         # Define the parameters using the par data structure
         pass
     
     def getFittedNames(self):
-        # Returns a named list of paramters that are being fitted
+        # Returns a named list of parameters that are being fitted
         # Assumes the par datastructure is being used for parameters
         
         fp = []

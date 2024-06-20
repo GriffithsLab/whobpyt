@@ -11,9 +11,9 @@
 
 * Fitting RWW Weights
 * Fitting Structural Connectivity Weights
-* Negative Laplacian of the Structual Connectivity Matrix used
+* Negative Laplacian of the Structural Connectivity Matrix used
 * Boundary Functions on State Variables
-* ReLU functions applied to parameters to prevent certian parameters from changing sign in the equations
+* ReLU functions applied to parameters to prevent certain parameters from changing sign in the equations
 * A kind of downsampling between the RWW and the BOLD dynamics
 * Faster BOLD dynamics to reduce computer memory requirement
 * Custom objective function components involving hyperparameters

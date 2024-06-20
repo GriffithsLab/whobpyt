@@ -59,7 +59,7 @@ class Model_fitting(AbstractFitting):
         self.device = device
         
         self.trainingStats = TrainingStats(self.model)
-        self.lastRec = None #A dictionary or Recordings of the last simulation preformed (either training or evaluation)
+        self.lastRec = None #A dictionary or Recordings of the last simulation performed (either training or evaluation)
         
         #self.u = None #This is the ML "Training Input"                
         #self.empTS = ts #This is the ML "Training Labels" - A list
@@ -212,7 +212,7 @@ class Model_fitting(AbstractFitting):
 
                 print('epoch: ', i_epoch, 
                       'loss:', loss.detach().cpu().numpy(),
-                      'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slighly different parameter values
+                      'Pseudo FC_cor: ', np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], #Calling this Pseudo as different windows of the time series have slightly different parameter values
                       'cos_sim: ', np.diag(cosine_similarity(ts_sim, ts_emp)).mean())
                       
                 if lr_scheduler:
@@ -224,7 +224,7 @@ class Model_fitting(AbstractFitting):
             self.trainingStats.appendLoss(np.mean(loss_his))
             # NMM/Other Parameter info for the Epoch (a list where a number is recorded every window of every record)            
             trackedParam = {}
-            exclude_param = ['gains_con', 'lm'] #This stores SC and LF which are saved seperately
+            exclude_param = ['gains_con', 'lm'] #This stores SC and LF which are saved separately
             if(self.model.track_params):
                 for par_name in self.model.track_params:
                     var = getattr(self.model.params, par_name)

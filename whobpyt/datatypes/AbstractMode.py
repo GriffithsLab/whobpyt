@@ -1,7 +1,7 @@
 import torch
 
 class AbstractMode:
-    # Neuroimaging Modalities such as EEG and fMRI BOLD may be seperate from the NMM model
+    # Neuroimaging Modalities such as EEG and fMRI BOLD may be separate from the NMM model
     # and implemented by inheriting from this class.
     # Going forward, the recommendation is to have the modalities integrated with the model.
 

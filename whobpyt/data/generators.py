@@ -106,7 +106,7 @@ def syntheticSC(numRegions, seed = None, maxConDist = 50):
 
     Args:
         numRegions (int): The number of regions in the connectome (must be an even number).
-        seed (int, optional): value to use as np.random.seed() for reproducability.. Defaults to None.
+        seed (int, optional): value to use as np.random.seed() for reproducibility.. Defaults to None.
         maxConDist (int, optional): The max distance between regions such that less than this distance there can still be a connection strength. May wish to scale this based on `numRegions`. Defaults to 50.
 
     Raises:
@@ -147,7 +147,7 @@ def syntheticSC(numRegions, seed = None, maxConDist = 50):
                 continue
             dist = np.linalg.norm(np.array(loc[x]) - np.array(loc[y])) #Distance between two regions
             if dist < maxConDist:
-                # If the distance between two regions is less than maxConDist, then connection strenth is calculated as follows
+                # If the distance between two regions is less than maxConDist, then connection strength is calculated as follows
                 con[x,y] = (maxConDist-dist)/maxConDist
     
     return con, loc

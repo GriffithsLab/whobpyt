@@ -25,7 +25,7 @@ class RWW_np:
     """
     A module for forward model (WWD) to simulate a batch of BOLD signals
 
-    Attibutes
+    Attributes
     ---------
     state_size: int
         the number of states in the WWD model

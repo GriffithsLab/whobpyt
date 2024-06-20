@@ -1,7 +1,7 @@
 Code Architecture
 ===================================
 
-The package is a collection of interchangable Whole Brain Models, Objective Functions Components, and Parameter Fitting Paradigms. This code base is still in alpha phase and not all combinations of these components are currently supported. 
+The package is a collection of interchangeable Whole Brain Models, Objective Functions Components, and Parameter Fitting Paradigms. This code base is still in alpha phase and not all combinations of these components are currently supported. 
 
 ## Simplified Usage Pseudo Code
 
@@ -30,7 +30,7 @@ plot(fitting.trainingStats)
 verify_model = NumPyNMM(model.params)
 simulated_data = verify_model.simulate()
 
-# Preform Analysis
+# Perform Analysis
 ...
 
 ```
@@ -41,7 +41,7 @@ These models implement the numerical simulation of a CNMM (or modified CNMM). Th
 
 The built in models are:
 
-- RWWExcInb - Two variations are avaliable
+- RWWExcInb - Two variations are available
 - JansenRit - With Lead Field, Delays, Laplacian Connections
 - Linear (needs updating)
 - Robinson (Future Addition)
@@ -64,7 +64,7 @@ Paradigms for fitting model parameters.
 
 The built in parameter fitting paradigms are:
 
-- Model Fitting - Uses a approch to train on windowed sections of neuroimaging recordings
+- Model Fitting - Uses a approach to train on windowed sections of neuroimaging recordings
 - Fitting FNGFPG - A technique to run true time scale BOLD 
 
 

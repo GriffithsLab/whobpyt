@@ -98,7 +98,7 @@ def blockTS(data, blocks, numNodes, numSV):
     n = torch.numel(data)
     
     if (not (n%blocks == 0)):
-        print("ERROR: data is not divisable by blocks")
+        print("ERROR: data is not divisible by blocks")
         return 
     
     newTimeDim = int(n/(blocks*numNodes*numSV))

@@ -84,7 +84,7 @@ class TrainingStats:
 
     def appendLoss(self, newValue):
         """ 
-        Append Trainig Loss
+        Append Training Loss
 
         Parameters
         -----------

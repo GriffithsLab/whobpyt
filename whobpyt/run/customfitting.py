@@ -58,7 +58,7 @@ class Fitting_FNGFPG(AbstractFitting):
         num_epochs : Int
             Number of epochs for training.
         block_len : Int
-            The number of simulation steps per block. Total number of steps should be divisable by this number.    
+            The number of simulation steps per block. Total number of steps should be divisible by this number.    
         learningrate : Float
             Learning rate used by backpropagation optimizer.
         resetIC : Bool
@@ -95,7 +95,7 @@ class Fitting_FNGFPG(AbstractFitting):
                     delayHist = torch.tensor(1.0, device = self.device) # TODO: Delays are currently is not implemented in various places
 
                 # initial the external inputs
-                external = torch.tensor([0], device = self.device) # TODO: Currenlty this code only works for resting state
+                external = torch.tensor([0], device = self.device) # TODO: Currently this code only works for resting state
                 
                 num_blocks = int(self.model.sim_len/block_len)
             
