@@ -34,7 +34,7 @@ class RNNRWW(AbstractNMM):
     state_size : int
         The number of states in the WWD model
     tr : float
-        tr of fMRI image. That is, the spacing betweeen images in the time series. 
+        tr of fMRI image. That is, the spacing between images in the time series. 
     step_size: float
         Integration step for forward model
     steps_per_TR: int
@@ -58,11 +58,11 @@ class RNNRWW(AbstractNMM):
     use_Gaussian_EI: bool
         Use a custom objective function component
     use_dynamic_boundary: bool
-        Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size. 
+        Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certain step_size. 
     params: ParamsRWW
         A object that contains the parameters for the RWW nodes
     params_fitted: dictionary
-        A dictionary containg fitted parameters and fitted hyper_parameters
+        A dictionary containing fitted parameters and fitted hyper_parameters
     output_size: int
         Number of ROIs
   
@@ -112,7 +112,7 @@ class RNNRWW(AbstractNMM):
         sampling_size:
             This is related to an averaging of NMM values before inputing into hemodynamic equaitons. This is non-standard. 
         tr : float
-            tr of fMRI image. That is, the spacing betweeen images in the time series. 
+            tr of fMRI image. That is, the spacing between images in the time series. 
         sc: float node_size x node_size array
             The structural connectivity matrix
         use_fit_gains: bool
@@ -126,7 +126,7 @@ class RNNRWW(AbstractNMM):
         use_Laplacian: bool
             Whether to use the negative laplacian of the (fitted) structural connectivity as the structural connectivity
         use_dynamic_boundary: bool
-            Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certian step_size.
+            Whether to have tanh function applied at each time step to constrain parameter values. Simulation results will become dependent on a certain step_size.
         """        
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         

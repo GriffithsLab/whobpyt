@@ -40,7 +40,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-print("Is cuda avaliable?")
+print("Is cuda available?")
 print(torch.cuda.is_available())
 
 device = torch.device("cpu") #Options: "cpu" or "cuda"
@@ -60,7 +60,7 @@ sim_len = 1500 # Simulation length in msecs
 skip_trans = int(500/step_size)
 
 # Initial Conditions
-S_E = 0.6; S_I = 0.1; x = 0.0000; f = 2.4286; v = 1.3283; q = 0.6144 # x,f,v,q might be choosen for different initial S_E
+S_E = 0.6; S_I = 0.1; x = 0.0000; f = 2.4286; v = 1.3283; q = 0.6144 # x,f,v,q might be chosen for different initial S_E
 init_state = torch.tensor([[S_E, S_I, x, f, v, q]]).repeat(num_regions, 1)
 
 # Add randomness
@@ -113,7 +113,7 @@ model = RWWEI2_EEG_BOLD(num_regions, num_channels, paramsNode, paramsEEG, params
 # ---------------------------------------------------
 #
 # Written in such as way as to be able to adjust the relative importance of components that make up the objective function.
-# Also, written in such a way as to be able to track and plot indiviual components losses over time. 
+# Also, written in such a way as to be able to track and plot individual components losses over time. 
 
 class mmObjectiveFunction():
     def __init__(self):

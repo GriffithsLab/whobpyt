@@ -31,7 +31,7 @@ class RWWEI2(AbstractNMM):
     output_size : Int
         The number of brain regions used in the model
     state_names : List of Strings
-        A list of the state varaible names of the model
+        A list of the state variable names of the model
     output_names : List of Strings
         A list of the output variable names of the model
     track_params :
@@ -125,7 +125,7 @@ class RWWEI2(AbstractNMM):
     
     def genNoise(self, block_len, batched = False):
         '''
-        This generates noise to be used by the model. It is particulary useful for the FNGFPG design 
+        This generates noise to be used by the model. It is particularly useful for the FNGFPG design 
         where the same noise must be used be restructure for two different forward passes. 
         
         Parameters
@@ -288,7 +288,7 @@ def forward(self, external, hx, hE, setNoise, batched):
         if(useLaplacian & (not useDelays)):
             # WARNING: This has not been tested
             
-            # NOTE: We are acutally using the NEGATIVE Laplacian
+            # NOTE: We are actually using the NEGATIVE Laplacian
             
             Laplacian_diagonal = -torch.diag(torch.sum(self.Con_Mtx, axis=1))    #Con_Mtx should be normalized, so this should just add a diagonal of -1's
             S_E_laplacian = torch.matmul(self.Con_Mtx + Laplacian_diagonal, S_E)
@@ -298,7 +298,7 @@ def forward(self, external, hx, hE, setNoise, batched):
         if(useDelays & useLaplacian):
             # WARNING: This has not been tested
             
-            # NOTE: We are acutally using the NEGATIVE Laplacian
+            # NOTE: We are actually using the NEGATIVE Laplacian
 
             Laplacian_diagonal = -torch.diag(torch.sum(self.Con_Mtx, axis=1))    #Con_Mtx should be normalized, so this should just add a diagonal of -1's
                        
@@ -384,7 +384,7 @@ def blockTS(data, blocks, numNodes, numSV):
     n = torch.numel(data)
     
     if (not (n%blocks == 0)):
-        print("ERROR: data is not divisable by blocks")
+        print("ERROR: data is not divisible by blocks")
         return 
     
     newTimeDim = int(n/(blocks*numNodes*numSV))

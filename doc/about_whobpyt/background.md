@@ -6,7 +6,7 @@ The Whole Brain Models are of the form of Connectome-based Neural Mass Models (C
 
 ## Neuroimaging Data
 
-The following items may be requried (in a consistent parcellated format), depending on the CNMM model and empirical data:
+The following items may be required (in a consistent parcellated format), depending on the CNMM model and empirical data:
 
 - Structural Connectivity Matrix : For connection strengths
 - Distance Matrix : For connection delays

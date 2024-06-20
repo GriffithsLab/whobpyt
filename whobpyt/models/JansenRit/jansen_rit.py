@@ -23,7 +23,7 @@ class RNNJANSEN(AbstractNMM):
     """
     A module for forward model (JansenRit) to simulate EEG signals
     
-    Attibutes
+    Attributes
     ---------
     state_size : int
         Number of states in the JansenRit model

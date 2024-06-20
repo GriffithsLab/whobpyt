@@ -225,7 +225,7 @@ class RWW_Layer(torch.nn.Module):
             if(useLaplacian & (not useDelays)):
                 # WARNING: This has not been tested
                 
-                # NOTE: We are acutally using the NEGATIVE Laplacian
+                # NOTE: We are actually using the NEGATIVE Laplacian
                 
                 Laplacian_diagonal = -torch.diag(torch.sum(self.Con_Mtx, axis=1))    #Con_Mtx should be normalized, so this should just add a diagonal of -1's
                 S_E_laplacian = torch.matmul(self.Con_Mtx + Laplacian_diagonal, S_E)
@@ -236,7 +236,7 @@ class RWW_Layer(torch.nn.Module):
             if(useDelays & useLaplacian):
                 # WARNING: This has not been tested
                 
-                # NOTE: We are acutally using the NEGATIVE Laplacian
+                # NOTE: We are actually using the NEGATIVE Laplacian
 
                 Laplacian_diagonal = -torch.diag(torch.sum(self.Con_Mtx, axis=1))    #Con_Mtx should be normalized, so this should just add a diagonal of -1's
                            
@@ -393,7 +393,7 @@ class BOLD_Params():
         #Starting Condition
         #x = 1   # vasodilatory signal
         #f = 1   # inflow
-        #v = 1   # blood volumne
+        #v = 1   # blood volume
         #q = 1   # deoxyhemoglobin content 
         
 class BOLD_Layer(torch.nn.Module):
@@ -429,7 +429,7 @@ class BOLD_Layer(torch.nn.Module):
         #Starting Condition
         #x = 1   # vasodilatory signal
         #f = 1   # inflow
-        #v = 1   # blood volumne
+        #v = 1   # blood volume
         #q = 1   # deoxyhemoglobin content 
         
         #############################################
@@ -950,7 +950,7 @@ class ParamsJR():
 class RNNJANSEN(torch.nn.Module):
     """
     A module for forward model (JansenRit) to simulate a batch of EEG signals
-    Attibutes
+    Attributes
     ---------
     state_size : int
         the number of states in the JansenRit model
@@ -1136,7 +1136,7 @@ class RNNJANSEN(torch.nn.Module):
         self.delays = (self.dist / (conduct_lb * con_1 + m(self.mu))).type(torch.int64)
         # print(torch.max(self.delays), self.delays.shape)
 
-        # placeholder for the updated corrent state
+        # placeholder for the updated current state
         current_state = torch.zeros_like(hx)
 
         # placeholders for output BOLD, history of E I x f v and q
@@ -1331,7 +1331,7 @@ def h_tf(a, b, d, z):
 class RNNWWD(torch.nn.Module):
     """
     A module for forward model (WWD) to simulate a batch of BOLD signals
-    Attibutes
+    Attributes
     ---------
     state_size : int
         the number of states in the WWD model
@@ -1516,7 +1516,7 @@ class RNNWWD(torch.nn.Module):
             l_s = torch.tensor(np.zeros((1, 1)), dtype=torch.float32)
 
         
-        # placeholder for the updated corrent state
+        # placeholder for the updated current state
         current_state = torch.zeros_like(hx)
 
         # placeholders for output BOLD, history of E I x f v and q
@@ -1638,7 +1638,7 @@ class WWD_np( ):
     """
     A module for forward model (WWD) to simulate a batch of BOLD signals
     
-    Attibutes
+    Attributes
     ---------
     state_size : int
         the number of states in the WWD model

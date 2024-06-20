@@ -121,7 +121,7 @@ class powerSpectrumLoss():
 class functionalConnectivityLoss():
     # Right now this fit's to a fixed "empirical" FC matrix, but in the future
     # will change to fit to a time series of FC
-    # Furthermore, for computational effeciency a batch of overlapping FC's will
+    # Furthermore, for computational efficiency a batch of overlapping FC's will
     # be calculated to create a kind of mini-batch back propagation 
     
     def __init__(self, num_regions, varIdx, targetValue = None, empiricalData = None):

@@ -5,7 +5,7 @@ import inspect
 def method_arg_type_check(method_obj, exclude = []):
     """
     Takes the method object of a given function (e.g. RNNJANSEN) and checks that the passed arguments abide by their 
-    expected data types.  If there is a discrepency, raises a ValueError.
+    expected data types.  If there is a discrepancy, raises a ValueError.
     
     Optional argument: exclude
         List of strings containing argument names to exclude from the check (e.g. ['step_size', 'params']).  

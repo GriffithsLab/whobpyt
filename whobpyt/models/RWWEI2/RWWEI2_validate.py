@@ -2,7 +2,7 @@ import numpy as np
 
 # Multi-Modal Connectome-based Neural Mass Modelling
 #
-# This is to simulate a RWW Network with addtional BOLD and EEG layers.
+# This is to simulate a RWW Network with additional BOLD and EEG layers.
 
 ## EQUATIONS & BIOLOGICAL VARIABLES FROM:
 #

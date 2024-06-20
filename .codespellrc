@@ -1,0 +1,6 @@
+[codespell]
+# Ref: https://github.com/codespell-project/codespell#using-a-config-file
+skip = .git*,.codespellrc
+check-hidden = true
+ignore-regex = ((^\s*"image/\S+": "|"output_type":"stream").*|Ather SH|Hussain Ather)
+ignore-words-list = numer

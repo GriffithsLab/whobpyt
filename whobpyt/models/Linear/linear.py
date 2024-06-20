@@ -25,7 +25,7 @@ class ParamsLIN(AbstractParams):
 class RNNLIN(AbstractNMM):
     """
     A module for forward model (Linear Model with 1 population) to simulate a window of BOLD signals
-    Attibutes
+    Attributes
     ---------
     state_size : int
         the number of states in the WWD model

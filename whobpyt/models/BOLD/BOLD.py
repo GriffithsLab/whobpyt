@@ -46,7 +46,7 @@ class BOLD_Layer(AbstractMode):
         #Starting Condition
         #x = 1   # vasodilatory signal
         #f = 1   # inflow
-        #v = 1   # blood volumne
+        #v = 1   # blood volume
         #q = 1   # deoxyhemoglobin content 
         pass
     

@@ -30,7 +30,7 @@ class Model_fitting:
         ts: array with num_tr x node_size
             empirical EEG time-series
         num_epoches: int
-            the times for repeating trainning
+            the times for repeating training
         """
         self.model = model
         self.num_epoches = num_epoches
@@ -84,7 +84,7 @@ class Model_fitting:
         hE = torch.tensor(np.random.uniform(state_lb, state_ub, (self.model.node_size, delays_max)),
                           dtype=torch.float32)
 
-        # define masks for geting lower triangle matrix
+        # define masks for getting lower triangle matrix
         mask = np.tril_indices(self.model.node_size, -1)
         mask_e = np.tril_indices(self.model.output_size, -1)
 
@@ -142,7 +142,7 @@ class Model_fitting:
                 
                 next_batch, hE_new = self.model(external, X, hE)
 
-                # Get the batch of emprical EEG signal.
+                # Get the batch of empirical EEG signal.
                 ts_batch = torch.tensor(
                     (eeg.T[i_batch * self.model.batch_size:(i_batch + 1) * self.model.batch_size, :]).T,
                     dtype=torch.float32)
@@ -298,7 +298,7 @@ class Model_fitting:
 
         # placeholders for model parameters
 
-        # define mask for geting lower triangle matrix
+        # define mask for getting lower triangle matrix
         mask = np.tril_indices(self.model.node_size, -1)
         mask_e = np.tril_indices(self.model.output_size, -1)
 
@@ -421,4 +421,4 @@ class Model_fitting:
                 tmp_ls = getattr(self.output_sim, name + '_test')
                 setattr(self.output_sim, name + '_test', np.concatenate(tmp_ls, axis=1))   
         else:
-            print("only WWD model for the test_realtime funcion")   
+            print("only WWD model for the test_realtime function")   

@@ -10,7 +10,7 @@ class CostsmmRWWEI2(AbstractLoss):
         # Defining the Objective Function
         # ---------------------------------------------------
         # Written in such as way as to be able to adjust the relative importance of components that make up the objective function.
-        # Also, written in such a way as to be able to track and plot indiviual components losses over time. 
+        # Also, written in such a way as to be able to track and plot individual components losses over time. 
         
         # Weights of Objective Function Components
         self.S_E_mean_weight = 1
