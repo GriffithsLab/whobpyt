@@ -1,5 +1,5 @@
 from torch import (device as ptdevice, numel as ptnumel, mean as ptmean)
-import torch.nn.functional.mse_loss as ptmse_loss
+from torch.nn.functional import mse_loss as ptmse_loss
 
 from ..datatypes import AbstractLoss
 
