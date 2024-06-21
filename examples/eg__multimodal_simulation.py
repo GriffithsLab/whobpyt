@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-r"""
-=================================
+"""
+========================================================
+Multimodal simulation
+========================================================
+
 Fitting S_E Mean to 0.164 using default RWW Parameters
-=================================
 
 What is being modeled:
 
-- Created a Sphere'd Cube (chosen points on cube projected onto radius = 1 sphere), so that regions were more evently distributed. All corners of cube chosen as regions, thus there are 8 regions. 
-
+- Created a Sphere'd Cube (chosen points on cube projected onto radius = 1 sphere), so that regions were more evently distributed. All corners of cube chosen as regions, thus there are 8 regions.
 - EEG channels located on the center of each face of the cube. Thus there are 6 EEG channels.
-
 - Added some randomness to initial values - to decorrelate the signals a bit. Looking for FC matrix to look similar to SC matrix.
 
 """  
@@ -107,9 +107,7 @@ paramsEEG.LF = LF_Norm
 #
 # The Multi-Modal Model
 
-
 model = RWWEI2_EEG_BOLD(num_regions, num_channels, paramsNode, paramsEEG, paramsBOLD, Con_Mtx, dist_mtx, step_size, sim_len, device = device)
-
 
 # %%
 # Defining the Objective Function

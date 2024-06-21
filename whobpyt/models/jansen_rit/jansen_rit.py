@@ -113,6 +113,7 @@ JR model class
 class JansenRitModel(AbstractNeuralModel):
     """
     A module for forward model (JansenRit) to simulate EEG signals
+    --------------------------------------------------------------
     
     Attibutes
     ---------

@@ -12,6 +12,7 @@ import numpy as np # for numerical operations
 class ReducedWongWangModel(AbstractNeuralModel):
     """
     Reduced Wong Wang Excitatory Inhibitory (RWWExcInb) Model with integrated BOLD dynamics
+    ---------------------------------------------------------------------------------------
     
     A module for forward model (WWD) to simulate a window of BOLD signals
     
@@ -19,7 +20,6 @@ class ReducedWongWangModel(AbstractNeuralModel):
     and there are other customizations to the neural mass model that may 
     deviate from standard differential equation simulation. Thus, the
     parameter should be tested on a validation model after fitting. 
- 
  
     Attributes
     ---------

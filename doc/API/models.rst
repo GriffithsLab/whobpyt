@@ -1,7 +1,7 @@
 Models
 ===================================
 
-.. autoclass:: whobpyt.models.jansen_rit.JansenRitParams
+.. autoclass:: whobpyt.models.jansen_rit.JansenRitModel
    :members: info, createIC, createDelayIC, setModelSCParameters, forward
    :undoc-members:
    :special-members: __init__
