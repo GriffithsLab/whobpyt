@@ -26,6 +26,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+*.DS_STORE
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -119,6 +120,9 @@ venv.bak/
 
 # mkdocs documentation
 /site
+/doc/_build/*
+/doc/auto_examples/*
+/doc/generated/*
 
 # mypy
 .mypy_cache/
@@ -127,3 +131,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# examples
+/examples/*_data/*
