@@ -70,7 +70,7 @@ class ReducedWongWangModel(AbstractNeuralModel):
         A function that returns a dictionary with model information.
     createIC(self, ver)
         A function to return an initial state tensor for the model.
-    setModelParameters(self)
+    setModelSCParameters(self)
         A function that assigns model parameters as model attributes and also to assign parameters and hyperparameters for fitting, 
         so that the inherited Torch functionality can be used. 
         This practice may be replaced soon.  
