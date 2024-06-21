@@ -110,7 +110,7 @@ sc = sc_df.values
 sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 
 # %%
-# Load the leadfield matrix
+# Load the leadfield matrix \
 # **PLACEHOLDER: Commented out `delays = dist/conduction_velocity` as it is unused**
 lm = os.path.join(data_dir, 'Subject_1_low_voltage_lf.npy')
 ki0 =stim_weights_thr[:,np.newaxis]
@@ -191,7 +191,7 @@ model = JansenRitModel(params,
 
 
 # %%
-# Create objective function using `CostsJR <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/optimization/custom_cost_JR.py#L14>`_
+# Create objective function using `CostsJR <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/optimization/custom_cost_JR.py#L14>`_ \
 # **PLACEHOLDER: Does objective mean loss function? If so point or insert here explanation of theory behind it**
 ObjFun = CostsJR(model)
 
@@ -201,7 +201,7 @@ ObjFun = CostsJR(model)
 F = ModelFitting(model, ObjFun)
 
 # %%
-# Model training
+# Model training \
 # **PLACEHOLDER: what is the reason for the values being replaced below?**
 u = np.zeros((node_size,hidden_size,time_dim))
 u[:,:,80:120]= 1000
@@ -220,12 +220,12 @@ F.evaluate(u = u, empRec = data_mean, TPperWindow = batch_size, base_window_num 
 
 
 # %%
-# Plot the original and simulated EEG data
-# **PLACEHOLDER: Commented out duplicate
+# Plot the original and simulated EEG data \
+# **PLACEHOLDER: Commented out duplicate code** \
 # ```
-# epoched = mne.read_epochs(file_name, verbose=False);
+# epoched = mne.read_epochs(file_name, verbose=False); \
 # evoked = epoched.average()
-# ``` **
+# ```
 ts_args = dict(xlim=[-0.1,0.3])
 ch, peak_locs1 = evoked.get_peak(ch_type='eeg', tmin=-0.05, tmax=0.01)
 ch, peak_locs2 = evoked.get_peak(ch_type='eeg', tmin=0.01, tmax=0.02)
