@@ -113,7 +113,7 @@ node_size = sc.shape[0]
 output_size = eeg_data.shape[0]
 batch_size = 20
 step_size = 0.0001
-num_epochs = 20 #2 # num_epochs = 20
+num_epochs = 2 # num_epochs = 20
 tr = 0.001
 state_size = 6
 base_batch_num = 20
@@ -131,35 +131,35 @@ data_mean = Timeseries(eeg_data, num_epochs, batch_size)
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
 lm = np.zeros((output_size,200))
 lm_v = np.zeros((output_size,200))
-params = JansenRitParams(A = par(3.25), 
-                         a= par(100,100, 2, True), 
-                         B = par(22), 
+params = JansenRitParams(A=par(3.25), 
+                         a=par(100,100, 2, True), 
+                         B=par(22), 
                          b = par(50, 50, 1, True),
-                         g=par(500,500,2, True), 
-                         g_f=par(10,10,1, True), 
-                         g_b=par(10,10,1, True),
+                         g = par(500,500,2, True), 
+                         g_f = par(10,10,1, True), 
+                         g_b = par(10,10,1, True),
                          c1 = par(135, 135, 1, True), 
                          c2 = par(135*0.8, 135*0.8, 1, True), 
                          c3 = par(135*0.25, 135*0.25, 1, True),
                          c4 = par(135*0.25, 135*0.25, 1, True), 
-                         std_in= par(np.log(10), np.log(10), .1, True, True), 
-                         vmax= par(5), 
-                         v0=par(6), 
-                         r=par(0.56),
-                         y0=par(-2, -2, 1/4, True),
+                         std_in = par(np.log(10), np.log(10), .1, True, True), 
+                         vmax = par(5), 
+                         v0 = par(6), 
+                         r = par(0.56),
+                         y0 = par(-2, -2, 1/4, True),
                          mu = par(np.log(1.5),
                                   np.log(1.5), .1, True, True, lb=0.1), 
-                         k =par(5., 5., 0.2, True, lb=1), 
-                         k0=par(0),
+                         k = par(5., 5., 0.2, True, lb=1), 
+                         k0 = par(0),
                          cy0 = par(50, 50, 1, True), 
-                         ki=par(ki0), 
-                         lm=par(lm, lm, 1 * np.ones((output_size, node_size))+lm_v, True)
+                         ki = par(ki0), 
+                         lm = par(lm, lm, 1 * np.ones((output_size, node_size))+lm_v, True)
                          )
 
 
 # %%
 # call model want to fit
-model = JansenRitModel(params, 
+model = JansenRitModel(params,
                        node_size=node_size, 
                        TRs_per_window=batch_size, 
                        step_size=step_size, 
@@ -169,7 +169,7 @@ model = JansenRitModel(params,
                        lm=lm, 
                        dist=dist, 
                        use_fit_gains=True, 
-                       use_fit_lfm = False)
+                       use_fit_lfm=False)
 
 
 
@@ -195,7 +195,7 @@ F.evaluate(u = u, empRec = data_mean, TPperWindow = batch_size, base_window_num 
 # %%
 # load in a previously completed model fitting results object
 full_run_fname = os.path.join(data_dir, 'Subject_1_low_voltage_fittingresults_stim_exp.pkl')
-F = pickle.load(open(full_run_fname, 'rb'))
+#F = pickle.load(open(full_run_fname, 'rb'))
 F.evaluate(u = u, empRec = data_mean, TPperWindow = batch_size, base_window_num = 20)
 
 
