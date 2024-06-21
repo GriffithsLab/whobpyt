@@ -72,7 +72,7 @@ init_state = (init_state + torch.randn_like(init_state)/30).to(device) # Randomi
 # Create a RWW Params
 paramsNode = ParamsRWWEI2(num_regions)
 
-#Create #EEG Params
+#Create EEG Params
 paramsEEG = EEG_Params(torch.eye(num_regions))
 paramsEEG.to(device)
 
