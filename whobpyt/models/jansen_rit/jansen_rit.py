@@ -113,6 +113,7 @@ JR model class
 class JansenRitModel(AbstractNeuralModel):
     """
     A module for forward model (JansenRit) to simulate EEG signals
+    --------------------------------------------------------------
     
     Attibutes
     ---------
@@ -170,7 +171,7 @@ class JansenRitModel(AbstractNeuralModel):
     createDelayIC(self, ver):
         Creates the initial conditions for the delays.
 
-    setModelParameters(self):    
+    setModelSCParameters(self):    
         Sets the parameters of the model.
     
     forward(input, noise_out, hx)
@@ -244,7 +245,7 @@ class JansenRitModel(AbstractNeuralModel):
         self.params = params
         self.output_size = lm.shape[0]  # number of EEG channels
         
-        self.setModelParameters()
+        self.setModelParameters() # defined in datatypes/abstract_neural_model.py
         self.setModelSCParameters()
 
     

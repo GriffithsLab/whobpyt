@@ -26,6 +26,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+*.DS_STORE
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -69,7 +70,9 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+doc/_build/
+doc/auto_examples/
+doc/generated/
 
 # PyBuilder
 target/
@@ -117,9 +120,6 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
-
 # mypy
 .mypy_cache/
 .dmypy.json
@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# examples
+examples/*_data/*

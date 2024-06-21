@@ -38,4 +38,6 @@ Welcome to WhoBPyT documentation!
    :glob:
  
    auto_examples/eg__replicate_Momi2023
+   auto_examples/eg__RWW_example
+   auto_examples/eg__multimodal_simulation
    
