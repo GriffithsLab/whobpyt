@@ -70,7 +70,9 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+doc/_build/
+doc/auto_examples/
+doc/generated/
 
 # PyBuilder
 target/
@@ -118,12 +120,6 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
-/doc/_build/*
-/doc/auto_examples/*
-/doc/generated/*
-
 # mypy
 .mypy_cache/
 .dmypy.json
@@ -133,4 +129,4 @@ dmypy.json
 .pyre/
 
 # examples
-/examples/*_data/*
+examples/*_data/*
