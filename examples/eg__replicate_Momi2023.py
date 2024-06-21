@@ -14,18 +14,18 @@ Momi, D., Wang, Z., Griffiths, J.D. (2023).
 **PLACEHOLDER -- What findings specifically are being replicated?**
 **Extract from paper**
 
-The effect of two anatomical connectivity-based lesion 
+*The effect of two anatomical connectivity-based lesion 
 strategies (random vs targeted) and time of damage (20ms: blue; 50ms: orange; 100ms: green) on TMS-EEG dynamics for one
 representative subject. Overall, targeted attack (left column) significantly compromised the propagation of the TMS-evoked signal
 compared to the random attack (right column) condition. Moreover, the EEG dynamics were significantly affected by early (20ms:
-blue and 50ms: orange) compared to late (100ms: green) virtual lesions.
+blue and 50ms: orange) compared to late (100ms: green) virtual lesions.*
 
 The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.
 
 """
 
 # sphinx_gallery_thumbnail_number = 1
-#
+
 # %%
 # Setup
 # --------------------------------------------------
@@ -111,15 +111,15 @@ sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 
 # %%
 # Load the leadfield matrix
+# **PLACEHOLDER: Commented out `delays = dist/conduction_velocity` as it is unused**
 lm = os.path.join(data_dir, 'Subject_1_low_voltage_lf.npy')
 ki0 =stim_weights_thr[:,np.newaxis]
 #UNUSED
 # delays = dist/conduction_velocity
 
 # %%
-# Define options for JR model
-# **PlACEHOLDER** 
-# Start and end times are chosen for X
+# Define options for JR model \
+# **PLACEHOLDER: Start and end times are chosen for X reasons?**
 eeg_data = evoked.data.copy()
 time_start = np.where(evoked.times==-0.1)[0][0]
 time_end = np.where(evoked.times==0.3)[0][0]
@@ -139,14 +139,14 @@ hidden_size = int(tr/step_size)
 
 
 # %%
-# Prepare data structure of the model using `Timeseries <https://github.com/GriffithsLab/whobpyt/blob/dev/whobpyt/datatypes/timeseries.py>` _, 
+# Prepare data structure of the model using `Timeseries <https://github.com/GriffithsLab/whobpyt/blob/dev/whobpyt/datatypes/timeseries.py>`_, 
 # which is responsible for holding the empirical and simulated data. It is the format expected by the visualization function of whobpyt. 
 data_mean = Timeseries(eeg_data, num_epochs, batch_size)
 
 # %%
 # Get model parameters structure and define the fitted parameters by setting non-zero variance for the model using
-# `JansenRitParams <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/models/jansen_rit/jansen_rit.py#L42>` _.
-# **What's g_f, g_b, k0, lm? No definition given in class**
+# `JansenRitParams <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/models/jansen_rit/jansen_rit.py#L42>`_. \
+# **PLACEHOLDER: What's g_f, g_b, k0, lm? No definition given in class**
 lm = np.zeros((output_size,200))
 lm_v = np.zeros((output_size,200))
 params = JansenRitParams(A = par(3.25), 
@@ -176,7 +176,7 @@ params = JansenRitParams(A = par(3.25),
 
 
 # %%
-# Call model you want to fit, in this case `JansenRitModel <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/models/jansen_rit/jansen_rit.py#L113>` _.
+# Call model you want to fit, in this case `JansenRitModel <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/models/jansen_rit/jansen_rit.py#L113>`_
 model = JansenRitModel(params, 
                        node_size=node_size, 
                        TRs_per_window=batch_size, 
@@ -190,20 +190,20 @@ model = JansenRitModel(params,
                        use_fit_lfm = False)
 
 
-
-# Create objective function using `CostsJR <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/optimization/custom_cost_JR.py#L14>` _
+# %%
+# Create objective function using `CostsJR <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/optimization/custom_cost_JR.py#L14>`_
 # **PLACEHOLDER: Does objective mean loss function? If so point or insert here explanation of theory behind it**
 ObjFun = CostsJR(model)
 
 
 # %%
-# Call model fit using `ModelFitting <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/run/model_fitting.py#L18>` _
+# Call model fit using `ModelFitting <https://github.com/GriffithsLab/whobpyt/blob/main/whobpyt/run/model_fitting.py#L18>`_
 F = ModelFitting(model, ObjFun)
 
 # %%
 # Model training
+# **PLACEHOLDER: what is the reason for the values being replaced below?**
 u = np.zeros((node_size,hidden_size,time_dim))
-#PLACEHOLDER: why are values being replaced being done below?
 u[:,:,80:120]= 1000
 F.train(u=u, empRecs = [data_mean], num_epochs = num_epochs, TPperWindow = batch_size)
 
@@ -221,9 +221,11 @@ F.evaluate(u = u, empRec = data_mean, TPperWindow = batch_size, base_window_num 
 
 # %%
 # Plot the original and simulated EEG data
-# Commented out duplicate
+# **PLACEHOLDER: Commented out duplicate
+# ```
 # epoched = mne.read_epochs(file_name, verbose=False);
 # evoked = epoched.average()
+# ``` **
 ts_args = dict(xlim=[-0.1,0.3])
 ch, peak_locs1 = evoked.get_peak(ch_type='eeg', tmin=-0.05, tmax=0.01)
 ch, peak_locs2 = evoked.get_peak(ch_type='eeg', tmin=0.01, tmax=0.02)
