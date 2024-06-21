@@ -1,0 +1,1 @@
+from .wong_wang import ReducedWongWangModel, ReducedWongWangParams
