@@ -5,14 +5,11 @@
 Replicating Momi et al. (2023): TMS-evoked Responses
 ========================================================
 
-This script replicates the findings of the paper :footcite:`MomiEtAl2023`:
+This script replicates the findings of the paper:
 
 Momi, D., Wang, Z., Griffiths, J.D. (2023).
  "TMS-evoked responses are driven by recurrent large-scale network dynamics."
-# eLife, [doi: 10.7554/eLife.83232](https://elifesciences.org/articles/83232)
-
-**PLACEHOLDER -- What findings specifically are being replicated?**
-**Extract from paper**
+  eLife, [doi: 10.7554/eLife.83232](https://elifesciences.org/articles/83232)
 
 *The effect of two anatomical connectivity-based lesion 
 strategies (random vs targeted) and time of damage (20ms: blue; 50ms: orange; 100ms: green) on TMS-EEG dynamics for one
@@ -22,6 +19,7 @@ blue and 50ms: orange) compared to late (100ms: green) virtual lesions.*
 
 The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.
 
+**PLACEHOLDER -- What findings specifically are being replicated?**
 """
 
 # sphinx_gallery_thumbnail_number = 1
@@ -59,8 +57,6 @@ import mne
 
 # viz stuff
 import matplotlib.pyplot as plt
-
-
 
 # %%
 # Download and load necessary data for the example
@@ -110,7 +106,7 @@ sc = sc_df.values
 sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 
 # %%
-# Load the leadfield matrix \
+# Load the leadfield matrix
 # **PLACEHOLDER: Commented out `delays = dist/conduction_velocity` as it is unused**
 lm = os.path.join(data_dir, 'Subject_1_low_voltage_lf.npy')
 ki0 =stim_weights_thr[:,np.newaxis]
