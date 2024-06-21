@@ -1,12 +1,12 @@
 Data Types
 ===================================
 
-.. autoclass:: whobpyt.datatypes.Recording
+.. autoclass:: whobpyt.datatypes.Timeseries
    :members:
    :undoc-members:
    :special-members: __init__
    
-.. autoclass:: whobpyt.datatypes.par
+.. autoclass:: whobpyt.datatypes.Parameter
    :members:
    :undoc-members:
    :special-members: __init__
