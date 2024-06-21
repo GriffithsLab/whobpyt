@@ -1,17 +1,17 @@
 Run
 ===================================
 
-.. autoclass:: whobpyt.run.Model_fitting
+.. autoclass:: whobpyt.run.ModelFitting
    :members: train, evaluate, save
    :undoc-members:
    :special-members: __init__
 
-.. autoclass:: whobpyt.run.Fitting_Batch
+.. autoclass:: whobpyt.run.FittingBatch
    :members: train
    :undoc-members:
    :special-members: __init__
    
-.. autoclass:: whobpyt.run.Fitting_FNGFPG
+.. autoclass:: whobpyt.run.FittingFNGFPG
    :members: train
    :undoc-members:
    :special-members: __init__
