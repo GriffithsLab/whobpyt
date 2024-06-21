@@ -4,7 +4,6 @@ Authors: Andrew Clappison, John Griffiths, Zheng Wang, Davide Momi, Sorenza Bast
 
 
 import torch
-import numpy
 import numpy as np
 
 class Parameter:
