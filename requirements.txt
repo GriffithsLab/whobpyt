@@ -14,11 +14,11 @@ mne
 # Docs requirements
 sphinx
 #sphinx==3.1.1
-sphinx-gallery#==0.8.1
+sphinx-gallery #==0.8.1
 sphinx_rtd_theme #==0.5.0
-sphinx-tabs#==1.3.0
-sphinx-copybutton#==0.3.1
-sphinxcontrib-httpdomain#==1.7.0
+sphinx-tabs #==1.3.0
+sphinx-copybutton #==0.3.1
+sphinxcontrib-httpdomain #==1.7.0
 numpydoc==1.1.0
 recommonmark==0.6.0
 versioneer==0.19
