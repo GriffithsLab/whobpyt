@@ -1,11 +1,11 @@
 """
-.. _ex-momi2023-rep:
+.. _ex-tmseeg:
 
 ========================================================
-Replicating Momi et al. (2023): TMS-evoked Responses
+Modelling TMS-EEG evoked responses
 ========================================================
 
-This script replicates the findings of the paper :footcite:`MomiEtAl2023`:
+This example runs a minimal example based on the analysis in the paaper :footcite:`MomiEtAl2023`:
 
 Momi, D., Wang, Z., Griffiths, J.D. (2023).
  "TMS-evoked responses are driven by recurrent large-scale network dynamics."
@@ -56,9 +56,10 @@ import matplotlib.pyplot as plt
 # %%
 # Download and load necessary data for the example
 download_data = True 
-url = 'https://drive.google.com/drive/folders/1dpyyfJl9wjTrWVo5lqOmB8HRhD3irjNj?usp=drive_link'
+url = 'https://drive.google.com/drive/folders/1DTdF_xR78DxB6kzxqY3SVYBAcdU9IkAB?usp=drive_link'
+
 if download_data: gdown.download_folder(url, quiet=True)
-data_dir = os.path.abspath('eg__replicate_Momi2023_data')
+data_dir = os.path.abspath('eg__tmseeg_data')
 
 # %%
 # Load EEG data from a file
@@ -113,7 +114,7 @@ node_size = sc.shape[0]
 output_size = eeg_data.shape[0]
 batch_size = 20
 step_size = 0.0001
-num_epochs = 20 #2 # num_epochs = 20
+num_epochs = 2 # num_epochs = 20
 tr = 0.001
 state_size = 6
 base_batch_num = 20
