@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Replicating Momi et al. (2023): TMS-evoked Responses &mdash; WhoBPyT 0.0.0 documentation</title>
+  <title>Modelling TMS-EEG evoked responses &mdash; WhoBPyT 0.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -30,8 +30,7 @@
         <script src="../_static/debug.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Data Types" href="../API/datatypes.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -147,15 +146,6 @@
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Replicating Momi et al. (2023): TMS-evoked Responses</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#results-description">Results Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
-</ul>
-</li>
-</ul>
 
         </div>
       </div>
@@ -171,7 +161,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Replicating Momi et al. (2023): TMS-evoked Responses</li>
+      <li class="breadcrumb-item active">Modelling TMS-EEG evoked responses</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -182,12 +172,12 @@
              
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-auto-examples-eg-replicate-momi2023-py"><span class="std std-ref">Go to the end</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-eg-tmseeg-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="replicating-momi-et-al-2023-tms-evoked-responses">
-<span id="ex-momi2023-rep"></span><span id="sphx-glr-auto-examples-eg-replicate-momi2023-py"></span><h1>Replicating Momi et al. (2023): TMS-evoked Responses<a class="headerlink" href="#replicating-momi-et-al-2023-tms-evoked-responses" title="Link to this heading"></a></h1>
-<p>This script replicates the findings of the paper <a href="#id1"><span class="problematic" id="id2">:footcite:`MomiEtAl2023`</span></a>:</p>
+<section class="sphx-glr-example-title" id="modelling-tms-eeg-evoked-responses">
+<span id="ex-tmseeg"></span><span id="sphx-glr-auto-examples-eg-tmseeg-py"></span><h1>Modelling TMS-EEG evoked responses<a class="headerlink" href="#modelling-tms-eeg-evoked-responses" title="Link to this heading"></a></h1>
+<p>This example runs a minimal example based on the analysis in the paaper <a href="#id1"><span class="problematic" id="id2">:footcite:`MomiEtAl2023`</span></a>:</p>
 <dl class="simple">
 <dt>Momi, D., Wang, Z., Griffiths, J.D. (2023).</dt><dd><p>“TMS-evoked responses are driven by recurrent large-scale network dynamics.”</p>
 </dd>
@@ -232,9 +222,10 @@ to download the full example code.</p>
 </div>
 <p>Download and load necessary data for the example</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">download_data</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://drive.google.com/drive/folders/1dpyyfJl9wjTrWVo5lqOmB8HRhD3irjNj?usp=drive_link&#39;</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://drive.google.com/drive/folders/1DTdF_xR78DxB6kzxqY3SVYBAcdU9IkAB?usp=drive_link&#39;</span>
+
 <span class="k">if</span> <span class="n">download_data</span><span class="p">:</span> <span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;eg__replicate_Momi2023_data&#39;</span><span class="p">)</span>
+<span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;eg__tmseeg_data&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Load EEG data from a file</p>
@@ -266,6 +257,14 @@ to download the full example code.</p>
 <span class="n">labels</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">stim_weights_thr</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>19                 7Networks_LH_SomMot_6
+22                 7Networks_LH_SomMot_9
+23                7Networks_LH_SomMot_10
+33          7Networks_LH_DorsAttn_Post_4
+44    7Networks_LH_SalVentAttn_ParOper_2
+Name: ROI Name, dtype: object
+</pre></div>
+</div>
 <p>Load the structural connectivity matrix</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sc_file</span> <span class="o">=</span>  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;Schaefer2018_200Parcels_7Networks_count.csv&#39;</span><span class="p">)</span>
 <span class="n">sc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sc_file</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
@@ -288,7 +287,7 @@ to download the full example code.</p>
 <span class="n">output_size</span> <span class="o">=</span> <span class="n">eeg_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span>
-<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">20</span> <span class="c1">#2 # num_epochs = 20</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># num_epochs = 20</span>
 <span class="n">tr</span> <span class="o">=</span> <span class="mf">0.001</span>
 <span class="n">state_size</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="n">base_batch_num</span> <span class="o">=</span> <span class="mi">20</span>
@@ -360,14 +359,26 @@ to download the full example code.</p>
 <span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">empRecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_mean</span><span class="p">],</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
+epoch:  0 loss: 2.0560505 Pseudo FC_cor:  0.06499107914181587 cos_sim:  0.15775068306767664
+Epoch:  1
+epoch:  1 loss: 2.952542 Pseudo FC_cor:  -0.023429775913822375 cos_sim:  -0.021942122293529844
+</pre></div>
+</div>
 <p>quick test run with 2 epochs</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  -0.027717301614692432 cos_sim:  -0.025475073559488828
 </pre></div>
 </div>
 <p>load in a previously completed model fitting results object</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">full_run_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;Subject_1_low_voltage_fittingresults_stim_exp.pkl&#39;</span><span class="p">)</span>
 <span class="n">F</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">full_run_fname</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
 <span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.47898811498806726 cos_sim:  0.39879850140637885
 </pre></div>
 </div>
 <p>Plot the original and simulated EEG data</p>
@@ -389,6 +400,14 @@ to download the full example code.</p>
 <span class="n">simulated_joint_st</span> <span class="o">=</span> <span class="n">simulated_EEG_st</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">)</span>
 </pre></div>
 </div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_eg__tmseeg_001.png" srcset="../_images/sphx_glr_eg__tmseeg_001.png" alt="EEG (60 channels), 0.005 s, 0.020 s, 0.040 s, 0.078 s, 0.150 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__tmseeg_002.png" srcset="../_images/sphx_glr_eg__tmseeg_002.png" alt="EEG (60 channels), 0.005 s, 0.020 s, 0.040 s, 0.078 s, 0.150 s" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+</pre></div>
+</div>
 </section>
 <section id="results-description">
 <h2>Results Description<a class="headerlink" href="#results-description" title="Link to this heading"></a></h2>
@@ -400,15 +419,16 @@ to capture key features of the EEG signal.</p>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-replicate-momi2023-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 17.986 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-tmseeg-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/42bb710020ec01e2545c257fd1b6d203/eg__replicate_Momi2023.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__replicate_Momi2023.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/adddac552e627b5207e7ec47e04b862e/eg__tmseeg.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__tmseeg.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/27e2d85d32c545dffd08a4bdd25bd094/eg__replicate_Momi2023.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg__replicate_Momi2023.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/d286feff2953e5f5cb87b179e160e2a2/eg__tmseeg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg__tmseeg.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/96a82a4888aa997237721d3523b7b9c9/eg__replicate_Momi2023.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">eg__replicate_Momi2023.zip</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/afd7c9b8f2de3ee98ad077e2f1c87a74/eg__tmseeg.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">eg__tmseeg.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -418,9 +438,7 @@ to capture key features of the EEG signal.</p>
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../API/datatypes.html" class="btn btn-neutral float-left" title="Data Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
+          <footer>
 
   <hr/>
 
