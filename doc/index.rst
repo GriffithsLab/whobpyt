@@ -1,7 +1,7 @@
 Welcome to WhoBPyT documentation!
 ===================================
 
-.. include:: ../README.md
+.. include:: ../README.rst
 
 .. toctree::
    :maxdepth: 1
