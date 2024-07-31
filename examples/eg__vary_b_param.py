@@ -11,7 +11,7 @@ Momi, D., Wang, Z., Griffiths, J.D. (2023).
  "TMS-evoked responses are driven by recurrent large-scale network dynamics."
 # eLife, [doi: 10.7554/eLife.83232](https://elifesciences.org/articles/83232)
 
-This code loads up a previously-fit whobpyt model, varies a specific model parameter (the inhibitory time constant; b), and simulates TEPs to visualize what effect this model parameter has on the output.
+This code loads up a previously-fit whobpyt model, varies a specific model parameter (the inhibitory rate constant; b), and simulates TEPs to visualize what effect this model parameter has on the output.
 
 
 """
@@ -54,19 +54,20 @@ import matplotlib.pyplot as plt
 # %%
 # Download and load necessary data for the example
 download_data = True 
-url = 'https://drive.google.com/drive/folders/1dpyyfJl9wjTrWVo5lqOmB8HRhD3irjNj?usp=drive_link'
+url = 'https://drive.google.com/drive/folders/1DTdF_xR78DxB6kzxqY3SVYBAcdU9IkAB?usp=drive_link'
 if download_data: gdown.download_folder(url, quiet=True)
-data_dir = os.path.abspath('eg__replicate_Momi2023_data')
+data_dir = os.path.abspath('eg__tmseeg_data')
+
 
 # # %%
 # # load in a previously completed model fitting results object
-# full_run_fname = os.path.join(data_dir, 'Subject_1_low_voltage_fittingresults_stim_exp.pkl')
-# F = pickle.load(open(full_run_fname, 'rb'))
-# F.evaluate(u = u, empRec = data_mean, TPperWindow = batch_size, base_window_num = 20)
+full_run_fname = os.path.join(data_dir, 'Subject_1_low_voltage_fittingresults_stim_exp.pkl')
+F = pickle.load(open(full_run_fname, 'rb'))
 
-# define relevant variables for whobpyt fititng/simuations
 
 # %%
+# Define relevant variables for whobpyt fititng/simuations
+
 # Load EEG data from a file
 file_name = os.path.join(data_dir, 'Subject_1_low_voltage.fif')
 epoched = mne.read_epochs(file_name, verbose=False);
@@ -103,6 +104,10 @@ u[:,:,80:120]= 1000
 
 
 # %%
+
+# Run simulation 
+F.evaluate(u = u, empRec = data_mean, TPperWindow = batch_size, base_window_num = 20)
+
 # Visualizng the original fit
 ts_args = dict(xlim=[-0.1,0.3])
 ch, peak_locs1 = evoked.get_peak(ch_type='eeg', tmin=-0.05, tmax=0.01)
@@ -155,6 +160,6 @@ fig.show()
 # ---------------------------------------------------
 #
 #
-# Here we replicate the results of Momi et al. 2023 (Fig.  5D). As the inhibitory synaptic time constant b increases, 
+# Here we replicate the results of Momi et al. 2023 (Fig.  5D). As the inhibitory synaptic rate constant b increases (or equivalently, the time constant decreases), 
 # we observe an increase in the amplitude of the first, early, and local TEP components; and a decrease of the second, 
 # late, and global TEP components.
