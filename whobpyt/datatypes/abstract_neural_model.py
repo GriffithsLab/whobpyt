@@ -29,16 +29,16 @@ class AbstractNeuralModel(ptModule):
         self.state_names = ["None"] # The names of the state variables of the model
         self.output_names = ["None"] # The variable to be used as output from the NMM, for purposes such as the input to an objective function
         self.track_params = [] # Which NMM Parameters to track over training
-        #self.commit_hash = get_git_commit_hash()
+        self.commit_hash = get_git_commit_hash()
         
         
-    """def info(self):
+    def info(self):
         # Information about the model, which may be used by other classes to know which variables to use. 
         
         return {"state_names": self.state_names, 
                 "output_names": self.output_names,
                 "track_params": self.track_params,
-                "commit_hash": self.commit_hash}"""
+                "commit_hash": self.commit_hash}
             
     def setModelParameters(self):
         # Setting the parameters that will be optimized as either model parameters or 2ndLevel/hyper
