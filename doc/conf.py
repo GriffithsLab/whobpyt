@@ -255,7 +255,7 @@ html_show_sourcelink = False
 
 # Configurations for sphinx gallery
 
-sphinx_gallery_conf = {'filename_pattern': '(?=.*r__)(?=.*.py)', 
+sphinx_gallery_conf = {'filename_pattern': '(?=.*eg__)(?=.*.py)', 
                        'examples_dirs': ['../examples'],
                        'gallery_dirs': ['auto_examples'],
                        'within_subsection_order': FileNameSortKey, #'default_thumb_file': 'img/whobpyt_logo.png',
