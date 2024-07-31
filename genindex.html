@@ -84,7 +84,19 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="API/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/models.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel"><code class="docutils literal notranslate"><span class="pre">JansenRitModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createDelayIC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createIC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.forward()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelParameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelSCParameters()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="API/optimization.html">Optimization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsTS"><code class="docutils literal notranslate"><span class="pre">CostsTS</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsTS.__init__"><code class="docutils literal notranslate"><span class="pre">CostsTS.__init__()</span></code></a></li>
@@ -122,7 +134,16 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="API/run.html">Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/run.html">Run</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting"><code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting.__init__"><code class="docutils literal notranslate"><span class="pre">ModelFitting.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting.evaluate"><code class="docutils literal notranslate"><span class="pre">ModelFitting.evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting.save"><code class="docutils literal notranslate"><span class="pre">ModelFitting.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting.train"><code class="docutils literal notranslate"><span class="pre">ModelFitting.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="API/visualization.html">Visualization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="API/visualization.html#whobpyt.visualization.plot_fc"><code class="docutils literal notranslate"><span class="pre">plot_fc()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="API/visualization.html#whobpyt.visualization.plot_timeseries"><code class="docutils literal notranslate"><span class="pre">plot_timeseries()</span></code></a></li>
@@ -130,19 +151,46 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="API/datatypes.html">Data Types</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats"><code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.__init__"><code class="docutils literal notranslate"><span class="pre">TrainingStats.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendLF"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLF()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendLoss"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLoss()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendParam"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendParam()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC_p2e"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2e()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC_p2i"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2i()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC_p2p"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2p()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.reset"><code class="docutils literal notranslate"><span class="pre">TrainingStats.reset()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.save"><code class="docutils literal notranslate"><span class="pre">TrainingStats.save()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries"><code class="docutils literal notranslate"><span class="pre">Timeseries</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.__init__"><code class="docutils literal notranslate"><span class="pre">Timeseries.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.length"><code class="docutils literal notranslate"><span class="pre">Timeseries.length()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npNodeByTime"><code class="docutils literal notranslate"><span class="pre">Timeseries.npNodeByTime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npResample"><code class="docutils literal notranslate"><span class="pre">Timeseries.npResample()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTS"><code class="docutils literal notranslate"><span class="pre">Timeseries.npTS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTimeByNodes"><code class="docutils literal notranslate"><span class="pre">Timeseries.npTimeByNodes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.pyTS"><code class="docutils literal notranslate"><span class="pre">Timeseries.pyTS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.windowedTensor"><code class="docutils literal notranslate"><span class="pre">Timeseries.windowedTensor()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.__init__"><code class="docutils literal notranslate"><span class="pre">Parameter.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.npValue"><code class="docutils literal notranslate"><span class="pre">Parameter.npValue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.to"><code class="docutils literal notranslate"><span class="pre">Parameter.to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.value"><code class="docutils literal notranslate"><span class="pre">Parameter.value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats"><code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.__init__"><code class="docutils literal notranslate"><span class="pre">TrainingStats.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendLF"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLF()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendLoss"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLoss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendParam"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendParam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2e"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2e()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2i"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2i()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2p"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2p()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.reset"><code class="docutils literal notranslate"><span class="pre">TrainingStats.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.save"><code class="docutils literal notranslate"><span class="pre">TrainingStats.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/eg__tmseeg.html">Modelling TMS-EEG evoked responses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg__tmseeg.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg__tmseeg.html#results-description">Results Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg__tmseeg.html#references">References</a></li>
 </ul>
 </li>
 </ul>
@@ -178,20 +226,33 @@
  | <a href="#A"><strong>A</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.__init__">__init__() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.__init__">__init__() (whobpyt.datatypes.outputs.TrainingStats method)</a>
 
       <ul>
+        <li><a href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.__init__">(whobpyt.datatypes.parameter.Parameter method)</a>
+</li>
+        <li><a href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.__init__">(whobpyt.datatypes.timeseries.Timeseries method)</a>
+</li>
+        <li><a href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__">(whobpyt.models.jansen_rit.jansen_rit.JansenRitModel method)</a>
+</li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsFC.__init__">(whobpyt.optimization.CostsFC method)</a>
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC.__init__">(whobpyt.optimization.CostsFixedFC method)</a>
@@ -204,6 +265,8 @@
 </li>
         <li><a href="API/optimization.html#whobpyt.optimization.CostsTS.__init__">(whobpyt.optimization.CostsTS method)</a>
 </li>
+        <li><a href="API/run.html#whobpyt.run.model_fitting.ModelFitting.__init__">(whobpyt.run.model_fitting.ModelFitting method)</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -211,21 +274,21 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendLF">appendLF() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendLF">appendLF() (whobpyt.datatypes.outputs.TrainingStats method)</a>
 </li>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendLoss">appendLoss() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendLoss">appendLoss() (whobpyt.datatypes.outputs.TrainingStats method)</a>
 </li>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendParam">appendParam() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendParam">appendParam() (whobpyt.datatypes.outputs.TrainingStats method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC">appendSC() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC">appendSC() (whobpyt.datatypes.outputs.TrainingStats method)</a>
 </li>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC_p2e">appendSC_p2e() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2e">appendSC_p2e() (whobpyt.datatypes.outputs.TrainingStats method)</a>
 </li>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC_p2i">appendSC_p2i() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2i">appendSC_p2i() (whobpyt.datatypes.outputs.TrainingStats method)</a>
 </li>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC_p2p">appendSC_p2p() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2p">appendSC_p2p() (whobpyt.datatypes.outputs.TrainingStats method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -243,15 +306,19 @@
 </li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC">CostsFixedFC (class in whobpyt.optimization)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedPSD">CostsFixedPSD (class in whobpyt.optimization)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsMean">CostsMean (class in whobpyt.optimization)</a>
 </li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD">CostsPSD (class in whobpyt.optimization)</a>
 </li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsTS">CostsTS (class in whobpyt.optimization)</a>
+</li>
+      <li><a href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC">createDelayIC() (whobpyt.models.jansen_rit.jansen_rit.JansenRitModel method)</a>
+</li>
+      <li><a href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC">createIC() (whobpyt.models.jansen_rit.jansen_rit.JansenRitModel method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -264,9 +331,43 @@
   </ul></td>
 </tr></table>
 
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/run.html#whobpyt.run.model_fitting.ModelFitting.evaluate">evaluate() (whobpyt.run.model_fitting.ModelFitting method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward">forward() (whobpyt.models.jansen_rit.jansen_rit.JansenRitModel method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info">info() (whobpyt.models.jansen_rit.jansen_rit.JansenRitModel method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel">JansenRitModel (class in whobpyt.models.jansen_rit.jansen_rit)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.length">length() (whobpyt.datatypes.timeseries.Timeseries method)</a>
+</li>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsFixedFC.loss">loss() (whobpyt.optimization.CostsFixedFC method)</a>
 
       <ul>
@@ -290,11 +391,35 @@
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/run.html#whobpyt.run.model_fitting.ModelFitting">ModelFitting (class in whobpyt.run.model_fitting)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npNodeByTime">npNodeByTime() (whobpyt.datatypes.timeseries.Timeseries method)</a>
+</li>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npResample">npResample() (whobpyt.datatypes.timeseries.Timeseries method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTimeByNodes">npTimeByNodes() (whobpyt.datatypes.timeseries.Timeseries method)</a>
+</li>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTS">npTS() (whobpyt.datatypes.timeseries.Timeseries method)</a>
+</li>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.npValue">npValue() (whobpyt.datatypes.parameter.Parameter method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter">Parameter (class in whobpyt.datatypes.parameter)</a>
+</li>
       <li><a href="API/visualization.html#whobpyt.visualization.plot_fc">plot_fc() (in module whobpyt.visualization)</a>
 </li>
   </ul></td>
@@ -303,13 +428,15 @@
 </li>
       <li><a href="API/visualization.html#whobpyt.visualization.plot_timeseries">plot_timeseries() (in module whobpyt.visualization)</a>
 </li>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.pyTS">pyTS() (whobpyt.datatypes.timeseries.Timeseries method)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.reset">reset() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.reset">reset() (whobpyt.datatypes.outputs.TrainingStats method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -317,11 +444,19 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats.save">save() (whobpyt.datatypes.TrainingStats method)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.save">save() (whobpyt.datatypes.outputs.TrainingStats method)</a>
+
+      <ul>
+        <li><a href="API/run.html#whobpyt.run.model_fitting.ModelFitting.save">(whobpyt.run.model_fitting.ModelFitting method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="API/optimization.html#whobpyt.optimization.CostsPSD.scalePSD">scalePSD() (whobpyt.optimization.CostsPSD method)</a>
+</li>
+      <li><a href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters">setModelParameters() (whobpyt.models.jansen_rit.jansen_rit.JansenRitModel method)</a>
+</li>
+      <li><a href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters">setModelSCParameters() (whobpyt.models.jansen_rit.jansen_rit.JansenRitModel method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -329,7 +464,31 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="API/datatypes.html#whobpyt.datatypes.TrainingStats">TrainingStats (class in whobpyt.datatypes)</a>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries">Timeseries (class in whobpyt.datatypes.timeseries)</a>
+</li>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.to">to() (whobpyt.datatypes.parameter.Parameter method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/run.html#whobpyt.run.model_fitting.ModelFitting.train">train() (whobpyt.run.model_fitting.ModelFitting method)</a>
+</li>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats">TrainingStats (class in whobpyt.datatypes.outputs)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.value">value() (whobpyt.datatypes.parameter.Parameter method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.windowedTensor">windowedTensor() (whobpyt.datatypes.timeseries.Timeseries method)</a>
 </li>
   </ul></td>
 </tr></table>

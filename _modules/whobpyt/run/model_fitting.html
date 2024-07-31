@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>whobpyt.run.model_fitting &mdash; WhoBPyT 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/theme_override.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=a5c4661c" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=3e6ca1ad"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../../_static/copybutton.js?v=a56c686a"></script>
+        <script src="../../../_static/tabs.js?v=3030b3cb"></script>
+        <script src="../../../_static/debug.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            WhoBPyT
+          </a>
+              <div class="version">
+                0.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About WhoBPyT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../about_whobpyt/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about_whobpyt/architecture.html">Code Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#simplified-usage-pseudo-code">Simplified Usage Pseudo Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#whole-brain-models">Whole Brain Models:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#objective-function-components">Objective Function Components:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#parameter-fitting-paradigms">Parameter Fitting Paradigms:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/architecture.html#package-expansions">Package Expansions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about_whobpyt/background.html">Background Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/background.html#neuroimaging-data">Neuroimaging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about_whobpyt/background.html#system-model-and-biophysical-parameters">System, Model, and Biophysical Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../about_whobpyt/background.html#rwwexcinb">RWWExcInb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about_whobpyt/background.html#jansen-rit">Jansen-Rit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/models.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel"><code class="docutils literal notranslate"><span class="pre">JansenRitModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createDelayIC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createIC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.forward()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelParameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelSCParameters()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/optimization.html">Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsTS"><code class="docutils literal notranslate"><span class="pre">CostsTS</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsTS.__init__"><code class="docutils literal notranslate"><span class="pre">CostsTS.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsTS.main_loss"><code class="docutils literal notranslate"><span class="pre">CostsTS.main_loss()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFC"><code class="docutils literal notranslate"><span class="pre">CostsFC</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFC.__init__"><code class="docutils literal notranslate"><span class="pre">CostsFC.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFC.main_loss"><code class="docutils literal notranslate"><span class="pre">CostsFC.main_loss()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC"><code class="docutils literal notranslate"><span class="pre">CostsFixedFC</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.__init__"><code class="docutils literal notranslate"><span class="pre">CostsFixedFC.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedFC.loss"><code class="docutils literal notranslate"><span class="pre">CostsFixedFC.loss()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD.__init__"><code class="docutils literal notranslate"><span class="pre">CostsPSD.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD.calcPSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD.calcPSD()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD.downSmoothPSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD.downSmoothPSD()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD.loss"><code class="docutils literal notranslate"><span class="pre">CostsPSD.loss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsPSD.scalePSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD.scalePSD()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedPSD"><code class="docutils literal notranslate"><span class="pre">CostsFixedPSD</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedPSD.__init__"><code class="docutils literal notranslate"><span class="pre">CostsFixedPSD.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedPSD.calcPSD"><code class="docutils literal notranslate"><span class="pre">CostsFixedPSD.calcPSD()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsFixedPSD.loss"><code class="docutils literal notranslate"><span class="pre">CostsFixedPSD.loss()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsMean"><code class="docutils literal notranslate"><span class="pre">CostsMean</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.__init__"><code class="docutils literal notranslate"><span class="pre">CostsMean.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/optimization.html#whobpyt.optimization.CostsMean.loss"><code class="docutils literal notranslate"><span class="pre">CostsMean.loss()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/run.html">Run</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting"><code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting.__init__"><code class="docutils literal notranslate"><span class="pre">ModelFitting.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting.evaluate"><code class="docutils literal notranslate"><span class="pre">ModelFitting.evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting.save"><code class="docutils literal notranslate"><span class="pre">ModelFitting.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting.train"><code class="docutils literal notranslate"><span class="pre">ModelFitting.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/visualization.html">Visualization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/visualization.html#whobpyt.visualization.plot_fc"><code class="docutils literal notranslate"><span class="pre">plot_fc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/visualization.html#whobpyt.visualization.plot_timeseries"><code class="docutils literal notranslate"><span class="pre">plot_timeseries()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/visualization.html#whobpyt.visualization.plot_psd"><code class="docutils literal notranslate"><span class="pre">plot_psd()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/datatypes.html">Data Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries"><code class="docutils literal notranslate"><span class="pre">Timeseries</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.__init__"><code class="docutils literal notranslate"><span class="pre">Timeseries.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.length"><code class="docutils literal notranslate"><span class="pre">Timeseries.length()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npNodeByTime"><code class="docutils literal notranslate"><span class="pre">Timeseries.npNodeByTime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npResample"><code class="docutils literal notranslate"><span class="pre">Timeseries.npResample()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTS"><code class="docutils literal notranslate"><span class="pre">Timeseries.npTS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTimeByNodes"><code class="docutils literal notranslate"><span class="pre">Timeseries.npTimeByNodes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.pyTS"><code class="docutils literal notranslate"><span class="pre">Timeseries.pyTS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.windowedTensor"><code class="docutils literal notranslate"><span class="pre">Timeseries.windowedTensor()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.parameter.Parameter.__init__"><code class="docutils literal notranslate"><span class="pre">Parameter.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.parameter.Parameter.npValue"><code class="docutils literal notranslate"><span class="pre">Parameter.npValue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.parameter.Parameter.to"><code class="docutils literal notranslate"><span class="pre">Parameter.to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.parameter.Parameter.value"><code class="docutils literal notranslate"><span class="pre">Parameter.value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats"><code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.__init__"><code class="docutils literal notranslate"><span class="pre">TrainingStats.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendLF"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLF()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendLoss"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLoss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendParam"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendParam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2e"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2e()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2i"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2i()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2p"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2p()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.reset"><code class="docutils literal notranslate"><span class="pre">TrainingStats.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.save"><code class="docutils literal notranslate"><span class="pre">TrainingStats.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/eg__tmseeg.html">Modelling TMS-EEG evoked responses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg__tmseeg.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg__tmseeg.html#results-description">Results Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../auto_examples/eg__tmseeg.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">WhoBPyT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">whobpyt.run.model_fitting</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for whobpyt.run.model_fitting</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Authors: Zheng Wang, John Griffiths, Andrew Clappison, Hussain Ather, Kevin Kadak</span>
+<span class="sd">Neural Mass Model fitting module for model fitting using pytorch</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># for numerical operations</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+<span class="kn">from</span> <span class="nn">..datatypes</span> <span class="kn">import</span> <span class="n">Timeseries</span> <span class="k">as</span> <span class="n">Recording</span> <span class="c1"># JG: rename this to just Timeseries</span>
+<span class="kn">from</span> <span class="nn">..datatypes</span> <span class="kn">import</span> <span class="n">AbstractNeuralModel</span><span class="p">,</span><span class="n">AbstractFitting</span><span class="p">,</span><span class="n">AbstractLoss</span>
+<span class="kn">from</span> <span class="nn">..datatypes</span> <span class="kn">import</span> <span class="n">TrainingStats</span>
+<span class="c1">#from whobpyt.models.RWW.RWW_np import RWW_np #This should be removed and made general</span>
+<span class="kn">from</span> <span class="nn">..functions.arg_type_check</span> <span class="kn">import</span> <span class="n">method_arg_type_check</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="kn">import</span> <span class="n">cosine_similarity</span>
+
+
+<div class="viewcode-block" id="ModelFitting">
+<a class="viewcode-back" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelFitting</span><span class="p">(</span><span class="n">AbstractFitting</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This Model_fitting class is able to fit resting state data or evoked potential data </span>
+<span class="sd">    for which the input training data is empty or some stimulus to one or more NMM nodes,</span>
+<span class="sd">    and the label is an associated empirical neuroimaging recording.</span>
+<span class="sd">    </span>
+<span class="sd">    Studies which consider different kinds of input, such as if SC or some other variable</span>
+<span class="sd">    is associated with an empirical recording, must use a different fitting class. </span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model: AbstractNMM </span>
+<span class="sd">        Whole Brain Model to Simulate</span>
+<span class="sd">    cost: AbstractLoss</span>
+<span class="sd">        A particular objective function which the model will be optimized for. </span>
+<span class="sd">    trainingStats: TrainingStats</span>
+<span class="sd">        Information about objective function loss and parameter values over training windows/epochs</span>
+<span class="sd">    lastRec: Recording</span>
+<span class="sd">        The last simulation of fitting(), evaluation(), or simulation()</span>
+<span class="sd">    device : torch.device</span>
+<span class="sd">        Whether the fitting is to run on CPU or GPU</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ModelFitting.__init__">
+<a class="viewcode-back" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">AbstractNeuralModel</span><span class="p">,</span> <span class="n">cost</span><span class="p">:</span> <span class="n">AbstractLoss</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model: AbstractNMM </span>
+<span class="sd">            Whole Brain Model to Simulate</span>
+<span class="sd">        cost: AbstractLoss</span>
+<span class="sd">            A particular objective function which the model will be optimized for. </span>
+<span class="sd">        device : torch.device</span>
+<span class="sd">            Whether the fitting is to run on CPU or GPU</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cost</span> <span class="o">=</span> <span class="n">cost</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainingStats</span> <span class="o">=</span> <span class="n">TrainingStats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1">#A dictionary or Recordings of the last simulation preformed (either training or evaluation)</span></div>
+
+        
+        <span class="c1">#self.u = None #This is the ML &quot;Training Input&quot;                </span>
+        <span class="c1">#self.empTS = ts #This is the ML &quot;Training Labels&quot; - A list</span>
+
+<div class="viewcode-block" id="ModelFitting.save">
+<a class="viewcode-back" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename: String</span>
+<span class="sd">            filename to use when saving object to file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelFitting.train">
+<a class="viewcode-back" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting.train">[docs]</a>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRecs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> 
+              <span class="n">num_epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">TPperWindow</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">warmupWindow</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">learningrate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">lr_2ndLevel</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u: type</span>
+<span class="sd">           This stimulus is the ML &quot;Training Input&quot; </span>
+<span class="sd">        empRec: list of Recording</span>
+<span class="sd">            This is the ML &quot;Training Labels&quot;</span>
+<span class="sd">        num_epochs: int</span>
+<span class="sd">            the number of times to go through the entire training data set</span>
+<span class="sd">        TPperWindow: int</span>
+<span class="sd">            Number of Empirical Time Points per window. model.forward does one window at a time.             </span>
+<span class="sd">        learningrate: float</span>
+<span class="sd">            rate of gradient descent</span>
+<span class="sd">        lr_2ndLevel: float</span>
+<span class="sd">            learning rate for priors of model parameters, and possibly others</span>
+<span class="sd">        lr_scheduler: bool</span>
+<span class="sd">            Whether to use the learning rate scheduler</span>
+<span class="sd">        &quot;&quot;&quot;</span>            
+        <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">])</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
+
+        <span class="c1"># Define two different optimizers for each group</span>
+        <span class="n">modelparameter_optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params_fitted</span><span class="p">[</span><span class="s1">&#39;modelparameter&#39;</span><span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="n">learningrate</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">)</span>
+        <span class="n">hyperparameter_optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params_fitted</span><span class="p">[</span><span class="s1">&#39;hyperparameter&#39;</span><span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr_2ndLevel</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">)</span>
+
+        <span class="c1"># Define the learning rate schedulers for each group of parameters</span>
+
+        <span class="k">if</span> <span class="n">lr_scheduler</span><span class="p">:</span>
+            <span class="n">total_steps</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">empRec</span> <span class="ow">in</span> <span class="n">empRecs</span><span class="p">:</span>
+                <span class="n">total_steps</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">empRec</span><span class="o">.</span><span class="n">length</span><span class="o">/</span><span class="n">TPperWindow</span><span class="p">)</span><span class="o">*</span><span class="n">num_epochs</span>
+        
+            <span class="c1"># total_steps = self.num_windows*num_epochs</span>
+            <span class="n">hyperparameter_scheduler</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">OneCycleLR</span><span class="p">(</span><span class="n">hyperparameter_optimizer</span><span class="p">,</span> 
+                                                                     <span class="n">lr_hyper</span><span class="p">,</span> 
+                                                                     <span class="n">total_steps</span><span class="p">,</span> 
+                                                                     <span class="n">anneal_strategy</span> <span class="o">=</span> <span class="s2">&quot;cos&quot;</span><span class="p">)</span>
+            <span class="n">hlrs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">modelparameter_scheduler</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">OneCycleLR</span><span class="p">(</span><span class="n">modelparameter_optimizer</span><span class="p">,</span> 
+                                                                     <span class="n">learningrate</span><span class="p">,</span> 
+                                                                     <span class="n">total_steps</span><span class="p">,</span> 
+                                                                     <span class="n">anneal_strategy</span> <span class="o">=</span> <span class="s2">&quot;cos&quot;</span><span class="p">)</span>
+            <span class="n">mlrs</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># initial state</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># initials of history of E</span>
+        <span class="n">hE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createDelayIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># define masks for getting lower triangle matrix indices</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mask_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># LOOP 1/4: Number of Training Epochs</span>
+        <span class="k">for</span> <span class="n">i_epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+            
+            <span class="c1"># Perform the training in windows.</span>
+            <span class="k">if</span> <span class="n">i_epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warmup_windows</span> <span class="o">=</span> <span class="mi">100</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warmup_windows</span> <span class="o">=</span> <span class="n">warmupWindow</span>
+        
+            <span class="c1"># TRAINING_STATS: placeholders for the history of trainingStats</span>
+            <span class="n">loss_his</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># loss placeholder to take the average for the epoch at the end of the epoch</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch: &quot;</span><span class="p">,</span> <span class="n">i_epoch</span><span class="p">)</span>
+                   
+            <span class="c1"># LOOP 2/4: Number of Recordings in the Training Dataset</span>
+            <span class="k">for</span> <span class="n">empRec</span> <span class="ow">in</span> <span class="n">empRecs</span><span class="p">:</span> 
+                <span class="n">windowedTS</span> <span class="o">=</span> <span class="n">empRec</span><span class="o">.</span><span class="n">windowedTensor</span><span class="p">(</span><span class="n">TPperWindow</span><span class="p">)</span>
+
+                <span class="c1"># TIME SERIES: Create placeholders for the simulated states and outputs of entire time series corresponding to one recording</span>
+                <span class="n">windListDict</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># A Dictionary with a List of windowed time series</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+                    <span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                
+                <span class="c1"># initial the external inputs</span>
+                <span class="n">external</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">steps_per_TR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">]),</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">TR_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">warmup_windows</span><span class="p">):</span>
+                
+
+
+
+                    <span class="c1"># Use the model.forward() function to update next state and get simulated EEG in this batch.</span>
+                    <span class="n">next_window</span><span class="p">,</span> <span class="n">hE_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">external</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">hE</span><span class="p">)</span>
+                    <span class="c1">#print(next_window[&#39;current_state&#39;])</span>
+                    <span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">next_window</span><span class="p">[</span><span class="s1">&#39;current_state&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                    <span class="n">hE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">hE_new</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                <span class="c1"># LOOP 3/4: Number of windowed segments for the recording</span>
+                <span class="k">for</span> <span class="n">win_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">windowedTS</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+
+                    <span class="c1"># Reset the gradient to zeros after update model parameters.</span>
+                    <span class="n">hyperparameter_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                    <span class="n">modelparameter_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+                    <span class="c1"># if the external not empty</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                        <span class="n">external</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                            <span class="p">(</span><span class="n">u</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">win_idx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">:(</span><span class="n">win_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">]),</span> 
+                            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+                    <span class="c1"># LOOP 4/4: The loop within the forward model (numerical solver), which is number of time points per windowed segment</span>
+                    <span class="n">next_window</span><span class="p">,</span> <span class="n">hE_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">external</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">hE</span><span class="p">)</span>
+
+                    <span class="c1"># Get the batch of empirical signal.</span>
+                    <span class="n">ts_window</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">windowedTS</span><span class="p">[</span><span class="n">win_idx</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+                    <span class="c1"># calculating loss</span>
+                    <span class="n">loss</span><span class="p">,</span> <span class="n">loss_main</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">next_window</span><span class="p">,</span> <span class="n">ts_window</span><span class="p">)</span>
+                    
+                    <span class="c1"># TIME SERIES: Put the window of simulated forward model.</span>
+                    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+                        <span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_window</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+                    <span class="c1"># TRAINING_STATS: Adding Loss for every training window (corresponding to one backpropagation)</span>
+                    <span class="n">loss_his</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss_main</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+                    <span class="c1"># Calculate gradient using backward (backpropagation) method of the loss function.</span>
+                    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                    <span class="c1"># Optimize the model based on the gradient method in updating the model parameters.</span>
+                    <span class="n">hyperparameter_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                    <span class="n">modelparameter_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                    
+                    <span class="k">if</span> <span class="n">lr_scheduler</span><span class="p">:</span>
+                        <span class="c1">#appending (needed to plot learning rate)</span>
+                        <span class="n">hlrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hyperparameter_optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;lr&quot;</span><span class="p">])</span>
+                        <span class="n">mlrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modelparameter_optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;lr&quot;</span><span class="p">])</span>
+                        
+                        <span class="c1"># schedular step </span>
+                        <span class="n">hyperparameter_scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                        <span class="n">modelparameter_scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+                    <span class="c1"># last update current state using next state...</span>
+                    <span class="c1"># (no direct use X = X_next, since gradient calculation only depends on one batch no history)</span>
+                    <span class="n">X</span> <span class="o">=</span> <span class="n">next_window</span><span class="p">[</span><span class="s1">&#39;current_state&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="c1"># dtype=torch.float32</span>
+                    <span class="n">hE</span> <span class="o">=</span> <span class="n">hE_new</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="c1">#dtype=torch.float32</span>
+
+                <span class="n">ts_emp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">windowedTS</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#TODO: Check this code</span>
+                <span class="n">fc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">ts_emp</span><span class="p">)</span>
+
+                <span class="c1"># TIME SERIES: Concatenate all windows together to get one recording</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+                        <span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">ts_sim</span> <span class="o">=</span> <span class="n">windListDict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="n">fc_sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">ts_sim</span><span class="p">[:,</span> <span class="mi">10</span><span class="p">:])</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;epoch: &#39;</span><span class="p">,</span> <span class="n">i_epoch</span><span class="p">,</span> 
+                      <span class="s1">&#39;loss:&#39;</span><span class="p">,</span> <span class="n">loss_main</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+                      <span class="s1">&#39;Pseudo FC_cor: &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">fc_sim</span><span class="p">[</span><span class="n">mask_e</span><span class="p">],</span> <span class="n">fc</span><span class="p">[</span><span class="n">mask_e</span><span class="p">])[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="c1">#Calling this Pseudo as different windows of the time series have slighly different parameter values</span>
+                      <span class="s1">&#39;cos_sim: &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cosine_similarity</span><span class="p">(</span><span class="n">ts_sim</span><span class="p">,</span> <span class="n">ts_emp</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+                      
+                <span class="k">if</span> <span class="n">lr_scheduler</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Modelparam_lr: &#39;</span><span class="p">,</span> <span class="n">modelparameter_scheduler</span><span class="o">.</span><span class="n">get_last_lr</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hyperparam_lr: &#39;</span><span class="p">,</span> <span class="n">hyperparameter_scheduler</span><span class="o">.</span><span class="n">get_last_lr</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+                    
+            <span class="c1"># TRAINING_STATS: Put the updated model parameters into the history placeholders at the end of every epoch.</span>
+            <span class="c1"># Additing Mean Loss for the Epoch</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">appendLoss</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">loss_his</span><span class="p">))</span>
+            <span class="c1"># NMM/Other Parameter info for the Epoch (a list where a number is recorded every window of every record)            </span>
+            <span class="n">trackedParam</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">exclude_param</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gains_con&#39;</span><span class="p">,</span> <span class="s1">&#39;lm&#39;</span><span class="p">]</span> <span class="c1">#This stores SC and LF which are saved seperately</span>
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">track_params</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">track_params</span><span class="p">:</span>
+                    <span class="n">var</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">par_name</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">fit_par</span><span class="p">):</span>
+                        <span class="n">trackedParam</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">value</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">fit_hyper</span><span class="p">):</span>
+                        <span class="n">trackedParam</span><span class="p">[</span><span class="n">par_name</span> <span class="o">+</span> <span class="s2">&quot;_prior_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">prior_mean</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                        <span class="n">trackedParam</span><span class="p">[</span><span class="n">par_name</span> <span class="o">+</span> <span class="s2">&quot;_prior_precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">prior_precision</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_param</span><span class="p">:</span>
+                    <span class="n">trackedParam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">appendParam</span><span class="p">(</span><span class="n">trackedParam</span><span class="p">)</span>
+            <span class="c1"># Saving the SC and/or Lead Field State at Every Epoch</span>
+
+                
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">use_fit_gains</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">model_name</span> <span class="o">==</span> <span class="s1">&#39;JR&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">appendSC_p2p</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sc_p2p</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">appendSC_p2e</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sc_p2e</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">appendSC_p2i</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sc_p2i</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">appendSC</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sc_fitted</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+            <span class="c1">#if self.model.use_fit_lfm:</span>
+                <span class="c1">#self.trainingStats.appendLF(self.model.lm.detach().cpu().numpy())</span>
+        
+        <span class="c1"># Saving the last recording of training as a Model_fitting attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">step_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">step_size</span><span class="p">)</span> <span class="c1">#TODO: This won&#39;t work if different variables have different step sizes</span></div>
+
+
+<div class="viewcode-block" id="ModelFitting.evaluate">
+<a class="viewcode-back" href="../../../API/run.html#whobpyt.run.model_fitting.ModelFitting.evaluate">[docs]</a>
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">TPperWindow</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">base_window_num</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">transient_num</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span> 
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : int or Tensor</span>
+<span class="sd">            external or stimulus</span>
+<span class="sd">        empRec: list of Recording</span>
+<span class="sd">            This is the ML &quot;Training Labels&quot;</span>
+<span class="sd">        TPperWindow: int</span>
+<span class="sd">            Number of Empirical Time Points per window. model.forward does one window at a time.  </span>
+<span class="sd">        base_window_num : int</span>
+<span class="sd">            length of num_windows for resting</span>
+<span class="sd">        transient_num : int</span>
+<span class="sd">            The number of initial time points to exclude from some metrics</span>
+<span class="sd">        -----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">])</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
+        <span class="c1">#TODO: Should be updated to take a list of u and empRec</span>
+
+        <span class="c1"># initial state</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># initials of history of E</span>
+        <span class="n">hE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createDelayIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># define mask for getting lower triangle matrix</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mask_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># Create placeholders for the simulated states and outputs of entire time series corresponding to one recording</span>
+        <span class="n">windListDict</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># A Dictionary with a List of windowed time series</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+            <span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">num_windows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">empRec</span><span class="o">.</span><span class="n">length</span><span class="o">/</span><span class="n">TPperWindow</span><span class="p">)</span>
+        <span class="n">u_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">steps_per_TR</span><span class="p">,</span>
+             <span class="n">base_window_num</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span> <span class="o">+</span> <span class="n">num_windows</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">))</span>
+        <span class="n">u_hat</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">base_window_num</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">:]</span> <span class="o">=</span> <span class="n">u</span>
+
+        <span class="c1"># LOOP 1/2: The number of windows in a recording</span>
+        <span class="k">for</span> <span class="n">win_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_windows</span> <span class="o">+</span> <span class="n">base_window_num</span><span class="p">):</span>
+
+            <span class="c1"># Get the input and output noises for the module.</span>
+            <span class="n">external</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">u_hat</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">win_idx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">:(</span><span class="n">win_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">]),</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+            <span class="c1"># LOOP 2/2: The loop within the forward model (numerical solver), which is number of time points per windowed segment</span>
+            <span class="n">next_window</span><span class="p">,</span> <span class="n">hE_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">external</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">hE</span><span class="p">)</span>
+
+            <span class="c1"># TIME SERIES: Put the window of simulated forward model.</span>
+            <span class="k">if</span> <span class="n">win_idx</span> <span class="o">&gt;</span> <span class="n">base_window_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+                    <span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_window</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+            <span class="c1"># last update current state using next state...</span>
+            <span class="c1"># (no direct use X = X_next, since gradient calculation only depends on one batch no history)</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">next_window</span><span class="p">[</span><span class="s1">&#39;current_state&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="c1"># dtype=torch.float32</span>
+            <span class="n">hE</span> <span class="o">=</span> <span class="n">hE_new</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="c1">#dtype=torch.float32</span>
+        
+        <span class="n">windowedTS</span> <span class="o">=</span> <span class="n">empRec</span><span class="o">.</span><span class="n">windowedTensor</span><span class="p">(</span><span class="n">TPperWindow</span><span class="p">)</span>
+        <span class="n">ts_emp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">windowedTS</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#TODO: Check this code</span>
+        <span class="n">fc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">ts_emp</span><span class="p">)</span>
+        
+        <span class="c1"># TIME SERIES: Concatenate all windows together to get one recording</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+            <span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">ts_sim</span> <span class="o">=</span> <span class="n">windListDict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">fc_sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">ts_sim</span><span class="p">[:,</span> <span class="n">transient_num</span><span class="p">:])</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;FC_cor: &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">fc_sim</span><span class="p">[</span><span class="n">mask_e</span><span class="p">],</span> <span class="n">fc</span><span class="p">[</span><span class="n">mask_e</span><span class="p">])[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> 
+              <span class="s1">&#39;cos_sim: &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cosine_similarity</span><span class="p">(</span><span class="n">ts_sim</span><span class="p">,</span> <span class="n">ts_emp</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        
+        <span class="c1"># Saving the last recording of training as a Model_fitting attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">step_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">step_size</span><span class="p">)</span> <span class="c1">#TODO: This won&#39;t work if different variables have different step sizes</span></div>
+
+
+    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">numTP</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">base_window_num</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">transient_num</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : int or Tensor</span>
+<span class="sd">            external or stimulus</span>
+<span class="sd">        numTP : int</span>
+<span class="sd">            The number of time points ot simulate</span>
+<span class="sd">        base_window_num : int</span>
+<span class="sd">            length of num_windows for resting</span>
+<span class="sd">        transient_num : int</span>
+<span class="sd">            The number of initial time points to exclude from some metrics</span>
+<span class="sd">        -----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">method_arg_type_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">,</span> <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">])</span> <span class="c1"># Check that the passed arguments (excluding self) abide by their expected data types</span>
+
+        <span class="n">num_windows</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">numTP</span> <span class="c1">#TODO: May want to go back to TPperWindow so base_window_num is used correctly, but also should be made consistent with train</span>
+
+        <span class="c1"># initial state</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># initials of history of E</span>
+        <span class="n">hE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createDelayIC</span><span class="p">(</span><span class="n">ver</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># define mask for getting lower triangle matrix</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mask_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># Create placeholders for the simulated states and outputs of entire time series corresponding to one recording</span>
+        <span class="n">windListDict</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># A Dictionary with a List of windowed time series</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+            <span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">u_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">steps_per_TR</span><span class="p">,</span>
+             <span class="n">base_window_num</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span> <span class="o">+</span> <span class="n">num_windows</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">))</span>
+        <span class="n">u_hat</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">base_window_num</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">:]</span> <span class="o">=</span> <span class="n">u</span>
+
+        <span class="c1"># LOOP 1/2: The number of windows in a recording</span>
+        <span class="k">for</span> <span class="n">win_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_windows</span> <span class="o">+</span> <span class="n">base_window_num</span><span class="p">):</span>
+
+            <span class="c1"># Get the input and output noises for the module.</span>
+            <span class="n">external</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">u_hat</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">win_idx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">:(</span><span class="n">win_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">]),</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+            <span class="c1"># LOOP 2/2: The loop within the forward model (numerical solver), which is number of time points per windowed segment</span>
+            <span class="n">next_window</span><span class="p">,</span> <span class="n">hE_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">external</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">hE</span><span class="p">)</span>
+
+            <span class="c1"># TIME SERIES: Put the window of simulated forward model.</span>
+            <span class="k">if</span> <span class="n">win_idx</span> <span class="o">&gt;</span> <span class="n">base_window_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+                    <span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_window</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+            <span class="c1"># last update current state using next state...</span>
+            <span class="c1"># (no direct use X = X_next, since gradient calculation only depends on one batch no history)</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">next_window</span><span class="p">[</span><span class="s1">&#39;current_state&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="c1"># dtype=torch.float32</span>
+            <span class="n">hE</span> <span class="o">=</span> <span class="n">hE_new</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="c1">#dtype=torch.float32</span>
+        
+        <span class="c1"># TIME SERIES: Concatenate all windows together to get one recording</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+            <span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">ts_sim</span> <span class="o">=</span> <span class="n">windListDict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">fc_sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">ts_sim</span><span class="p">[:,</span> <span class="n">transient_num</span><span class="p">:])</span>
+        
+        <span class="c1"># Saving the last recording of training as a Model_fitting attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_names</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lastRec</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Recording</span><span class="p">(</span><span class="n">windListDict</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">step_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">step_size</span><span class="p">)</span> <span class="c1">#TODO: This won&#39;t work if different variables have different step sizes</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright KCNI Griffiths Lab &amp; Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-XXXXXXX-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>

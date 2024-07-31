@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>whobpyt.visualization.plotting &mdash; WhoBPyT 0.0.0 documentation</title>
+  <title>whobpyt.datatypes.timeseries &mdash; WhoBPyT 0.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -210,7 +210,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">whobpyt.visualization.plotting</li>
+      <li class="breadcrumb-item active">whobpyt.datatypes.timeseries</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -219,98 +219,170 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for whobpyt.visualization.plotting</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">whobpyt.optimization</span> <span class="kn">import</span> <span class="n">CostsPSD</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+  <h1>Source code for whobpyt.datatypes.timeseries</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<div class="viewcode-block" id="Timeseries">
+<a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries">[docs]</a>
+<span class="k">class</span> <span class="nc">Timeseries</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;    </span>
+<span class="sd">    This class is responsible for holding timeseries of empirical and simulated data. It is: </span>
+<span class="sd">        - Part of the input and output of Model_fitting and Model_simulation[future]. </span>
+<span class="sd">        - It is the format expected by the visualization function of whobpyt. </span>
+<span class="sd">    </span>
+<span class="sd">    However, the Recording class is not used within and across the NMM and Modals, as a simpler dictionary of tensors is used in those contexts. </span>
 
-<div class="viewcode-block" id="plot_fc">
-<a class="viewcode-back" href="../../../API/visualization.html#whobpyt.visualization.plot_fc">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_fc</span><span class="p">(</span><span class="n">recording</span><span class="p">,</span> <span class="n">skip_dur</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function takes a Recording object and plots the functional connectivity based on its timeseries data.</span>
+<span class="sd">    Numerical simulation internals don&#39;t necessarily use this data structure, as calculations may be more efficient as the transpose: ts_length x num_regions.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    -------------</span>
+<span class="sd">    data : Numpy Array or Tensor of dimensions num_regions x ts_length</span>
+<span class="sd">        The time series data, either empirical or simulated</span>
+<span class="sd">    step_size : Float</span>
+<span class="sd">        The step size of the time points in the data class</span>
+<span class="sd">    modality : String</span>
+<span class="sd">        The name of the modality of the time series   </span>
+<span class="sd">    numNodes : Int</span>
+<span class="sd">        The number of nodes it time series.</span>
+<span class="sd">    length : Int </span>
+<span class="sd">        The number of time points in the time series. </span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+        
+<div class="viewcode-block" id="Timeseries.__init__">
+<a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">modality</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        </span>
+<span class="sd">        data : Numpy Array or Tensor of dimensions num_regions x ts_length</span>
+<span class="sd">            The time series data, either empirical or simulated</span>
+<span class="sd">        step_size : Float</span>
+<span class="sd">            The step size of the time points in the data class</span>
+<span class="sd">        modality : String</span>
+<span class="sd">            The name of the modality of the time series</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># Store as Tensor</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span> <span class="o">=</span> <span class="n">step_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modality</span> <span class="o">=</span> <span class="n">modality</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numNodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    recording: Recording object containing the activity data.</span>
-<span class="sd">    skip_dur: Initial transient duration to skip (in seconds).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">step_size</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">step_size</span>
-    <span class="n">skip_trans</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">skip_dur</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
-    <span class="n">num_regions</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     
-    <span class="c1"># Compute functional connectivity</span>
-    <span class="n">sim_FC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">recording</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[:,</span><span class="n">skip_trans</span><span class="p">:])</span>
+<div class="viewcode-block" id="Timeseries.pyTS">
+<a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.pyTS">[docs]</a>
+    <span class="k">def</span> <span class="nf">pyTS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        Tensor of num_regions x ts_length</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated BOLD FC: After Training&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Create a mask to ignore self-connections</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_regions</span><span class="p">)</span>
-
-    <span class="c1"># Heatmap of functional connectivity</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">sim_FC</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
-
-
-
-<div class="viewcode-block" id="plot_timeseries">
-<a class="viewcode-back" href="../../../API/visualization.html#whobpyt.visualization.plot_timeseries">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_timeseries</span><span class="p">(</span><span class="n">recording</span><span class="p">,</span> <span class="n">pop_label</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Takes a Recording object and plots the timeseries </span>
-<span class="sd">    activity of a specific population.</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">    recording: Recording object containing the activity data.</span>
-<span class="sd">    pop_label: String representing the population label.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_regions</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">step_size</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">step_size</span>
     
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Activity of </span><span class="si">{</span><span class="n">pop_label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Timeseries.npTS">
+<a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTS">[docs]</a>
+    <span class="k">def</span> <span class="nf">npTS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        ---------</span>
+<span class="sd">        Numpy Array of num_regions x ts_length</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span></div>
 
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_regions</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">recording</span><span class="o">.</span><span class="n">npTS</span><span class="p">()[</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pop_label</span><span class="si">}</span><span class="s2"> Node = </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="Timeseries.npNodeByTime">
+<a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npNodeByTime">[docs]</a>
+    <span class="k">def</span> <span class="nf">npNodeByTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        ---------</span>
+<span class="sd">        Numpy Array of num_regions x ts_length        </span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span></div>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Time Steps (multiply by step_size to get msec), step_size = </span><span class="si">{</span><span class="n">step_size</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Activity&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="Timeseries.npTimeByNodes">
+<a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTimeByNodes">[docs]</a>
+    <span class="k">def</span> <span class="nf">npTimeByNodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        ---------</span>
+<span class="sd">        Numpy Array of ts_length x num_regions        </span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">T</span></div>
 
+        
+<div class="viewcode-block" id="Timeseries.length">
+<a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.length">[docs]</a>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        ---------</span>
+<span class="sd">        The time series length</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>   
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span></div>
 
+        
+<div class="viewcode-block" id="Timeseries.npResample">
+<a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npResample">[docs]</a>
+    <span class="k">def</span> <span class="nf">npResample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This outputs resampled data used for figures (TODO: Not yet implemented)        </span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">pass</span></div>
 
-
-
-
-
-<div class="viewcode-block" id="plot_psd">
-<a class="viewcode-back" href="../../../API/visualization.html#whobpyt.visualization.plot_psd">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_psd</span><span class="p">(</span><span class="n">recording</span><span class="p">,</span> <span class="n">minFreq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxFreq</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function takes a Recording object and plots the power spectral density (PSD) based on its timeseries data.</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">    recording: Recording object containing the activity data.</span>
-<span class="sd">    minFreq: Minimum frequency to plot (in Hz).</span>
-<span class="sd">    maxFreq: Maximum frequency to plot (in Hz).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">step_size</span> <span class="o">=</span> <span class="n">recording</span><span class="o">.</span><span class="n">step_size</span>
-    <span class="n">sampleFreqHz</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
-    <span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">calcPSD</span><span class="p">((</span><span class="n">recording</span><span class="o">.</span><span class="n">npTS</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">sampleFreqHz</span><span class="p">,</span> <span class="n">minFreq</span><span class="p">,</span> <span class="n">maxFreq</span><span class="p">)</span>
-    <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">downSmoothPSD</span><span class="p">(</span><span class="n">sdAxis</span><span class="p">,</span> <span class="n">sdValues</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
-    <span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span> <span class="o">=</span> <span class="n">CostsPSD</span><span class="o">.</span><span class="n">scalePSD</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sdAxis_dS</span><span class="p">,</span> <span class="n">sdValues_dS_scaled</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Hz&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PSD&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated EEG PSD: After Training&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="Timeseries.windowedTensor">
+<a class="viewcode-back" href="../../../API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.windowedTensor">[docs]</a>
+    <span class="k">def</span> <span class="nf">windowedTensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">TPperWindow</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method is called by the Model_fitting Class during training to reshape the data into windowed segments (adds another dimension).</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        TPperWindow : Int</span>
+<span class="sd">            The number of time points in the window that will be back propagated</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ---------</span>
+<span class="sd">        Tensor: num_windows x num_regions x window_length</span>
+<span class="sd">            The time series data in a windowed format</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="n">node_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">length_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">num_windows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">length_ts</span> <span class="o">/</span> <span class="n">TPperWindow</span><span class="p">)</span>
+        <span class="n">data_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_windows</span><span class="p">,</span> <span class="n">node_size</span><span class="p">,</span> <span class="n">TPperWindow</span><span class="p">))</span>
+    
+        <span class="k">for</span> <span class="n">i_win</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_windows</span><span class="p">):</span>
+            <span class="n">data_out</span><span class="p">[</span><span class="n">i_win</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i_win</span> <span class="o">*</span> <span class="n">TPperWindow</span><span class="p">:(</span><span class="n">i_win</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">TPperWindow</span><span class="p">]</span>
+    
+        <span class="k">return</span> <span class="n">data_out</span></div>
+</div>
 
 </pre></div>
 

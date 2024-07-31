@@ -84,7 +84,19 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="API/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/models.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel"><code class="docutils literal notranslate"><span class="pre">JansenRitModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createDelayIC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createIC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.forward()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelParameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/models.html#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelSCParameters()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="API/optimization.html">Optimization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsTS"><code class="docutils literal notranslate"><span class="pre">CostsTS</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsTS.__init__"><code class="docutils literal notranslate"><span class="pre">CostsTS.__init__()</span></code></a></li>
@@ -122,7 +134,16 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="API/run.html">Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/run.html">Run</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting"><code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting.__init__"><code class="docutils literal notranslate"><span class="pre">ModelFitting.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting.evaluate"><code class="docutils literal notranslate"><span class="pre">ModelFitting.evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting.save"><code class="docutils literal notranslate"><span class="pre">ModelFitting.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting.train"><code class="docutils literal notranslate"><span class="pre">ModelFitting.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="API/visualization.html">Visualization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="API/visualization.html#whobpyt.visualization.plot_fc"><code class="docutils literal notranslate"><span class="pre">plot_fc()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="API/visualization.html#whobpyt.visualization.plot_timeseries"><code class="docutils literal notranslate"><span class="pre">plot_timeseries()</span></code></a></li>
@@ -130,19 +151,46 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="API/datatypes.html">Data Types</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats"><code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.__init__"><code class="docutils literal notranslate"><span class="pre">TrainingStats.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendLF"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLF()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendLoss"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLoss()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendParam"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendParam()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC_p2e"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2e()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC_p2i"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2i()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.appendSC_p2p"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2p()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.reset"><code class="docutils literal notranslate"><span class="pre">TrainingStats.reset()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.TrainingStats.save"><code class="docutils literal notranslate"><span class="pre">TrainingStats.save()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries"><code class="docutils literal notranslate"><span class="pre">Timeseries</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.__init__"><code class="docutils literal notranslate"><span class="pre">Timeseries.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.length"><code class="docutils literal notranslate"><span class="pre">Timeseries.length()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npNodeByTime"><code class="docutils literal notranslate"><span class="pre">Timeseries.npNodeByTime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npResample"><code class="docutils literal notranslate"><span class="pre">Timeseries.npResample()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTS"><code class="docutils literal notranslate"><span class="pre">Timeseries.npTS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.npTimeByNodes"><code class="docutils literal notranslate"><span class="pre">Timeseries.npTimeByNodes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.pyTS"><code class="docutils literal notranslate"><span class="pre">Timeseries.pyTS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries.windowedTensor"><code class="docutils literal notranslate"><span class="pre">Timeseries.windowedTensor()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.__init__"><code class="docutils literal notranslate"><span class="pre">Parameter.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.npValue"><code class="docutils literal notranslate"><span class="pre">Parameter.npValue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.to"><code class="docutils literal notranslate"><span class="pre">Parameter.to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter.value"><code class="docutils literal notranslate"><span class="pre">Parameter.value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats"><code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.__init__"><code class="docutils literal notranslate"><span class="pre">TrainingStats.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendLF"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLF()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendLoss"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLoss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendParam"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendParam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2e"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2e()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2i"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2i()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.appendSC_p2p"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2p()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.reset"><code class="docutils literal notranslate"><span class="pre">TrainingStats.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats.save"><code class="docutils literal notranslate"><span class="pre">TrainingStats.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/eg__tmseeg.html">Modelling TMS-EEG evoked responses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg__tmseeg.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg__tmseeg.html#results-description">Results Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/eg__tmseeg.html#references">References</a></li>
 </ul>
 </li>
 </ul>
@@ -172,7 +220,7 @@
              
   <section id="computation-times">
 <span id="sphx-glr-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Link to this heading"></a></h1>
-<p><strong>01:17.986</strong> total execution time for 1 file <strong>from all galleries</strong>:</p>
+<p><strong>01:21.846</strong> total execution time for 1 file <strong>from all galleries</strong>:</p>
 <div class="docutils container">
 <style scoped>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
@@ -194,7 +242,7 @@ $(document).ready( function () {
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference internal" href="auto_examples/eg__tmseeg.html#sphx-glr-auto-examples-eg-tmseeg-py"><span class="std std-ref">Modelling TMS-EEG evoked responses</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/eg__tmseeg.py</span></code>)</p></td>
-<td><p>01:17.986</p></td>
+<td><p>01:21.846</p></td>
 <td><p>0.0</p></td>
 </tr>
 </tbody>
