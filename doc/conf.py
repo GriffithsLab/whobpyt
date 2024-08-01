@@ -58,11 +58,11 @@ intersphinx_mapping = {
     'sphinx': ('http://www.sphinx-doc.org/en/stable/', None),
 }
 
-html_theme = 'sphinx_rtd_theme'
-#html_theme_options = {
-#    'logo_only': False,#True,
-#    'navigation_depth': 5,
-#}
+html_theme = 'pydata_sphinx_theme'
+html_theme_options = {
+    'logo_only': False,#True,
+    'navigation_depth': 5,
+}
 html_context = {}
 
 if not 'READTHEDOCS' in os.environ:
