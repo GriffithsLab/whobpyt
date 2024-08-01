@@ -1,36 +1,28 @@
-WhoBPyT - Whole-Brain Modelling in PyTorch
-=================
-(`Or There and Back Again <https://en.wikipedia.org/wiki/The_Hobbit>`_)
+.. image:: https://github.com/griffithslab/whobpyt/raw/main/doc/_static/whobpyt_logo_shire.png
+   :target: https://docs.pyvista.org/examples/index.html
+   :alt: pyvista
+   :align: center
+
+*WhoBPyT* is a PyTorch-based Python library for mathematical modelling of large-scale brain network dynamics, obtuse literary allusion, and model-based analysis of neuroimaging and neurophysiology data.
+
+It is developed primarily by researchers in the `Whole-Brain Modelling Group`_
+at the `CAMH Krembil Centre for Neuroinformatics`_ & University of Toronto. 
+
+.. _Whole-Brain Modelling Group: www.grifflab.com
+
+.. _CAMH Krembil Centre for Neuroinformatics: www.krembilneuroinformatics.ca
 
 
-Summary
--------
+Note that this project is relatively new and under active development, so the contents of this repo are subject to substantial change. If you are interested in using WhoBPyT in your research (and especially if you are interested in contributing to the code base development), please get in touch by emailing john dot griffiths at utoronto dot ca, or just introduce yourself via an issue.
 
-``whobpyt`` (pronounce as 'hobbit') is a Python library for PyTorch-based whole-brain modeling in Python.
-
-Please note that the code here is still very preliminary, under active
-development, and subject to substantial change.
-
-
-Rationale
----------
-
-As open source and open science advocates, we have elected to pursue a
-‘fully open’ and public development approach here. A chief motivation
-behind this is to bring in contributors and collaborators who are
-interested in working together to move things forward more quickly that
-any of us would be able to individually. So, if you are interested in
-getting involved, don’t hesitate to reach out to John ( j dot
-davidgriffiths at gmail dot com ), or just introduce yourself via an
-issue.
 
 Structure
 ---------
 
 There are three main components to the code base:
 
-
 |  ``doc`` folder - Documentation pages text and organization
 |  ``whobpyt`` folder - The importable python library
-|  ``examples`` folder - Example usage scripts that become the gallery
-  items in the CI-managed sphinx gallery site
+|  ``examples`` folder - Example usage scripts that become the gallery items in the CI-managed sphinx gallery site
+
+
