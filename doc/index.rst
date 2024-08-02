@@ -1,7 +1,7 @@
+.. include:: ../README.rst
+
 Welcome to WhoBPyT documentation!
 ===================================
-
-.. include:: ../README.md
 
 .. toctree::
    :maxdepth: 1
@@ -37,5 +37,5 @@ Welcome to WhoBPyT documentation!
    :caption: Examples
    :glob:
  
-   auto_examples/eg__replicate_Momi2023
+   auto_examples/eg__tmseeg
    
