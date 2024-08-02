@@ -42,6 +42,12 @@ class RobinsonLinParams(AbstractParams):
     Attributes:
       Gee (par): Gain of excitatory-excitatory
       Gei (par): Gain of excitatory-inhibitory
+      Ges (par): Gain of excitatory-relay nuclei
+      Gse (par): Gain of relay nuclei-excitatory
+      Gsr (par): Gain of relay nuclei-reticular nucleus
+      Grs (par): Gain of reticular nucleus-relay nulei
+      Gre (par): Gain of reticular nucleus-excitatory
+      Gsn (par): Gain of relay nuclei-input
       Gese (par): Gain of excitatory-relay nuclei-excitatory
       Gesre (par): Gain of excitatory-relay nuclei-reticular nucleus-excitatory
       Gsrs (par): Gain of relay nuclei-reticular nucleus-relay nuclei
@@ -51,9 +57,13 @@ class RobinsonLinParams(AbstractParams):
       EMG: Artifacts
 
       Not fitted params
+      gammae: 116
       k0 (par): 10;  Volume conduction parameter 
+      re (par):
       phin (par): 1e-5; Input
       kmax (par) 4;
+      re (par): 
+      Lx (par): 
     """
     def __init__(self, **kwargs):
         """
@@ -68,17 +78,27 @@ class RobinsonLinParams(AbstractParams):
         # Initializing EC Abeysuriya 2015
         param = {
             "Gee": par(2.07),
-            "Gei": par(-4.11),            
+            "Gei": par(-4.11),
+            "Ges": par(0.77),
+            "Gse": par(7.77),
+            "Gsr": par(-3.30),
+            "Grs": par(0.20),
+            "Gre": par(0.66),
+            "Gsn": par(8.10),
             "Gese": par(0.77*7.77),
             "Gesre": par(-3.30*0.77*0.66),
             "Gsrs": par(-3.30*0.20),
+            "G_esn": par(0.77*8.10), 
             "alpha": par(83),
             "beta": par(769),
+            "gammae": par(116),
             "t0": par(0.085),
+            "re": par(0.086),
             "EMG": par(0),   
             "k0": par(10),
-            "phin": par(1e-5)
-            "kmax": par(4)
+            "phin": par(1e-5),
+            "kmax": par(4),
+            "Lx": par(0.5)
          }
         
          for var in param:
@@ -185,5 +205,57 @@ class RobinsonLinModel(AbstractNeuralModel):
         return ptinit_conds
 
   
-    def forward(self, external, hx, hE):   
+    def forward(self, external, w1):   
       # STILL TO DO 
+      G_ei = self.params.Gei.value()
+      G_ee = self.params.Gee.value()
+      G_es = self.params.Ges.value()
+      G_sn = self.params.Gsn.value()
+      G_se = self.params.Gse.value()
+      G_sr = self.params.Gsr.value()
+      G_rs = self.params.Grs.value()
+      G_re = self.params.Gre.value()
+      alpha = 83
+      beta = 769
+      G_esn = G_es*G_sn
+      G_srs = G_sr*G_rs
+      G_esre = G_es*G_sr*G_re
+      G_ese = G_es*G_se
+      gamma_e = self.params.gammae.value()
+      t0 = self.params.t0.value()
+      r_e = self.params.re.value()
+      phin = self.params.phin.value()
+      EMG = self.params.EMG.value()
+      kmax = self.params.kmax.value()
+      k0 = self.params.k0.value()
+      Lx = self.params.Lx.value()
+
+      dk = 2*np.pi/Lx
+      m_rows = list(range(-kmax, kmax + 1))
+      n_cols = list(range(-kmax, kmax + 1))
+      [kxa,kya] = np.meshgrid(dk*np.array(m_rows),dk*np.array(n_cols))
+      k2 = kxa**(2)+kya**(2)
+      k2u = np.unique(k2[:])
+      counts, _ = np.histogram(k2, bins=np.append(k2u, k2u[-1] + 1))
+      k2u = np.column_stack((k2u, counts))
+      k2_volconduct = np.exp(-k2u[:,0]/k0**2);
+      emg_f = 40;
+      emg = ((w1/(2*np.pi*emg_f))**2)/((1+(w1/(2*np.pi*emg_f))**2)**2);
+      if EMG==0:
+        emg = 0;
+    
+      L = (1-(w1*1j/alpha))**(-1)*(1-(w1*1j/beta))**(-1)
+      phin = 1e-5
+      Gei_oneminus = 1-L*G_ei
+      Gsrs_oneminus = 1-G_srs*(L**(2))
+      re2 = r_e**2
+      q2re2 = (1-(w1*1j/gamma_e))**(2) - (1/(1-G_ei*L))*(G_ee*L + ((G_ese*L**(2) + G_esre*L**(3))*np.exp(w1*1j*t0))/(1-G_srs*L**(2)))
+      T_prefactor = (L**(2)*phin)/(Gei_oneminus*Gsrs_oneminus);
+    
+      P = np.zeros_like(w1)
+      for j in range(k2u.shape[0]):
+          contribution = k2u[j, 1] * np.abs(T_prefactor / (k2u[j, 0] * re2 + q2re2))**2 * k2_volconduct[j]
+          P += contribution
+    
+      P = P + 1e-12*0.1*emg;
+      return P
