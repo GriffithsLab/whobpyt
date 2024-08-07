@@ -1,5 +1,6 @@
 # Reproducing Abeysuriya 2015 outputs and BrainTrak equations with the forward function
 
+# sphinx_gallery_thumbnail_number = 2
 # Importage:
 
 # os stuff
