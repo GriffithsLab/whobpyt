@@ -206,7 +206,7 @@ class RobinsonLinModel(AbstractNeuralModel):
 
   
     def forward(self, external, w1):   
-      # STILL TO DO 
+      # generate power spectra
       G_ei = self.params.Gei.value()
       G_ee = self.params.Gee.value()
       G_es = self.params.Ges.value()
