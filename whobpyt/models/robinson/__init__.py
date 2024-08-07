@@ -1,1 +1,1 @@
-from .robinson import RobinsonModel, RobinsonParams
+from .robinson import RobinsonLinModel, RobinsonLinParams
