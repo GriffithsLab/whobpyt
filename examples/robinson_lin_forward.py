@@ -1,5 +1,23 @@
+"""
+.. _ex-robinson_lin:
+
+========================================================
+Testing forward function of Linear Robinson model
+========================================================
+
+This example runs a minimal example for running the forward function of the Linear Robinson based on 
+
+R.G. Abeysuriya, C.J. Rennie, P.A. Robinson (2015)
+"Physiologically based arousal state estimation and dynamics"
+
+
+The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.
+
+"""
+
 # Reproducing Abeysuriya 2015 outputs and BrainTrak equations with the forward function
 
+# sphinx_gallery_thumbnail_number = 2
 # Importage:
 
 # os stuff
@@ -191,5 +209,4 @@ plt.xscale("log")
 plt.ylabel('Normalized Power (A.U.)')
 plt.xlabel('Frequency (Hz)')
 plt.legend(options)
-plt.savefig('plot.png')
 plt.title('Power spectra for different parameter sets')
