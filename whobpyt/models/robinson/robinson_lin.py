@@ -20,11 +20,12 @@ from torch.linalg import norm as ptnorm
 from torch import (tensor as pttensor, float32 as ptfloat32, sum as ptsum, exp as ptexp, diag as ptdiag, 
                    transpose as pttranspose, zeros_like as ptzeros_like, int64 as ptint64, randn as ptrandn, 
                    matmul as ptmatmul, tanh as pttanh, matmul as ptmatmul, reshape as ptreshape, sqrt as ptsqrt,
-                   ones as ptones, cat as ptcat)
+                   ones as ptones, cat as ptcat, pi as ptpi, abs as ptabs)
 
 # Numpy stuff
 from numpy.random import uniform 
 from numpy import ones,zeros
+import numpy as np
 
 # WhoBPyT stuff
 from ...datatypes import AbstractNeuralModel, AbstractParams, Parameter as par
@@ -101,10 +102,10 @@ class RobinsonLinParams(AbstractParams):
             "Lx": par(0.5)
          }
         
-         for var in param:
+        for var in param:
             setattr(self, var, param[var])
 
-         for var in kwargs:
+        for var in kwargs:
             setattr(self, var, kwargs[var])
 
 """
@@ -181,7 +182,6 @@ class RobinsonLinModel(AbstractNeuralModel):
         self.params = params
         
         self.setModelParameters()
-        self.setModelSCParameters()  
 
   
     def createIC(self, ver, state_lb = -0.5, state_ub = 0.5):
@@ -215,8 +215,8 @@ class RobinsonLinModel(AbstractNeuralModel):
       G_sr = self.params.Gsr.value()
       G_rs = self.params.Grs.value()
       G_re = self.params.Gre.value()
-      alpha = 83
-      beta = 769
+      alpha = self.params.alpha.value()
+      beta = self.params.beta.value()
       G_esn = G_es*G_sn
       G_srs = G_sr*G_rs
       G_esre = G_es*G_sr*G_re
@@ -230,17 +230,23 @@ class RobinsonLinModel(AbstractNeuralModel):
       k0 = self.params.k0.value()
       Lx = self.params.Lx.value()
 
-      dk = 2*np.pi/Lx
+      w1 = pttensor(w1)  
+      dk = 2*ptpi/Lx
+      kmax = int(kmax.item())
       m_rows = list(range(-kmax, kmax + 1))
       n_cols = list(range(-kmax, kmax + 1))
       [kxa,kya] = np.meshgrid(dk*np.array(m_rows),dk*np.array(n_cols))
+      kxa = pttensor(kxa)
+      kya = pttensor(kya)
+
       k2 = kxa**(2)+kya**(2)
       k2u = np.unique(k2[:])
       counts, _ = np.histogram(k2, bins=np.append(k2u, k2u[-1] + 1))
-      k2u = np.column_stack((k2u, counts))
-      k2_volconduct = np.exp(-k2u[:,0]/k0**2);
+      k2u = pttensor(np.column_stack((k2u, counts)))
+      k2_volconduct = pttensor(np.exp(-k2u[:,0]/k0**2));
       emg_f = 40;
       emg = ((w1/(2*np.pi*emg_f))**2)/((1+(w1/(2*np.pi*emg_f))**2)**2);
+      emg = pttensor(emg)
       if EMG==0:
         emg = 0;
     
@@ -249,12 +255,12 @@ class RobinsonLinModel(AbstractNeuralModel):
       Gei_oneminus = 1-L*G_ei
       Gsrs_oneminus = 1-G_srs*(L**(2))
       re2 = r_e**2
-      q2re2 = (1-(w1*1j/gamma_e))**(2) - (1/(1-G_ei*L))*(G_ee*L + ((G_ese*L**(2) + G_esre*L**(3))*np.exp(w1*1j*t0))/(1-G_srs*L**(2)))
+      q2re2 = (1-(w1*1j/gamma_e))**(2) - (1/(1-G_ei*L))*(G_ee*L + ((G_ese*L**(2) + G_esre*L**(3))*ptexp(w1*1j*t0))/(1-G_srs*L**(2)))
       T_prefactor = (L**(2)*phin)/(Gei_oneminus*Gsrs_oneminus);
     
-      P = np.zeros_like(w1)
+      P = pttensor(np.zeros_like(w1))
       for j in range(k2u.shape[0]):
-          contribution = k2u[j, 1] * np.abs(T_prefactor / (k2u[j, 0] * re2 + q2re2))**2 * k2_volconduct[j]
+          contribution = k2u[j, 1] * ptabs(T_prefactor / (k2u[j, 0] * re2 + q2re2))**2 * k2_volconduct[j]
           P += contribution
     
       P = P + 1e-12*0.1*emg;
