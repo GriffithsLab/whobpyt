@@ -2,7 +2,7 @@
 .. _ex-momi2023-part2:
 
 ========================================================
-Replicating Momi et al. (2023): TMS-evoked Responses
+Exploring the Effects of the Inhibitory Rate Constant Parameter (b)
 ========================================================
 
 This script replicates the findings of the paper :footcite:`MomiEtAl2023`:
