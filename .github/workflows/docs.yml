@@ -22,7 +22,6 @@ jobs:
     - name: Build docs
       run: |
         cd doc
-        mkdir _static
         make html
     - name: Deploy Docs
       uses: peaceiris/actions-gh-pages@v3
