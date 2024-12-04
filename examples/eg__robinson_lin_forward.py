@@ -195,7 +195,8 @@ def parameter_set(pars):
                                 Lx = par(0.5)
                                 )   
   return params
-
+# %%
+# Plot
 freq = np.linspace(1,60,200)
 w1 = 2*math.pi*freq
 options = ['EC','EO', 'REM', 'S1', 'S2', 'SWS', 'Spindles']
