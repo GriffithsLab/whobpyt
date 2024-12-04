@@ -33,9 +33,10 @@ Welcome to WhoBPyT documentation!
    API/datatypes
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Examples
    :glob:
  
    auto_examples/eg__tmseeg
+   auto_examples/eg__robinson_lin_forward
    
