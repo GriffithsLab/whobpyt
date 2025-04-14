@@ -38,4 +38,4 @@ Welcome to WhoBPyT documentation!
    :glob:
  
    auto_examples/eg__tmseeg
-   
+   auto_examples/eg__momi2023   
