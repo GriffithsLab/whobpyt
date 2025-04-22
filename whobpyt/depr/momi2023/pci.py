@@ -22,6 +22,9 @@ import numpy as np
 from numpy import linalg
 import scipy.signal
 
+# viz stuff
+import matplotlib.pyplot as plt
+
 
 def calc_PCIst(signal_evk, times, full_return=False, **par):
     ''' Calculates PCIst (Perturbational Complexity Index based on State transitions) of a signal.
