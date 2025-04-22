@@ -63,15 +63,11 @@ Replicating Momi Et Al. ELife 2023
 # os stuff
 import os
 import sys
-sys.path.append('..')
+sys.path.append('../whobpyt/depr/momi2023/')
+from jansen_rit import ParamsJR, Model_fitting, RNNJANSEN, Costs, OutputNM
 
 
-# whobpyt stuff
-import whobpyt
-from whobpyt.datatypes import Parameter as par, Timeseries
-from whobpyt.models.jansen_rit import JansenRitModel,JansenRitParams
-from whobpyt.run import ModelFitting
-from whobpyt.optimization.custom_cost_JR import CostsJR
+
 
 # python stuff
 import numpy as np
@@ -89,12 +85,6 @@ import mne
 import matplotlib.pyplot as plt
 
 
-import os
-import re
-import glob
-import time
-import warnings
-warnings.filterwarnings('ignore')
 
 
 import numpy as np
@@ -109,15 +99,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import mne
 import time
+import glob
+import re
 
-import sys
-sys.path.append("/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 1- momi _et_al 2023/momi_2023_whobpyt")
-from jansen_rit import ParamsJR, Model_fitting, RNNJANSEN, Costs, OutputNM
 
-import sys
-
-sys.path.append('/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 1- momi _et_al 2023/momi_2023_whobpyt')
-from pci import *
 
 
 
@@ -126,8 +111,16 @@ from pci import *
 # Download data
 print('to add...')
 #files_dir =  '/external/rprshnas01/netdata_kcni/jglab/Data/Davide/reproduce_Momi_et_al_2022/PyTepFit/data'
-data_dir = "/content/drive/MyDrive/reproducing_momi2023/following_github_repo_instructions"
-files_dir = data_dir + '/data'
+download_data = False 
+url = 'https://drive.google.com/drive/folders/1lrju2UiK3_amcNLb5G9gwJmdU_eO0wsi?usp=drive_link'
+
+if download_data: gdown.download_folder(url, quiet=True)
+files_dir = os.path.abspath('data_website')
+
+url = 'https://drive.google.com/drive/folders/1QNJW-9juPTua8vQtR9OYj_TRVq9uaEwC?usp=drive_link'
+
+if download_data: gdown.download_folder(url, quiet=True)
+lf_dir = os.path.abspath('leadfield_from_mne')
 
 sc_file = files_dir + '/Schaefer2018_200Parcels_7Networks_count.csv'
 high_file =files_dir + '/only_high_trial.mat'
