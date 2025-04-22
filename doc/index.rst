@@ -39,4 +39,4 @@ Welcome to WhoBPyT documentation!
  
    auto_examples/eg__tmseeg
    auto_examples/eg__momi2023   
-   auto_examples/eg_ismail2025
+   auto_examples/eg__ismail2025
