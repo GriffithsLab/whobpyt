@@ -219,9 +219,6 @@ simulated_EEG_st.data[:,time_start:time_end] = F.lastRec['eeg'].npTS()
 times = [peak_locs1, peak_locs2, peak_locs3, peak_locs4, peak_locs5]
 simulated_joint_st = simulated_EEG_st.plot_joint(ts_args=ts_args, times=times)
 
-# %%
-# This is the plot for the original and simulated EEG data
-# The original EEG data is shown on the left, while the simulated EEG data using the fitted Jansen-Rit model is shown on the right.
 
 # %%
 # Results Description
