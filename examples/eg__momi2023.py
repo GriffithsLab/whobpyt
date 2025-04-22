@@ -111,15 +111,15 @@ import re
 # Download data
 print('to add...')
 #files_dir =  '/external/rprshnas01/netdata_kcni/jglab/Data/Davide/reproduce_Momi_et_al_2022/PyTepFit/data'
-download_data = False 
+download_data = False
 url = 'https://drive.google.com/drive/folders/1lrju2UiK3_amcNLb5G9gwJmdU_eO0wsi?usp=drive_link'
 
-if download_data: gdown.download_folder(url, quiet=True)
+if download_data: gdown.download_folder(url, quiet=True,  remaining_ok=True, use_cookies=False)
 files_dir = os.path.abspath('data_website')
 
 url = 'https://drive.google.com/drive/folders/1QNJW-9juPTua8vQtR9OYj_TRVq9uaEwC?usp=drive_link'
 
-if download_data: gdown.download_folder(url, quiet=True)
+if download_data: gdown.download_folder(url, quiet=True,  remaining_ok=True, use_cookies=False)
 lf_dir = os.path.abspath('leadfield_from_mne')
 
 sc_file = files_dir + '/Schaefer2018_200Parcels_7Networks_count.csv'
@@ -234,7 +234,7 @@ simulated_data.plot_joint(ts_args=ts_args, times=times, title='Simulated TEPs fo
 # 2.3 Visualize Structural Connectivity and Stimulation Weights
 #
 # ( ... )
-print('to add...')
+#print('to add...')
 
 sc_df = pd.read_csv(sc_file, header=None, sep=' ')
 sc = sc_df.values
@@ -279,7 +279,7 @@ for i in range(1):
     data_mean = [data_high['only_high_trial'][i]]*num_epoches
     #data_mean = [gm]*num_epoches
     data_mean =np.array(data_mean)
-    file_leadfield = f'/content/drive/MyDrive/reproducing_momi2023/following_github_repo_instructions/data/leadfield_from_mne/sub{str(i+1).zfill(3)}/leadfield.npy'
+    file_leadfield = lf_dir+f'/sub{str(i+1).zfill(3)}/leadfield.npy'
 
     lm = np.load(file_leadfield, allow_pickle=True)
 
@@ -316,7 +316,7 @@ for i in range(1):
 
     ax.imshow(np.log1p(sc_mod), cmap = 'bwr')
     plt.show()
-    filename = '/content/drive/MyDrive/EEG/reproduce_fig/sub_'+str(i)+'_fittingresults_stim_exp.pkl'
+    """filename = '/content/drive/MyDrive/EEG/reproduce_fig/sub_'+str(i)+'_fittingresults_stim_exp.pkl'
     with open(filename, 'wb') as f:
         pickle.dump(F, f)
 
@@ -324,7 +324,7 @@ for i in range(1):
 
 
     with open(outfilename, 'wb') as f:
-        pickle.dump(F.output_sim, f)
+        pickle.dump(F.output_sim, f)"""
 
     fig, ax = plt.subplots(1,3, figsize=(12,8))
     ax[0].plot((F.output_sim.E_test-F.output_sim.I_test).T)
@@ -364,8 +364,7 @@ print(data.output_sim.eeg_test.shape)
 # 3.1 Load and Sort Simulation Result Files
 
 # %%
-data_dir = "/content/drive/MyDrive/reproducing_momi2023/following_github_repo_instructions"
-files_dir = data_dir + '/data'
+
 pck_files = sorted(glob.glob(files_dir + '/*_fittingresults_stim_exp.pkl'))
 pck_files.sort(key=lambda var:[int(x) if x.isdigit() else x for x in re.findall(r'[^0-9]|[0-9]+', var)])
 
