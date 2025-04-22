@@ -27,4 +27,4 @@ There are three main components to the code base:
 |  ``whobpyt`` folder - The importable python library
 |  ``examples`` folder - Example usage scripts that become the gallery items in the CI-managed sphinx gallery site
 
-
+Worked on at SOBP Brainhack 2025
