@@ -13,7 +13,7 @@ at the `CAMH Krembil Centre for Neuroinformatics`_ & University of Toronto.
 .. _CAMH Krembil Centre for Neuroinformatics: www.krembilneuroinformatics.ca
 
 
-Note that this project is relatively new and under active development, so the contents of this repo are subject to substantial change. If you are interested in using WhoBPyT in your research (and especially if you are interested in contributing to the code base development), please get in touch by emailing john dot griffiths at utoronto dot ca, or just introduce yourself via an issue.
+Note that this project is relatively new and under active development, so the contents of this repo are subject to substantial change. If you are interested in using WhoBPyT in your research (and especially if you are interested in contributing to the code base development), please get in touch by emailing john dot griffiths at utoronto dot ca, or just introduce yourself via an issue. This projects was made possible through the team and CAMH, along with the wonderful new protege's at the SOBP BrainHack.
 
 
 Structure
