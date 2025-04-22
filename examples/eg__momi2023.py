@@ -119,16 +119,14 @@ import re
 # Download data
 print('to add...')
 #files_dir =  '/external/rprshnas01/netdata_kcni/jglab/Data/Davide/reproduce_Momi_et_al_2022/PyTepFit/data'
-download_data = False
+download_data = True
 url = 'https://drive.google.com/drive/folders/1lrju2UiK3_amcNLb5G9gwJmdU_eO0wsi?usp=drive_link'
 
 if download_data: gdown.download_folder(url, quiet=True,  remaining_ok=True, use_cookies=False)
 files_dir = os.path.abspath('data_website')
 
-url = 'https://drive.google.com/drive/folders/1QNJW-9juPTua8vQtR9OYj_TRVq9uaEwC?usp=drive_link'
 
-if download_data: gdown.download_folder(url, quiet=True,  remaining_ok=True, use_cookies=False)
-lf_dir = os.path.abspath('leadfield_from_mne')
+lf_dir = os.path.abspath('data_website/leadfield_from_mne')
 
 sc_file = files_dir + '/Schaefer2018_200Parcels_7Networks_count.csv'
 high_file =files_dir + '/only_high_trial.mat'
@@ -164,7 +162,7 @@ print(data_high['only_high_trial'].shape)
 pck_files = sorted(glob.glob(files_dir + '/*_fittingresults_stim_exp.pkl'))
 pck_files.sort(key=lambda var:[int(x) if x.isdigit() else x for x in re.findall(r'[^0-9]|[0-9]+', var)])
 
-for sbj2plot in range(20):
+for sbj2plot in range(len(pck_files)):
     print(f"Processing Subject {sbj2plot + 1}")
 
     # Load EEG epochs
@@ -594,7 +592,7 @@ S_PC = (100 * S) / (np.sum(S))
 epochs = mne.read_epochs(files_dir + '/all_avg.mat_avg_high_epoched', verbose=False)
 
 # Replace a specific time window with simulated EEG data
-for sbj in range(epochs._data.shape[0]):  # Iterate through subjects
+for sbj in range(len(pck_files)):  # Iterate through subjects
     epochs._data[sbj, :, 900:1300] = sim_eeg[sbj, :, :]  # Replace data in the defined range
 
 # Compute average for modified epochs
@@ -663,7 +661,7 @@ ts2use = 'simulated' # 'empirical' or 'simulated'
 
 
 max_similairty = []
-for sbj in range(epochs._data.shape[0]):
+for sbj in range(len(pck_files)):
   similarity = []
 
   for tp in range(start_tp,sim_eeg[sbj,:,:].shape[1]-end_tp):
@@ -676,8 +674,8 @@ for sbj in range(epochs._data.shape[0]):
   max_similairty.append(np.where(similarity == np.max(similarity))[0][0])
 
 
-nrows = 5
-ncols=4
+nrows = 2
+ncols=3
 
 fig, axes = plt.subplots(figsize=(20, 10), nrows=nrows, ncols=ncols)
 
@@ -933,7 +931,7 @@ only_high_trial = io.loadmat(files_dir + '/only_high_trial.mat')['only_high_tria
 all_sim_EEG = []
 all_sim_parcels = []
 
-for sbj in range(only_high_trial.shape[0]):
+for sbj in range(len(pck_files)):
 
   with open(pck_files[sbj], 'rb') as f:
       data = pickle.load(f)
@@ -963,7 +961,7 @@ corr_r = np.zeros((only_high_trial.shape[0], only_high_trial.shape[1]))  # Corre
 corr_p = np.zeros((only_high_trial.shape[0], only_high_trial.shape[1]))  # p-values for correlations
 
 # Loop through each subject
-for subj in range(15):  # Modify range as needed based on data shape
+for subj in range(len(pck_files)):  # Modify range as needed based on data shape
     evoked_T0 = only_high_trial[subj, :, 900:1300]  # Extract original EEG signal in a specific window
     evoked_T2 = all_sim_EEG[subj, :, :]  # Extract simulated EEG signal
 
@@ -1001,7 +999,7 @@ fake_corr_r = np.zeros((nPerms, only_high_trial.shape[0], only_high_trial.shape[
 
 # Permutation testing
 for perm in range(nPerms):
-    for subj in range(15):  # Modify range as needed
+    for subj in range(len(pck_files)):  # Modify range as needed
         evoked_T0 = only_high_trial[subj, :, 900:1300]  # Original EEG signal
         evoked_T2 = all_sim_EEG[subj, :, :]  # Simulated EEG signal
 
@@ -1067,10 +1065,10 @@ evoked = epochs.average()
 par = {'baseline_window':(-0.4,-0.1), 'response_window':(0,0.3), 'k':1.2, 'min_snr':1.1,
         'max_var':99, 'embed':False,'n_steps':100}
 
-PCI_sim = np.zeros((epochs._data.shape[0]))
-PCI_emp = np.zeros((epochs._data.shape[0]))
+PCI_sim = np.zeros((len(pck_files)))
+PCI_emp = np.zeros((len(pck_files)))
 
-for sbj in range(epochs._data.shape[0]):
+for sbj in range(len(pck_files)):
   PCI_emp[sbj] = calc_PCIst(epochs._data[sbj, :, :], evoked.times, **par, full_return=False)
   with open(pck_files[sbj], 'rb') as f:
     data = pickle.load(f)
@@ -1127,7 +1125,7 @@ times = [peak_locs1, peak_locs2, peak_locs4, peak_locs5]
 evoked.plot_joint(ts_args=ts_args, times=times, title='Empirical Grand Mean');
 
 
-epochs._data[:,:,900:1300] = all_sim_EEG
+epochs._data[:len(pck_files),:,900:1300] = all_sim_EEG[:len(pck_files)]
 
 sim_evoked = epochs.average()
 
@@ -1156,4 +1154,3 @@ sim_evoked.plot_joint(ts_args=ts_args, times=times, title='Simulated Grand Mean'
 # ---------------------------------------------------
 #
 # Momi, D., Wang, Z., Griffiths, J.D. (2023). "TMS-evoked responses are driven by recurrent large-scale network dynamics." eLife, 10.7554/eLife.83232. https://doi.org/10.7554/eLife.83232
-
