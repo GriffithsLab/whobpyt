@@ -67,7 +67,15 @@ sys.path.append('../whobpyt/depr/momi2023/')
 from jansen_rit import ParamsJR, Model_fitting, RNNJANSEN, Costs, OutputNM
 
 
+from pci import calc_PCIst, dimensionality_reduction, calc_snr, get_svd, apply_svd, state_transition_quantification,\
+    recurrence_matrix, distance2transition, distance2recurrence, diff_matrix, calc_maxdim, dimension_embedding,\
+    preprocess_signal, avgreference, undersample_signal, baseline_correct, get_time_index, bar_plot, \
+    spider_plot
 
+from pci import bar_plot as bp_1
+
+# viz stuff
+import matplotlib.pyplot as plt
 
 # python stuff
 import numpy as np
