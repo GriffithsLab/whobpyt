@@ -21,7 +21,8 @@ jobs:
         pip install .
     - name: Build docs
       run: |
-          sphinx-build -b html -nWT --keep-going source/ _build/html
+          cd doc  
+          sphinx-build -b html -nWT --keep-going . _build/html
       continue-on-error: true  
     - name: Deploy Docs
       if: always() 
