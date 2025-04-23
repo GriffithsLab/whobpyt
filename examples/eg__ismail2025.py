@@ -217,30 +217,44 @@ plt.show()
 # -------------------------------------------------------------------------
 #We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
 #Create longer empty array with same shape and fill with the first 500 ms
-sim_1500_verb = np.zeros((verb_meg.shape[0], 1500))
-sim_1500_verb[:,:verb_meg.shape[1]] = verb_meg*1.0e13
+sim_1500_verb = np.zeros((verb_eeg.shape[0], 1500))
+sim_1500_verb[:,:verb_eeg.shape[1]] = verb_eeg*1.0e13
+node_size = sc.shape[0]
 output_size = sim_1500_verb.shape[0]
+batch_size = 250
+step_size = 0.0001
+input_size = 3
+num_epoches = 2
+tr = 0.001
+state_size = 6
+base_batch_num = 20
 time_dim = sim_1500_verb.shape[1]
 hidden_size = int(tr/step_size)
-data_verb = dataloader((sim_1500_verb-sim_1500_verb.mean(0)).T, num_epoches, batch_size)
-verb_F.ts = data_verb
-#keep stimulation the same
-#Stimulate the auditory cortices defined by roi in ki0
+data_mean = dataloader((sim_1500_verb-sim_1500_verb.mean(0)).T, num_epoches, batch_size)
+verb_F.ts = data_mean
 u = np.zeros((node_size,hidden_size,time_dim))
 u[:,:,100:140]= 5000
 output_test = verb_F.test(base_batch_num, u=u)
-#extract simulated sensor and source data for verb trials
+#extract simulated sensor and source data for noise trials
 sim_source_verb = verb_F.output_sim.P_test
 sim_sensor_verb = verb_F.output_sim.eeg_test
 
 #repeat for noise trials
-sim_1500_noise = np.zeros((noise_meg.shape[0], 1500))
-sim_1500_noise[:,:noise_meg.shape[1]] = noise_meg*1.0e13
-time_dim = sim_1500_noise.shape[1]
+sim_1500_noise = np.zeros((noise_eeg.shape[0], 1500))
+sim_1500_noise[:,:noise_eeg.shape[1]] = noise_eeg*1.0e13
+node_size = sc.shape[0]
 output_size = sim_1500_noise.shape[0]
+batch_size = 250
+step_size = 0.0001
+input_size = 3
+num_epoches = 2
+tr = 0.001
+state_size = 6
+base_batch_num = 20
+time_dim = sim_1500_noise.shape[1]
 hidden_size = int(tr/step_size)
-data_noise = dataloader((sim_1500_noise-sim_1500_noise.mean(0)).T, num_epoches, batch_size)
-noise_F.ts = data_noise
+data_mean = dataloader((sim_1500_noise-sim_1500_noise.mean(0)).T, num_epoches, batch_size)
+noise_F.ts = data_mean
 u = np.zeros((node_size,hidden_size,time_dim))
 u[:,:,100:140]= 5000
 output_test = noise_F.test(base_batch_num, u=u)
