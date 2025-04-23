@@ -5,10 +5,8 @@ Replicating Ismail et al. 2025
 ==============================================================
 """
 # sphinx_gallery_thumbnail_number = 1
-
-
 # %% [markdown]
-# ## 0. Overview
+# 0. Overview
 # ---------------------------------------------------
 #
 # This example replicates modelling in the Ismail et al. 2025 paper.
@@ -32,7 +30,7 @@ Replicating Ismail et al. 2025
 #This is Figure 1 from the paper, we will begin by replicating the results for one subject in this figure
 
 # %%  [markdown]
-# ## 1. Setup
+# 1. Setup
 # --------------------------------------------------
 # Imports:
 import numpy as np
@@ -53,10 +51,9 @@ import scipy.signal
 from scipy import stats
 
 # %%  [markdown]
-# ## 2. Download data
+# 2. Download data
 # -------------------------------------------------------------------------
 # We use an example dataset for one subject on a public Google Drive folder and includes:
-
 folder_id = "1F8XOPfKihcV5hk0p9N_UVciyC5-SMHsn"
 output_dir = "eg__ismail2025_data"
 if not os.path.exists(output_dir):
@@ -65,8 +62,9 @@ if not os.path.exists(output_dir):
 
 
 
+
 # %%  [markdown]
-# ## 3. Load Functional Data 
+# 3. Load Functional Data 
 # -------------------------------------------------------------------------
 # We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials 
 #Evoked MEG data averaged across trials (-100 to 400 ms)
@@ -80,7 +78,7 @@ noise_meg = noise_meg_raw / np.abs(noise_meg_raw).max() * 1
 
 
 # %%  [markdown]
-# ## 4. Load Forward Model Input
+# 4. Load Forward Model Input
 # -------------------------------------------------------------------------
 # We will use the leadfield to simulate MEG activty from sources derived from the individual's head model
 leadfield = loadmat(os.path.join('eg__ismail2025_data', 'leadfield_3d.mat'))  # shape (sources, sensors, 3)
@@ -97,10 +95,9 @@ lm = lm.T / 1e-11 * 5  # Shape: (channels, sources)
 
 
 # %%  [markdown]
-# ## 5. Load Structure
+# 5. Load Structure
 # -------------------------------------------------------------------------
 # We will use the individual's weights and distance matrices 
-
 sc_df = pd.read_csv(os.path.join('eg__ismail2025_data', 'weights.csv'), header=None).values
 sc = np.log1p(sc_df)
 sc = sc / np.linalg.norm(sc)
@@ -110,9 +107,8 @@ dist = np.loadtxt(os.path.join('eg__ismail2025_data', 'distance.txt'))
 
 
 # %%  [markdown]
-# ## 6. Put it all together and fit the model
+# 6. Put it all together and fit the model
 # -------------------------------------------------------------------------
-
 node_size = sc.shape[0]
 output_size = verb_meg.shape[0]
 batch_size = 250
@@ -161,8 +157,9 @@ print("Finished fitting model to noise trials")
 
 
 
+
 # %%  [markdown]
-# ## 7. Let's Compare Simulated & Empirical MEG Activity
+# 7. Let's Compare Simulated & Empirical MEG Activity
 # -------------------------------------------------------------------------
 #we will use the simulations from the fully trained model in the downloaded directory
 verb_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_verb_sensor.npy'))
@@ -194,8 +191,13 @@ plt.show()
 
 
 
+
+
+
+
+
 # %%  [markdown]
-# ## 8. Simulate models for longer (model was fitted with 500 ms of data, we will simulate 1500 ms!)
+# 8. Simulate models for longer (model was fitted with 500 ms of data, we will simulate 1500 ms!)
 # -------------------------------------------------------------------------
 #We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
 #Create longer empty array with same shape and fill with the first 500 ms
@@ -229,8 +231,11 @@ sim_sensor_noise = noise_F.output_sim.eeg_test
 
 
 
+
+
+
 #%% [markdown]
-# ## 9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
+# 9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
 # -------------------------------------------------------------------------
 #We are replicating figure 1D (Adolescents) for one subject
 #We will load the empirical source data (model was fitted with sensor MEG data) and simulated source from pretrained model
@@ -293,10 +298,11 @@ plt.show()
 
 # %%
 # **Results Description:**
-# Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) 
-#observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model's capacity 
-#to link temporal and spectral features of neural dynamics during the task. 
-#Fort this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference.
+# Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model's capacity to link temporal and spectral features of neural dynamics during the task. 
+
+#For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference.
+
 #Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed.
+
 #In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E). 
 
