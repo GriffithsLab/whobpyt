@@ -65,6 +65,8 @@ if not os.path.exists(output_dir):
 # 3. Load Functional Data
 # We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials  
 # -------------------------------------------------------------------------
+# We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials 
+
 #Evoked MEG data averaged across trials (-100 to 400 ms)
 verb_meg_raw = np.load(os.path.join('eg__ismail2025_data', 'verb_evoked.npy'))   # (time, channels)
 noise_meg_raw = np.load(os.path.join('eg__ismail2025_data', 'noise_evoked.npy')) # (time, channels)
