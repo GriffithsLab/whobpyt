@@ -219,6 +219,7 @@ plt.show()
 #Create longer empty array with same shape and fill with the first 500 ms
 sim_1500_verb = np.zeros((verb_meg.shape[0], 1500))
 sim_1500_verb[:,:verb_meg.shape[1]] = verb_meg*1.0e13
+output_size = sim_1500_verb.shape[0]
 time_dim = sim_1500_verb.shape[1]
 hidden_size = int(tr/step_size)
 data_verb = dataloader((sim_1500_verb-sim_1500_verb.mean(0)).T, num_epoches, batch_size)
@@ -236,6 +237,7 @@ sim_sensor_verb = verb_F.output_sim.eeg_test
 sim_1500_noise = np.zeros((noise_meg.shape[0], 1500))
 sim_1500_noise[:,:noise_meg.shape[1]] = noise_meg*1.0e13
 time_dim = sim_1500_noise.shape[1]
+output_size = sim_1500_noise.shape[0]
 hidden_size = int(tr/step_size)
 data_noise = dataloader((sim_1500_noise-sim_1500_noise.mean(0)).T, num_epoches, batch_size)
 noise_F.ts = data_noise
