@@ -229,6 +229,7 @@ output_test = noise_F.test(base_batch_num, u=u)
 sim_source_noise = noise_F.output_sim.P_test
 sim_sensor_noise = noise_F.output_sim.eeg_test
 
+#%%
 #9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
 # -------------------------------------------------------------------------
 
