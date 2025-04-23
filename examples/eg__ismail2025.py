@@ -63,6 +63,8 @@ if not os.path.exists(output_dir):
     url = f"https://drive.google.com/drive/folders/{folder_id}"
     gdown.download_folder(url, quiet=True, use_cookies=False)
 
+
+
 # %%
 # 3. Load Functional Data 
 # -------------------------------------------------------------------------
@@ -73,6 +75,9 @@ noise_meg_raw = np.load(os.path.join('eg__ismail2025_data', 'noise_evoked.npy'))
 # Normalize both signals
 verb_meg = verb_meg_raw / np.abs(verb_meg_raw).max() * 1
 noise_meg = noise_meg_raw / np.abs(noise_meg_raw).max() * 1
+
+
+
 
 # %%
 #4. Load Forward Model Input
@@ -88,6 +93,9 @@ for sources in range(lm_3d.shape[0]):
 # Scale the leadfield matrix
 lm = lm.T / 1e-11 * 5  # Shape: (channels, sources)
 
+
+
+
 # %%
 #5. Load Structure
 # -------------------------------------------------------------------------
@@ -97,6 +105,9 @@ sc_df = pd.read_csv(os.path.join('eg__ismail2025_data', 'weights.csv'), header=N
 sc = np.log1p(sc_df)
 sc = sc / np.linalg.norm(sc)
 dist = np.loadtxt(os.path.join('eg__ismail2025_data', 'distance.txt'))
+
+
+
 
 # %%
 #6. Put it all together and fit the model
@@ -147,6 +158,9 @@ noise_F.train(u=stim_input)
 noise_F.test(base_batch_num, u=stim_input)
 print("Finished fitting model to noise trials")
 
+
+
+
 # %%
 # 7. Let's Compare Simulated & Empirical MEG Activity
 # -------------------------------------------------------------------------
@@ -177,6 +191,8 @@ plt.show()
 # **Results Description:**
 # Models successfully reproduced the timing and spatial topography of the early evoked MEG components (0-400 ms) observed for both conditions. 
 #Figure 1C shows the model-generated and empirical MEG time series during noun and noise trials for an exemplar subject. 
+
+
 
 # %%
 #8. Simulate models for longer (model was fitted with 500 ms of data, we will simulate 1500 ms!)
@@ -210,6 +226,8 @@ output_test = noise_F.test(base_batch_num, u=u)
 #extract simulated sensor and source data for noise trials
 sim_source_noise = noise_F.output_sim.P_test
 sim_sensor_noise = noise_F.output_sim.eeg_test
+
+
 
 #%%
 #9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
