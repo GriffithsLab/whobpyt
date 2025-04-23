@@ -235,7 +235,7 @@
 
 <li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="eg__ismail2025.html">
-    Example: Replicating Ismail et al. 2025
+    Replicating Ismail et al. 2025
   </a>
 </li>
 
@@ -408,7 +408,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="eg__ismail2025.html">
-    Example: Replicating Ismail et al. 2025
+    Replicating Ismail et al. 2025
   </a>
 </li>
 
@@ -509,27 +509,21 @@ to download the full example code.</p>
 </dl>
 <p># eLife, [doi: 10.7554/eLife.83232](<a class="reference external" href="https://elifesciences.org/articles/83232">https://elifesciences.org/articles/83232</a>)</p>
 <p>The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
-</pre></div>
-</div>
-<section id="setup">
-<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Importage:</span>
-
-<span class="c1"># os stuff</span>
+<p>First we must import the necessary packages required for the example:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># System-based packages</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
 
 
-<span class="c1"># whobpyt stuff</span>
+<span class="c1"># Whobpyt modules taken from the whobpyt package</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">whobpyt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datatypes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parameter</span> <span class="k">as</span> <span class="n">par</span><span class="p">,</span> <span class="n">Timeseries</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.models.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">JansenRitModel</span><span class="p">,</span><span class="n">JansenRitParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelFitting</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.optimization.custom_cost_JR</span><span class="w"> </span><span class="kn">import</span> <span class="n">CostsJR</span>
 
-<span class="c1"># python stuff</span>
+<span class="c1"># Python Packages used for processing and displaying given analytical data (supported for .mat and Google Drive files)</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
@@ -537,12 +531,9 @@ to download the full example code.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span> <span class="c1"># Plotting library (For Visualization)</span>
 
-<span class="c1">#neuroimaging packages</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
-
-<span class="c1"># viz stuff</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mne</span> <span class="c1"># Neuroimaging package</span>
 </pre></div>
 </div>
 <p>Download and load necessary data for the example</p>
@@ -551,26 +542,6 @@ to download the full example code.</p>
 
 <span class="k">if</span> <span class="n">download_data</span><span class="p">:</span> <span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;eg__tmseeg_data&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__tmseeg.py&quot;</span>, line <span class="m">61</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="k">if</span> <span class="n">download_data</span><span class="p">:</span> <span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/gdown/download_folder.py&quot;</span>, line <span class="m">325</span>, in <span class="n">download_folder</span>
-<span class="w">    </span><span class="n">local_path</span> <span class="o">=</span> <span class="n">download</span><span class="p">(</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/gdown/download.py&quot;</span>, line <span class="m">278</span>, in <span class="n">download</span>
-<span class="w">    </span><span class="k">raise</span> <span class="n">FileURLRetrievalError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-<span class="gr">gdown.exceptions.FileURLRetrievalError</span>: <span class="n">Failed to retrieve file url:</span>
-
-<span class="x">    Cannot retrieve the public link of the file. You may need to change</span>
-<span class="x">    the permission to &#39;Anyone with the link&#39;, or have had many accesses.</span>
-<span class="x">    Check FAQ in https://github.com/wkentaro/gdown?tab=readme-ov-file#faq.</span>
-
-<span class="x">You may still be able to access the file from the browser:</span>
-
-<span class="x">    https://drive.google.com/uc?id=1PqYRp2E8zCslFZzOnJvwEk2z3qHMm9pA</span>
-
-<span class="x">but Gdown can&#39;t. Please check connections and permissions.</span>
 </pre></div>
 </div>
 <p>Load EEG data from a file</p>
@@ -600,6 +571,14 @@ to download the full example code.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">stim_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;stim_weights.npy&#39;</span><span class="p">))</span>
 <span class="n">stim_weights_thr</span> <span class="o">=</span> <span class="n">stim_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">labels</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">stim_weights_thr</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>19                 7Networks_LH_SomMot_6
+22                 7Networks_LH_SomMot_9
+23                7Networks_LH_SomMot_10
+33          7Networks_LH_DorsAttn_Post_4
+44    7Networks_LH_SalVentAttn_ParOper_2
+Name: ROI Name, dtype: object
 </pre></div>
 </div>
 <p>Load the structural connectivity matrix</p>
@@ -696,14 +675,26 @@ to download the full example code.</p>
 <span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">empRecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_mean</span><span class="p">],</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
+epoch:  0 loss: 3.2632935 Pseudo FC_cor:  0.04205668363605105 cos_sim:  0.05792038653831181
+Epoch:  1
+epoch:  1 loss: 2.5232635 Pseudo FC_cor:  -0.003013152454659393 cos_sim:  -0.006977446882431352
+</pre></div>
+</div>
 <p>quick test run with 2 epochs</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.0012180305200308915 cos_sim:  0.015356734878700621
 </pre></div>
 </div>
 <p>load in a previously completed model fitting results object</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">full_run_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;Subject_1_low_voltage_fittingresults_stim_exp.pkl&#39;</span><span class="p">)</span>
 <span class="n">F</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">full_run_fname</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
 <span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.45093941963032047 cos_sim:  0.3828908457384801
 </pre></div>
 </div>
 <p>Plot the original and simulated EEG data</p>
@@ -725,7 +716,14 @@ to download the full example code.</p>
 <span class="n">simulated_joint_st</span> <span class="o">=</span> <span class="n">simulated_EEG_st</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_eg__tmseeg_001.png" srcset="../_images/sphx_glr_eg__tmseeg_001.png" alt="EEG (60 channels), 0.005 s, 0.020 s, 0.040 s, 0.078 s, 0.150 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__tmseeg_002.png" srcset="../_images/sphx_glr_eg__tmseeg_002.png" alt="EEG (60 channels), 0.005 s, 0.020 s, 0.040 s, 0.078 s, 0.150 s" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+</pre></div>
+</div>
 <section id="results-description">
 <h2>Results Description<a class="headerlink" href="#results-description" title="Link to this heading">#</a></h2>
 <p>The plot above shows the original EEG data and the simulated EEG data using the fitted Jansen-Rit model.
@@ -736,7 +734,7 @@ to capture key features of the EEG signal.</p>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.193 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 15.115 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-tmseeg-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/adddac552e627b5207e7ec47e04b862e/eg__tmseeg.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__tmseeg.ipynb</span></code></a></p>
@@ -799,7 +797,6 @@ to capture key features of the EEG signal.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-description">Results Description</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
