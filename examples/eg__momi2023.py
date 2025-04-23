@@ -1154,3 +1154,103 @@ sim_evoked.plot_joint(ts_args=ts_args, times=times, title='Simulated Grand Mean'
 # ---------------------------------------------------
 #
 # Momi, D., Wang, Z., Griffiths, J.D. (2023). "TMS-evoked responses are driven by recurrent large-scale network dynamics." eLife, 10.7554/eLife.83232. https://doi.org/10.7554/eLife.83232
+
+
+#### rest is extral analysis on the neural states on different networks
+
+### get labels for Yeo 200
+url = 'https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv'
+atlas = pd.read_csv(url)
+labels = atlas['ROI Name']
+
+# get networks 
+nets = [label.split('_')[2] for label in labels]
+net_names = np.unique(np.array(nets))
+
+
+# collect fitting results
+fitting_results = []
+for sbj2plot in range(6):
+    print(f"Processing Subject {sbj2plot + 1}")
+
+   
+    # Load simulated data from pickle file
+    with open(pck_files[sbj2plot], 'rb') as f:
+        data = pickle.load(f)
+    
+    fitting_results.append(data)
+
+
+#### plot E response on each networks 
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+for data in fitting_results:
+    for i, net in enumerate(net_names):
+        mask = np.array(nets) == net
+        ax[i//4, i%4].plot(t, data.output_sim.E_test[mask,:].mean(0).T)
+        ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: E')
+plt.show()
+
+### plot I response at each networks
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+for data in fitting_results:
+    for i, net in enumerate(net_names):
+        mask = np.array(nets) == net
+        ax[i//4, i%4].plot(t, data.output_sim.I_test[mask,:].mean(0).T)
+        ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: I')
+plt.show()
+
+### plot P response at each networks
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+for data in fitting_results:
+    for i, net in enumerate(net_names):
+        mask = np.array(nets) == net
+        ax[i//4, i%4].plot(t, data.output_sim.P_test[mask,:].mean(0).T)
+        ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: P')
+plt.show()
+
+
+### plot phase of E at each network
+j = complex(0,1)
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+for data in fitting_results:
+    phase = np.angle(data.output_sim.E_test+j*data.output_sim.Ev_test)
+    for i, net in enumerate(net_names):
+        mask = np.array(nets) == net
+        ax[i//4, i%4].plot(t, phase[mask,:].mean(0).T)
+        ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: phase E')
+plt.show()
+
+### plot I phase at each network
+j = complex(0,1)
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+for data in fitting_results:
+    phase = np.angle(data.output_sim.I_test+j*data.output_sim.Iv_test)
+    for i, net in enumerate(net_names):
+        mask = np.array(nets) == net
+        ax[i//4, i%4].plot(t, phase[mask,:].mean(0).T)
+        ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: phase I')
+plt.show()
+
+### plot P phase at each network
+
+j = complex(0,1)
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+for data in fitting_results:
+    phase = np.angle(data.output_sim.P_test+j*data.output_sim.Pv_test)
+    for i, net in enumerate(net_names):
+        mask = np.array(nets) == net
+        ax[i//4, i%4].plot(t, phase[mask,:].mean(0).T)
+        ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: phase P')
+plt.show()
