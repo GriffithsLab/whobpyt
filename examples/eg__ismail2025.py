@@ -219,22 +219,23 @@ plt.show()
 #Create longer empty array with same shape and fill with the first 500 ms
 sim_1500_verb = np.zeros((verb_meg.shape[0], 1500))
 sim_1500_verb[:,:verb_meg.shape[1]] = verb_meg*1.0e13
-time_dim = verb_meg.shape[1]
+time_dim = sim_1500_verb.shape[1]
 hidden_size = int(tr/step_size)
 data_verb = dataloader((sim_1500_verb-sim_1500_verb.mean(0)).T, num_epoches, batch_size)
 verb_F.ts = data_verb
 #keep stimulation the same
 #Stimulate the auditory cortices defined by roi in ki0
-stim_input = np.zeros((node_size, hidden_size, time_dim))
-stim_input[:, :, 100:140] = 5000
-output_test = verb_F.test(base_batch_num, u=stim_input)
+u = np.zeros((node_size,hidden_size,time_dim))
+u[:,:,100:140]= 5000
+output_test = verb_F.test(base_batch_num, u=u)
 #extract simulated sensor and source data for verb trials
 sim_source_verb = verb_F.output_sim.P_test
 sim_sensor_verb = verb_F.output_sim.eeg_test
+
 #repeat for noise trials
 sim_1500_noise = np.zeros((noise_meg.shape[0], 1500))
 sim_1500_noise[:,:noise_meg.shape[1]] = noise_meg*1.0e13
-time_dim = noise_meg.shape[1]
+time_dim = sim_1500_noise.shape[1]
 hidden_size = int(tr/step_size)
 data_noise = dataloader((sim_1500_noise-sim_1500_noise.mean(0)).T, num_epoches, batch_size)
 noise_F.ts = data_noise
