@@ -1,42 +1,30 @@
-.. include:: ../README.rst
+WhoBPyT Docs
+============
 
-Welcome to WhoBPyT documentation!
-===================================
+.. image:: _static/whobpyt_logo_shire.png
+   :alt: WhoBPyT as in Hobbit
+   :align: center
+   :width: 400px
 
-.. toctree::
-   :maxdepth: 1
-   :caption: About WhoBPyT
-   :glob:
-      
-   about_whobpyt/overview
-   about_whobpyt/architecture
-   about_whobpyt/background
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Getting Started
-   :glob:
- 
-   getting_started/installation
-   getting_started/running_in_colab
-   getting_started/running_in_codespaces
+Demos and Tutorials
+-------------------
 
-.. toctree::
-   :maxdepth: 2
-   :caption: API
-   :glob:
-
-   API/models
-   API/optimization
-   API/run
-   API/visualization
-   API/datatypes
 
 .. toctree::
    :maxdepth: 1
-   :caption: Examples
-   :glob:
- 
-   auto_examples/eg__tmseeg
-   auto_examples/eg__momi2023   
-   auto_examples/eg__ismail2025
+   :caption: Demos and Tutorials
+
+.. minigallery:: ../examples/eg__tmseeg.py 
+
+
+Published Studies
+-------------------
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Published Studies
+
+.. minigallery:: ../examples/eg__ismail2025.py  ../examples/eg__momi2023.py 
+
+
