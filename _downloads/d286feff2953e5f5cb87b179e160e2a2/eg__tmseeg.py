@@ -14,23 +14,29 @@ Momi, D., Wang, Z., Griffiths, J.D. (2023).
 The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.
 
 """
-# %%  
-# First we must import the necessary packages required for the example:  
 
-# System-based packages
+# sphinx_gallery_thumbnail_number = 1
+#
+# %%
+# Setup
+# --------------------------------------------------
+
+# Importage:
+
+# os stuff
 import os
 import sys
 sys.path.append('..')
 
 
-# Whobpyt modules taken from the whobpyt package
+# whobpyt stuff
 import whobpyt
 from whobpyt.datatypes import Parameter as par, Timeseries
 from whobpyt.models.jansen_rit import JansenRitModel,JansenRitParams
 from whobpyt.run import ModelFitting
 from whobpyt.optimization.custom_cost_JR import CostsJR
 
-# Python Packages used for processing and displaying given analytical data (supported for .mat and Google Drive files)
+# python stuff
 import numpy as np
 import pandas as pd
 import scipy.io
@@ -38,9 +44,12 @@ import gdown
 import pickle
 import warnings
 warnings.filterwarnings('ignore')
-import matplotlib.pyplot as plt # Plotting library (For Visualization)
 
-import mne # Neuroimaging package
+#neuroimaging packages
+import mne
+
+# viz stuff
+import matplotlib.pyplot as plt
 
 
 
