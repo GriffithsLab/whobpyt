@@ -31,6 +31,7 @@ Example: Replicating Ismail et al. 2025
 # %%
 # 1. Setup
 # --------------------------------------------------
+
 # Imports:
 import numpy as np
 import pandas as pd
@@ -52,6 +53,7 @@ from scipy import stats
 # %%
 # 2. Download data
 # -------------------------------------------------------------------------
+
 # We use an example dataset for one subject on a public Google Drive folder and includes:
 
 folder_id = "1F8XOPfKihcV5hk0p9N_UVciyC5-SMHsn"
@@ -62,9 +64,9 @@ if not os.path.exists(output_dir):
     gdown.download_folder(url, quiet=True, use_cookies=False)
 
 # %%
-# 3. Load Functional Data
-# We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials  
+# 3. Load Functional Data 
 # -------------------------------------------------------------------------
+
 # We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials 
 
 #Evoked MEG data averaged across trials (-100 to 400 ms)
@@ -76,8 +78,9 @@ noise_meg = noise_meg_raw / np.abs(noise_meg_raw).max() * 1
 
 # %%
 #4. Load Forward Model Input
-# We will use the leadfield to simulate MEG activty from sources derived from the individual's head model
 # -------------------------------------------------------------------------
+
+# We will use the leadfield to simulate MEG activty from sources derived from the individual's head model
 leadfield = loadmat(os.path.join('eg__ismail2025_data', 'leadfield_3d.mat'))  # shape (sources, sensors, 3)
 lm_3d = leadfield['M']  # 3D leadfield matrix
 # Convert 3D to 2D using SVD-based projection
@@ -89,9 +92,10 @@ for sources in range(lm_3d.shape[0]):
 lm = lm.T / 1e-11 * 5  # Shape: (channels, sources)
 
 # %%
-#4. Load Structure
-# We will use the individual's weights and distance matrices 
+#5. Load Structure
 # -------------------------------------------------------------------------
+
+# We will use the individual's weights and distance matrices 
 
 sc_df = pd.read_csv(os.path.join('eg__ismail2025_data', 'weights.csv'), header=None).values
 sc = np.log1p(sc_df)
@@ -99,8 +103,9 @@ sc = sc / np.linalg.norm(sc)
 dist = np.loadtxt(os.path.join('eg__ismail2025_data', 'distance.txt'))
 
 # %%
-#5. Put it all together and fit the model
+#6. Put it all together and fit the model
 # -------------------------------------------------------------------------
+
 node_size = sc.shape[0]
 output_size = verb_meg.shape[0]
 batch_size = 250
@@ -154,8 +159,9 @@ noise_F.test(base_batch_num, u=stim_input)
 print("Finished fitting model to noise trials")
 
 # %%
-# 6. Let's Compare Simulated & Empirical MEG Activity
+# 7. Let's Compare Simulated & Empirical MEG Activity
 # -------------------------------------------------------------------------
+
 #we will use the simulations from the fully trained model in the downloaded directory
 verb_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_verb_sensor.npy'))
 noise_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_noise_sensor.npy'))
@@ -190,9 +196,10 @@ plt.show()
 #Figure 1C shows the model-generated and empirical MEG time series during noun and noise trials for an exemplar subject. 
 
 # %%
-#7. Simulate models for longer (model was fitted with 500 ms of data, we will simulate 1500 ms!)
-#We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
+#8. Simulate models for longer (model was fitted with 500 ms of data, we will simulate 1500 ms!)
 # -------------------------------------------------------------------------
+
+#We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
 #Create longer empty array with same shape and fill with the first 500 ms
 sim_1500_verb = np.zeros((verb_meg.shape[0], 1500))
 sim_1500_verb[:,:verb_meg.shape[1]] = verb_meg*1.0e13
@@ -222,10 +229,10 @@ output_test = noise_F.test(base_batch_num, u=u)
 sim_source_noise = noise_F.output_sim.P_test
 sim_sensor_noise = noise_F.output_sim.eeg_test
 
-#7. Compare empirical and simulated change in beta power between verb and noise trials for one subject
-#We are replicating figure 1D (Adolescents) for one subject
+#9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
 # -------------------------------------------------------------------------
 
+#We are replicating figure 1D (Adolescents) for one subject
 #We will load the empirical source data (model was fitted with sensor MEG data) and simulated source from pretrained model
 emp_source_noise = np.load(os.path.join('eg__ismail2025_data', 'emp_noise_source.npy'))
 emp_source_verb = np.load(os.path.join('eg__ismail2025_data', 'emp_verb_source.npy'))
