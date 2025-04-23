@@ -1,4 +1,5 @@
 """
+
 ==============================================================
 Example: Replicating Ismail et al. 2025
 ==============================================================
@@ -22,16 +23,17 @@ Example: Replicating Ismail et al. 2025
 # transplant experiments, we show that the reduction in local inhibition allows pre-existing asymmetries in interhemispheric 
 # inhibition to drive laterality. This work provides a developmental framework for understanding how inhibitory circuits shape language networks.
 
-.. image:: https://github.com/griffithslab/whobpyt/doc/_static/Ismail2025_Figure1.png
-   :alt: Ismail et al. 2025 Figure 1
-   :align: center
+#%%
+#.. image:: https://github.com/griffithslab/whobpyt/doc/_static/Ismail2025_Figure1.png
+#   :alt: Ismail et al. 2025 Figure 1
+#   :align: center
 
+#%%
 #This is Figure 1 from the paper, we will begin by replicating the results for one subject in this figure
 
 # %%
 # 1. Setup
 # --------------------------------------------------
-
 # Imports:
 import numpy as np
 import pandas as pd
@@ -53,12 +55,10 @@ from scipy import stats
 # %%
 # 2. Download data
 # -------------------------------------------------------------------------
-
 # We use an example dataset for one subject on a public Google Drive folder and includes:
 
 folder_id = "1F8XOPfKihcV5hk0p9N_UVciyC5-SMHsn"
 output_dir = "eg__ismail2025_data"
-
 if not os.path.exists(output_dir):
     url = f"https://drive.google.com/drive/folders/{folder_id}"
     gdown.download_folder(url, quiet=True, use_cookies=False)
@@ -66,9 +66,7 @@ if not os.path.exists(output_dir):
 # %%
 # 3. Load Functional Data 
 # -------------------------------------------------------------------------
-
 # We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials 
-
 #Evoked MEG data averaged across trials (-100 to 400 ms)
 verb_meg_raw = np.load(os.path.join('eg__ismail2025_data', 'verb_evoked.npy'))   # (time, channels)
 noise_meg_raw = np.load(os.path.join('eg__ismail2025_data', 'noise_evoked.npy')) # (time, channels)
@@ -79,7 +77,6 @@ noise_meg = noise_meg_raw / np.abs(noise_meg_raw).max() * 1
 # %%
 #4. Load Forward Model Input
 # -------------------------------------------------------------------------
-
 # We will use the leadfield to simulate MEG activty from sources derived from the individual's head model
 leadfield = loadmat(os.path.join('eg__ismail2025_data', 'leadfield_3d.mat'))  # shape (sources, sensors, 3)
 lm_3d = leadfield['M']  # 3D leadfield matrix
@@ -94,7 +91,6 @@ lm = lm.T / 1e-11 * 5  # Shape: (channels, sources)
 # %%
 #5. Load Structure
 # -------------------------------------------------------------------------
-
 # We will use the individual's weights and distance matrices 
 
 sc_df = pd.read_csv(os.path.join('eg__ismail2025_data', 'weights.csv'), header=None).values
@@ -120,70 +116,57 @@ hidden_size = int(tr/step_size)
 # Format input data
 data_verb = dataloader(verb_meg.T, num_epoches, batch_size)
 data_noise = dataloader(noise_meg.T, num_epoches, batch_size)
-
 #To simulate the auditory inputs in this task we will stimulate the auditory cortices
 #These nodes were identified using an ROI mask of left and right Heschl’s gyri based on the Talairach Daemon database 
 ki0 = np.zeros((node_size, 1))
 ki0[[2, 183, 5]] = 1
-
+#initiate leadfield matrices
 lm_n = 0.01 * np.random.randn(output_size, node_size)
 lm_v = 0.01 * np.random.randn(output_size, node_size)
-
 par = ParamsModel('JR', A = [3.25, 0.1], a= [100, 1], B = [22, 0.5], b = [50, 1], g=[400, 1], g_f=[10, 1], g_b=[10, 1],\
                     c1 = [135, 1], c2 = [135*0.8, 1], c3 = [135*0.25, 1], c4 = [135*0.25, 1],\
                     std_in=[0, 1], vmax= [5, 0], v0=[6,0], r=[0.56, 0], y0=[-0.5 , 0.05],\
                     mu = [1., 0.1], k = [5, 0.2], kE = [0, 0], kI = [0, 0],
                     cy0 = [5, 0], ki=[ki0, 0], lm=[lm+lm_n, .1 * np.ones((output_size, node_size))+lm_v])
-
 #Fit two models: 1) verb generation trials and noise trials
 verb_model = RNNJANSEN(node_size, batch_size, step_size, output_size, tr, sc, lm, dist, True, False, par)
 verb_model.setModelParameters()
-
 #Stimulate the auditory cortices defined by roi in ki0
 stim_input = np.zeros((node_size, hidden_size, time_dim))
 stim_input[:, :, 100:140] = 5000
-
+#Fit models
 verb_F = Model_fitting(verb_model, data_verb, num_epoches, 0)
 verb_F.train(u=stim_input)
 verb_F.test(base_batch_num, u=stim_input)
-
 print("Finished fitting model to verb trials")
-
+#repeat for noise
 noise_model = RNNJANSEN(node_size, batch_size, step_size, output_size, tr, sc, lm, dist, True, False, par)
 noise_model.setModelParameters()
-
 noise_F = Model_fitting(noise_model, data_noise, num_epoches, 0)
 noise_F.train(u=stim_input)
 noise_F.test(base_batch_num, u=stim_input)
-
 print("Finished fitting model to noise trials")
 
 # %%
 # 7. Let's Compare Simulated & Empirical MEG Activity
 # -------------------------------------------------------------------------
-
 #we will use the simulations from the fully trained model in the downloaded directory
 verb_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_verb_sensor.npy'))
 noise_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_noise_sensor.npy'))
 ev_samp_file = mne.read_epochs(os.path.join('eg__ismail2025_data', 'evoked_info.fif'), preload=True).resample(1000)
 ev_samp_file.drop_channels(['MLC12-3405']) #we removed this channel in our empirical data 
 info = ev_samp_file.info  # Use existing MEG channel structure to use MNE format
-
 # Convert empirical data to MNE format
 emp_verb_evoked = mne.EvokedArray(verb_meg[:, 0:], info, tmin=-0.1)
 emp_noise_evoked = mne.EvokedArray(noise_meg[:, 0:], info, tmin=-0.1)
 # Convert simulated data to MNE format
 sim_verb_evoked = mne.EvokedArray(verb_meg_sim[:, 0:500], info, tmin=-0.1)
 sim_noise_evoked = mne.EvokedArray(noise_meg_sim[:, 0:500], info, tmin=-0.1)
-
-
 # Plot empirical verb trial
 emp_verb_evoked.plot_joint(title=f"Empirical Verb", show=False, times=[0.07,0.1,0.1585])
 # Plot simulated verb trial
 sim_verb_evoked.plot_joint(title=f"Simulated Verb", show=False, times=[0.07,0.1,0.1585])
 plt.show()
-
-
 # Plot empirical noise trial
 emp_noise_evoked.plot_joint(title=f"Empirical Noise", show=False, times=[0.07,0.1,0.1585])
 # Plot simulated noise trial
@@ -198,7 +181,6 @@ plt.show()
 # %%
 #8. Simulate models for longer (model was fitted with 500 ms of data, we will simulate 1500 ms!)
 # -------------------------------------------------------------------------
-
 #We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
 #Create longer empty array with same shape and fill with the first 500 ms
 sim_1500_verb = np.zeros((verb_meg.shape[0], 1500))
@@ -232,7 +214,6 @@ sim_sensor_noise = noise_F.output_sim.eeg_test
 #%%
 #9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
 # -------------------------------------------------------------------------
-
 #We are replicating figure 1D (Adolescents) for one subject
 #We will load the empirical source data (model was fitted with sensor MEG data) and simulated source from pretrained model
 emp_source_noise = np.load(os.path.join('eg__ismail2025_data', 'emp_noise_source.npy'))
@@ -259,30 +240,22 @@ frontal_rois = np.array([2, 7, 10, 17, 18, 24, 25, 26, 28, 30, 31, 33,
 # Separate left and right hemisphere indices
 right_frontal_idx = frontal_rois[frontal_rois < 93]
 left_frontal_idx = frontal_rois[frontal_rois > 93]
-
 emp_verb_psd = scipy.signal.welch(emp_source_verb[:, :, 1200:1700], fs=fs, noverlap=noverlap, nperseg=nperseg, detrend='linear')
 emp_noise_psd = scipy.signal.welch(emp_source_noise[:, :, 1200:1700], fs=fs, noverlap=noverlap, nperseg=nperseg, detrend='linear')
-
 sim_verb_psd = scipy.signal.welch(sim_source_verb[:, 800:1300], fs=fs, noverlap=noverlap, nperseg=nperseg, detrend='linear')
 sim_noise_psd = scipy.signal.welch(sim_source_noise[:, 800:1300], fs=fs, noverlap=noverlap, nperseg=nperseg, detrend='linear')
-
 #We average beta power across trials 
 emp_verb_beta= np.mean(emp_verb_psd[1][:, :, start_freq:end_freq], axis=(2))
 emp_noise_beta= np.mean(emp_noise_psd[1][:, :, start_freq:end_freq], axis=(2))
-
 sim_verb_beta=np.mean(sim_verb_psd[1][:, start_freq:end_freq], axis=1)
 sim_noise_beta=np.mean(sim_noise_psd[1][:, start_freq:end_freq], axis=1)
-
 emp_beta_diff = (np.mean(emp_verb_beta, axis=1)) - (np.mean(emp_noise_beta, axis=1))
 sim_beta_diff = (np.array(sim_verb_beta)) - (np.array(sim_noise_beta))
-
 #We seperate right and left regions to observe ERD in the left and ERS in the right
 right_emp_avg = np.mean(emp_beta_diff[right_frontal_idx])
 left_emp_avg = np.mean(emp_beta_diff[left_frontal_idx])
-
 right_sim_avg = np.mean(sim_beta_diff[right_frontal_idx])
 left_sim_avg = np.mean(sim_beta_diff[left_frontal_idx])
-
 #Plot beta power difference in left and right frontal regions
 labels = ['Data', 'Simulated']
 x = np.arange(len(labels))
