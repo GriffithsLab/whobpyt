@@ -10,9 +10,9 @@
 It is developed primarily by researchers in the `Whole-Brain Modelling Group`_
 at the `CAMH Krembil Centre for Neuroinformatics`_ & University of Toronto. 
 
-.. _Whole-Brain Modelling Group: www.grifflab.com
+.. _Whole-Brain Modelling Group: https://www.grifflab.com
 
-.. _CAMH Krembil Centre for Neuroinformatics: www.krembilneuroinformatics.ca
+.. _CAMH Krembil Centre for Neuroinformatics: https://www.krembilneuroinformatics.ca
 
 
 Note that this project is relatively new and under active development, so the contents of this repo are subject to substantial change. If you are interested in using WhoBPyT in your research (and especially if you are interested in contributing to the code base development), please get in touch by emailing john dot griffiths at utoronto dot ca, or just introduce yourself via an issue. This projects was made possible through the team and CAMH, along with the wonderful new protege's at the SOBP BrainHack.
