@@ -1,14 +1,14 @@
 """
 
 ==============================================================
-Example: Replicating Ismail et al. 2025
+Replicating Ismail et al. 2025
 ==============================================================
 """
 # sphinx_gallery_thumbnail_number = 1
-#
 
-# %%
-# 0. Overview
+
+# %% [markdown]
+# ## 0. Overview
 # ---------------------------------------------------
 #
 # This example replicates modelling in the Ismail et al. 2025 paper.
@@ -23,7 +23,7 @@ Example: Replicating Ismail et al. 2025
 # transplant experiments, we show that the reduction in local inhibition allows pre-existing asymmetries in interhemispheric 
 # inhibition to drive laterality. This work provides a developmental framework for understanding how inhibitory circuits shape language networks.
 
-#%%
+#%%  [markdown]
 #.. image:: https://github.com/griffithslab/whobpyt/doc/_static/Ismail2025_Figure1.png
 #   :alt: Ismail et al. 2025 Figure 1
 #   :align: center
@@ -31,8 +31,8 @@ Example: Replicating Ismail et al. 2025
 #%%
 #This is Figure 1 from the paper, we will begin by replicating the results for one subject in this figure
 
-# %%
-# 1. Setup
+# %%  [markdown]
+# ## 1. Setup
 # --------------------------------------------------
 # Imports:
 import numpy as np
@@ -52,8 +52,8 @@ import seaborn as sns
 import scipy.signal
 from scipy import stats
 
-# %%
-# 2. Download data
+# %%  [markdown]
+# ## 2. Download data
 # -------------------------------------------------------------------------
 # We use an example dataset for one subject on a public Google Drive folder and includes:
 
@@ -65,8 +65,8 @@ if not os.path.exists(output_dir):
 
 
 
-# %%
-# 3. Load Functional Data 
+# %%  [markdown]
+# ## 3. Load Functional Data 
 # -------------------------------------------------------------------------
 # We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials 
 #Evoked MEG data averaged across trials (-100 to 400 ms)
@@ -79,8 +79,8 @@ noise_meg = noise_meg_raw / np.abs(noise_meg_raw).max() * 1
 
 
 
-# %%
-#4. Load Forward Model Input
+# %%  [markdown]
+# ## 4. Load Forward Model Input
 # -------------------------------------------------------------------------
 # We will use the leadfield to simulate MEG activty from sources derived from the individual's head model
 leadfield = loadmat(os.path.join('eg__ismail2025_data', 'leadfield_3d.mat'))  # shape (sources, sensors, 3)
@@ -96,8 +96,8 @@ lm = lm.T / 1e-11 * 5  # Shape: (channels, sources)
 
 
 
-# %%
-#5. Load Structure
+# %%  [markdown]
+# ## 5. Load Structure
 # -------------------------------------------------------------------------
 # We will use the individual's weights and distance matrices 
 
@@ -109,8 +109,8 @@ dist = np.loadtxt(os.path.join('eg__ismail2025_data', 'distance.txt'))
 
 
 
-# %%
-#6. Put it all together and fit the model
+# %%  [markdown]
+# ## 6. Put it all together and fit the model
 # -------------------------------------------------------------------------
 
 node_size = sc.shape[0]
@@ -161,8 +161,8 @@ print("Finished fitting model to noise trials")
 
 
 
-# %%
-# 7. Let's Compare Simulated & Empirical MEG Activity
+# %%  [markdown]
+# ## 7. Let's Compare Simulated & Empirical MEG Activity
 # -------------------------------------------------------------------------
 #we will use the simulations from the fully trained model in the downloaded directory
 verb_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_verb_sensor.npy'))
@@ -194,8 +194,8 @@ plt.show()
 
 
 
-# %%
-#8. Simulate models for longer (model was fitted with 500 ms of data, we will simulate 1500 ms!)
+# %%  [markdown]
+# ## 8. Simulate models for longer (model was fitted with 500 ms of data, we will simulate 1500 ms!)
 # -------------------------------------------------------------------------
 #We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
 #Create longer empty array with same shape and fill with the first 500 ms
@@ -229,8 +229,8 @@ sim_sensor_noise = noise_F.output_sim.eeg_test
 
 
 
-#%%
-#9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
+#%% [markdown]
+# ## 9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
 # -------------------------------------------------------------------------
 #We are replicating figure 1D (Adolescents) for one subject
 #We will load the empirical source data (model was fitted with sensor MEG data) and simulated source from pretrained model
