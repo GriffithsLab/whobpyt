@@ -50,6 +50,10 @@ import seaborn as sns
 import scipy.signal
 from scipy import stats
 
+
+
+
+
 # %%  [markdown]
 # 2. Download data
 # -------------------------------------------------------------------------
@@ -59,6 +63,9 @@ output_dir = "eg__ismail2025_data"
 if not os.path.exists(output_dir):
     url = f"https://drive.google.com/drive/folders/{folder_id}"
     gdown.download_folder(url, quiet=True, use_cookies=False)
+
+
+
 
 
 
@@ -73,6 +80,8 @@ noise_meg_raw = np.load(os.path.join('eg__ismail2025_data', 'noise_evoked.npy'))
 # Normalize both signals
 verb_meg = verb_meg_raw / np.abs(verb_meg_raw).max() * 1
 noise_meg = noise_meg_raw / np.abs(noise_meg_raw).max() * 1
+
+
 
 
 
@@ -94,6 +103,9 @@ lm = lm.T / 1e-11 * 5  # Shape: (channels, sources)
 
 
 
+
+
+
 # %%  [markdown]
 # 5. Load Structure
 # -------------------------------------------------------------------------
@@ -102,6 +114,7 @@ sc_df = pd.read_csv(os.path.join('eg__ismail2025_data', 'weights.csv'), header=N
 sc = np.log1p(sc_df)
 sc = sc / np.linalg.norm(sc)
 dist = np.loadtxt(os.path.join('eg__ismail2025_data', 'distance.txt'))
+
 
 
 
@@ -184,6 +197,9 @@ emp_noise_evoked.plot_joint(title=f"Empirical Noise", show=False, times=[0.07,0.
 sim_noise_evoked.plot_joint(title=f"Simulated Noise", show=False, times=[0.07,0.1,0.1585])
 plt.show()
 
+
+
+
 # %%
 # **Results Description:**
 # Models successfully reproduced the timing and spatial topography of the early evoked MEG components (0-400 ms) observed for both conditions. 
@@ -234,7 +250,7 @@ sim_sensor_noise = noise_F.output_sim.eeg_test
 
 
 
-#%% [markdown]
+# %%  [markdown]
 # 9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
 # -------------------------------------------------------------------------
 #We are replicating figure 1D (Adolescents) for one subject
@@ -296,13 +312,11 @@ plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 plt.show()
 
+
+
+
+
+
 # %%
 # **Results Description:**
-# Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model's capacity to link temporal and spectral features of neural dynamics during the task. 
-
-#For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference.
-
-#Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed.
-
-#In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E). 
-
+# Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model's capacity to link temporal and spectral features of neural dynamics during the task. For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference. Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed. In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E). 
