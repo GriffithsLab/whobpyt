@@ -16,7 +16,6 @@ The code includes data fetching, model fitting, and result visualization based o
 """
 
 # sphinx_gallery_thumbnail_number = 1
-#
 # %%
 # Setup
 # --------------------------------------------------
