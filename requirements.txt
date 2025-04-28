@@ -30,6 +30,7 @@ ipykernel
 jupyter-alabaster-theme
 pydata-sphinx-theme
 gdown
+kaggle
 jinja2<3.1
 
 
