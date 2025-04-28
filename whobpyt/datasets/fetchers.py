@@ -140,10 +140,11 @@ def fetch_egtmseeg(dest_folder=None, redownload=False):
 
     osf_url_pfx = 'https://osf.io/download'
     files_dict = {'680fc6eb5210d93da17c5a1d':'Schaefer2018_200Parcels_7Networks_count.csv',
+                  '680fe69f9ba48ef173568c07':'Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt',
                   '680fc6fbab92f2b5627c5a0f':'stim_weights.npy',
-                  '680fc6f63068d66fc8568e3e': 'Subject_1_low_voltage.fif',
-                  '680fc6f80959f56dde568f29': 'Subject_1_low_voltage_fittingresults_stim_exp.pkl',
-                  '680fc6f99f030183213cbfd3': 'Subject_1_low_voltage_lf.npy'}
+                  '680fc6f63068d66fc8568e3e':'Subject_1_low_voltage.fif',
+                  '680fc6f80959f56dde568f29':'Subject_1_low_voltage_fittingresults_stim_exp.pkl',
+                  '680fc6f99f030183213cbfd3':'Subject_1_low_voltage_lf.npy'}
     
     cwd = os.getcwd()
    
