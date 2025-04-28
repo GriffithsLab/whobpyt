@@ -285,10 +285,6 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -497,153 +493,6 @@
                   
   <section id="models">
 <h1>Models<a class="headerlink" href="#models" title="Link to this heading">#</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.models.jansen_rit.jansen_rit.</span></span><span class="sig-name descname"><span class="pre">JansenRitModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">JansenRitParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TRs_per_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_gains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_laplacian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_lfm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/jansen_rit/jansen_rit.html#JansenRitModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel" title="Link to this definition">#</a></dt>
-<dd><p>A module for forward model (JansenRit) to simulate EEG signals</p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>createIC(self, ver):</strong></p></td>
-<td><p>Creates the initial conditions for the model.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>createDelayIC(self, ver):</strong></p></td>
-<td><p>Creates the initial conditions for the delays.</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>setModelParameters(self):</strong></p></td>
-<td><p>Sets the parameters of the model.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>forward(input, noise_out, hx)</strong></p></td>
-<td><p>Forward pass for generating a number of EEG signals with current model parameters</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">JansenRitParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TRs_per_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_gains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_laplacian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_lfm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/jansen_rit/jansen_rit.html#JansenRitModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>node_size: int</strong></dt><dd><p>Number of ROIs</p>
-</dd>
-<dt><strong>TRs_per_window: int # TODO: CHANGE THE NAME</strong></dt><dd><p>Number of EEG signals to simulate</p>
-</dd>
-<dt><strong>step_size: float</strong></dt><dd><p>Integration step for forward model</p>
-</dd>
-<dt><strong>output_size</strong><span class="classifier">int</span></dt><dd><p>Number of EEG channels.</p>
-</dd>
-<dt><strong>tr</strong><span class="classifier">float # TODO: CHANGE THE NAME TO sampling_rate</span></dt><dd><p>Sampling rate of the simulated EEG signals</p>
-</dd>
-<dt><strong>sc: ndarray node_size x node_size float array</strong></dt><dd><p>Structural connectivity</p>
-</dd>
-<dt><strong>lm: ndarray float array</strong></dt><dd><p>Leadfield matrix from source space to EEG space</p>
-</dd>
-<dt><strong>dist: ndarray float array</strong></dt><dd><p>Distance matrix</p>
-</dd>
-<dt><strong>use_fit_gains: bool</strong></dt><dd><p>Flag for fitting gains. 1: fit, 0: not fit</p>
-</dd>
-<dt><strong>use_laplacian: bool</strong></dt><dd><p>Flat for using laplacian. 1: yes, 0: no.</p>
-</dd>
-<dt><strong>use_fit_lfm: bool</strong></dt><dd><p>Flag for fitting the leadfield matrix. 1: fit, 0: not fit</p>
-</dd>
-<dt><strong>params: ParamsJR</strong></dt><dd><p>Model parameters object.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC">
-<span class="sig-name descname"><span class="pre">createDelayIC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delays_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_lb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_ub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/jansen_rit/jansen_rit.html#JansenRitModel.createDelayIC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC" title="Link to this definition">#</a></dt>
-<dd><p>Creates the initial conditions for the delays.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>ver</strong><span class="classifier">int</span></dt><dd><p>Initial condition version. 
-(in the JR model, the version is not used. It is just for consistency with other models)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>torch.Tensor</dt><dd><p>Tensor of shape (node_size, delays_max) with random values between <cite>state_lb</cite> and <cite>state_ub</cite>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC">
-<span class="sig-name descname"><span class="pre">createIC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_lb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_ub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/jansen_rit/jansen_rit.html#JansenRitModel.createIC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC" title="Link to this definition">#</a></dt>
-<dd><p>Creates the initial conditions for the model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>ver</strong><span class="classifier">int # TODO: ADD MORE DESCRIPTION</span></dt><dd><p>Initial condition version. (in the JR model, the version is not used. It is just for consistency with other models)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>torch.Tensor</dt><dd><p>Tensor of shape (node_size, state_size) with random values between <cite>state_lb</cite> and <cite>state_ub</cite>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/jansen_rit/jansen_rit.html#JansenRitModel.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward" title="Link to this definition">#</a></dt>
-<dd><p>This function carries out the forward Euler integration method for the JR neural mass model,
-with time delays, connection gains, and external inputs considered. Each population (pyramidal,
-excitatory, inhibitory) in the network is modeled as a nonlinear second order system. The function
-updates the state of each neural population and computes the EEG signals at each time step.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>external</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor of shape (batch_size, num_ROIs) representing the input to the model.</p>
-</dd>
-<dt><strong>hx</strong><span class="classifier">Optional[torch.Tensor]</span></dt><dd><p>Optional tensor of shape (batch_size, state_size, num_ROIs) representing the initial hidden state.</p>
-</dd>
-<dt><strong>hE</strong><span class="classifier">Optional[torch.Tensor]</span></dt><dd><p>Optional tensor of shape (batch_size, num_ROIs, delays_max) representing the initial delays.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>next_state</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the updated current state, EEG signals, and the history of
-each population’s current and voltage at each time step.</p>
-</dd>
-<dt><strong>hE</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Tensor representing the updated history of the pyramidal population’s current.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info">
-<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters">
-<span class="sig-name descname"><span class="pre">setModelParameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters" title="Link to this definition">#</a></dt>
-<dd><p>Sets the parameters of the model.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters">
-<span class="sig-name descname"><span class="pre">setModelSCParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">small_constant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/whobpyt/models/jansen_rit/jansen_rit.html#JansenRitModel.setModelSCParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters" title="Link to this definition">#</a></dt>
-<dd><p>Sets the parameters of the model.</p>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 
 
@@ -680,33 +529,6 @@ each population’s current and voltage at each time step.</p>
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel"><code class="docutils literal notranslate"><span class="pre">JansenRitModel</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createDelayIC()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createIC()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.forward()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.info()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelParameters()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelSCParameters()</span></code></a></li>
-</ul>
-</li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

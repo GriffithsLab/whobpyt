@@ -537,31 +537,20 @@ to download the full example code.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mne</span> <span class="c1"># Neuroimaging package</span>
 </pre></div>
 </div>
-<p>Download and load example data</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">fetch_egtmseeg</span><span class="p">()</span>
+<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__tmseeg.py&quot;</span>, line <span class="m">27</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">import</span><span class="w"> </span><span class="nn">whobpyt</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/whobpyt/__init__.py&quot;</span>, line <span class="m">4</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/whobpyt/datasets/__init__.py&quot;</span>, line <span class="m">2</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_hcpl2k8</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/whobpyt/datasets/fetchers.py&quot;</span>, line <span class="m">13</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">kaggle.api.kaggle_api_extended</span><span class="w"> </span><span class="kn">import</span> <span class="n">KaggleApi</span>
+<span class="gr">ModuleNotFoundError</span>: <span class="n">No module named &#39;kaggle&#39;</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading Schaefer2018_200Parcels_7Networks_count.csv
-
-
-
-Downloading Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt
-
-
-
-Downloading stim_weights.npy
-
-
-
-Downloading Subject_1_low_voltage.fif
-
-
-
-Downloading Subject_1_low_voltage_fittingresults_stim_exp.pkl
-
-
-
-Downloading Subject_1_low_voltage_lf.npy
+<p>Download and load example data</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">fetch_egtmseeg</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Load EEG data</p>
@@ -591,14 +580,6 @@ Downloading Subject_1_low_voltage_lf.npy
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">stim_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;stim_weights.npy&#39;</span><span class="p">))</span>
 <span class="n">stim_weights_thr</span> <span class="o">=</span> <span class="n">stim_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">labels</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">stim_weights_thr</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>19                 7Networks_LH_SomMot_6
-22                 7Networks_LH_SomMot_9
-23                7Networks_LH_SomMot_10
-33          7Networks_LH_DorsAttn_Post_4
-44    7Networks_LH_SalVentAttn_ParOper_2
-Name: ROI Name, dtype: object
 </pre></div>
 </div>
 <p>Load the structural connectivity matrix</p>
@@ -695,26 +676,14 @@ Name: ROI Name, dtype: object
 <span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">empRecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_mean</span><span class="p">],</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: 3.6063373 Pseudo FC_cor:  0.04777125995625415 cos_sim:  0.0316717682950262
-Epoch:  1
-epoch:  1 loss: 3.79971 Pseudo FC_cor:  0.08304515429241818 cos_sim:  -0.03622950962366866
-</pre></div>
-</div>
 <p>quick test run with 2 epochs</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.09949597103682857 cos_sim:  -0.029938876857404904
 </pre></div>
 </div>
 <p>load in a previously completed model fitting results object</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">full_run_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;Subject_1_low_voltage_fittingresults_stim_exp.pkl&#39;</span><span class="p">)</span>
 <span class="n">F</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">full_run_fname</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
 <span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.4368635024232008 cos_sim:  0.3665893969880057
 </pre></div>
 </div>
 <p>Plot the original and simulated EEG data</p>
@@ -736,23 +705,6 @@ epoch:  1 loss: 3.79971 Pseudo FC_cor:  0.08304515429241818 cos_sim:  -0.0362295
 <span class="n">simulated_joint_st</span> <span class="o">=</span> <span class="n">simulated_EEG_st</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__tmseeg.py&quot;</span>, line <span class="m">193</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="n">epoched</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
-  File <span class="nb">&quot;&lt;decorator-gen-232&gt;&quot;</span>, line <span class="m">10</span>, in <span class="n">read_epochs</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/mne/epochs.py&quot;</span>, line <span class="m">4213</span>, in <span class="n">read_epochs</span>
-<span class="w">    </span><span class="k">return</span> <span class="n">EpochsFIF</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">preload</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-  File <span class="nb">&quot;&lt;decorator-gen-233&gt;&quot;</span>, line <span class="m">10</span>, in <span class="n">__init__</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/mne/epochs.py&quot;</span>, line <span class="m">4272</span>, in <span class="n">__init__</span>
-<span class="w">    </span><span class="n">fid</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fiff_open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">preload</span><span class="o">=</span><span class="n">preload</span><span class="p">)</span>
-  File <span class="nb">&quot;&lt;decorator-gen-11&gt;&quot;</span>, line <span class="m">12</span>, in <span class="n">fiff_open</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/mne/_fiff/open.py&quot;</span>, line <span class="m">133</span>, in <span class="n">fiff_open</span>
-<span class="w">    </span><span class="k">return</span> <span class="n">_fiff_open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fid</span><span class="p">,</span> <span class="n">preload</span><span class="p">)</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/mne/_fiff/open.py&quot;</span>, line <span class="m">152</span>, in <span class="n">_fiff_open</span>
-<span class="w">    </span><span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2"> start with a file id tag&quot;</span><span class="p">)</span>
-<span class="gr">ValueError</span>: <span class="n">file &#39;/home/runner/.whobpyt/data/eg__tmseeg/Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt&#39; does not start with a file id tag</span>
-</pre></div>
-</div>
 <section id="results-description">
 <h2>Results Description<a class="headerlink" href="#results-description" title="Link to this heading">#</a></h2>
 <p>The plot above shows the original EEG data and the simulated EEG data using the fitted Jansen-Rit model.
@@ -763,7 +715,7 @@ to capture key features of the EEG signal.</p>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 56.684 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.002 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-tmseeg-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/adddac552e627b5207e7ec47e04b862e/eg__tmseeg.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__tmseeg.ipynb</span></code></a></p>

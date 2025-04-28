@@ -532,6 +532,7 @@ inhibition to drive laterality. This work provides a developmental framework for
 <span class="kn">import</span><span class="w"> </span><span class="nn">gdown</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">loadmat</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.ismail2025.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamsModel</span><span class="p">,</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">Model_fitting</span><span class="p">,</span> <span class="n">dataloader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datasets.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_ismail2025</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
@@ -539,15 +540,23 @@ inhibition to drive laterality. This work provides a developmental framework for
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__ismail2025.py&quot;</span>, line <span class="m">46</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.ismail2025.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamsModel</span><span class="p">,</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">Model_fitting</span><span class="p">,</span> <span class="n">dataloader</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/whobpyt/__init__.py&quot;</span>, line <span class="m">4</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/whobpyt/datasets/__init__.py&quot;</span>, line <span class="m">2</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_hcpl2k8</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/whobpyt/datasets/fetchers.py&quot;</span>, line <span class="m">13</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">kaggle.api.kaggle_api_extended</span><span class="w"> </span><span class="kn">import</span> <span class="n">KaggleApi</span>
+<span class="gr">ModuleNotFoundError</span>: <span class="n">No module named &#39;kaggle&#39;</span>
+</pre></div>
+</div>
 </section>
 <section id="download-data">
 <h2>2. Download data<a class="headerlink" href="#download-data" title="Link to this heading">#</a></h2>
-<p>We use an example dataset for one subject on a public Google Drive folder and includes:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">folder_id</span> <span class="o">=</span> <span class="s2">&quot;1F8XOPfKihcV5hk0p9N_UVciyC5-SMHsn&quot;</span>
-<span class="n">output_dir</span> <span class="o">=</span> <span class="s2">&quot;eg__ismail2025_data&quot;</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://drive.google.com/drive/folders/</span><span class="si">{</span><span class="n">folder_id</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_cookies</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<p>We use an example dataset for one subject on a public Google Drive folder</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">fetch_ismail2025</span><span class="p">()</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
@@ -557,8 +566,8 @@ inhibition to drive laterality. This work provides a developmental framework for
 <div><p>We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials</p>
 </div></blockquote>
 <p>Evoked MEG data averaged across trials (-100 to 400 ms)</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">verb_meg_raw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;verb_evoked.npy&#39;</span><span class="p">))</span>   <span class="c1"># (time, channels)</span>
-<span class="n">noise_meg_raw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;noise_evoked.npy&#39;</span><span class="p">))</span> <span class="c1"># (time, channels)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">verb_meg_raw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;verb_evoked.npy&#39;</span><span class="p">))</span>   <span class="c1"># (time, channels)</span>
+<span class="n">noise_meg_raw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;noise_evoked.npy&#39;</span><span class="p">))</span> <span class="c1"># (time, channels)</span>
 <span class="c1"># Normalize both signals</span>
 <span class="n">verb_meg</span> <span class="o">=</span> <span class="n">verb_meg_raw</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">verb_meg_raw</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1</span>
 <span class="n">noise_meg</span> <span class="o">=</span> <span class="n">noise_meg_raw</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">noise_meg_raw</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1</span>
@@ -568,7 +577,7 @@ inhibition to drive laterality. This work provides a developmental framework for
 <section id="load-forward-model-input">
 <h2>4. Load Forward Model Input<a class="headerlink" href="#load-forward-model-input" title="Link to this heading">#</a></h2>
 <p>We will use the leadfield to simulate MEG activty from sources derived from the individual’s head model</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">leadfield</span> <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;leadfield_3d.mat&#39;</span><span class="p">))</span>  <span class="c1"># shape (sources, sensors, 3)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">leadfield</span> <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;leadfield_3d.mat&#39;</span><span class="p">))</span>  <span class="c1"># shape (sources, sensors, 3)</span>
 <span class="n">lm_3d</span> <span class="o">=</span> <span class="n">leadfield</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">]</span>  <span class="c1"># 3D leadfield matrix</span>
 <span class="c1"># Convert 3D to 2D using SVD-based projection</span>
 <span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">lm_3d</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
@@ -583,10 +592,10 @@ inhibition to drive laterality. This work provides a developmental framework for
 <section id="load-structure">
 <h2>5. Load Structure<a class="headerlink" href="#load-structure" title="Link to this heading">#</a></h2>
 <p>We will use the individual’s weights and distance matrices</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;weights.csv&#39;</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;weights.csv&#39;</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">sc_df</span><span class="p">)</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">sc</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
-<span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;distance.txt&#39;</span><span class="p">))</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;distance.txt&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </section>
@@ -638,48 +647,16 @@ inhibition to drive laterality. This work provides a developmental framework for
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished fitting model to noise trials&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Parameter containing:
-tensor([[-0.1194,  0.0433, -0.3397,  ..., -0.5205,  0.3482,  0.1104],
-        [-0.0327,  0.5905, -0.2080,  ..., -1.1653,  0.8587,  0.1382],
-        [-0.0091,  0.9165, -0.1275,  ..., -1.3996,  1.1796,  0.0950],
-        ...,
-        [ 0.3113,  0.0932,  0.5197,  ..., -0.2280, -0.3064, -0.3225],
-        [ 0.0797, -0.0442,  0.2342,  ..., -0.1677, -0.1388, -0.0231],
-        [ 0.6566,  0.8181,  0.7400,  ..., -0.5151, -0.9495, -0.8001]],
-       requires_grad=True)
-epoch:  0 -225527.78
-epoch:  0 0.3039092461093993 cos_sim:  -0.01276814153757071
-epoch:  1 -226190.61
-epoch:  1 0.3730159372017875 cos_sim:  0.06716783919028772
-0.39481610357161073 cos_sim:  0.12588489555366478
-Finished fitting model to verb trials
-Parameter containing:
-tensor([[-0.1194,  0.0433, -0.3397,  ..., -0.5205,  0.3482,  0.1104],
-        [-0.0327,  0.5905, -0.2080,  ..., -1.1653,  0.8587,  0.1382],
-        [-0.0091,  0.9165, -0.1275,  ..., -1.3996,  1.1796,  0.0950],
-        ...,
-        [ 0.3113,  0.0932,  0.5197,  ..., -0.2280, -0.3064, -0.3225],
-        [ 0.0797, -0.0442,  0.2342,  ..., -0.1677, -0.1388, -0.0231],
-        [ 0.6566,  0.8181,  0.7400,  ..., -0.5151, -0.9495, -0.8001]],
-       requires_grad=True)
-epoch:  0 -225540.56
-epoch:  0 0.22616590840830916 cos_sim:  -0.11049429812005916
-epoch:  1 -226203.03
-epoch:  1 0.2751357970684848 cos_sim:  -0.09624069961672098
-0.27541168722088316 cos_sim:  -0.04076970861179942
-Finished fitting model to noise trials
-</pre></div>
-</div>
 <ol class="arabic simple" start="7">
 <li><p>Let’s Compare Simulated &amp; Empirical MEG Activity</p></li>
 </ol>
 <blockquote>
 <div></div></blockquote>
 <p>we will use the simulations from the fully trained model in the downloaded directory</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">verb_meg_sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;sim_verb_sensor.npy&#39;</span><span class="p">))</span>
-<span class="n">noise_meg_sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;sim_noise_sensor.npy&#39;</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">verb_meg_sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;sim_verb_sensor.npy&#39;</span><span class="p">))</span>
+<span class="n">noise_meg_sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;sim_noise_sensor.npy&#39;</span><span class="p">))</span>
 <span class="c1"># Use existing MEG channel structure to use MNE format</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;info.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;info.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="c1"># Convert empirical data to MNE format</span>
 <span class="n">emp_verb_evoked</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">EvokedArray</span><span class="p">(</span><span class="n">verb_meg</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:],</span> <span class="n">info</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">)</span>
@@ -697,12 +674,6 @@ Finished fitting model to noise trials
 <span class="c1"># Plot simulated noise trial</span>
 <span class="n">sim_noise_evoked</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Simulated Noise&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mf">0.07</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1585</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__ismail2025.py&quot;</span>, line <span class="m">181</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;info.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="gr">NameError</span>: <span class="n">name &#39;data_dir&#39; is not defined</span>
 </pre></div>
 </div>
 <dl class="simple">
@@ -770,10 +741,10 @@ Create longer empty array with same shape and fill with the first 500 ms</p>
 <div></div></blockquote>
 <p>We are replicating figure 1D (Adolescents) for one subject
 We will load the empirical source data (model was fitted with sensor MEG data) and simulated source from pretrained model</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">emp_source_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;emp_noise_source.npy&#39;</span><span class="p">))</span>
-<span class="n">emp_source_verb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;emp_verb_source.npy&#39;</span><span class="p">))</span>
-<span class="n">sim_source_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;sim_noise_source.npy&#39;</span><span class="p">))</span>
-<span class="n">sim_source_verb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;sim_verb_source.npy&#39;</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">emp_source_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;emp_noise_source.npy&#39;</span><span class="p">))</span>
+<span class="n">emp_source_verb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;emp_verb_source.npy&#39;</span><span class="p">))</span>
+<span class="n">sim_source_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;sim_noise_source.npy&#39;</span><span class="p">))</span>
+<span class="n">sim_source_verb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;sim_verb_source.npy&#39;</span><span class="p">))</span>
 
 <span class="c1">#Compute beta power</span>
 <span class="c1"># Sampling parameters</span>
@@ -830,7 +801,7 @@ We will load the empirical source data (model was fitted with sensor MEG data) a
 </div>
 <p><strong>Results Description:</strong>
 Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model’s capacity to link temporal and spectral features of neural dynamics during the task. For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference. Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed. In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E).</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (4 minutes 30.530 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.267 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-ismail2025-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fa46508a782571b79143e92910a4f1a8/eg__ismail2025.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__ismail2025.ipynb</span></code></a></p>
