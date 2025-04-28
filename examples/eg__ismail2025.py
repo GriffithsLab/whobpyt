@@ -177,9 +177,9 @@ print("Finished fitting model to noise trials")
 #we will use the simulations from the fully trained model in the downloaded directory
 verb_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_verb_sensor.npy'))
 noise_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_noise_sensor.npy'))
-ev_samp_file = mne.read_epochs(os.path.join('eg__ismail2025_data', 'evoked_info.fif'), preload=True).resample(1000)
-ev_samp_file.drop_channels(['MLC12-3405']) #we removed this channel in our empirical data 
-info = ev_samp_file.info  # Use existing MEG channel structure to use MNE format
+# Use existing MEG channel structure to use MNE format
+with open(os.path.join(data_dir, 'info.pkl'), 'rb') as f:
+    info = pickle.load(f)
 # Convert empirical data to MNE format
 emp_verb_evoked = mne.EvokedArray(verb_meg[:, 0:], info, tmin=-0.1)
 emp_noise_evoked = mne.EvokedArray(noise_meg[:, 0:], info, tmin=-0.1)
