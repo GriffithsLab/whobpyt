@@ -639,34 +639,34 @@ inhibition to drive laterality. This work provides a developmental framework for
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Parameter containing:
-tensor([[-0.1382,  0.0489, -0.3383,  ..., -0.5268,  0.3447,  0.1220],
-        [-0.0382,  0.5824, -0.2064,  ..., -1.1695,  0.8418,  0.1386],
-        [-0.0084,  0.9238, -0.1469,  ..., -1.4214,  1.1691,  0.1015],
+tensor([[-0.1091,  0.0523, -0.3378,  ..., -0.5204,  0.3404,  0.1183],
+        [-0.0447,  0.5988, -0.1960,  ..., -1.1706,  0.8415,  0.1305],
+        [-0.0239,  0.9206, -0.1214,  ..., -1.3896,  1.1850,  0.0967],
         ...,
-        [ 0.3075,  0.1153,  0.5507,  ..., -0.2300, -0.3142, -0.3367],
-        [ 0.0860, -0.0665,  0.2316,  ..., -0.1616, -0.1196, -0.0337],
-        [ 0.6450,  0.7994,  0.7441,  ..., -0.5086, -0.9385, -0.8069]],
+        [ 0.2898,  0.0950,  0.5355,  ..., -0.2411, -0.2953, -0.3268],
+        [ 0.0666, -0.0661,  0.2250,  ..., -0.1649, -0.1228, -0.0343],
+        [ 0.6612,  0.7913,  0.7390,  ..., -0.4975, -0.9461, -0.7957]],
        requires_grad=True)
-epoch:  0 -225482.69
-epoch:  0 0.3017349592101652 cos_sim:  0.028062987799717786
-epoch:  1 -226145.19
-epoch:  1 0.3741142002384907 cos_sim:  0.07917507625176769
-0.39164011409508803 cos_sim:  0.10986843646687443
+epoch:  0 -225584.61
+epoch:  0 0.2962099760128081 cos_sim:  -0.03958518995880434
+epoch:  1 -226237.56
+epoch:  1 0.36870179696044514 cos_sim:  0.0388550678875732
+0.40102391966899026 cos_sim:  0.10247735095268044
 Finished fitting model to verb trials
 Parameter containing:
-tensor([[-0.1382,  0.0489, -0.3383,  ..., -0.5268,  0.3447,  0.1220],
-        [-0.0382,  0.5824, -0.2064,  ..., -1.1695,  0.8418,  0.1386],
-        [-0.0084,  0.9238, -0.1469,  ..., -1.4214,  1.1691,  0.1015],
+tensor([[-0.1091,  0.0523, -0.3378,  ..., -0.5204,  0.3404,  0.1183],
+        [-0.0447,  0.5988, -0.1960,  ..., -1.1706,  0.8415,  0.1305],
+        [-0.0239,  0.9206, -0.1214,  ..., -1.3896,  1.1850,  0.0967],
         ...,
-        [ 0.3075,  0.1153,  0.5507,  ..., -0.2300, -0.3142, -0.3367],
-        [ 0.0860, -0.0665,  0.2316,  ..., -0.1616, -0.1196, -0.0337],
-        [ 0.6450,  0.7994,  0.7441,  ..., -0.5086, -0.9385, -0.8069]],
+        [ 0.2898,  0.0950,  0.5355,  ..., -0.2411, -0.2953, -0.3268],
+        [ 0.0666, -0.0661,  0.2250,  ..., -0.1649, -0.1228, -0.0343],
+        [ 0.6612,  0.7913,  0.7390,  ..., -0.4975, -0.9461, -0.7957]],
        requires_grad=True)
-epoch:  0 -225478.62
-epoch:  0 0.2290601246331231 cos_sim:  -0.1272075837252179
-epoch:  1 -226143.38
-epoch:  1 0.27827639087456396 cos_sim:  -0.06892653440516325
-0.2843038242589276 cos_sim:  -0.027041064058013455
+epoch:  0 -225581.78
+epoch:  0 0.22785768853687183 cos_sim:  -0.13392840292036906
+epoch:  1 -226238.7
+epoch:  1 0.2826783034657586 cos_sim:  -0.0762274595541569
+0.2765636912677516 cos_sim:  -0.025569035155993087
 Finished fitting model to noise trials
 </pre></div>
 </div>
@@ -822,7 +822,7 @@ We will load the empirical source data (model was fitted with sensor MEG data) a
 </div>
 <p><strong>Results Description:</strong>
 Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model’s capacity to link temporal and spectral features of neural dynamics during the task. For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference. Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed. In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E).</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (4 minutes 20.209 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (4 minutes 30.012 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-ismail2025-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fa46508a782571b79143e92910a4f1a8/eg__ismail2025.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__ismail2025.ipynb</span></code></a></p>
