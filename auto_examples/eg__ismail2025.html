@@ -639,34 +639,34 @@ inhibition to drive laterality. This work provides a developmental framework for
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Parameter containing:
-tensor([[-0.1125,  0.0511, -0.3571,  ..., -0.5243,  0.3519,  0.1256],
-        [-0.0517,  0.5894, -0.2089,  ..., -1.1729,  0.8487,  0.1198],
-        [-0.0073,  0.9219, -0.1346,  ..., -1.4301,  1.1906,  0.1131],
+tensor([[-0.1224,  0.0597, -0.3388,  ..., -0.5367,  0.3268,  0.1305],
+        [-0.0509,  0.5786, -0.1704,  ..., -1.1843,  0.8611,  0.1423],
+        [-0.0103,  0.9307, -0.1278,  ..., -1.4182,  1.1865,  0.0988],
         ...,
-        [ 0.3104,  0.0996,  0.5345,  ..., -0.2299, -0.3014, -0.3293],
-        [ 0.0612, -0.0601,  0.2405,  ..., -0.1388, -0.1151, -0.0336],
-        [ 0.6492,  0.8019,  0.7500,  ..., -0.5193, -0.9542, -0.7964]],
+        [ 0.3239,  0.0913,  0.5197,  ..., -0.2353, -0.3073, -0.3316],
+        [ 0.0833, -0.0707,  0.2405,  ..., -0.1258, -0.1105, -0.0292],
+        [ 0.6685,  0.8015,  0.7475,  ..., -0.5122, -0.9373, -0.7849]],
        requires_grad=True)
-epoch:  0 -225527.06
-epoch:  0 0.31483726064729384 cos_sim:  0.010948589995054677
-epoch:  1 -226199.27
-epoch:  1 0.3725852844620468 cos_sim:  0.06731425011170655
-0.3910807227215016 cos_sim:  0.11820875703470353
+epoch:  0 -225619.47
+epoch:  0 0.30797388134940124 cos_sim:  -0.04728288962418354
+epoch:  1 -226281.67
+epoch:  1 0.3671393363270379 cos_sim:  0.051871128997424784
+0.393164863211671 cos_sim:  0.10378894123313376
 Finished fitting model to verb trials
 Parameter containing:
-tensor([[-0.1125,  0.0511, -0.3571,  ..., -0.5243,  0.3519,  0.1256],
-        [-0.0517,  0.5894, -0.2089,  ..., -1.1729,  0.8487,  0.1198],
-        [-0.0073,  0.9219, -0.1346,  ..., -1.4301,  1.1906,  0.1131],
+tensor([[-0.1224,  0.0597, -0.3388,  ..., -0.5367,  0.3268,  0.1305],
+        [-0.0509,  0.5786, -0.1704,  ..., -1.1843,  0.8611,  0.1423],
+        [-0.0103,  0.9307, -0.1278,  ..., -1.4182,  1.1865,  0.0988],
         ...,
-        [ 0.3104,  0.0996,  0.5345,  ..., -0.2299, -0.3014, -0.3293],
-        [ 0.0612, -0.0601,  0.2405,  ..., -0.1388, -0.1151, -0.0336],
-        [ 0.6492,  0.8019,  0.7500,  ..., -0.5193, -0.9542, -0.7964]],
+        [ 0.3239,  0.0913,  0.5197,  ..., -0.2353, -0.3073, -0.3316],
+        [ 0.0833, -0.0707,  0.2405,  ..., -0.1258, -0.1105, -0.0292],
+        [ 0.6685,  0.8015,  0.7475,  ..., -0.5122, -0.9373, -0.7849]],
        requires_grad=True)
-epoch:  0 -225540.7
-epoch:  0 0.22399463421489688 cos_sim:  -0.11842401351786534
-epoch:  1 -226205.62
-epoch:  1 0.28255756268012494 cos_sim:  -0.07158921983454851
-0.2772005116299658 cos_sim:  -0.03364737617202373
+epoch:  0 -225617.28
+epoch:  0 0.21654905161723575 cos_sim:  -0.1244909067724956
+epoch:  1 -226282.69
+epoch:  1 0.26623820959515804 cos_sim:  -0.08804983232914718
+0.27917507496659083 cos_sim:  -0.030416009797603945
 Finished fitting model to noise trials
 </pre></div>
 </div>
@@ -678,9 +678,9 @@ Finished fitting model to noise trials
 <p>we will use the simulations from the fully trained model in the downloaded directory</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">verb_meg_sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;sim_verb_sensor.npy&#39;</span><span class="p">))</span>
 <span class="n">noise_meg_sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;sim_noise_sensor.npy&#39;</span><span class="p">))</span>
-<span class="n">ev_samp_file</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;evoked_info.fif&#39;</span><span class="p">),</span> <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
-<span class="n">ev_samp_file</span><span class="o">.</span><span class="n">drop_channels</span><span class="p">([</span><span class="s1">&#39;MLC12-3405&#39;</span><span class="p">])</span> <span class="c1">#we removed this channel in our empirical data</span>
-<span class="n">info</span> <span class="o">=</span> <span class="n">ev_samp_file</span><span class="o">.</span><span class="n">info</span>  <span class="c1"># Use existing MEG channel structure to use MNE format</span>
+<span class="c1"># Use existing MEG channel structure to use MNE format</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;info.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="c1"># Convert empirical data to MNE format</span>
 <span class="n">emp_verb_evoked</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">EvokedArray</span><span class="p">(</span><span class="n">verb_meg</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:],</span> <span class="n">info</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">emp_noise_evoked</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">EvokedArray</span><span class="p">(</span><span class="n">noise_meg</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:],</span> <span class="n">info</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">)</span>
@@ -700,18 +700,9 @@ Finished fitting model to noise trials
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__ismail2025.py&quot;</span>, line <span class="m">180</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="n">ev_samp_file</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;eg__ismail2025_data&#39;</span><span class="p">,</span> <span class="s1">&#39;evoked_info.fif&#39;</span><span class="p">),</span> <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
-  File <span class="nb">&quot;&lt;decorator-gen-232&gt;&quot;</span>, line <span class="m">12</span>, in <span class="n">read_epochs</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/mne/epochs.py&quot;</span>, line <span class="m">4213</span>, in <span class="n">read_epochs</span>
-<span class="w">    </span><span class="k">return</span> <span class="n">EpochsFIF</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">preload</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-  File <span class="nb">&quot;&lt;decorator-gen-233&gt;&quot;</span>, line <span class="m">12</span>, in <span class="n">__init__</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/mne/epochs.py&quot;</span>, line <span class="m">4262</span>, in <span class="n">__init__</span>
-<span class="w">    </span><span class="n">fname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">_check_fname</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="s2">&quot;read&quot;</span><span class="p">))</span>
-  File <span class="nb">&quot;&lt;decorator-gen-0&gt;&quot;</span>, line <span class="m">12</span>, in <span class="n">_check_fname</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/mne/utils/check.py&quot;</span>, line <span class="m">274</span>, in <span class="n">_check_fname</span>
-<span class="w">    </span><span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> does not exist: &quot;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
-<span class="gr">FileNotFoundError</span>: <span class="n">File does not exist: &quot;/home/runner/work/whobpyt/whobpyt/examples/eg__ismail2025_data/evoked_info.fif&quot;</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__ismail2025.py&quot;</span>, line <span class="m">181</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;info.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gr">NameError</span>: <span class="n">name &#39;data_dir&#39; is not defined</span>
 </pre></div>
 </div>
 <dl class="simple">
@@ -839,7 +830,7 @@ We will load the empirical source data (model was fitted with sensor MEG data) a
 </div>
 <p><strong>Results Description:</strong>
 Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model’s capacity to link temporal and spectral features of neural dynamics during the task. For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference. Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed. In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E).</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (4 minutes 19.713 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (4 minutes 22.321 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-ismail2025-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fa46508a782571b79143e92910a4f1a8/eg__ismail2025.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__ismail2025.ipynb</span></code></a></p>
