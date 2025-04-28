@@ -168,5 +168,7 @@ def fetch_egtmseeg(dest_folder=None, redownload=False):
    
         os.chdir(cwd)
 
+    return dest_folder 
+
 
 
