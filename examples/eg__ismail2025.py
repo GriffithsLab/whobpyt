@@ -44,6 +44,7 @@ import os
 import gdown
 from scipy.io import loadmat
 from whobpyt.depr.ismail2025.jansen_rit import ParamsModel, RNNJANSEN, Model_fitting, dataloader
+from whobpyt.datasets.fetchers import fetch_ismail2025
 import mne
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -57,15 +58,8 @@ from scipy import stats
 # %%  [markdown]
 # 2. Download data
 # -------------------------------------------------------------------------
-# We use an example dataset for one subject on a public Google Drive folder and includes:
-folder_id = "1F8XOPfKihcV5hk0p9N_UVciyC5-SMHsn"
-output_dir = "eg__ismail2025_data"
-if not os.path.exists(output_dir):
-    url = f"https://drive.google.com/drive/folders/{folder_id}"
-    gdown.download_folder(url, quiet=True, use_cookies=False)
-
-
-
+# We use an example dataset for one subject on a public Google Drive folder
+output_dir = fetch_ismail2025()
 
 
 
@@ -75,8 +69,8 @@ if not os.path.exists(output_dir):
 # -------------------------------------------------------------------------
 # We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials 
 #Evoked MEG data averaged across trials (-100 to 400 ms)
-verb_meg_raw = np.load(os.path.join('eg__ismail2025_data', 'verb_evoked.npy'))   # (time, channels)
-noise_meg_raw = np.load(os.path.join('eg__ismail2025_data', 'noise_evoked.npy')) # (time, channels)
+verb_meg_raw = np.load(os.path.join(output_dir, 'verb_evoked.npy'))   # (time, channels)
+noise_meg_raw = np.load(os.path.join(output_dir, 'noise_evoked.npy')) # (time, channels)
 # Normalize both signals
 verb_meg = verb_meg_raw / np.abs(verb_meg_raw).max() * 1
 noise_meg = noise_meg_raw / np.abs(noise_meg_raw).max() * 1
@@ -90,7 +84,7 @@ noise_meg = noise_meg_raw / np.abs(noise_meg_raw).max() * 1
 # 4. Load Forward Model Input
 # -------------------------------------------------------------------------
 # We will use the leadfield to simulate MEG activty from sources derived from the individual's head model
-leadfield = loadmat(os.path.join('eg__ismail2025_data', 'leadfield_3d.mat'))  # shape (sources, sensors, 3)
+leadfield = loadmat(os.path.join(output_dir, 'leadfield_3d.mat'))  # shape (sources, sensors, 3)
 lm_3d = leadfield['M']  # 3D leadfield matrix
 # Convert 3D to 2D using SVD-based projection
 lm = np.zeros_like(lm_3d[:, :, 0])
@@ -110,11 +104,10 @@ lm = lm.T / 1e-11 * 5  # Shape: (channels, sources)
 # 5. Load Structure
 # -------------------------------------------------------------------------
 # We will use the individual's weights and distance matrices 
-sc_df = pd.read_csv(os.path.join('eg__ismail2025_data', 'weights.csv'), header=None).values
+sc_df = pd.read_csv(os.path.join(output_dir, 'weights.csv'), header=None).values
 sc = np.log1p(sc_df)
 sc = sc / np.linalg.norm(sc)
-dist = np.loadtxt(os.path.join('eg__ismail2025_data', 'distance.txt'))
-
+dist = np.loadtxt(os.path.join(output_dir, 'distance.txt'))
 
 
 
@@ -175,10 +168,10 @@ print("Finished fitting model to noise trials")
 # 7. Let's Compare Simulated & Empirical MEG Activity
 # -------------------------------------------------------------------------
 #we will use the simulations from the fully trained model in the downloaded directory
-verb_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_verb_sensor.npy'))
-noise_meg_sim = np.load(os.path.join('eg__ismail2025_data', 'sim_noise_sensor.npy'))
+verb_meg_sim = np.load(os.path.join(output_dir, 'sim_verb_sensor.npy'))
+noise_meg_sim = np.load(os.path.join(output_dir, 'sim_noise_sensor.npy'))
 # Use existing MEG channel structure to use MNE format
-with open(os.path.join(data_dir, 'info.pkl'), 'rb') as f:
+with open(os.path.join(output_dir, 'info.pkl'), 'rb') as f:
     info = pickle.load(f)
 # Convert empirical data to MNE format
 emp_verb_evoked = mne.EvokedArray(verb_meg[:, 0:], info, tmin=-0.1)
@@ -272,10 +265,10 @@ sim_sensor_noise = noise_F.output_sim.eeg_test
 # -------------------------------------------------------------------------
 #We are replicating figure 1D (Adolescents) for one subject
 #We will load the empirical source data (model was fitted with sensor MEG data) and simulated source from pretrained model
-emp_source_noise = np.load(os.path.join('eg__ismail2025_data', 'emp_noise_source.npy'))
-emp_source_verb = np.load(os.path.join('eg__ismail2025_data', 'emp_verb_source.npy'))
-sim_source_noise = np.load(os.path.join('eg__ismail2025_data', 'sim_noise_source.npy'))
-sim_source_verb = np.load(os.path.join('eg__ismail2025_data', 'sim_verb_source.npy'))
+emp_source_noise = np.load(os.path.join(output_dir, 'emp_noise_source.npy'))
+emp_source_verb = np.load(os.path.join(output_dir, 'emp_verb_source.npy'))
+sim_source_noise = np.load(os.path.join(output_dir, 'sim_noise_source.npy'))
+sim_source_verb = np.load(os.path.join(output_dir, 'sim_verb_source.npy'))
 
 #Compute beta power
 # Sampling parameters

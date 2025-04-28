@@ -10,6 +10,7 @@
 import os,sys,glob,shutil,numpy as np, pandas as pd
 import requests, zipfile,gdown
 from datetime import datetime
+from kaggle.api.kaggle_api_extended import KaggleApi
 
 WHOBPYT_DATA_FOLDER = '~/.whobpyt/data'
 
@@ -218,3 +219,36 @@ def fetch_ismail2025(dest_folder=None, redownload=False):
 
     return dest_folder
 
+def  fetch_Momi2025(dest_folder=None, redownload=False):
+    #
+    # -----
+    # Usage
+    # -----
+    #
+    # res = fetch_egtmseeg()
+    #
+    api = KaggleApi()
+    api.config_values['username'] = "claires03"
+    api.config_values['key'] = "ee39084a8974336d9fff7e1ced807e64"
+    files_dict = {'davi1990/empirical-data':'empirical-data',
+                  'davi1990/anatomical':'anatomical',
+                  'davi1990/calculate-distance':'calculate-distance',
+                  'davi1990/virtual-dissection':'virtual-dissection'}
+    cwd = os.getcwd()
+    #
+    if dest_folder is None:
+        defpath = get_localdefaultdatapath()
+        dest_folder = os.path.join(defpath, 'eg__momi2025')
+    # If input instruction was to re-download and folder is already present, remove it
+    if os.path.isdir(dest_folder) and redownload == True:
+        os.system('rm -rf %s' %dest_folder)
+    # If the folder does not exist, create it and download the files
+    if not os.path.isdir(dest_folder):
+        os.makedirs(dest_folder)
+        os.chdir(dest_folder)
+        for file_code, file_name in files_dict.items():
+          dest_sub_folder = os.path.join(dest_sub_folder, file_name)
+          if not os.path.isdir(dest_sub_folder):
+              os.makedirs(dest_sub_folder)
+              api.dataset_download_files(file_code, path= dest_sub_folder, unzip=True)
+    return dest_folder
