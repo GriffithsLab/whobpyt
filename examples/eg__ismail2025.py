@@ -44,6 +44,7 @@ import os
 import gdown
 from scipy.io import loadmat
 from whobpyt.depr.ismail2025.jansen_rit import ParamsModel, RNNJANSEN, Model_fitting, dataloader
+from whobpyt.datasets.fetchers import fetch_ismail2025
 import mne
 import matplotlib.pyplot as plt
 import seaborn as sns
