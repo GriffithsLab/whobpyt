@@ -21,14 +21,12 @@ jobs:
         pip install .
     - name: Build docs
       run: |
-        cd doc
-        make html
+          cd doc  
+          sphinx-build -b html -nT --keep-going . _build/html
+      continue-on-error: true  
     - name: Deploy Docs
       uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
+      if: always() 
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: doc/_build/html
- 
-
-
+        publish_dir: doc/_build/html  

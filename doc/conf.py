@@ -210,9 +210,16 @@ html_theme_options = {
                       'sticky_navigation': True,
                       'navigation_depth': 4,
                       'includehidden': True,
-                      'titles_only': False
-                                           }
-
+                      'titles_only': False,
+                      'navbar_sidebarrel': False,
+                      'navbar_links': [
+                                       ("About", "about"),        
+                                       ("Examples", "auto_examples/index"),
+                                       ("User guide", "user_guide/index"),
+                                       ("FAQ", "faq"),
+                                       ("GitHub", "https://github.com/griffithslab/whobpyt", True)
+                                       ]
+                      }
 
 """
 html_theme_options = {
