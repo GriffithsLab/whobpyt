@@ -639,34 +639,34 @@ inhibition to drive laterality. This work provides a developmental framework for
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Parameter containing:
-tensor([[-0.1248,  0.0498, -0.3383,  ..., -0.5276,  0.3549,  0.1367],
-        [-0.0414,  0.5954, -0.1851,  ..., -1.1602,  0.8459,  0.1450],
-        [-0.0043,  0.9241, -0.1390,  ..., -1.4194,  1.1679,  0.0995],
+tensor([[-0.1125,  0.0511, -0.3571,  ..., -0.5243,  0.3519,  0.1256],
+        [-0.0517,  0.5894, -0.2089,  ..., -1.1729,  0.8487,  0.1198],
+        [-0.0073,  0.9219, -0.1346,  ..., -1.4301,  1.1906,  0.1131],
         ...,
-        [ 0.3029,  0.0925,  0.5176,  ..., -0.2439, -0.3037, -0.3356],
-        [ 0.0684, -0.0717,  0.2414,  ..., -0.1448, -0.1131, -0.0428],
-        [ 0.6474,  0.8171,  0.7444,  ..., -0.5100, -0.9331, -0.7792]],
+        [ 0.3104,  0.0996,  0.5345,  ..., -0.2299, -0.3014, -0.3293],
+        [ 0.0612, -0.0601,  0.2405,  ..., -0.1388, -0.1151, -0.0336],
+        [ 0.6492,  0.8019,  0.7500,  ..., -0.5193, -0.9542, -0.7964]],
        requires_grad=True)
-epoch:  0 -225538.44
-epoch:  0 0.3026272377366429 cos_sim:  0.003916011128641763
-epoch:  1 -226212.06
-epoch:  1 0.37338078044864625 cos_sim:  0.0563774816029304
-0.40210278191762233 cos_sim:  0.12764350561955806
+epoch:  0 -225527.06
+epoch:  0 0.31483726064729384 cos_sim:  0.010948589995054677
+epoch:  1 -226199.27
+epoch:  1 0.3725852844620468 cos_sim:  0.06731425011170655
+0.3910807227215016 cos_sim:  0.11820875703470353
 Finished fitting model to verb trials
 Parameter containing:
-tensor([[-0.1248,  0.0498, -0.3383,  ..., -0.5276,  0.3549,  0.1367],
-        [-0.0414,  0.5954, -0.1851,  ..., -1.1602,  0.8459,  0.1450],
-        [-0.0043,  0.9241, -0.1390,  ..., -1.4194,  1.1679,  0.0995],
+tensor([[-0.1125,  0.0511, -0.3571,  ..., -0.5243,  0.3519,  0.1256],
+        [-0.0517,  0.5894, -0.2089,  ..., -1.1729,  0.8487,  0.1198],
+        [-0.0073,  0.9219, -0.1346,  ..., -1.4301,  1.1906,  0.1131],
         ...,
-        [ 0.3029,  0.0925,  0.5176,  ..., -0.2439, -0.3037, -0.3356],
-        [ 0.0684, -0.0717,  0.2414,  ..., -0.1448, -0.1131, -0.0428],
-        [ 0.6474,  0.8171,  0.7444,  ..., -0.5100, -0.9331, -0.7792]],
+        [ 0.3104,  0.0996,  0.5345,  ..., -0.2299, -0.3014, -0.3293],
+        [ 0.0612, -0.0601,  0.2405,  ..., -0.1388, -0.1151, -0.0336],
+        [ 0.6492,  0.8019,  0.7500,  ..., -0.5193, -0.9542, -0.7964]],
        requires_grad=True)
-epoch:  0 -225539.17
-epoch:  0 0.21492660423178384 cos_sim:  -0.13189811824512093
-epoch:  1 -226202.39
-epoch:  1 0.28293349554494657 cos_sim:  -0.07327691046219487
-0.2866705032569103 cos_sim:  -0.021342010655904773
+epoch:  0 -225540.7
+epoch:  0 0.22399463421489688 cos_sim:  -0.11842401351786534
+epoch:  1 -226205.62
+epoch:  1 0.28255756268012494 cos_sim:  -0.07158921983454851
+0.2772005116299658 cos_sim:  -0.03364737617202373
 Finished fitting model to noise trials
 </pre></div>
 </div>
@@ -726,27 +726,44 @@ Finished fitting model to noise trials
 <div></div></blockquote>
 <p>We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
 Create longer empty array with same shape and fill with the first 500 ms</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sim_1500_verb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">verb_meg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1500</span><span class="p">))</span>
-<span class="n">sim_1500_verb</span><span class="p">[:,:</span><span class="n">verb_meg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">verb_meg</span><span class="o">*</span><span class="mf">1.0e13</span>
-<span class="n">time_dim</span> <span class="o">=</span> <span class="n">verb_meg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sim_1500_verb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">verb_eeg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1500</span><span class="p">))</span>
+<span class="n">sim_1500_verb</span><span class="p">[:,:</span><span class="n">verb_eeg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">verb_eeg</span><span class="o">*</span><span class="mf">1.0e13</span>
+<span class="n">node_size</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">output_size</span> <span class="o">=</span> <span class="n">sim_1500_verb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span>
+<span class="n">input_size</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">num_epoches</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">tr</span> <span class="o">=</span> <span class="mf">0.001</span>
+<span class="n">state_size</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">base_batch_num</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">time_dim</span> <span class="o">=</span> <span class="n">sim_1500_verb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">hidden_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tr</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
-<span class="n">data_verb</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">((</span><span class="n">sim_1500_verb</span><span class="o">-</span><span class="n">sim_1500_verb</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
-<span class="n">verb_F</span><span class="o">.</span><span class="n">ts</span> <span class="o">=</span> <span class="n">data_verb</span>
-<span class="c1">#keep stimulation the same</span>
-<span class="c1">#Stimulate the auditory cortices defined by roi in ki0</span>
-<span class="n">stim_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">time_dim</span><span class="p">))</span>
-<span class="n">stim_input</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">100</span><span class="p">:</span><span class="mi">140</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5000</span>
-<span class="n">output_test</span> <span class="o">=</span> <span class="n">verb_F</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">base_batch_num</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">stim_input</span><span class="p">)</span>
-<span class="c1">#extract simulated sensor and source data for verb trials</span>
+<span class="n">data_mean</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">((</span><span class="n">sim_1500_verb</span><span class="o">-</span><span class="n">sim_1500_verb</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+<span class="n">verb_F</span><span class="o">.</span><span class="n">ts</span> <span class="o">=</span> <span class="n">data_mean</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">))</span>
+<span class="n">u</span><span class="p">[:,:,</span><span class="mi">100</span><span class="p">:</span><span class="mi">140</span><span class="p">]</span><span class="o">=</span> <span class="mi">5000</span>
+<span class="n">output_test</span> <span class="o">=</span> <span class="n">verb_F</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">base_batch_num</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">)</span>
+<span class="c1">#extract simulated sensor and source data for noise trials</span>
 <span class="n">sim_source_verb</span> <span class="o">=</span> <span class="n">verb_F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">P_test</span>
 <span class="n">sim_sensor_verb</span> <span class="o">=</span> <span class="n">verb_F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">eeg_test</span>
+
 <span class="c1">#repeat for noise trials</span>
-<span class="n">sim_1500_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">noise_meg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1500</span><span class="p">))</span>
-<span class="n">sim_1500_noise</span><span class="p">[:,:</span><span class="n">noise_meg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">noise_meg</span><span class="o">*</span><span class="mf">1.0e13</span>
-<span class="n">time_dim</span> <span class="o">=</span> <span class="n">noise_meg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">sim_1500_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">noise_eeg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1500</span><span class="p">))</span>
+<span class="n">sim_1500_noise</span><span class="p">[:,:</span><span class="n">noise_eeg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">noise_eeg</span><span class="o">*</span><span class="mf">1.0e13</span>
+<span class="n">node_size</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">output_size</span> <span class="o">=</span> <span class="n">sim_1500_noise</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span>
+<span class="n">input_size</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">num_epoches</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">tr</span> <span class="o">=</span> <span class="mf">0.001</span>
+<span class="n">state_size</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">base_batch_num</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">time_dim</span> <span class="o">=</span> <span class="n">sim_1500_noise</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">hidden_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tr</span><span class="o">/</span><span class="n">step_size</span><span class="p">)</span>
-<span class="n">data_noise</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">((</span><span class="n">sim_1500_noise</span><span class="o">-</span><span class="n">sim_1500_noise</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
-<span class="n">noise_F</span><span class="o">.</span><span class="n">ts</span> <span class="o">=</span> <span class="n">data_noise</span>
+<span class="n">data_mean</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">((</span><span class="n">sim_1500_noise</span><span class="o">-</span><span class="n">sim_1500_noise</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+<span class="n">noise_F</span><span class="o">.</span><span class="n">ts</span> <span class="o">=</span> <span class="n">data_mean</span>
 <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">))</span>
 <span class="n">u</span><span class="p">[:,:,</span><span class="mi">100</span><span class="p">:</span><span class="mi">140</span><span class="p">]</span><span class="o">=</span> <span class="mi">5000</span>
 <span class="n">output_test</span> <span class="o">=</span> <span class="n">noise_F</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">base_batch_num</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">)</span>
@@ -822,7 +839,7 @@ We will load the empirical source data (model was fitted with sensor MEG data) a
 </div>
 <p><strong>Results Description:</strong>
 Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model’s capacity to link temporal and spectral features of neural dynamics during the task. For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference. Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed. In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E).</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (4 minutes 31.357 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (4 minutes 19.713 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-ismail2025-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fa46508a782571b79143e92910a4f1a8/eg__ismail2025.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__ismail2025.ipynb</span></code></a></p>
