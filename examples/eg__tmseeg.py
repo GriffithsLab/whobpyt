@@ -58,7 +58,7 @@ evoked = epoched.average()
 # %%
 # Load Atlas
 file_name = os.path.join(data_dir, 'Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv')
-atlas = pd.read_csv(url)
+atlas = pd.read_csv(file_name)
 labels = atlas['ROI Name']
 coords = np.array([atlas['R'], atlas['A'], atlas['S']]).T
 conduction_velocity = 5 #in ms
