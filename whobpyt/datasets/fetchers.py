@@ -23,30 +23,26 @@ def pull_file(dlcode,destination,download_method):
   dest_file = destination.split('/')[-1]
   print('\n\nDownloading %s\n' %dest_file)
 
-  if download_method == "gdown":
+  if download_method == "wget": 
+    os.system('wget %s -O %s' %(dlcode, destination))
 
+  elif download_method == "gdown":
     url = "https://drive.google.com/uc?id=" + dlcode
     gdown.download(url, destination, quiet=False)
 
-
   elif download_method == "requests":
-
     url = "https://docs.google.com/uc?export=download"
-
     session = requests.Session()
     response = session.get(
     url, params={"id": dlcode}, stream=True)
-
     # get the confirmation token to download large files
     token = None
     for key, value in response.cookies.items():
       if key.startswith("download_warning"):
         token = value
-
     if token:
       params = {"id": id, "confirm": token}
       response = session.get(url, params=params, stream=True)
-
     # save content to the zip-file  
     CHUNK_SIZE = 32768
     with open(destination, "wb") as f:
@@ -129,6 +125,48 @@ def fetch_MomiEtAlELife2023(dest_folder=None):
 
     # Confirm you got everything and go back to initial dir
     os.chdir(cwd)
+
+
+
+
+def fetch_egtmseeg(dest_folder=None, redownload=False):
+    #
+    # -----
+    # Usage
+    # -----
+    #
+    # res = fetch_egtmseeg()
+    #
+
+    osf_url_pfx = 'https://osf.io/download'
+    files_dict = {'680fc6eb5210d93da17c5a1d':'Schaefer2018_200Parcels_7Networks_count.csv',
+                  '680fc6fbab92f2b5627c5a0f':'stim_weights.npy',
+                  '680fc6f63068d66fc8568e3e': 'Subject_1_low_voltage.fif',
+                  '680fc6f80959f56dde568f29': 'Subject_1_low_voltage_fittingresults_stim_exp.pkl',
+                  '680fc6f99f030183213cbfd3': 'Subject_1_low_voltage_lf.npy'}
+    
+    cwd = os.getcwd()
+   
+    if dest_folder is None:
+        defpath = get_localdefaultdatapath()
+        dest_folder = os.path.join(defpath, 'eg__tmseeg')
+
+    # If input instruction was to re-download and folder is already present, remove it
+    if os.path.isdir(dest_folder) and redownload == True:
+        os.system('rm -rf %s' %dest_folder)
+
+    # If the folder does not exist, create it and download the files
+    if not os.path.isdir(dest_folder): 
+
+        os.makedirs(dest_folder)
+    
+        os.chdir(dest_folder)
+
+        for file_code, file_name in files_dict.items():
+          dlcode = osf_url_pfx + '/' + file_code
+          pull_file(dlcode, file_name, download_method='wget')
+   
+        os.chdir(cwd)
 
 
 
