@@ -522,6 +522,7 @@ to download the full example code.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.models.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">JansenRitModel</span><span class="p">,</span><span class="n">JansenRitParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelFitting</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.optimization.custom_cost_JR</span><span class="w"> </span><span class="kn">import</span> <span class="n">CostsJR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datasets.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_egtmseeg</span>
 
 <span class="c1"># Python Packages used for processing and displaying given analytical data (supported for .mat and Google Drive files)</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -536,46 +537,51 @@ to download the full example code.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mne</span> <span class="c1"># Neuroimaging package</span>
 </pre></div>
 </div>
-<p>Download and load necessary data for the example</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">download_data</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://drive.google.com/drive/folders/1DTdF_xR78DxB6kzxqY3SVYBAcdU9IkAB?usp=drive_link&#39;</span>
-
-<span class="k">if</span> <span class="n">download_data</span><span class="p">:</span> <span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;eg__tmseeg_data&#39;</span><span class="p">)</span>
+<p>Download and load example data</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">fetch_egtmseeg</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__tmseeg.py&quot;</span>, line <span class="m">52</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="k">if</span> <span class="n">download_data</span><span class="p">:</span> <span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/gdown/download_folder.py&quot;</span>, line <span class="m">325</span>, in <span class="n">download_folder</span>
-<span class="w">    </span><span class="n">local_path</span> <span class="o">=</span> <span class="n">download</span><span class="p">(</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/gdown/download.py&quot;</span>, line <span class="m">278</span>, in <span class="n">download</span>
-<span class="w">    </span><span class="k">raise</span> <span class="n">FileURLRetrievalError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-<span class="gr">gdown.exceptions.FileURLRetrievalError</span>: <span class="n">Failed to retrieve file url:</span>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading Schaefer2018_200Parcels_7Networks_count.csv
 
-<span class="x">    Cannot retrieve the public link of the file. You may need to change</span>
-<span class="x">    the permission to &#39;Anyone with the link&#39;, or have had many accesses.</span>
-<span class="x">    Check FAQ in https://github.com/wkentaro/gdown?tab=readme-ov-file#faq.</span>
 
-<span class="x">You may still be able to access the file from the browser:</span>
 
-<span class="x">    https://drive.google.com/uc?id=1PqYRp2E8zCslFZzOnJvwEk2z3qHMm9pA</span>
+Downloading Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt
 
-<span class="x">but Gdown can&#39;t. Please check connections and permissions.</span>
+
+
+Downloading stim_weights.npy
+
+
+
+Downloading Subject_1_low_voltage.fif
+
+
+
+Downloading Subject_1_low_voltage_fittingresults_stim_exp.pkl
+
+
+
+Downloading Subject_1_low_voltage_lf.npy
 </pre></div>
 </div>
-<p>Load EEG data from a file</p>
+<p>Load EEG data</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;Subject_1_low_voltage.fif&#39;</span><span class="p">)</span>
 <span class="n">epoched</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
 <span class="n">evoked</span> <span class="o">=</span> <span class="n">epoched</span><span class="o">.</span><span class="n">average</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Load Atlas</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv&#39;</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv&#39;</span><span class="p">)</span>
 <span class="n">atlas</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;ROI Name&#39;</span><span class="p">]</span>
 <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">],</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;S&#39;</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
 <span class="n">conduction_velocity</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1">#in ms</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__tmseeg.py&quot;</span>, line <span class="m">61</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="n">atlas</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="gr">NameError</span>: <span class="n">name &#39;url&#39; is not defined</span>
 </pre></div>
 </div>
 <p>Compute the distance matrix</p>
@@ -726,7 +732,7 @@ to capture key features of the EEG signal.</p>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 7.342 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 8.633 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-tmseeg-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/adddac552e627b5207e7ec47e04b862e/eg__tmseeg.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__tmseeg.ipynb</span></code></a></p>

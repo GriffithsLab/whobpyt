@@ -29,6 +29,7 @@ from whobpyt.datatypes import Parameter as par, Timeseries
 from whobpyt.models.jansen_rit import JansenRitModel,JansenRitParams
 from whobpyt.run import ModelFitting
 from whobpyt.optimization.custom_cost_JR import CostsJR
+from whobpyt.datasets.fetchers import fetch_egtmseeg
 
 # Python Packages used for processing and displaying given analytical data (supported for .mat and Google Drive files)
 import numpy as np
@@ -45,22 +46,18 @@ import mne # Neuroimaging package
 
 
 # %%
-# Download and load necessary data for the example
-download_data = True 
-url = 'https://drive.google.com/drive/folders/1DTdF_xR78DxB6kzxqY3SVYBAcdU9IkAB?usp=drive_link'
-
-if download_data: gdown.download_folder(url, quiet=True)
-data_dir = os.path.abspath('eg__tmseeg_data')
+# Download and load example data
+data_dir = fetch_egtmseeg()
 
 # %%
-# Load EEG data from a file
+# Load EEG data 
 file_name = os.path.join(data_dir, 'Subject_1_low_voltage.fif')
 epoched = mne.read_epochs(file_name, verbose=False);
 evoked = epoched.average()
 
 # %%
 # Load Atlas
-url = 'https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv'
+file_name = os.path.join(data_dir, 'Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv')
 atlas = pd.read_csv(url)
 labels = atlas['ROI Name']
 coords = np.array([atlas['R'], atlas['A'], atlas['S']]).T
