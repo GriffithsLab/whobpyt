@@ -63,8 +63,7 @@ Replicating Momi Et Al. ELife 2023
 # os stuff
 import os
 import sys
-sys.path.append('../whobpyt/depr/momi2023/')
-from jansen_rit import ParamsJR, Model_fitting, RNNJANSEN, Costs, OutputNM
+from whobpyt.depr.momi2023.jansen_rit import ParamsJR, Model_fitting, RNNJANSEN, Costs, OutputNM
 
 
 from pci import calc_PCIst, dimensionality_reduction, calc_snr, get_svd, apply_svd, state_transition_quantification,\
