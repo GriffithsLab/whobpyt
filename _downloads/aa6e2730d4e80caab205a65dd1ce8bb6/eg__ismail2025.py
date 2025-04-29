@@ -44,7 +44,7 @@ import os
 import gdown
 from scipy.io import loadmat
 from whobpyt.depr.ismail2025.jansen_rit import ParamsModel, RNNJANSEN, Model_fitting, dataloader
-from whobpyt.datasets.fetchers import fetch_ismail2025
+from whobpyt.datasets.fetchers import fetch_egismail2025
 import mne
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -59,7 +59,7 @@ from scipy import stats
 # 2. Download data
 # -------------------------------------------------------------------------
 # We use an example dataset for one subject on a public Google Drive folder
-output_dir = fetch_ismail2025()
+output_dir = fetch_egismail2025()
 
 
 
