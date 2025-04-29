@@ -172,7 +172,7 @@ def fetch_egtmseeg(dest_folder=None, redownload=False):
 
     return dest_folder 
 
-def fetch_ismail2025(dest_folder=None, redownload=False):
+def fetch_egismail2025(dest_folder=None, redownload=False):
     """
     Fetch multiple files for Ismail2025 using pull_file function.
     """
@@ -219,13 +219,13 @@ def fetch_ismail2025(dest_folder=None, redownload=False):
 
     return dest_folder
 
-def  fetch_Momi2025(dest_folder=None, redownload=False):
+def  fetch_egmomi2025(dest_folder=None, redownload=False):
     #
     # -----
     # Usage
     # -----
     #
-    # res = fetch_egtmseeg()
+    # res = fetch_egmomi2025()
     #
     api = KaggleApi()
     api.config_values['username'] = "claires03"
