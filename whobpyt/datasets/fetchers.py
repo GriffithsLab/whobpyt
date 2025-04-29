@@ -172,6 +172,77 @@ def fetch_egtmseeg(dest_folder=None, redownload=False):
 
     return dest_folder 
 
+
+
+def fetch_egmomi2023(dest_folder=None, redownload=False):
+    """
+    Fetch multiple files for Momi2023 using pull_file function.
+    """
+    
+    osf_url_pfx = 'https://osf.io/download'    
+    cwd = os.getcwd()
+
+    if dest_folder is None:
+        defpath = get_localdefaultdatapath()
+        dest_folder = os.path.join(defpath, 'eg__momi2023')
+
+    # If input instruction was to re-download and folder is already present, remove it
+    if os.path.isdir(dest_folder) and redownload == True:
+        shutil.rmtree(dest_folder)
+
+    # Create the destination folder if it doesn't exist
+    if not os.path.isdir(dest_folder):
+        os.makedirs(dest_folder)
+
+    os.chdir(dest_folder)
+
+    """
+    files_to_download = [('10CNgKxKtuF-fHCSzAZszrMWxfiE3npBZ','sub_0_fittingresults_stim_exp.pkl'),
+                         ('10EKlRPE3LhMe4g3-etEtcgpGAnUBxX7L','sub_1_fittingresults_stim_exp.pkl'),
+                         ('10EhWhBQhoE-_FU8EsZjPQCNlt_7HtKPZ','sub_2_fittingresults_stim_exp.pkl'),
+                         ('10LT6yM3zY4OHV4iFZxhYffeE0dW6-82m','sub_3_fittingresults_stim_exp.pkl'),
+                         ('10MATp09A6wkIaBxr0V0dRejmI4MxnVES','sub_4_fittingresults_stim_exp.pkl'),
+                         ('10TTUXcLaOGIcvJERZXR2YGd7-tvTbHU7','sub_5_fittingresults_stim_exp.pkl'),
+                         ('109p5O9bsprTWxDGGFIh2KUZ6B4uP51oO', 'stim_weights'),
+                         ('1z9uz8jgoWk8BqviPaxVMBU4ES_GV-obb', 'Schaefer2018_200Parcels_7Networks_distance.csv'),
+                         ('1fMTVFgKfshF5WN0PV87GZY489ZSTESOh', 'Schaefer2018_200Parcels_7Networks_count.csv'),
+                         ('1Ve1LsL-zoJ4bOYCtlkS-1PTLCc_NwmYR', 'rh.Schaefer2018_200Parcels_7Networks_order.annot'),
+                         ('1LOY3j5Ti3pf6G0KUnmL1tEKZ2EIx8i3c', 'real_EEG'),
+                         ('1n3W892HiPumKaQ6eE6veZgsPlKrxDGvH', 'only_high_trial.mat'),
+                         ('1BnlXHlGJK1O-xPSB0dS09lm-2f35yR4O', 'lh.Schaefer2018_200Parcels_7Networks_order.annot'),
+                         ('1GZ8fmw3HeLlLDUXVMMV9VQMI-mZ8esVl', 'leadfield'),
+                         ('1-SA-ooEa6s6Jo4uarSUzqqZkId3sYDTg', 'all_avg.mat_avg_high_epoched')]"
+     """
+
+    files_to_download = {"10CNgKxKtuF-fHCSzAZszrMWxfiE3npBZ":  "sub_0_fittingresults_stim_exp.pkl",
+                          "681075a6e72532ce337c5a4a", "sub_1_fittingresults_stim_exp.pkl",
+                          "68107596e5ea73185c7c5a7c":          'stim_weights',
+                          '"681075a6e72532ce337c5a4a":       'Schaefer2018_200Parcels_7Networks_distance.csv',
+                          "68107591430f2af683568cb2': 'Schaefer2018_200Parcels_7Networks_count.csv',   
+                          "6810758e11d6cb1d67568d05': 'rh.Schaefer2018_200Parcels_7Networks_order.annot',
+                          "6810758681075a6e72532ce337c5a4a': 'real_EEG',
+                          "68107567fed207be8f3cbf9f': 'only_high_trial.mat',
+                          "681074df24f63ddb219fddf8': 'lh.Schaefer2018_200Parcels_7Networks_order.annot',
+                          "1-SA-ooEa6s6Jo4uarSUzqqZkId3sYDTg": 'all_avg.mat_avg_high_epoched' }
+
+
+    total_files = len(files_to_download)
+
+    # If the folder does not exist, create it and download the files
+    if not os.path.isdir(dest_folder): 
+
+        os.makedirs(dest_folder)
+    
+        os.chdir(dest_folder)
+
+        for file_code, file_name in files_dict.items():
+          dlcode = osf_url_pfx + '/' + file_code
+          pull_file(dlcode, file_name, download_method='wget')
+
+    return dest_folder
+
+
+
 def fetch_egismail2025(dest_folder=None, redownload=False):
     """
     Fetch multiple files for Ismail2025 using pull_file function.
