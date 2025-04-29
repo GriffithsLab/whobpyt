@@ -9,6 +9,7 @@ pooch
 torch
 scikit-learn
 mne
+kaggle
 
 
 # Docs requirements
