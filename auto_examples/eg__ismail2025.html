@@ -547,10 +547,9 @@ inhibition to drive laterality. This work provides a developmental framework for
 <span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span>
   File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/whobpyt/datasets/__init__.py&quot;</span>, line <span class="m">2</span>, in <span class="n">&lt;module&gt;</span>
 <span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_hcpl2k8</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/whobpyt/datasets/fetchers.py&quot;</span>, line <span class="m">218</span>
-<span class="w">    </span><span class="s2">&quot;681075a6e72532ce337c5a4a&quot;</span><span class="p">,</span> <span class="s2">&quot;sub_1_fittingresults_stim_exp.pkl&quot;</span><span class="p">,</span>
-<span class="w">                              </span><span class="pm">^</span>
-<span class="gr">SyntaxError</span>: <span class="n">invalid syntax</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/whobpyt/datasets/fetchers.py&quot;</span>, line <span class="m">13</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">kaggle.api.kaggle_api_extended</span><span class="w"> </span><span class="kn">import</span> <span class="n">KaggleApi</span>
+<span class="gr">ModuleNotFoundError</span>: <span class="n">No module named &#39;kaggle&#39;</span>
 </pre></div>
 </div>
 </section>
@@ -802,7 +801,7 @@ We will load the empirical source data (model was fitted with sensor MEG data) a
 </div>
 <p><strong>Results Description:</strong>
 Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model’s capacity to link temporal and spectral features of neural dynamics during the task. For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference. Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed. In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E).</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.430 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.224 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-ismail2025-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fa46508a782571b79143e92910a4f1a8/eg__ismail2025.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__ismail2025.ipynb</span></code></a></p>
