@@ -10,20 +10,58 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0   
+
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
         python-version: 3.9
+        
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
         pip install .
+
+    - name: Get list of changed files
+      id: changes
+      run: |
+        git fetch origin master
+        git diff --name-only origin/master...HEAD > changed_files.txt
+        cat changed_files.txt
+
+    - name: Determine build mode
+      id: mode
+      run: |
+        if grep -vqE '^examples/.*\.py$' changed_files.txt; then
+          echo "FULL_BUILD=true" >> $GITHUB_ENV
+          echo "Detected non-example file change. Full build triggered."
+        else
+          CHANGED_EXAMPLES=$(grep '^examples/.*\.py$' changed_files.txt | paste -sd '|' -)
+          echo "FULL_BUILD=false" >> $GITHUB_ENV
+          echo "CHANGED_EXAMPLES=$CHANGED_EXAMPLES" >> $GITHUB_ENV
+          echo "Changed examples: $CHANGED_EXAMPLES"
+        fi
+
+    - name: Cache built documentation
+      id: cache-docs
+      uses: actions/cache@v4
+      with:
+        path: |
+          doc/_build/html
+        key: ${{ runner.os }}-sphinx-${{ hashFiles('examples/**/*.py', 'doc/**/*', 'conf.py') }}
+        restore-keys: |
+          ${{ runner.os }}-sphinx-
+        
     - name: Build docs
       run: |
           cd doc  
           sphinx-build -b html -nT --keep-going . _build/html
       continue-on-error: true  
+      
     - name: Deploy Docs
       uses: peaceiris/actions-gh-pages@v3
       if: always() 
