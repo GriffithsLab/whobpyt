@@ -1,42 +1,44 @@
-.. include:: ../README.rst
+:html_theme.sidebar_secondary.remove:
 
-Welcome to WhoBPyT documentation!
-===================================
+.. title:: WhoBPyT
 
-.. toctree::
-   :maxdepth: 1
-   :caption: About WhoBPyT
-   :glob:
-      
-   about_whobpyt/overview
-   about_whobpyt/architecture
-   about_whobpyt/background
+.. The page title must be in rST for it to show in next/prev page buttons.
+   Therefore we add a special style rule to only this page that hides h1 tags
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Getting Started
-   :glob:
- 
-   getting_started/installation
-   getting_started/running_in_colab
-   getting_started/running_in_codespaces
+.. raw:: html
 
-.. toctree::
-   :maxdepth: 2
-   :caption: API
-   :glob:
+    <style type="text/css">h1 {display:none;}</style>
 
-   API/models
-   API/optimization
-   API/run
-   API/visualization
-   API/datatypes
+WhoBPyT Homepage
+===================
+
+.. LOGO
+
+.. image:: _static/whobpyt_logo_shire.png
+   :alt: WhoBPyT
+   :class: logo, mainlogo, only-light
+   :align: center
+
+.. image:: _static/whobpyt_logo_feet_dark.png
+   :alt: WhoBPyT
+   :class: logo, mainlogo, only-dark
+   :align: center
+
+.. rst-class:: text-center font-weight-light my-4
+   
+   *WhoBPyT* is a PyTorch-based Python library for mathematical modelling of large-scale brain network dynamics, obtuse literary allusion, and model-based analysis of neuroimaging and neurophysiology data. It is developed primarily by researchers in the `Whole-Brain Modelling Group <https://www.grifflab.com>`_ at the `CAMH Krembil Centre for Neuroinformatics <https://www.krembilneuroinformatics.ca>`_ & University of Toronto.
+
+.. frontpage gallery is added by a conditional in _templates/layout.html
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Examples
-   :glob:
- 
-   auto_examples/eg__tmseeg
-   auto_examples/eg__momi2023   
-   auto_examples/eg__ismail2025
+   :hidden:
+
+   About <about/index>
+   Documentation <documentation/index>
+   Contribute <development/index>
+   handpicked_gallery   
+
+
+.. meta::
+   :page-layout: wide        # removes both sidebars and lets the body span the page
+
