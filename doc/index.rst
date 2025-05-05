@@ -33,7 +33,7 @@ WhoBPyT Homepage
 .. toctree::
    :hidden:
 
-   About <about/index>
+   About <about_whobpyt/index>
    Documentation <documentation/index>
    Contribute <development/index>
    handpicked_gallery   
