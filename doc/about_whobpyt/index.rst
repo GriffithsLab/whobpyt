@@ -1,5 +1,0 @@
-About WhoBPyT
-======================
-
-coming soon...
-
