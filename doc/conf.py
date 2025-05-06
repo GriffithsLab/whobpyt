@@ -856,39 +856,31 @@ html_context = {
     "github_repo": "whobpyt",
     "github_version": "main",
     "doc_path": "doc",
-    "funders": [
-        dict(img="nih.svg", size="3", title="CAMH"),
-        dict(img="nsf.png", size="3.5", title="CIHR"),
-        dict(
-            img="erc.svg",
-            size="3.5",
-            title="UofT",
-            klass="only-light"),
-    ],
+    #"funders": [ dict(img="nih.svg", size="3", title="CAMH"), dict(img="nsf.png", size="3.5", title="CIHR"),dict( img="erc.svg", size="3.5", title="UofT", klass="only-light"),],
     "institutions": [
         dict(
             name="University of Toronto",
-            img="MGH.svg",
-            url="https://www.massgeneral.org/",
-            size=sm,
+            img="UofT_logo.jpg",
+            url="https://www.utoronto.ca/",
+            size=xl,
         ),
         dict(
             name="Krembil Centre for Neuroinformatics",
-            img="Martinos.png",
-            url="https://martinos.org/",
-            size=md,
+            img="KCNI_logo.png",
+            url="https://www.krembilneuroinformatics.ca/",
+            size=xl,
         ),
         dict(
             name="Center for Addiction and Mental Health",
-            img="Harvard.png",
-            url="https://hms.harvard.edu/",
-            size=sm,
+            img="CAMH_logo_purple.png",
+            url="https://www.camh.ca/",
+            size=xl,
         ),
         dict(
             name="Hospital for Sick Children",
-            img="MIT.svg",
-            url="https://web.mit.edu/",
-            size=md,
+            img="sick_kids_logo.png",
+            url="https://www.sickkids.ca/",
+            size=xl,
         )
     ],
     # \u00AD is an optional hyphen (not rendered unless needed)
@@ -903,14 +895,14 @@ html_context = {
         ),
         dict(
             title="Brain Stimulation",
-            text="Advanced decoding models including time general\u00adiza\u00adtion.",  # noqa E501
+            text="electrical/magnetic/acoustic, invasive/noninvasive brain stimulation",
             url="auto_examples/index.html",
             img="../_static/momi2025__SummaryFigure.png",
             alt="Stimulation",
         ),
         dict(
             title="Brain & Cognition",
-            text="Modelling evoked and induced brain dynamics during cognitive tasks",
+            text="evoked/induced activity during cognitive tasks",
             url="auto_examples/index.html",
             img="../_static/Ismail2025_SummaryFigure.png",
             alt="Cognition",
