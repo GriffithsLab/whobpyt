@@ -41,12 +41,12 @@ linkcode_resolve = None
 # assert linkcode_resolve is not None  # avoid flake warnings, used by numpydoc
 matplotlib.use("agg")
 faulthandler.enable()
-os.environ["_MNE_BROWSER_NO_BLOCK"] = "true"
-os.environ["MNE_BROWSER_OVERVIEW_MODE"] = "hidden"
-os.environ["MNE_BROWSER_THEME"] = "light"
-os.environ["MNE_3D_OPTION_THEME"] = "light"
+#os.environ["_MNE_BROWSER_NO_BLOCK"] = "true"
+#os.environ["MNE_BROWSER_OVERVIEW_MODE"] = "hidden"
+#os.environ["MNE_BROWSER_THEME"] = "light"
+#os.environ["MNE_3D_OPTION_THEME"] = "light"
 # https://numba.readthedocs.io/en/latest/reference/deprecation.html#deprecation-of-old-style-numba-captured-errors  # noqa: E501
-os.environ["NUMBA_CAPTURED_ERRORS"] = "new_style"
+#os.environ["NUMBA_CAPTURED_ERRORS"] = "new_style"
 #mne.html_templates._templates._COLLAPSED = True  # collapse info _repr_html_
 
 # -- Path setup --------------------------------------------------------------
@@ -778,11 +778,11 @@ html_theme_options = {
     "article_header_start": [],  # disable breadcrumbs
     "navbar_end": [
         "theme-switcher", #"version-switcher",
-        "navbar-icon-links",
-    ],
+        "navbar-icon-links"],#,#        "sidebar-toggle",  "toggle-sidebar.html"],
     "navbar_align": "left",
     "navbar_persistent": ["search-button"],
-    #"footer_start": ["copyright"],
+    "collapse_navigation": True,
+    "footer_start": ["copyright"],
     "secondary_sidebar_items": ["page-toc", "edit-this-page"],
     "analytics": dict(google_analytics_id="G-5TBCPCRB6X"),
     #"switcher": { "json_url": "https://mne.tools/dev/_static/versions.json", "version_match": switcher_version_match,
@@ -830,9 +830,24 @@ html_css_files = [
 # ]
 
 # Custom sidebar templates, maps document names to template names.
-html_sidebars = {} #{
+#html_sidebars = {} #{
 #    "index": ["sidebar-quicklinks.html"],
 #}
+# conf.py
+
+"""
+html_sidebars = {
+    # every page gets the same sidebar
+    "**": [
+        "globaltoc.html",         # ← full docs tree (collapsible)
+        "searchbox.html",
+        "toggle-sidebar.html",    # ← we add this just below
+    ]
+}
+"""
+
+
+
 
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = False
@@ -889,21 +904,21 @@ html_context = {
         dict(
             title="Brain Dynamics",
             text="oscillations, functional connectivity, brain network organization", 
-            url="auto_examples/index.html",
+            url="documentation/science/brain_dynamics/index.html",
             img="../_static/Ismail2025_SummaryFigure.png",
             alt="dSPM",
         ),
         dict(
             title="Brain Stimulation",
             text="electrical/magnetic/acoustic, invasive/noninvasive brain stimulation",
-            url="auto_examples/index.html",
+            url="documentation/science/brain_stimulation/index.html",
             img="../_static/momi2025__SummaryFigure.png",
             alt="Stimulation",
         ),
         dict(
             title="Brain & Cognition",
             text="evoked/induced activity during cognitive tasks",
-            url="auto_examples/index.html",
+            url="documentation/science/brain_cognition/index.html",
             img="../_static/Ismail2025_SummaryFigure.png",
             alt="Cognition",
         ),
