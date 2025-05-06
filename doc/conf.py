@@ -27,8 +27,8 @@ from sphinx_gallery.sorting import ExplicitOrder
 
 import whobpyt
 
-#import mne
-#import mne.html_templates._templates
+import mne
+import mne.html_templates._templates
 #from mne.tests.test_docstring_parameters import error_ignores
 
 #from mne.utils import (
@@ -42,12 +42,12 @@ linkcode_resolve = None
 matplotlib.use("agg")
 faulthandler.enable()
 #os.environ["_MNE_BROWSER_NO_BLOCK"] = "true"
-#os.environ["MNE_BROWSER_OVERVIEW_MODE"] = "hidden"
+os.environ["MNE_BROWSER_OVERVIEW_MODE"] = "hidden"
 #os.environ["MNE_BROWSER_THEME"] = "light"
 #os.environ["MNE_3D_OPTION_THEME"] = "light"
 # https://numba.readthedocs.io/en/latest/reference/deprecation.html#deprecation-of-old-style-numba-captured-errors  # noqa: E501
 #os.environ["NUMBA_CAPTURED_ERRORS"] = "new_style"
-#mne.html_templates._templates._COLLAPSED = True  # collapse info _repr_html_
+mne.html_templates._templates._COLLAPSED = False #  True  # collapse info _repr_html_
 
 # -- Path setup --------------------------------------------------------------
 
@@ -775,13 +775,17 @@ html_theme_options = {
     "use_edit_page_button": False,
     "navigation_with_keys": False,
     "show_toc_level": 1,
+    "show_nav_level": 0,
+    "navigation_depth": 4,
     "article_header_start": [],  # disable breadcrumbs
+    "navbar_start": ["navbar-logo"],
+    "navbar_center": ["navbar-nav"],   # ← lives in the middle
     "navbar_end": [
         "theme-switcher", #"version-switcher",
-        "navbar-icon-links"],#,#        "sidebar-toggle",  "toggle-sidebar.html"],
-    "navbar_align": "left",
+        "navbar-icon-links"],#, "toggle-sidebar.html"],
+    "navbar_align": "left", # left
     "navbar_persistent": ["search-button"],
-    "collapse_navigation": True,
+    "collapse_navigation": False, #True, # False, # True,
     "footer_start": ["copyright"],
     "secondary_sidebar_items": ["page-toc", "edit-this-page"],
     "analytics": dict(google_analytics_id="G-5TBCPCRB6X"),
@@ -815,9 +819,11 @@ html_favicon = "_static/favicon.ico"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-html_css_files = [
-    "style.css",
-]
+#html_css_files = [
+#    "style.css",
+#]
+
+html_css_files = ['style.css', 'css/fix-sidebar.css']
 
 # # Add any extra paths that contain custom files (such as robots.txt or
 # # .htaccess) here, relative to this directory. These files are copied
@@ -835,6 +841,21 @@ html_css_files = [
 #}
 # conf.py
 
+
+#html_sidebars = {
+#    "auto_examples/**": [],          # ← hide left sidebar on every example page
+#    "**": ["search-field.html",      # ← keep your normal sidebar everywhere else
+#           "sidebar-nav-bs.html",
+#           "sidebar-ethical-ads.html"],
+#}
+
+
+html_sidebars = {
+    "auto_examples/**": [],          # ← hide left sidebar on every example page
+    '**': ["sidebar-nav-bs.html"]}
+#    "**": ["search-field.html",      # ← keep your normal sidebar everywhere else
+#           "sidebar-nav-bs.html",
+
 """
 html_sidebars = {
     # every page gets the same sidebar
@@ -846,7 +867,7 @@ html_sidebars = {
 }
 """
 
-
+#html_sidebars = {"**": ['sidebar-collapse', 'sidebar-nav-bs', 'search-field']}
 
 
 # If true, links to the reST sources are added to the pages.
@@ -1372,6 +1393,9 @@ def make_api_redirects(app, exception):
 
 # -- Connect our handlers to the main Sphinx app ---------------------------
 
+
+def setup(app):
+    app.add_css_file("css/fix-sidebar.css")
 
 #def setup(app):
     #"""Set up the Sphinx app."""

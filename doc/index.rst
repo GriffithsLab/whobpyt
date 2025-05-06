@@ -1,4 +1,3 @@
-:html_theme.sidebar_secondary.remove:
 
 .. title:: WhoBPyT
 
@@ -38,6 +37,4 @@ WhoBPyT Homepage
    Science <documentation/science/index>
    Contribute <documentation/development/index>
 
-.. meta::
-   :page-layout: wide        # removes both sidebars and lets the body span the page
 
