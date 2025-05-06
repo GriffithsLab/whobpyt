@@ -33,11 +33,10 @@ WhoBPyT Homepage
 .. toctree::
    :hidden:
 
-   About <about_whobpyt/index>
+   About <documentation/about/index>
    Documentation <documentation/index>
-   Contribute <development/index>
-   handpicked_gallery   
-
+   Science <documentation/science/index>
+   Contribute <documentation/development/index>
 
 .. meta::
    :page-layout: wide        # removes both sidebars and lets the body span the page
