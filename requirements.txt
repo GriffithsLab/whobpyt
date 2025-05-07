@@ -21,6 +21,7 @@ sphinx-copybutton #==0.3.1
 sphinxcontrib-httpdomain #==1.7.0
 sphinxcontrib-towncrier
 sphinxcontrib-youtube
+sphinx-design  
 numpydoc==1.1.0
 recommonmark==0.6.0
 versioneer==0.19
