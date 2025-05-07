@@ -25,7 +25,7 @@ from sphinx.config import is_serializable
 from sphinx.domains.changeset import versionlabels
 from sphinx_gallery.sorting import ExplicitOrder
 
-import whobpyt
+#import whobpyt
 
 import mne
 import mne.html_templates._templates
