@@ -34,6 +34,7 @@ jobs:
         echo "PR head SHA=${{ github.event.pull_request.head.sha }}"   
         git fetch origin main
         git diff --name-only origin/main...HEAD > changed_files.txt
+        echo "\nAll changed files:"
         cat changed_files.txt
 
     - name: Determine build mode
