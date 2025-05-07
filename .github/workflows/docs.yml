@@ -37,7 +37,7 @@ jobs:
         echo "PR head SHA=${{ github.event.pull_request.head.sha }}"   
         git fetch origin main
         git diff --name-only origin/main...HEAD > changed_files.txt
-        echo "\nAll changed files:"
+        echo "All changed files:"
         cat changed_files.txt
 
     - name: Determine build mode
@@ -66,7 +66,10 @@ jobs:
     - name: Build docs
       run: |
           cd doc  
-          sphinx-build -b html -nT --keep-going . _build/html
+          echo 'Run 1'  # first run: skip plots
+          sphinx-build -b html -nT --keep-going -D plot_gallery=0 . _build/html           
+          echo 'Run 2'  # second run: don't remove anything, add the plots          
+          sphinx-build -b html -nT --keep-going . _build/html   
       continue-on-error: true  
       
     - name: Deploy Docs
