@@ -2,19 +2,19 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="./" data-theme="auto">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Structure &#8212; WhoBPyT 0.0.0 documentation</title>
+    <title>WhoBPyT &#8212; MNE  documentation</title>
   
   
   
   <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
   </script>
   <!--
     this give us a css class that will be invisible only if js is disabled
@@ -30,13 +30,18 @@
   <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css?v=7f9a90b1" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/theme_override.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/fix-sidebar.css?v=52f27943" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css?v=1395d0ad" />
+    <link rel="stylesheet" type="text/css" href="_static/css/fix-sidebar.css?v=52f27943" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -44,34 +49,45 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/jquery.js?v=5d32c60e"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="_static/documentation_options.js?v=3e6ca1ad"></script>
+    <script src="_static/documentation_options.js?v=7f41d439"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=a56c686a"></script>
+    <script src="_static/copybutton.js?v=fd10adb8"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-5TBCPCRB6X"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-5TBCPCRB6X');
+            </script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-5TBCPCRB6X');
+            </script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
-    <script src="_static/debug.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Overview" href="about_whobpyt/overview.html" />
+    <link rel="next" title="About the WhoBPyT Library" href="documentation/about/index.html" />
+    <link rel="canonical" href="https://mne.tools/stable/index.html" />
+    
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.0" />
+  <meta name="docsearch:version" content="" />
+
   </head>
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="auto">
 
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <dialog id="pst-search-dialog">
@@ -105,7 +121,7 @@
   </button>
   
   
-  <div class="col-lg-3 navbar-header-items__start">
+  <div class=" navbar-header-items__start">
     
       <div class="navbar-item">
 
@@ -119,14 +135,20 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/whobpyt_logo_feet.png" class="logo__image only-light" alt="MNE  documentation - Home"/>
+    <img src="_static/whobpyt_logo_feet_dark.png" class="logo__image only-dark pst-js-only" alt="MNE  documentation - Home"/>
   
-    <p class="title logo__title">WhoBPyT 0.0.0 documentation</p>
   
 </a></div>
     
   </div>
   
-  <div class="col-lg-9 navbar-header-items">
+  <div class=" navbar-header-items">
     
     <div class="me-auto navbar-header-items__center">
       
@@ -135,112 +157,32 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about_whobpyt/overview.html">
-    Overview
+  <a class="nav-link nav-internal" href="documentation/about/index.html">
+    About
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about_whobpyt/architecture.html">
-    Code Architecture
+  <a class="nav-link nav-internal" href="documentation/index.html">
+    Documentation
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about_whobpyt/background.html">
-    Background Information
+  <a class="nav-link nav-internal" href="documentation/science/index.html">
+    Science
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="getting_started/installation.html">
-    Installation
+  <a class="nav-link nav-internal" href="documentation/development/index.html">
+    Contribute
   </a>
 </li>
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="getting_started/running_in_colab.html">
-    Running whobpyt in google colab
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="getting_started/running_in_codespaces.html">
-    Running whobpyt in GitHub Codespaces
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="API/models.html">
-    Models
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="API/optimization.html">
-    Optimization
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="API/run.html">
-    Run
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="API/visualization.html">
-    Visualization
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="API/datatypes.html">
-    Data Types
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="auto_examples/eg__tmseeg.html">
-    Modelling TMS-EEG evoked responses
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="auto_examples/eg__momi2023.html">
-    Replicating Momi Et Al. ELife 2023
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="auto_examples/eg__ismail2025.html">
-    Replicating Ismail et al. 2025
-  </a>
-</li>
-
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -252,10 +194,8 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
         </div>
       
@@ -268,6 +208,22 @@
   <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
 </button></div>
       
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
     </div>
     
   </div>
@@ -275,18 +231,12 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
     </div>
   
 
-  
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
   
 </div>
 
@@ -317,99 +267,29 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about_whobpyt/overview.html">
-    Overview
+  <a class="nav-link nav-internal" href="documentation/about/index.html">
+    About
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about_whobpyt/architecture.html">
-    Code Architecture
+  <a class="nav-link nav-internal" href="documentation/index.html">
+    Documentation
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about_whobpyt/background.html">
-    Background Information
+  <a class="nav-link nav-internal" href="documentation/science/index.html">
+    Science
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="getting_started/installation.html">
-    Installation
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="getting_started/running_in_colab.html">
-    Running whobpyt in google colab
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="getting_started/running_in_codespaces.html">
-    Running whobpyt in GitHub Codespaces
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="API/models.html">
-    Models
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="API/optimization.html">
-    Optimization
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="API/run.html">
-    Run
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="API/visualization.html">
-    Visualization
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="API/datatypes.html">
-    Data Types
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="auto_examples/eg__tmseeg.html">
-    Modelling TMS-EEG evoked responses
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="auto_examples/eg__momi2023.html">
-    Replicating Momi Et Al. ELife 2023
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="auto_examples/eg__ismail2025.html">
-    Replicating Ismail et al. 2025
+  <a class="nav-link nav-internal" href="documentation/development/index.html">
+    Contribute
   </a>
 </li>
 
@@ -430,6 +310,22 @@
   <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
   <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
 </button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
         
       </div>
     
@@ -458,83 +354,98 @@
               <div class="bd-header-article d-print-none"></div>
               
               
-              
-                
-<div id="searchbox"></div>
-                <article class="bd-article">
-                  
-  <a class="reference external image-reference" href="https://github.io/griffithslab/whobpyt/examples/index.html"><img alt="whobpyt" class="align-center" src="https://github.com/griffithslab/whobpyt/raw/main/doc/_static/whobpyt_logo_shire.png" />
-</a>
-<p><em>WhoBPyT</em> is a PyTorch-based Python library for mathematical modelling of large-scale brain network dynamics, obtuse literary allusion, and model-based analysis of neuroimaging and neurophysiology data.</p>
-<p>It is developed primarily by researchers in the <a class="reference external" href="https://www.grifflab.com">Whole-Brain Modelling Group</a>
-at the <a class="reference external" href="https://www.krembilneuroinformatics.ca">CAMH Krembil Centre for Neuroinformatics</a> &amp; University of Toronto.</p>
-<p>Note that this project is relatively new and under active development, so the contents of this repo are subject to substantial change. If you are interested in using WhoBPyT in your research (and especially if you are interested in contributing to the code base development), please get in touch by emailing john dot griffiths at utoronto dot ca, or just introduce yourself via an issue. This projects was made possible through the team and CAMH, along with the wonderful new protege’s at the SOBP BrainHack.</p>
-<section id="structure">
-<h1>Structure<a class="headerlink" href="#structure" title="Link to this heading">#</a></h1>
-<p>There are three main components to the code base:</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">doc</span></code> folder - Documentation pages text and organization</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">whobpyt</span></code> folder - The importable python library</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">examples</span></code> folder - Example usage scripts that become the gallery items in the CI-managed sphinx gallery site</div>
-</div>
-<section id="welcome-to-whobpyt-documentation">
-<h2>Welcome to WhoBPyT documentation!<a class="headerlink" href="#welcome-to-whobpyt-documentation" title="Link to this heading">#</a></h2>
+<div>
+  
+  <style type="text/css">h1 {display:none;}</style><section id="whobpyt-homepage">
+<h1>WhoBPyT Homepage<a class="headerlink" href="#whobpyt-homepage" title="Link to this heading">#</a></h1>
+<img alt="WhoBPyT" class="logo mainlogo only-light align-center" src="_images/whobpyt_logo_shire.png" />
+<img alt="WhoBPyT" class="logo mainlogo only-dark align-center" src="_images/whobpyt_logo_feet_dark.png" />
+<p class="text-center font-weight-light my-4"><em>WhoBPyT</em> is a PyTorch-based Python library for mathematical modelling of large-scale brain network dynamics, obtuse literary allusion, and model-based analysis of neuroimaging and neurophysiology data. It is developed primarily by researchers in the <a class="reference external" href="https://www.grifflab.com">Whole-Brain Modelling Group</a> at the <a class="reference external" href="https://www.krembilneuroinformatics.ca">CAMH Krembil Centre for Neuroinformatics</a> &amp; University of Toronto.</p>
 <div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">About WhoBPyT</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="about_whobpyt/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about_whobpyt/architecture.html">Code Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about_whobpyt/background.html">Background Information</a></li>
-</ul>
 </div>
-<div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started/running_in_colab.html">Running whobpyt in google colab</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started/running_in_codespaces.html">Running whobpyt in GitHub Codespaces</a></li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="API/models.html">Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="API/optimization.html">Optimization</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsTS"><code class="docutils literal notranslate"><span class="pre">CostsTS</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsFC"><code class="docutils literal notranslate"><span class="pre">CostsFC</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsFixedFC"><code class="docutils literal notranslate"><span class="pre">CostsFixedFC</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsPSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsFixedPSD"><code class="docutils literal notranslate"><span class="pre">CostsFixedPSD</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="API/optimization.html#whobpyt.optimization.CostsMean"><code class="docutils literal notranslate"><span class="pre">CostsMean</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="API/run.html">Run</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="API/run.html#whobpyt.run.model_fitting.ModelFitting"><code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="API/visualization.html">Visualization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="API/datatypes.html">Data Types</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.timeseries.Timeseries"><code class="docutils literal notranslate"><span class="pre">Timeseries</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="API/datatypes.html#whobpyt.datatypes.outputs.TrainingStats"><code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code></a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/eg__tmseeg.html">Modelling TMS-EEG evoked responses</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/eg__momi2023.html">Replicating Momi Et Al. ELife 2023</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/eg__ismail2025.html">Replicating Ismail et al. 2025</a></li>
-</ul>
-</div>
-</section>
 </section>
 
 
-                </article>
-              
+  <!-- homepage gallery -->
+<div class="container">
+  <div class="d-flex flex-wrap flex-row justify-content-between">
+    
+      <div class="col-12 col-sm-6 col-lg-4 px-2 my-2">
+        <div class="card frontpage-gallery">
+          <a href="documentation/science/brain_dynamics/index.html">
+            <img class="card-img institution" src="_images/../_static/Ismail2025_SummaryFigure.png" alt="dSPM">
+            <div class="card-img-overlay px-3 py-1">
+              <p class="lead mb-1 fadeout">Brain Dynamics</p>
+              <p class="card-text fadeout">oscillations, functional connectivity, brain network organization</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    
+      <div class="col-12 col-sm-6 col-lg-4 px-2 my-2">
+        <div class="card frontpage-gallery">
+          <a href="documentation/science/brain_stimulation/index.html">
+            <img class="card-img institution" src="_images/../_static/momi2025__SummaryFigure.png" alt="Stimulation">
+            <div class="card-img-overlay px-3 py-1">
+              <p class="lead mb-1 fadeout">Brain Stimulation</p>
+              <p class="card-text fadeout">electrical/magnetic/acoustic, invasive/noninvasive brain stimulation</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    
+      <div class="col-12 col-sm-6 col-lg-4 px-2 my-2">
+        <div class="card frontpage-gallery">
+          <a href="documentation/science/brain_cognition/index.html">
+            <img class="card-img institution" src="_images/../_static/Ismail2025_SummaryFigure.png" alt="Cognition">
+            <div class="card-img-overlay px-3 py-1">
+              <p class="lead mb-1 fadeout">Brain & Cognition</p>
+              <p class="card-text fadeout">evoked/induced activity during cognitive tasks</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    
+  </div>
+</div>
+<!-- funders -->
+<div class="container my-4">
+  <p class="h4 text-center font-weight-light"></p>
+  <div id="funder-logos" class="d-flex flex-wrap flex-row justify-content-center align-items-center">
+    
+  </div>
+</div>
+<!-- institutions -->
+<div class="container my-4">
+  <p class="h4 text-center font-weight-light">Supporting institutions</p>
+  <div id="institution-logos" class="d-flex flex-wrap flex-row justify-content-center align-items-center">
+    <div class="card my-1 mx-2 " style="width: 5rem;">
+        <a href="https://www.utoronto.ca/">
+          <img class="card-img institution" src="_static/UofT_logo.jpg" title="University of Toronto" alt="University of Toronto"/>
+        </a>
+      </div>
+    <div class="card my-1 mx-2 " style="width: 5rem;">
+        <a href="https://www.krembilneuroinformatics.ca/">
+          <img class="card-img institution" src="_static/KCNI_logo.png" title="Krembil Centre for Neuroinformatics" alt="Krembil Centre for Neuroinformatics"/>
+        </a>
+      </div>
+    <div class="card my-1 mx-2 " style="width: 5rem;">
+        <a href="https://www.camh.ca/">
+          <img class="card-img institution" src="_static/CAMH_logo_purple.png" title="Center for Addiction and Mental Health" alt="Center for Addiction and Mental Health"/>
+        </a>
+      </div>
+    <div class="card my-1 mx-2 " style="width: 5rem;">
+        <a href="https://www.sickkids.ca/">
+          <img class="card-img institution" src="_static/sick_kids_logo.png" title="Hospital for Sick Children" alt="Hospital for Sick Children"/>
+        </a>
+      </div>
+    
+  </div>
+<!-- contributors -->
+<p> </p>
+</div>
+</div>
+
               
               
               
@@ -543,11 +454,11 @@ at the <a class="reference external" href="https://www.krembilneuroinformatics.c
                   
 <div class="prev-next-area">
     <a class="right-next"
-       href="about_whobpyt/overview.html"
+       href="documentation/about/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Overview</p>
+        <p class="prev-next-title">About the WhoBPyT Library</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -557,26 +468,6 @@ at the <a class="reference external" href="https://www.krembilneuroinformatics.c
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#welcome-to-whobpyt-documentation">Welcome to WhoBPyT documentation!</a><ul class="nav section-nav flex-column">
-</ul>
-</li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
@@ -588,32 +479,18 @@ at the <a class="reference external" href="https://www.krembilneuroinformatics.c
     </div>
   </div>
   
+    
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
   <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
 <script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
+    <script src="https://mne.tools/versionwarning.js"></script>
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
   
     <div class="footer-items__start">
       
-        <div class="footer-item">
-
-  <p class="copyright">
-    
-      © Copyright KCNI Griffiths Lab &amp; Contributors.
-      <br/>
-    
-  </p>
-</div>
-      
-        <div class="footer-item">
-
-  <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
-    <br/>
-  </p>
-</div>
+        <div class="footer-item"><p class="text-center small">&copy; Copyright </p></div>
       
     </div>
   
