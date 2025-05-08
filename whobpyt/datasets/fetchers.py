@@ -10,7 +10,7 @@
 import os,sys,glob,shutil,numpy as np, pandas as pd
 import requests, zipfile,gdown
 from datetime import datetime
-
+#from kaggle.api.kaggle_api_extended import KaggleApi
 
 WHOBPYT_DATA_FOLDER = '~/.whobpyt/data'
 
@@ -215,15 +215,15 @@ def fetch_egmomi2023(dest_folder=None, redownload=False):
      """
 
     files_to_download = {"10CNgKxKtuF-fHCSzAZszrMWxfiE3npBZ":  "sub_0_fittingresults_stim_exp.pkl",
-                          "681075a6e72532ce337c5a4a", "sub_1_fittingresults_stim_exp.pkl",
-                          "68107596e5ea73185c7c5a7c":          'stim_weights',
-                          '"681075a6e72532ce337c5a4a":       'Schaefer2018_200Parcels_7Networks_distance.csv',
-                          "68107591430f2af683568cb2': 'Schaefer2018_200Parcels_7Networks_count.csv',   
-                          "6810758e11d6cb1d67568d05': 'rh.Schaefer2018_200Parcels_7Networks_order.annot',
-                          "6810758681075a6e72532ce337c5a4a': 'real_EEG',
-                          "68107567fed207be8f3cbf9f': 'only_high_trial.mat',
-                          "681074df24f63ddb219fddf8': 'lh.Schaefer2018_200Parcels_7Networks_order.annot',
-                          "1-SA-ooEa6s6Jo4uarSUzqqZkId3sYDTg": 'all_avg.mat_avg_high_epoched' }
+                                  "681075a6e72532ce337c5a4a":  "sub_1_fittingresults_stim_exp.pkl",
+                                  "68107596e5ea73185c7c5a7c": "stim_weights",
+                                  "681075a6e72532ce337c5a4a": "Schaefer2018_200Parcels_7Networks_distance.csv",
+                                  "68107591430f2af683568cb2": "Schaefer2018_200Parcels_7Networks_count.csv",   
+                                  "6810758e11d6cb1d67568d05": "rh.Schaefer2018_200Parcels_7Networks_order.annot",
+                           "6810758681075a6e72532ce337c5a4a": "real_EEG",
+                                  "68107567fed207be8f3cbf9f": "only_high_trial.mat",
+                                  "681074df24f63ddb219fddf8": "lh.Schaefer2018_200Parcels_7Networks_order.annot",
+                         "1-SA-ooEa6s6Jo4uarSUzqqZkId3sYDTg": "all_avg.mat_avg_high_epoched" }
 
 
     total_files = len(files_to_download)

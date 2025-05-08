@@ -13,7 +13,7 @@ Replicating Momi Et Al. ELife 2023
 # 0. Overview
 # ---------------------------------------------------
 #
-# This example gives a (fairly) complete replication and didactic explanation of the TMS-EEG modelling and results reported in the paper 
+# This example gives a replication and didactic explanation of the TMS-EEG modelling and results reported in the paper 
 # 
 # Momi, D., Wang, Z., Griffiths, J.D. (2023).
 # 

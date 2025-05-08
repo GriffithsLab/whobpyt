@@ -5,14 +5,10 @@ Original file is located at
     https://colab.research.google.com/drive/1dD_XqTVleoW8VgH_T_y5SrFxBNOu_ZRz
 """
 
-from google.colab import files
-files.upload()  # Upload the kaggle.json file you downloaded from Kaggle
-
-# @title Prepare for data download from Kaggle
-
-!mkdir -p ~/.kaggle
-!mv kaggle.json ~/.kaggle/
-!chmod 600 ~/.kaggle/kaggle.json
+# Prepare for data download from Kaggle
+mkdir -p ~/.kaggle
+mv kaggle.json ~/.kaggle/
+chmod 600 ~/.kaggle/kaggle.json
 
 # Commented out IPython magic to ensure Python compatibility.
 # %%capture
