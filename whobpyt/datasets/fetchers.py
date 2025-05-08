@@ -298,6 +298,7 @@ def  fetch_egmomi2025(dest_folder=None, redownload=False):
     #
     # res = fetch_egmomi2025()
     #
+    from kaggle.api.kaggle_api_extended import KaggleApi
     api = KaggleApi()
     api.config_values['username'] = "claires03"
     api.config_values['key'] = "ee39084a8974336d9fff7e1ced807e64"
