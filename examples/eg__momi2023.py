@@ -56,7 +56,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # TMS-EEG activity, which was compared with the empirical data at both the 
 # channel and source level.
 #
-# .. figure:: ../_static/momi2023__Figure_7.PNG
+# .. figure:: ../_static/momi2023__Figure_7.png
 #   :alt: Momi 2023 Fig. 7
 #   :width: 600px
 #   :align: center
@@ -85,7 +85,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # component of interest would support the ‘local echo’ scenario, and whereas 
 # suppressed TEPs would support the ‘recurrent activation’ scenario.
 #
-# .. figure:: ../_static/momi2023__Figure_2.png
+# .. figure:: ../_static/momi2023__Figure_2.PNG
 #   :alt: Momi 2023 Fig. 2
 #   :width: 600px
 #   :align: center
@@ -121,52 +121,53 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #   :alt: Momi 2023 Eqn. 
 #   :width: 300px
 # 
-# whose kernel $h_{e,i}(t)$ is given by
+# whose kernel :math:`h_{e,i}(t)` is given by
 #
 # .. figure:: https://latex.codecogs.com/png.latex?h_%7Be%2Ci%7D%20%3D%20%5Cfrac%7BH_%7Be%2Ci%7D%7D%7B%5Ctau_%7Be%2Ci%7D%7D%20%5Ccdot%20t%20%5Ccdot%20exp%28%20-%5Cfrac%7Bt%7D%7B%5Ctau_%7Be%2Ci%7D%7D%20%29
 #   :alt: Momi 2023 Eqn. 
 #   :width: 300px
 # 
-# where $m(t)$ is the (population-average) presynaptic input, $v(t)$ is the postsynaptic membrane 
-# potential, $H_{e,i}$ is the maximum postsynaptic potential and $\tau_{e,i}$  
+# where :math:`m(t)` is the (population-average) presynaptic input, :math:`v(t)` is the postsynaptic membrane 
+# potential, :math:`H_{e,i}` is the maximum postsynaptic potential and :math:`\tau_{e,i}`  
 # lumped representation of delays occurring during the synaptic transmission.
 # 
-# This synaptic response function, also known as a pulse-to-wave operator [Freeman et al., 1975](https://www.sciencedirect.com/book/9780122671500/mass-action-in-the-nervous-system), determines the excitability of the population, as parameterized by the rate constants $a$ and $b$, which are of particular interest in the present study. Complementing the pulse-to-wave operator for the synaptic response, each neural population also has wave-to-pulse operator [Freeman et al., 1975](https://www.sciencedirect.com/book/9780122671500/mass-action-in-the-nervous-system) that determines the its output - the (population-average) firing rate - which is an instantaneous function of the somatic membrane potential that takes the sigmoidal form
+# This synaptic response function, also known as a pulse-to-wave operator `(Freeman et al., 1975) <https://www.sciencedirect.com/book/9780122671500/mass-action-in-the-nervous-system>`_), determines the excitability of the population, as parameterized by the rate constants $a$ and $b$, which are of particular interest in the present study. Complementing the pulse-to-wave operator for the synaptic response, each neural population also has wave-to-pulse operator [Freeman et al., 1975](https://www.sciencedirect.com/book/9780122671500/mass-action-in-the-nervous-system) that determines the its output - the (population-average) firing rate - which is an instantaneous function of the somatic membrane potential that takes the sigmoidal form
+#
 # 
 # .. figure:: https://latex.codecogs.com/png.latex?Su%28t%29%20%3D%20%5Cbegin%7Bcases%7D%20%5Cfrac%7Be_%7B0%7D%7D%7B1-exp%28r%28v_%7B0%7D%20-%20v%28t%29%29%29%7D%20%26%20t%5Cgeq%200%20%5C%5C%200%20%26%20t%5Cleq%200%20%5C%5C%20%5Cend%7Bcases%7D
 #   :alt: Momi 2023 Eqn. 
 #   :width: 300px
 # 
-# where $e_{0}$ is the maximum pulse, $r$ is the steepness of the sigmoid function, and $v_0$ is the postsynaptic potential for which half of the maximum pulse rate is achieved.
+# where :math:`e_{0}` is the maximum pulse, :math:`r` is the steepness of the sigmoid function, and :math:`v_0` is the postsynaptic potential for which half of the maximum pulse rate is achieved.
 #
-# In practice, we re-write the three sets of second-order differential equations that follow the form in (1) as pairs of coupled first-order differential equations, and so the full JR system for each individual cortical area $j \in i:N$ in our network of $N$=200 regions is given by the following six equations:
+# In practice, we re-write the three sets of second-order differential equations that follow the form in (1) as pairs of coupled first-order differential equations, and so the full JR system for each individual cortical area :math:`j \in i:N` in our network of :math:`N=200` regions is given by the following six equations:
 # 
 # .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bv%7D_%7Bj1%7D%20%3D%20x_%7Bj1%7D
 #   :alt: Momi 2023 Eqn. 
-#   :width: 300px
+#   :width: 100px
 # 
 # .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bx%7D_%7Bj1%7D%20%3D%20%5Cfrac%7BH_e%7D%7B%5Ctau_e%7D%5Cleft%28p%28t%29&plus;%5Cmathrm%7Bconn%7D_j&plus;S%28v_%7Bj2%7D%29%5Cright%29%20-%20%5Cfrac%7B2%7D%7B%5Ctau_e%7Dx_%7Bj1%7D%20-%20%5Cfrac%7B1%7D%7B%5Ctau_e%5E2%7Dv_%7Bj1%7D
 #   :alt: Momi 2023 Eqn. 
-#   :width: 50px
+#   :width: 300px
 #
 # .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bv%7D_%7Bj2%7D%20%3D%20x_%7Bj2%7D
 #   :alt: Momi 2023 Eqn. 
-#   :width: 300px
+#   :width: 100px
 #
 # .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bx%7D_%7Bj2%7D%20%3D%20%5Cfrac%7BH_i%7D%7B%5Ctau_i%7D%5Cleft%28S%28v_%7B3j%7D%29%5Cright%29%20-%20%5Cfrac%7B2%7D%7B%5Ctau_i%7Dx_%7Bj2%7D%20-%20%5Cfrac%7B1%7D%7B%5Ctau_i%5E2%7Dv_%7Bj2%7D
 #   :alt: Momi 2023 Eqn. 
-#   :width: 50px
+#   :width: 300px
 # 
 # .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bv%7D_%7Bj3%7D%20%3D%20x_%7Bj3%7D
 #   :alt: Momi 2023 Eqn. 
-#   :width: 300px
+#   :width: 100px
 # 
 # .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bx%7D_%7Bj3%7D%20%3D%20%5Cfrac%7BH_e%7D%7B%5Ctau_e%7D%5Cleft%28S%28v_%7Bj1%7D%20-%20v_%7Bj2%7D%29%5Cright%29%20-%20%5Cfrac%7B2%7D%7B%5Ctau_e%7Dx_%7Bj3%7D%20-%20%5Cfrac%7B1%7D%7B%5Ctau_e%5E2%7Dv_%7Bj3%7D
 #   :alt: Momi 2023 Eqn. 
-#   :width: 50px
+#   :width: 300px
 #
-# where $v_{1,2,3}$ is the average postsynaptic membrane potential of populations of the excitatory stellate cells, inhibitory interneuron, and excitatory pyramidal cell populations, respectively.
-# The output $y(t) = v_1(t) - v_2(t)$ is the EEG signal.
+# where :math:`v_{1,2,3}` is the average postsynaptic membrane potential of populations of the excitatory stellate cells, inhibitory interneuron, and excitatory pyramidal cell populations, respectively.
+# The output :math:`y(t) = v_1(t) - v_2(t)` is the EEG signal.
 #
 # 
 # Data
@@ -181,15 +182,16 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # Main Results 
 # ^^^^^^^^^^^^^
 # 
-# Comparison between simulated and empirical TMS-EEG data in channel space. A) Empirical and simulated TMSEEG time series for 3 representative subjects showing a robust recovery of individual subjects’ empirical TEP propagation patterns in model-generated activity EEG time series. B) Pearson correlation coefficients over subjects between empirical and simulated TMS-EEG time series. C) Time-wise permutation tests results showing the significant Pearson correlation coefficient and the corresponding reversed p-values (bottom) for every electrode. D) PCI values extracted from the empirical (orange) and simulated (blue) TMS-EEG time series (left). Significant positive correlation (R2 = 80%, p < 0.0001) was found between the simulated and the empirical PCI (right).
+# Comparison between simulated and empirical TMS-EEG data in channel space. 
+# A) Empirical and simulated TMSEEG time series for 3 representative subjects showing a robust recovery of individual subjects’ empirical TEP propagation patterns in model-generated activity EEG time series. B) Pearson correlation coefficients over subjects between empirical and simulated TMS-EEG time series. C) Time-wise permutation tests results showing the significant Pearson correlation coefficient and the corresponding reversed p-values (bottom) for every electrode. D) PCI values extracted from the empirical (orange) and simulated (blue) TMS-EEG time series (left). Significant positive correlation (R2 = 80%, p < 0.0001) was found between the simulated and the empirical PCI (right).
 #
-# .. figure:: https://www.github.com/GriffithsLab/PyTepFit/blob/main/img/Figure_3.PNG
+# .. figure:: https://raw.githubusercontent.com/GriffithsLab/PyTepFit/main/img/Figure_3.PNG
 #   :alt: Momi 2023 Eqn. 
 #   :width: 600px
 #
 # Comparison between simulated and empirical TMS-EEG data in source space. A) TMS-EEG time series showing a robust recovery of grand-mean empirical TEP patterns in model-generated EEG time series. B) Source reconstructed TMS-evoked propagation pattern dynamics for empirical (top) and simulated (bottom) data. C) Time-wise permutation test results showing the significant Pearson correlation coefficient (tp) and the corresponding reversed p-values (bottom) for every vertex. Network-based dSPM values extracted for the grand mean empirical (left) and simulated (right) source-reconstructed time series.
 # 
-# .. figure:: https://www.github.com/GriffithsLab/PyTepFit/blob/main/img/Figure_4.PNG
+# .. figure:: https://raw.githubusercontent.com/GriffithsLab/PyTepFit/main/img/Figure_4.PNG
 #   :alt: Momi 2023 Eqn. 
 #   :width: 600px
 #
@@ -213,7 +215,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # amplitude of the early first local component and a decrease of the second latest global 
 # component
 #
-# .. figure:: https://www.github.com/GriffithsLab/PyTepFit/blob/main/img/Figure_6.PNG
+# .. figure:: https://raw.githubusercontent.com/GriffithsLab/PyTepFit/main/img/Figure_6.PNG
 #   :alt: Momi 2023 Eqn. 
 #   :width: 600px
 #
@@ -337,8 +339,8 @@ eeg
 
 # %%
 # 2.1. Load the data
-#
-
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# 
 # leadfield file
 lm = np.load(file_leadfield, allow_pickle=True)
 print(lm.max(), lm.min())
@@ -350,6 +352,7 @@ print(data_high['only_high_trial'].shape)
 
 # %%
 # 2.2. Plotting Example Trials and Stimulated Data
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
 # ( ... )
 pck_files = sorted(glob.glob(files_dir + '/*_fittingresults_stim_exp.pkl'))
@@ -431,6 +434,7 @@ simulated_data.plot_joint(ts_args=ts_args, times=times, title='Simulated TEPs fo
 
 # %%
 # 2.3 Visualize Structural Connectivity and Stimulation Weights
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 #
 # ( ... )
 #print('to add...')
@@ -454,6 +458,7 @@ plt.plot(ki0)
 
 # %% 
 # 2.4 Model Setup and Training
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 # %%
 # Run a shorter version with num_epochs = 2 to check the process without overwriting the results of the full run.
@@ -561,7 +566,8 @@ print(data.output_sim.eeg_test.shape)
 
 # %%
 # 3.1 Load and Sort Simulation Result Files
-
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
 # %%
 
 pck_files = sorted(glob.glob(files_dir + '/*_fittingresults_stim_exp.pkl'))
@@ -676,7 +682,8 @@ print(new_df1.head())
 
 # %%
 # 3.2 Plot Distributions of Data Features
-
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
 sns.set_style('darkgrid',{'axes.edgecolor': '.9'},)
 f, ax = plt.subplots(3,3,figsize = (25,13))
 plt.rcParams["patch.force_edgecolor"] = True
@@ -695,7 +702,7 @@ for k in new_df1.keys():
 #f.savefig('/content/drive/MyDrive/TORONTO/TMS_EEG_model/saving-a-high-resolution-seaborn-plot.png', dpi=300)
 
 # %%
-# **Result Description:**
+# **Summary of Results:**
 #
 # This plot can be found in Appendix 2—figure 3
 #
@@ -760,7 +767,8 @@ plt.show()
 
 # %%
 # 3.3 Singular Value Decomposition (SVD) of Empirical and Simulated EEG
-# 
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#  
 # Compute SVD for Specific Time Window: Perform SVD on both empirical and simulated EEG data to extract eigenvectors and explained variance.
 
 # Use the default matplotlib style
@@ -844,7 +852,8 @@ sns.heatmap(_arr3, ax=ax[2])
 
 # %%
 # 3.4 Compute and Visualize Similarity and Visualize Topomaps for Maximum Similarity
-
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
 # %% 
 # Compute cosine similarity between eigenvectors and EEG data for specific time windows.
 comp_n=0
@@ -904,7 +913,8 @@ sns.displot(np.array(max_similairty) + start_tp - 100)
 
 # %%
 # 3.5 Extract Peaks from EEG Data and Correlate Features with Peaks
-# 
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#  
 # 1.   Analyze the first peaks in EEG signals across multiple subjects, comparing empirical and simulated data.
 # 2.   Quantify the relationship between these peak properties (latency and amplitude) and external variables (new_df1), likely representing behavioral, experimental, or clinical metrics.
 
