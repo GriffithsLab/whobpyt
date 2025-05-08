@@ -5,10 +5,7 @@ Original file is located at
     https://colab.research.google.com/drive/1dD_XqTVleoW8VgH_T_y5SrFxBNOu_ZRz
 """
 
-# Prepare for data download from Kaggle
-mkdir -p ~/.kaggle
-mv kaggle.json ~/.kaggle/
-chmod 600 ~/.kaggle/kaggle.json
+
 
 # Commented out IPython magic to ensure Python compatibility.
 # %%capture
@@ -21,17 +18,28 @@ chmod 600 ~/.kaggle/kaggle.json
 
 # @title whobpyt Package
 
-from google.colab import drive
-drive.mount('/content/drive')
 
 import os
 import sys
+import json
+
+sys.path.append('whobpyt/depr/momi2025')
+
+
+
+data = {"username":"claires03","key":"ee39084a8974336d9fff7e1ced807e64"}
+
+kaggle_file = os.path.join('/root/.config', 'kaggle', 'kaggle.json')
+with open(kaggle_file, 'w') as f:
+    json.dump(data, f)
+
+os.chmod(kaggle_file, 0o600)
 import time
 import warnings
 warnings.filterwarnings('ignore')
 
 # Add custom module paths
-from whobpyt.depr.momi2025.euclidean_distance import euclidean_distance
+#from whobpyt.depr.momi2025.euclidean_distance import euclidean_distance
 import re
 import math
 import glob
@@ -50,12 +58,14 @@ import seaborn as sns
 
 import mne
 import nibabel
+import nibabel as nib
 from nilearn import plotting, surface
 from nilearn.image import load_img
 
 # WHOBPYT
 import torch
-import whobpyt
+#import whobpyt
+from whobpyt.data.fetchers import fetch_egmomi2025
 from whobpyt.datatypes import par, Recording
 from whobpyt.datatypes.parameter import par
 from whobpyt.datatypes.AbstractLoss import AbstractLoss
@@ -66,23 +76,26 @@ from whobpyt.optimization.cost_TS import CostsTS
 from whobpyt.run import Model_fitting
 from whobpyt.functions.arg_type_check import method_arg_type_check
 
+
+
+import math
+def euclidean_distance(coord1, coord2):
+    x1, y1, z1 = coord1[0], coord1[1], coord1[2]
+    x2, y2, z2 = coord2[0], coord2[1], coord2[2]
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+
 """## Empirical Result"""
 
-!kaggle datasets download -d davi1990/empirical-data
-!unzip empirical-data.zip
-!rm empirical-data.zip
+data_folder = fetch_egmomi2025()
 
 # @title Download Data
 
 start_time = time.time()
 
-import sys
-!{sys.executable} -m pip install mne > /dev/null
-!{sys.executable} -m pip install nilearn > /dev/null
-!{sys.executable} -m pip install nibabel > /dev/null
 
-all_eeg_evoked = np.load('all_eeg_evoked.npy')
-epo_eeg = mne.read_epochs('example_epoched.fif', verbose=False)
+
+all_eeg_evoked = np.load(data_folder + '/empirical-data/all_eeg_evoked.npy')
+epo_eeg = mne.read_epochs(data_folder + '/empirical-data/example_epoched.fif', verbose=False)
 
 all_gfma = np.zeros((all_eeg_evoked.shape[0], all_eeg_evoked.shape[2]))
 
@@ -91,7 +104,7 @@ for ses in range(all_eeg_evoked.shape[0]):
     #Normalized for the baseline for making comparison
     all_gfma[ses,:] = np.abs(all_gfma[ses,:] - np.mean(all_gfma[ses, :300]))
 
-with open('dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
+with open(data_folder + '/empirical-data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
 stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
@@ -272,7 +285,7 @@ plt.tight_layout()  # Adjust the spacing between subplots if needed
 
 plt.show()
 
-with open('all_epo_seeg.pkl', 'rb') as handle:
+with open(data_folder + '/empirical-data/all_epo_seeg.pkl', 'rb') as handle:
     all_epo_seeg = pickle.load(handle)
 
 
@@ -286,7 +299,7 @@ for ses in range(len(list(all_epo_seeg.keys()))):
     all_gfma[ses,:] =  np.std(epo_seeg, axis=0)
 
 
-with open('dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
+with open(data_folder + '/empirical-data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
 stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
@@ -432,24 +445,6 @@ print(f"Elapsed time: {elapsed_time} seconds")
 
 """## Model_fitting"""
 
-!kaggle datasets download -d davi1990/empirical-data
-!unzip empirical-data.zip
-!rm empirical-data.zip
-
-!kaggle datasets download -d davi1990/anatomical
-!unzip anatomical.zip
-!rm anatomical.zip
-
-!kaggle datasets download -d davi1990/calculate-distance
-!unzip calculate-distance.zip -d calculate-distance
-!rm calculate-distance.zip
-
-# @title Download Data
-
-import sys
-!{sys.executable} -m pip install mne > /dev/null
-!{sys.executable} -m pip install nilearn > /dev/null
-!{sys.executable} -m pip install nibabel > /dev/null
 
 # @title Install dependencies
 
@@ -459,10 +454,10 @@ start_time = time.time()
 ses2use = 10
 
 # Load the precomputed EEG evoked response data from a file
-all_eeg_evoked = np.load('all_eeg_evoked.npy')
+all_eeg_evoked = np.load(data_folder + '/empirical-data/all_eeg_evoked.npy')
 
 # Read the epoch data from an MNE-formatted file
-epo_eeg = mne.read_epochs('example_epoched.fif', verbose=False)
+epo_eeg = mne.read_epochs(data_folder + '/empirical-data/example_epoched.fif', verbose=False)
 
 # Compute the average evoked response from the epochs
 evoked = epo_eeg.average()
@@ -471,10 +466,10 @@ evoked = epo_eeg.average()
 evoked.data = all_eeg_evoked[ses2use]
 
 # Load additional data from pickle files
-with open('all_epo_seeg.pkl', 'rb') as handle:
+with open(data_folder + '/empirical-data/all_epo_seeg.pkl', 'rb') as handle:
     all_epo_seeg = pickle.load(handle)
 
-with open('dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
+with open(data_folder + '/empirical-data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
 
 # Extract the stimulation region data from the loaded pickle file
@@ -566,7 +561,7 @@ thr = mean + (4 * std)
 # Count the number of unique regions affected by the threshold
 number_of_region_affected = np.unique(np.where(abs_value > thr)[0]).shape[0]
 
-img = nib.load('calculate-distance/calculate_distance/example/mri/example_Schaefer2018_200Parcels_7Networks_rewritten.nii')
+img = nib.load(data_folder + '/calculate-distance/calculate_distance/example/mri/example_Schaefer2018_200Parcels_7Networks_rewritten.nii')
 
 # Get the shape and affine matrix of the image
 shape, affine = img.shape[:3], img.affine
@@ -616,17 +611,18 @@ stim_weights_thr = np.zeros((len(label)))
 # Assign the computed values to the stimulus weights for the selected parcels
 stim_weights_thr[inject_stimulus] = values
 
-old_path = "anatomical/example-bem"
-new_path = "anatomical/example-bem.fif" # CS
+old_path = data_folder + "/anatomical/anatomical/example-bem"
+new_path = data_folder + "/anatomical/anatomical/example-bem.fif" # CS
 
-os.rename(old_path, new_path)
-print(f"Renamed {old_path} to {new_path}")
+if not os.path.exists(new_path):
+    os.rename(old_path, new_path)
+    print(f"Renamed {old_path} to {new_path}")
 
 # File paths for transformation, source space, and BEM files
-trans = 'anatomical/example-trans.fif'
-src = 'anatomical/example-src.fif'
+trans = data_folder + '/anatomical/anatomical/example-trans.fif'
+src = data_folder + '/anatomical/anatomical/example-src.fif'
 #bem = 'anatomical/example-bem'
-bem = 'anatomical/example-bem.fif'
+bem = data_folder + '/anatomical/anatomical/example-bem.fif'
 
 # Create a forward solution using the provided transformation, source space, and BEM files
 # Only EEG is used here; MEG is disabled
@@ -650,8 +646,8 @@ src = mne.read_source_spaces(src, verbose=False)
 vertices = [src_hemi['vertno'] for src_hemi in fwd_fixed['src']]
 
 # Read annotation files for left and right hemispheres
-lh_vertices = nibabel.freesurfer.io.read_annot('anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot')[0]
-rh_vertices = nibabel.freesurfer.io.read_annot('anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot')[0]
+lh_vertices = nibabel.freesurfer.io.read_annot(data_folder +'/anatomical/anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot')[0]
+rh_vertices = nibabel.freesurfer.io.read_annot(data_folder +'/anatomical/anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot')[0]
 
 # Extract vertices corresponding to the parcels from the annotation files
 # Add 100 to right hemisphere vertices to adjust for parcel numbering
@@ -759,12 +755,12 @@ F.evaluate(u = u, empRec = data_mean, TPperWindow = TPperWindow, base_window_num
 
 # @title 150 training
 
-from google.colab import drive
+"""from google.colab import drive
 drive.mount('/content/drive')
 save_path = '/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl'
 
 with open(save_path, 'wb') as f:
-    pickle.dump(F, f)
+    pickle.dump(F, f)"""
 
 params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True), \
               g=par(200), g_f=par(10), g_b=par(10), \
@@ -803,10 +799,10 @@ F.train(u = u, empRec = data_mean, num_epochs = 2, TPperWindow = TPperWindow,  w
 F.evaluate(u = u, empRec = data_mean, TPperWindow = TPperWindow, base_window_num = 100)
 # @title 2 epoch
 
-load_path = '/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl'
+"""load_path = '/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl'
 
 with open(load_path, 'rb') as f:
-    F = pickle.load(f)
+    F = pickle.load(f)"""
 
 time_start = np.where(evoked.times==-0.1)[0][0]
 time_end = np.where(evoked.times==0.3)[0][0]
@@ -833,22 +829,15 @@ simulated_joint_st = simulated_EEG_st.plot_joint(ts_args=ts_args, times=times)
 
 """## Virtual_dissection"""
 
-!kaggle datasets download -d davi1990/virtual-dissection
-!unzip virtual-dissection.zip
-!rm virtual-dissection.zip
 
-import sys
-!{sys.executable} -m pip install mne > /dev/null
-!{sys.executable} -m pip install nilearn > /dev/null
-!{sys.executable} -m pip install nibabel > /dev/null
 
 url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
 colour = pd.read_excel(url, header=None)[4]
-template_eeg = mne.read_epochs('eeg_template.fif', verbose=False)
+template_eeg = mne.read_epochs(data_folder + '/virtual-dissection/eeg_template.fif', verbose=False)
 
-model_results =np.load('model_results.npy', allow_pickle=True).item()
+model_results =np.load(data_folder + '/virtual-dissection/model_results.npy', allow_pickle=True).item()
 
-with open('dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
+with open(data_folder + '/empirical-data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     stim_region = pickle.load(handle)
 stim_region = stim_region['stim_region']
 
@@ -1015,14 +1004,7 @@ plt.show()
 
 """## Applying_virtual_dissection"""
 
-!kaggle datasets download -d davi1990/example-fittingresults
-!unzip example-fittingresults.zip
-!rm example-fittingresults.zip
 
-import sys
-!{sys.executable} -m pip install mne > /dev/null
-!{sys.executable} -m pip install nilearn > /dev/null
-!{sys.executable} -m pip install nibabel > /dev/null
 
 # @title Install dependencies
 
@@ -1067,7 +1049,7 @@ network_indices_arr = np.array(network_indices[sti_net])
 diff = np.array(list(set(np.arange(200)) - set(network_indices_arr)))
 
 #already trained file
-fit_file = 'example-fittingresults.pkl'
+fit_file = data_folder + '/example-fittingresults/example-fittingresults.pkl'
 
 
 # Define model parameters
@@ -1178,7 +1160,7 @@ new_I = np.concatenate((final_ouput_I[0], final_ouput_I[1]), axis=1)
 new_eeg = np.concatenate((final_ouput_eeg[0], final_ouput_eeg[1]), axis=1)
 
 # Read the epoched data from a .fif file
-epoched = mne.read_epochs('example_epoched.fif', verbose=False)
+epoched = mne.read_epochs(data_folder + '/empirical-data/example_epoched.fif', verbose=False)
 
 # Compute the average evoked response from the epoched data
 evoked = epoched.average()
