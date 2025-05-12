@@ -23,13 +23,20 @@ import os
 import sys
 import json
 
-sys.path.append('whobpyt/depr/momi2025')
+#sys.path.append('../whobpyt')
 
 
 
 data = {"username":"claires03","key":"ee39084a8974336d9fff7e1ced807e64"}
+kaggle_path = os.path.join('/root/.config', 'kaggle')
+if not os.path.exists(kaggle_path):
+    os.makedirs(kaggle_path)
+    print(f"Created directory: {kaggle_path}")
+else:
+    print(f"Directory already exists: {kaggle_path}")
 
-kaggle_file = os.path.join('/root/.config', 'kaggle', 'kaggle.json')
+kaggle_file = kaggle_path+ '/kaggle.json'
+print(kaggle_file)
 with open(kaggle_file, 'w') as f:
     json.dump(data, f)
 
@@ -64,18 +71,13 @@ from nilearn.image import load_img
 
 # WHOBPYT
 import torch
-#import whobpyt
-from whobpyt.data.fetchers import fetch_egmomi2025
-from whobpyt.datatypes import par, Recording
-from whobpyt.datatypes.parameter import par
-from whobpyt.datatypes.AbstractLoss import AbstractLoss
-from whobpyt.data import dataloader
-from whobpyt.models.JansenRit.jansen_rit_old import RNNJANSEN, ParamsJR
-from whobpyt.optimization.custom_cost_JR import CostsJR
-from whobpyt.optimization.cost_TS import CostsTS
-from whobpyt.run import Model_fitting
-from whobpyt.functions.arg_type_check import method_arg_type_check
+import whobpyt
+from whobpyt.datasets.fetchers import fetch_egmomi2025
+from whobpyt.depr.momi2025.jansen_rit import par, Recording, method_arg_type_check, dataloader
 
+
+#from whobpyt.datasets.dataload import dataload
+from whobpyt.depr.momi2025.jansen_rit import RNNJANSEN, ParamsJR, CostsJR, Model_fitting
 
 
 import math
@@ -1082,7 +1084,7 @@ final_ouput_I = []
 final_ouput_eeg = []
 
 # Initialize an empty dictionary to store lesion data
-lesion_data = {}
+"""lesion_data = {}
 
 # Load data from a pickle file
 with open(fit_file, 'rb') as f:
@@ -1224,6 +1226,6 @@ plt.title('Comparison of GMFP: Intact vs. Virtual Dissection')
 plt.legend()
 
 # Show the plot
-plt.show()
+plt.show()"""
 
 # @title difference
