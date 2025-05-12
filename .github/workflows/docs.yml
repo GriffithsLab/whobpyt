@@ -6,16 +6,19 @@ on:
   pull_request:
     branches: [ main, dev ]
 
+permissions:
+  contents: write  
+  
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     
-    - name: Checkout repo
-      uses: actions/checkout@v3
-      with:
+    - name: Checkout repo  
+      uses: actions/checkout@v3  
+      with:  
         fetch-depth: 0   
-
+       
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
@@ -29,8 +32,12 @@ jobs:
     - name: Get list of changed files
       id: changes
       run: |
+        echo "GITHUB_REF=$GITHUB_REF"
+        echo "GITHUB_SHA=$GITHUB_SHA"
+        echo "PR head SHA=${{ github.event.pull_request.head.sha }}"   
         git fetch origin main
         git diff --name-only origin/main...HEAD > changed_files.txt
+        echo "All changed files:"
         cat changed_files.txt
 
     - name: Determine build mode
@@ -59,7 +66,10 @@ jobs:
     - name: Build docs
       run: |
           cd doc  
-          sphinx-build -b html -nT --keep-going . _build/html
+          echo 'Run 1'  # first run: skip plots
+          sphinx-build -b html -nT --keep-going -D plot_gallery=0 . _build/html           
+          echo 'Run 2'  # second run: don't remove anything, add the plots          
+          sphinx-build -b html -nT --keep-going . _build/html   
       continue-on-error: true  
       
     - name: Deploy Docs

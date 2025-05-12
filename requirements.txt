@@ -9,6 +9,7 @@ pooch
 torch
 scikit-learn
 mne
+kaggle
 
 
 # Docs requirements
@@ -19,6 +20,10 @@ sphinx_rtd_theme #==0.5.0
 sphinx-tabs #==1.3.0
 sphinx-copybutton #==0.3.1
 sphinxcontrib-httpdomain #==1.7.0
+sphinxcontrib-towncrier
+sphinxcontrib-youtube
+sphinxcontrib.bibtex
+sphinx-design  
 numpydoc==1.1.0
 recommonmark==0.6.0
 versioneer==0.19
@@ -30,6 +35,7 @@ ipykernel
 jupyter-alabaster-theme
 pydata-sphinx-theme
 gdown
+kaggle
 jinja2<3.1
 
 
