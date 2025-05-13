@@ -262,12 +262,12 @@ import os
 import sys
 from whobpyt.depr.momi2023.jansen_rit import ParamsJR, Model_fitting, RNNJANSEN, Costs, OutputNM
 
-from pci import calc_PCIst, dimensionality_reduction, calc_snr, get_svd, apply_svd, state_transition_quantification,\
+from whobpyt.depr.momi2023.pci import calc_PCIst, dimensionality_reduction, calc_snr, get_svd, apply_svd, state_transition_quantification,\
     recurrence_matrix, distance2transition, distance2recurrence, diff_matrix, calc_maxdim, dimension_embedding,\
     preprocess_signal, avgreference, undersample_signal, baseline_correct, get_time_index, bar_plot, \
     spider_plot
 
-from pci import bar_plot as bp_1
+from whobpyt.depr.momi2023.pci import bar_plot as bp_1
 
 # viz stuff
 import matplotlib.pyplot as plt
@@ -305,6 +305,7 @@ import time
 import glob
 import re
 
+from whobpyt.datasets.fetchers import fetch_egmomi2023
 
 
 
@@ -312,8 +313,16 @@ import re
 
 # %%
 # Download data
-print('to add...')
-#files_dir =  '/external/rprshnas01/netdata_kcni/jglab/Data/Davide/reproduce_Momi_et_al_2022/PyTepFit/data'
+files_dir = fetch_egmomi2023() 
+sc_file = files_dir + '/Schaefer2018_200Parcels_7Networks_count.csv'
+high_file =files_dir + '/only_high_trial.mat'
+dist_file = files_dir + '/Schaefer2018_200Parcels_7Networks_distance.csv'
+file_eeg = files_dir + '/label_ts_corrected'
+file_leadfield = files_dir + '/leadfield'
+file_eeg = files_dir + '/real_EEG'
+eeg = np.load(file_eeg, allow_pickle=True)
+
+"""
 download_data = True
 url = 'https://drive.google.com/drive/folders/1lrju2UiK3_amcNLb5G9gwJmdU_eO0wsi?usp=drive_link'
 
@@ -331,14 +340,14 @@ file_leadfield = files_dir + '/leadfield'
 file_eeg = files_dir + '/real_EEG'
 eeg =np.load(file_eeg, allow_pickle=True)
 eeg
-
+"""
 
 # %%
 # 2 - Model fitting and key results
 # --------------------------------------------------
 
 # %%
-# 2.1. Load the data
+# 2.1 Load the data
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
 # leadfield file
@@ -351,10 +360,9 @@ print(data_high['only_high_trial'].shape)
 
 
 # %%
-# 2.2. Plotting Example Trials and Stimulated Data
+# 2.2 Plotting Example Trials and Stimulated Data
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
-# ( ... )
 pck_files = sorted(glob.glob(files_dir + '/*_fittingresults_stim_exp.pkl'))
 pck_files.sort(key=lambda var:[int(x) if x.isdigit() else x for x in re.findall(r'[^0-9]|[0-9]+', var)])
 
@@ -434,11 +442,8 @@ simulated_data.plot_joint(ts_args=ts_args, times=times, title='Simulated TEPs fo
 
 # %%
 # 2.3 Visualize Structural Connectivity and Stimulation Weights
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
-#
-# ( ... )
-#print('to add...')
-
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+# 
 sc_df = pd.read_csv(sc_file, header=None, sep=' ')
 sc = sc_df.values
 dist_df = pd.read_csv(dist_file, header=None, sep=' ')
@@ -452,17 +457,16 @@ stim_weights = np.load(stim_weights_file)
 
 ki0 =stim_weights[:,np.newaxis]
 
-plt.plot(ki0)
+# plt.plot(ki0)
 
 
 
 # %% 
 # 2.4 Model Setup and Training
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-# %%
+# 
 # Run a shorter version with num_epochs = 2 to check the process without overwriting the results of the full run.
-
+#
 start_time = time.time()
 node_size = stim_weights.shape[0]
 output_size = 62 ##gm.shape[0]
@@ -483,9 +487,11 @@ for i in range(1):
     data_mean = [data_high['only_high_trial'][i]]*num_epoches
     #data_mean = [gm]*num_epoches
     data_mean =np.array(data_mean)
-    file_leadfield = lf_dir+f'/sub{str(i+1).zfill(3)}/leadfield.npy'
-
-    lm = np.load(file_leadfield, allow_pickle=True)
+    #file_leadfield = lf_dir+f'/sub{str(i+1).zfill(3)}/leadfield.npy'
+    sub_file_leadfield = files_dir + '/sub_%s_leadfield' % (i+1) 
+    
+    print('loading leadfield file: %s' %sub_file_leadfield)
+    lm = np.load(sub_file_leadfield, allow_pickle=True)
 
     par = ParamsJR('JR', A = [3.25, 0], a= [100, 0.5], B = [22, 0], b = [50, 1], g=[1000, .1], \
                     c1 = [135, 0.2], c2 = [135*0.8, 0.4], c3 = [135*0.25, 0.8], c4 = [135*0.25, 0.8],\
@@ -495,6 +501,8 @@ for i in range(1):
 
     model = RNNJANSEN(input_size, node_size, batch_size, step_size, output_size, tr, sc, lm, dist, True, False, par)
 
+
+    print('call model fitting')
     # call model fit method
     F = Model_fitting(model, data_mean[:,:,900:1300], num_epoches, 0)
 
@@ -563,16 +571,13 @@ print(data.output_sim.eeg_test.shape)
 # 3 - Exploring model parameters
 # --------------------------------------------------
 # 
-
+#
 # %%
 # 3.1 Load and Sort Simulation Result Files
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# %%
-
 pck_files = sorted(glob.glob(files_dir + '/*_fittingresults_stim_exp.pkl'))
 pck_files.sort(key=lambda var:[int(x) if x.isdigit() else x for x in re.findall(r'[^0-9]|[0-9]+', var)])
-
 
 # %%
 # Extract Simulation Data Keys
@@ -896,7 +901,7 @@ for axes_row in range(nrows):
 
 
 # %%
-# **Result Description:**
+# **Results description**  
 #
 # **Timing and topographies of the prototypical TMS-EEG evoked potential (TEP) response pattern in each subject.**
 #
@@ -904,7 +909,7 @@ for axes_row in range(nrows):
 #
 # These figures extend the single-subject examples from TEP channel data singular value decompositions (SVD) decompositions in Figure 5.
 #
-#**(A)** First right singular vectors from TEP SVDs for all subjects, with corresponding time location indicating the time point of maximum expression for the corresponding left singular vector (temporal eigenmode).
+# **(A)** First right singular vectors from TEP SVDs for all subjects, with corresponding time location indicating the time point of maximum expression for the corresponding left singular vector (temporal eigenmode).
 
 # %% 
 sns.displot(np.array(max_similairty) + start_tp - 100)
@@ -1087,7 +1092,7 @@ for i in vars(data.output_sim).keys():
 
 # %%
 # 4.1 Draw the plot for each subject
-
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 num_subjects = len(pck_files)
 for sbj2plot in range(num_subjects):
     print(f"Processing Subject: {sbj2plot}")
@@ -1110,6 +1115,7 @@ for sbj2plot in range(num_subjects):
 
     simulated_data = epochs.average()
     simulated_data.data[:, 900:1300] = data.output_sim.eeg_test
+    
     simulated_data.plot_joint(ts_args=ts_args, times=times, title=f'Simulated TEPs for sub {sbj2plot}')
 
     print(f"Subject {sbj2plot} processed successfully.\n")
@@ -1242,7 +1248,7 @@ fake_corr_p_avg[fake_corr_p_avg > pval] = 0  # Retain significant p-values only
 
 # %%
 # 4.2 Visualize Correlation Results
-
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 x_pos = np.arange(corr_r.shape[0])
 plt.rcParams["figure.figsize"] = (20,6)
 barlist = plt.bar(x_pos, np.mean(corr_r, axis=1))
@@ -1281,6 +1287,10 @@ for sbj in range(len(pck_files)):
 
 # %% 
 # 4.3 Visualization of Comparison between simulated and empirical TMS-EEG data in channel space.
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+x_pos = np.arange(corr_r.shape[0])
+plt.rcParams["figure.figsize"] = (20,6)
 
 data2plot = {
           "PCI_sim": PCI_sim,
@@ -1312,6 +1322,9 @@ ax.set_title('R2=' + str(round(r,2)) + ' p=' + str(round(p,2)))
 
 # %% 
 # 4.4 Comparison between simulated and empirical TMS-EEG data in source space.
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+x_pos = np.arange(corr_r.shape[0])
 
 epochs = mne.read_epochs(files_dir + '/all_avg.mat_avg_high_epoched', verbose=False)
 evoked = epochs.average()

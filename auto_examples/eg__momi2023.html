@@ -596,12 +596,12 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2023.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamsJR</span><span class="p">,</span> <span class="n">Model_fitting</span><span class="p">,</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">Costs</span><span class="p">,</span> <span class="n">OutputNM</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pci</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_PCIst</span><span class="p">,</span> <span class="n">dimensionality_reduction</span><span class="p">,</span> <span class="n">calc_snr</span><span class="p">,</span> <span class="n">get_svd</span><span class="p">,</span> <span class="n">apply_svd</span><span class="p">,</span> <span class="n">state_transition_quantification</span><span class="p">,</span>\
+<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2023.pci</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_PCIst</span><span class="p">,</span> <span class="n">dimensionality_reduction</span><span class="p">,</span> <span class="n">calc_snr</span><span class="p">,</span> <span class="n">get_svd</span><span class="p">,</span> <span class="n">apply_svd</span><span class="p">,</span> <span class="n">state_transition_quantification</span><span class="p">,</span>\
     <span class="n">recurrence_matrix</span><span class="p">,</span> <span class="n">distance2transition</span><span class="p">,</span> <span class="n">distance2recurrence</span><span class="p">,</span> <span class="n">diff_matrix</span><span class="p">,</span> <span class="n">calc_maxdim</span><span class="p">,</span> <span class="n">dimension_embedding</span><span class="p">,</span>\
     <span class="n">preprocess_signal</span><span class="p">,</span> <span class="n">avgreference</span><span class="p">,</span> <span class="n">undersample_signal</span><span class="p">,</span> <span class="n">baseline_correct</span><span class="p">,</span> <span class="n">get_time_index</span><span class="p">,</span> <span class="n">bar_plot</span><span class="p">,</span> \
     <span class="n">spider_plot</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pci</span><span class="w"> </span><span class="kn">import</span> <span class="n">bar_plot</span> <span class="k">as</span> <span class="n">bp_1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2023.pci</span><span class="w"> </span><span class="kn">import</span> <span class="n">bar_plot</span> <span class="k">as</span> <span class="n">bp_1</span>
 
 <span class="c1"># viz stuff</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -638,6 +638,8 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datasets.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_egmomi2023</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
@@ -649,32 +651,41 @@ The following figures from the paper are replicated in the provided Jupyter Note
 </pre></div>
 </div>
 <p>Download data</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;to add...&#39;</span><span class="p">)</span>
-<span class="c1">#files_dir =  &#39;/external/rprshnas01/netdata_kcni/jglab/Data/Davide/reproduce_Momi_et_al_2022/PyTepFit/data&#39;</span>
-<span class="n">download_data</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://drive.google.com/drive/folders/1lrju2UiK3_amcNLb5G9gwJmdU_eO0wsi?usp=drive_link&#39;</span>
-
-<span class="k">if</span> <span class="n">download_data</span><span class="p">:</span> <span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="n">remaining_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_cookies</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">files_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;data_website&#39;</span><span class="p">)</span>
-
-
-<span class="n">lf_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;data_website/leadfield_from_mne&#39;</span><span class="p">)</span>
-
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">files_dir</span> <span class="o">=</span> <span class="n">fetch_egmomi2023</span><span class="p">()</span>
 <span class="n">sc_file</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/Schaefer2018_200Parcels_7Networks_count.csv&#39;</span>
 <span class="n">high_file</span> <span class="o">=</span><span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/only_high_trial.mat&#39;</span>
 <span class="n">dist_file</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/Schaefer2018_200Parcels_7Networks_distance.csv&#39;</span>
 <span class="n">file_eeg</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/label_ts_corrected&#39;</span>
 <span class="n">file_leadfield</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/leadfield&#39;</span>
 <span class="n">file_eeg</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/real_EEG&#39;</span>
-<span class="n">eeg</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_eeg</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">eeg</span>
+<span class="n">eeg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_eeg</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">download_data = True</span>
+<span class="sd">url = &#39;https://drive.google.com/drive/folders/1lrju2UiK3_amcNLb5G9gwJmdU_eO0wsi?usp=drive_link&#39;</span>
+
+<span class="sd">if download_data: gdown.download_folder(url, quiet=True,  remaining_ok=True, use_cookies=False)</span>
+<span class="sd">files_dir = os.path.abspath(&#39;data_website&#39;)</span>
+
+
+<span class="sd">lf_dir = os.path.abspath(&#39;data_website/leadfield_from_mne&#39;)</span>
+
+<span class="sd">sc_file = files_dir + &#39;/Schaefer2018_200Parcels_7Networks_count.csv&#39;</span>
+<span class="sd">high_file =files_dir + &#39;/only_high_trial.mat&#39;</span>
+<span class="sd">dist_file = files_dir + &#39;/Schaefer2018_200Parcels_7Networks_distance.csv&#39;</span>
+<span class="sd">file_eeg = files_dir + &#39;/label_ts_corrected&#39;</span>
+<span class="sd">file_leadfield = files_dir + &#39;/leadfield&#39;</span>
+<span class="sd">file_eeg = files_dir + &#39;/real_EEG&#39;</span>
+<span class="sd">eeg =np.load(file_eeg, allow_pickle=True)</span>
+<span class="sd">eeg</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 </section>
 <section id="model-fitting-and-key-results">
 <h2>2 - Model fitting and key results<a class="headerlink" href="#model-fitting-and-key-results" title="Link to this heading">#</a></h2>
 <section id="load-the-data">
-<h3>2.1. Load the data<a class="headerlink" href="#load-the-data" title="Link to this heading">#</a></h3>
+<h3>2.1 Load the data<a class="headerlink" href="#load-the-data" title="Link to this heading">#</a></h3>
 <p>leadfield file</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_leadfield</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">lm</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
@@ -686,8 +697,7 @@ The following figures from the paper are replicated in the provided Jupyter Note
 </div>
 </section>
 <section id="plotting-example-trials-and-stimulated-data">
-<h3>2.2. Plotting Example Trials and Stimulated Data<a class="headerlink" href="#plotting-example-trials-and-stimulated-data" title="Link to this heading">#</a></h3>
-<p>( … )</p>
+<h3>2.2 Plotting Example Trials and Stimulated Data<a class="headerlink" href="#plotting-example-trials-and-stimulated-data" title="Link to this heading">#</a></h3>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pck_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/*_fittingresults_stim_exp.pkl&#39;</span><span class="p">))</span>
 <span class="n">pck_files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">var</span><span class="p">:[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^0-9]|[0-9]+&#39;</span><span class="p">,</span> <span class="n">var</span><span class="p">)])</span>
 
@@ -761,11 +771,9 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <p><strong>Results Description:</strong>
 Simulated TMS-evoked potentials (TEPs) for subject only_high_trial[0]
 This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG studies combining Transcranial Magnetic Stimulation (TMS) and EEG to investigate cortical excitability and connectivity. Each peak or feature in the EEG signal corresponds to specific neural processes triggered by TMS.</p>
-<dl class="simple">
-<dt>2.3 Visualize Structural Connectivity and Stimulation Weights</dt><dd><p>( … )</p>
-</dd>
-</dl>
-<p>print(‘to add…’)</p>
+</section>
+<section id="visualize-structural-connectivity-and-stimulation-weights">
+<h3>2.3 Visualize Structural Connectivity and Stimulation Weights<a class="headerlink" href="#visualize-structural-connectivity-and-stimulation-weights" title="Link to this heading">#</a></h3>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sc_file</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">sc_df</span><span class="o">.</span><span class="n">values</span>
 <span class="n">dist_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dist_file</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
@@ -779,7 +787,7 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 
 <span class="n">ki0</span> <span class="o">=</span><span class="n">stim_weights</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ki0</span><span class="p">)</span>
+<span class="c1"># plt.plot(ki0)</span>
 </pre></div>
 </div>
 </section>
@@ -806,9 +814,11 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
     <span class="n">data_mean</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_high</span><span class="p">[</span><span class="s1">&#39;only_high_trial&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span><span class="o">*</span><span class="n">num_epoches</span>
     <span class="c1">#data_mean = [gm]*num_epoches</span>
     <span class="n">data_mean</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_mean</span><span class="p">)</span>
-    <span class="n">file_leadfield</span> <span class="o">=</span> <span class="n">lf_dir</span><span class="o">+</span><span class="sa">f</span><span class="s1">&#39;/sub</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s1">/leadfield.npy&#39;</span>
+    <span class="c1">#file_leadfield = lf_dir+f&#39;/sub{str(i+1).zfill(3)}/leadfield.npy&#39;</span>
+    <span class="n">sub_file_leadfield</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/sub_</span><span class="si">%s</span><span class="s1">_leadfield&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_leadfield</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;loading leadfield file: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">sub_file_leadfield</span><span class="p">)</span>
+    <span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">sub_file_leadfield</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">par</span> <span class="o">=</span> <span class="n">ParamsJR</span><span class="p">(</span><span class="s1">&#39;JR&#39;</span><span class="p">,</span> <span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">B</span> <span class="o">=</span> <span class="p">[</span><span class="mi">22</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mf">.1</span><span class="p">],</span> \
                     <span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">c3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="n">c4</span> <span class="o">=</span> <span class="p">[</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>\
@@ -818,6 +828,8 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">RNNJANSEN</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">node_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
 
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;call model fitting&#39;</span><span class="p">)</span>
     <span class="c1"># call model fit method</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">[:,:,</span><span class="mi">900</span><span class="p">:</span><span class="mi">1300</span><span class="p">],</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
@@ -881,9 +893,9 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 </section>
 <section id="exploring-model-parameters">
 <h2>3 - Exploring model parameters<a class="headerlink" href="#exploring-model-parameters" title="Link to this heading">#</a></h2>
-<section id="load-and-sort-simulation-result-files">
-<h3>3.1 Load and Sort Simulation Result Files<a class="headerlink" href="#load-and-sort-simulation-result-files" title="Link to this heading">#</a></h3>
-<p>%%</p>
+<p>%%
+3.1 Load and Sort Simulation Result Files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pck_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/*_fittingresults_stim_exp.pkl&#39;</span><span class="p">))</span>
 <span class="n">pck_files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">var</span><span class="p">:[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^0-9]|[0-9]+&#39;</span><span class="p">,</span> <span class="n">var</span><span class="p">)])</span>
 </pre></div>
@@ -987,7 +999,6 @@ Create arrays to store different types of simulation data based on their dimensi
 <span class="nb">print</span><span class="p">(</span><span class="n">new_df1</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 </div>
-</section>
 <section id="plot-distributions-of-data-features">
 <h3>3.2 Plot Distributions of Data Features<a class="headerlink" href="#plot-distributions-of-data-features" title="Link to this heading">#</a></h3>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;darkgrid&#39;</span><span class="p">,{</span><span class="s1">&#39;axes.edgecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;.9&#39;</span><span class="p">},)</span>
@@ -1189,12 +1200,10 @@ Compute cosine similarity between eigenvectors and EEG data for specific time wi
     <span class="n">sbj</span><span class="o">=</span><span class="n">sbj</span>
 </pre></div>
 </div>
-<p><strong>Result Description:</strong></p>
-<blockquote>
-<div><p><strong>Timing and topographies of the prototypical TMS-EEG evoked potential (TEP) response pattern in each subject.</strong></p>
+<p><strong>Results description</strong></p>
+<p><strong>Timing and topographies of the prototypical TMS-EEG evoked potential (TEP) response pattern in each subject.</strong></p>
 <p>This figure can be found in Appendix 2—figure 5 Panel A.</p>
 <p>These figures extend the single-subject examples from TEP channel data singular value decompositions (SVD) decompositions in Figure 5.</p>
-</div></blockquote>
 <p><strong>(A)</strong> First right singular vectors from TEP SVDs for all subjects, with corresponding time location indicating the time point of maximum expression for the corresponding left singular vector (temporal eigenmode).</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">max_similairty</span><span class="p">)</span> <span class="o">+</span> <span class="n">start_tp</span> <span class="o">-</span> <span class="mi">100</span><span class="p">)</span>
 </pre></div>
@@ -1365,7 +1374,8 @@ A significant positive correlation (R2=52%, p=0.02) was found between the modula
     <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>4.1 Draw the plot for each subject</p>
+<section id="draw-the-plot-for-each-subject">
+<h3>4.1 Draw the plot for each subject<a class="headerlink" href="#draw-the-plot-for-each-subject" title="Link to this heading">#</a></h3>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">num_subjects</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pck_files</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">sbj2plot</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_subjects</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing Subject: </span><span class="si">{</span><span class="n">sbj2plot</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1388,6 +1398,7 @@ A significant positive correlation (R2=52%, p=0.02) was found between the modula
 
     <span class="n">simulated_data</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">average</span><span class="p">()</span>
     <span class="n">simulated_data</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">900</span><span class="p">:</span><span class="mi">1300</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">eeg_test</span>
+
     <span class="n">simulated_data</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Simulated TEPs for sub </span><span class="si">{</span><span class="n">sbj2plot</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Subject </span><span class="si">{</span><span class="n">sbj2plot</span><span class="si">}</span><span class="s2"> processed successfully.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1506,7 +1517,9 @@ A significant positive correlation (R2=52%, p=0.02) was found between the modula
 <span class="n">fake_corr_p_avg</span><span class="p">[</span><span class="n">fake_corr_p_avg</span> <span class="o">&gt;</span> <span class="n">pval</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Retain significant p-values only</span>
 </pre></div>
 </div>
-<p>4.2 Visualize Correlation Results</p>
+</section>
+<section id="visualize-correlation-results">
+<h3>4.2 Visualize Correlation Results<a class="headerlink" href="#visualize-correlation-results" title="Link to this heading">#</a></h3>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">x_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">corr_r</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">barlist</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">corr_r</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
@@ -1541,8 +1554,13 @@ This plot can be found in Figure 3 Panel E</p>
     <span class="n">PCI_sim</span><span class="p">[</span><span class="n">sbj</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_PCIst</span><span class="p">(</span><span class="n">simulated_EEG_st</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">evoked</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="o">**</span><span class="n">par</span><span class="p">,</span> <span class="n">full_return</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>4.3 Visualization of Comparison between simulated and empirical TMS-EEG data in channel space.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data2plot</span> <span class="o">=</span> <span class="p">{</span>
+</section>
+<section id="visualization-of-comparison-between-simulated-and-empirical-tms-eeg-data-in-channel-space">
+<h3>4.3 Visualization of Comparison between simulated and empirical TMS-EEG data in channel space.<a class="headerlink" href="#visualization-of-comparison-between-simulated-and-empirical-tms-eeg-data-in-channel-space" title="Link to this heading">#</a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">x_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">corr_r</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="n">data2plot</span> <span class="o">=</span> <span class="p">{</span>
           <span class="s2">&quot;PCI_sim&quot;</span><span class="p">:</span> <span class="n">PCI_sim</span><span class="p">,</span>
           <span class="s2">&quot;PCI_emp&quot;</span><span class="p">:</span> <span class="n">PCI_emp</span><span class="p">,</span>
 <span class="p">}</span>
@@ -1567,8 +1585,12 @@ Comparison between simulated and empirical TMS-EEG data in channel space.</p>
 <blockquote>
 <div><p>Perturbational complexity index (PCI) values extracted from the empirical (orange) and simulated (blue) TMS-EEG time series (left). A significant positive correlation (R2=80%, p&lt;0.001) was found between the simulated and the empirical PCI (right), demonstrating high correspondence between empirical and simulated data.</p>
 </div></blockquote>
-<p>4.4 Comparison between simulated and empirical TMS-EEG data in source space.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">epochs</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/all_avg.mat_avg_high_epoched&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</section>
+<section id="comparison-between-simulated-and-empirical-tms-eeg-data-in-source-space">
+<h3>4.4 Comparison between simulated and empirical TMS-EEG data in source space.<a class="headerlink" href="#comparison-between-simulated-and-empirical-tms-eeg-data-in-source-space" title="Link to this heading">#</a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">x_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">corr_r</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/all_avg.mat_avg_high_epoched&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">evoked</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">average</span><span class="p">()</span>
 
 
@@ -1602,6 +1624,7 @@ Comparison between simulated and empirical TMS-EEG data in channel space.</p>
 <p><a href="#id3"><span class="problematic" id="id4">**</span></a>Result Discription: **
 TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG evoked potential (TEP) patterns in model-generated electroencephalography (EEG) time series</p>
 <p>This plot could be found as Panel A in Figure 3.</p>
+</section>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
@@ -1662,20 +1685,26 @@ TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG ev
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">1. Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-fitting-and-key-results">2 - Model fitting and key results</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-data">2.1. Load the data</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-example-trials-and-stimulated-data">2.2. Plotting Example Trials and Stimulated Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-data">2.1 Load the data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-example-trials-and-stimulated-data">2.2 Plotting Example Trials and Stimulated Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-structural-connectivity-and-stimulation-weights">2.3 Visualize Structural Connectivity and Stimulation Weights</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-setup-and-training">2.4 Model Setup and Training</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-model-parameters">3 - Exploring model parameters</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-and-sort-simulation-result-files">3.1 Load and Sort Simulation Result Files</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-distributions-of-data-features">3.2 Plot Distributions of Data Features</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#singular-value-decomposition-svd-of-empirical-and-simulated-eeg">3.3 Singular Value Decomposition (SVD) of Empirical and Simulated EEG</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-and-visualize-similarity-and-visualize-topomaps-for-maximum-similarity">3.4 Compute and Visualize Similarity and Visualize Topomaps for Maximum Similarity</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-peaks-from-eeg-data-and-correlate-features-with-peaks">3.5 Extract Peaks from EEG Data and Correlate Features with Peaks</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-vs-data-comparisons-and-visualizations">4 - Model vs. data comparisons and visualizations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-vs-data-comparisons-and-visualizations">4 - Model vs. data comparisons and visualizations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#draw-the-plot-for-each-subject">4.1 Draw the plot for each subject</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-correlation-results">4.2 Visualize Correlation Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-of-comparison-between-simulated-and-empirical-tms-eeg-data-in-channel-space">4.3 Visualization of Comparison between simulated and empirical TMS-EEG data in channel space.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-between-simulated-and-empirical-tms-eeg-data-in-source-space">4.4 Comparison between simulated and empirical TMS-EEG data in source space.</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
   </nav></div>
