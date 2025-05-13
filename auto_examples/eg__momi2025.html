@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>SyntaxError &#8212; MNE  documentation</title>
+    <title>Model Training &#8212; MNE  documentation</title>
   
   
   
@@ -362,29 +362,12 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-eg-momi2025-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="syntaxerror">
-<span id="sphx-glr-auto-examples-eg-momi2025-py"></span><h1>SyntaxError<a class="headerlink" href="#syntaxerror" title="Link to this heading">#</a></h1>
-<p>Example script with invalid Python syntax</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;momi_2025_example.ipynb</span>
-
-<span class="sd">Original file is located at</span>
-<span class="sd">    https://colab.research.google.com/drive/1dD_XqTVleoW8VgH_T_y5SrFxBNOu_ZRz</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="c1"># Prepare for data download from Kaggle</span>
-<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/.</span><span class="n">kaggle</span>
-<span class="n">mv</span> <span class="n">kaggle</span><span class="o">.</span><span class="n">json</span> <span class="o">~/.</span><span class="n">kaggle</span><span class="o">/</span>
-<span class="n">chmod</span> <span class="mi">600</span> <span class="o">~/.</span><span class="n">kaggle</span><span class="o">/</span><span class="n">kaggle</span><span class="o">.</span><span class="n">json</span>
-
-<span class="c1"># Commented out IPython magic to ensure Python compatibility.</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__momi2025.py&quot;</span>, line <span class="m">9</span>
-<span class="w">    </span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/.</span><span class="n">kaggle</span>
-<span class="w">             </span><span class="pm">^</span>
-<span class="gr">SyntaxError</span>: <span class="n">invalid syntax</span>
+<p class="sphx-glr-example-title" id="sphx-glr-auto-examples-eg-momi2025-py">momi_2025_example.ipynb</p>
+<dl class="simple">
+<dt>Original file is located at</dt><dd><p><a class="reference external" href="https://colab.research.google.com/drive/1dD_XqTVleoW8VgH_T_y5SrFxBNOu_ZRz">https://colab.research.google.com/drive/1dD_XqTVleoW8VgH_T_y5SrFxBNOu_ZRz</a></p>
+</dd>
+</dl>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Commented out IPython magic to ensure Python compatibility.</span>
 </pre></div>
 </div>
 <p>!pip install mne
@@ -392,17 +375,35 @@ to download the full example code.</p>
 <p><a class="reference external" href="mailto:#&#37;&#52;&#48;title">#<span>&#64;</span>title</a> Install dependencies</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title whobpyt Package</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">google.colab</span><span class="w"> </span><span class="kn">import</span> <span class="n">drive</span>
-<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="c1">#sys.path.append(&#39;../whobpyt&#39;)</span>
+
+
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span><span class="s2">&quot;claires03&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="p">:</span><span class="s2">&quot;ee39084a8974336d9fff7e1ced807e64&quot;</span><span class="p">}</span>
+<span class="n">kaggle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/root/.config&#39;</span><span class="p">,</span> <span class="s1">&#39;kaggle&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">kaggle_path</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">kaggle_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created directory: </span><span class="si">{</span><span class="n">kaggle_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Directory already exists: </span><span class="si">{</span><span class="n">kaggle_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">kaggle_file</span> <span class="o">=</span> <span class="n">kaggle_path</span><span class="o">+</span> <span class="s1">&#39;/kaggle.json&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">kaggle_file</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">kaggle_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">kaggle_file</span><span class="p">,</span> <span class="mo">0o600</span><span class="p">)</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 
 <span class="c1"># Add custom module paths</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2025.euclidean_distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">euclidean_distance</span>
+<span class="c1">#from whobpyt.depr.momi2025.euclidean_distance import euclidean_distance</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
@@ -421,39 +422,39 @@ to download the full example code.</p>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">nibabel</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">nibabel</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nib</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nilearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">plotting</span><span class="p">,</span> <span class="n">surface</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nilearn.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_img</span>
 
 <span class="c1"># WHOBPYT</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">whobpyt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datatypes</span><span class="w"> </span><span class="kn">import</span> <span class="n">par</span><span class="p">,</span> <span class="n">Recording</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datatypes.parameter</span><span class="w"> </span><span class="kn">import</span> <span class="n">par</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datatypes.AbstractLoss</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractLoss</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataloader</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.models.JansenRit.jansen_rit_old</span><span class="w"> </span><span class="kn">import</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">ParamsJR</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.optimization.custom_cost_JR</span><span class="w"> </span><span class="kn">import</span> <span class="n">CostsJR</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.optimization.cost_TS</span><span class="w"> </span><span class="kn">import</span> <span class="n">CostsTS</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model_fitting</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.functions.arg_type_check</span><span class="w"> </span><span class="kn">import</span> <span class="n">method_arg_type_check</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datasets.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_egmomi2025</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2025.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">par</span><span class="p">,</span> <span class="n">Recording</span><span class="p">,</span> <span class="n">method_arg_type_check</span><span class="p">,</span> <span class="n">dataloader</span>
+
+
+<span class="c1">#from whobpyt.datasets.dataload import dataload</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2025.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">ParamsJR</span><span class="p">,</span> <span class="n">CostsJR</span><span class="p">,</span> <span class="n">Model_fitting</span>
+
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">euclidean_distance</span><span class="p">(</span><span class="n">coord1</span><span class="p">,</span> <span class="n">coord2</span><span class="p">):</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">coord1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coord1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coord1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">coord2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coord2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coord2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">z2</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;## Empirical Result&quot;&quot;&quot;</span>
 
-<span class="err">!</span><span class="n">kaggle</span> <span class="n">datasets</span> <span class="n">download</span> <span class="o">-</span><span class="n">d</span> <span class="n">davi1990</span><span class="o">/</span><span class="n">empirical</span><span class="o">-</span><span class="n">data</span>
-<span class="err">!</span><span class="n">unzip</span> <span class="n">empirical</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
-<span class="err">!</span><span class="n">rm</span> <span class="n">empirical</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
+<span class="n">data_folder</span> <span class="o">=</span> <span class="n">fetch_egmomi2025</span><span class="p">()</span>
 
 <span class="c1"># @title Download Data</span>
 
 <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">mne</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nilearn</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nibabel</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
 
-<span class="n">all_eeg_evoked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;all_eeg_evoked.npy&#39;</span><span class="p">)</span>
-<span class="n">epo_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="s1">&#39;example_epoched.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">all_eeg_evoked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/all_eeg_evoked.npy&#39;</span><span class="p">)</span>
+<span class="n">epo_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/example_epoched.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">all_gfma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">all_eeg_evoked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">all_eeg_evoked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
 
@@ -462,7 +463,7 @@ to download the full example code.</p>
     <span class="c1">#Normalized for the baseline for making comparison</span>
     <span class="n">all_gfma</span><span class="p">[</span><span class="n">ses</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">all_gfma</span><span class="p">[</span><span class="n">ses</span><span class="p">,:]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_gfma</span><span class="p">[</span><span class="n">ses</span><span class="p">,</span> <span class="p">:</span><span class="mi">300</span><span class="p">]))</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">dist_Schaefer_1000parcels_7net</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 <span class="n">stim_region</span> <span class="o">=</span> <span class="n">dist_Schaefer_1000parcels_7net</span><span class="p">[</span><span class="s1">&#39;stim_region&#39;</span><span class="p">]</span>
 
@@ -643,7 +644,7 @@ to download the full example code.</p>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;all_epo_seeg.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/all_epo_seeg.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">all_epo_seeg</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
 
@@ -657,7 +658,7 @@ to download the full example code.</p>
     <span class="n">all_gfma</span><span class="p">[</span><span class="n">ses</span><span class="p">,:]</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">epo_seeg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">dist_Schaefer_1000parcels_7net</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 <span class="n">stim_region</span> <span class="o">=</span> <span class="n">dist_Schaefer_1000parcels_7net</span><span class="p">[</span><span class="s1">&#39;stim_region&#39;</span><span class="p">]</span>
 
@@ -803,24 +804,6 @@ to download the full example code.</p>
 
 <span class="sd">&quot;&quot;&quot;## Model_fitting&quot;&quot;&quot;</span>
 
-<span class="err">!</span><span class="n">kaggle</span> <span class="n">datasets</span> <span class="n">download</span> <span class="o">-</span><span class="n">d</span> <span class="n">davi1990</span><span class="o">/</span><span class="n">empirical</span><span class="o">-</span><span class="n">data</span>
-<span class="err">!</span><span class="n">unzip</span> <span class="n">empirical</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
-<span class="err">!</span><span class="n">rm</span> <span class="n">empirical</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
-
-<span class="err">!</span><span class="n">kaggle</span> <span class="n">datasets</span> <span class="n">download</span> <span class="o">-</span><span class="n">d</span> <span class="n">davi1990</span><span class="o">/</span><span class="n">anatomical</span>
-<span class="err">!</span><span class="n">unzip</span> <span class="n">anatomical</span><span class="o">.</span><span class="n">zip</span>
-<span class="err">!</span><span class="n">rm</span> <span class="n">anatomical</span><span class="o">.</span><span class="n">zip</span>
-
-<span class="err">!</span><span class="n">kaggle</span> <span class="n">datasets</span> <span class="n">download</span> <span class="o">-</span><span class="n">d</span> <span class="n">davi1990</span><span class="o">/</span><span class="n">calculate</span><span class="o">-</span><span class="n">distance</span>
-<span class="err">!</span><span class="n">unzip</span> <span class="n">calculate</span><span class="o">-</span><span class="n">distance</span><span class="o">.</span><span class="n">zip</span> <span class="o">-</span><span class="n">d</span> <span class="n">calculate</span><span class="o">-</span><span class="n">distance</span>
-<span class="err">!</span><span class="n">rm</span> <span class="n">calculate</span><span class="o">-</span><span class="n">distance</span><span class="o">.</span><span class="n">zip</span>
-
-<span class="c1"># @title Download Data</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">mne</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nilearn</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nibabel</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
 
 <span class="c1"># @title Install dependencies</span>
 
@@ -830,10 +813,10 @@ to download the full example code.</p>
 <span class="n">ses2use</span> <span class="o">=</span> <span class="mi">10</span>
 
 <span class="c1"># Load the precomputed EEG evoked response data from a file</span>
-<span class="n">all_eeg_evoked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;all_eeg_evoked.npy&#39;</span><span class="p">)</span>
+<span class="n">all_eeg_evoked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/all_eeg_evoked.npy&#39;</span><span class="p">)</span>
 
 <span class="c1"># Read the epoch data from an MNE-formatted file</span>
-<span class="n">epo_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="s1">&#39;example_epoched.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">epo_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/example_epoched.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># Compute the average evoked response from the epochs</span>
 <span class="n">evoked</span> <span class="o">=</span> <span class="n">epo_eeg</span><span class="o">.</span><span class="n">average</span><span class="p">()</span>
@@ -842,10 +825,10 @@ to download the full example code.</p>
 <span class="n">evoked</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">all_eeg_evoked</span><span class="p">[</span><span class="n">ses2use</span><span class="p">]</span>
 
 <span class="c1"># Load additional data from pickle files</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;all_epo_seeg.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/all_epo_seeg.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">all_epo_seeg</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">dist_Schaefer_1000parcels_7net</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
 <span class="c1"># Extract the stimulation region data from the loaded pickle file</span>
@@ -937,7 +920,7 @@ to download the full example code.</p>
 <span class="c1"># Count the number of unique regions affected by the threshold</span>
 <span class="n">number_of_region_affected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">abs_value</span> <span class="o">&gt;</span> <span class="n">thr</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;calculate-distance/calculate_distance/example/mri/example_Schaefer2018_200Parcels_7Networks_rewritten.nii&#39;</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/calculate-distance/calculate_distance/example/mri/example_Schaefer2018_200Parcels_7Networks_rewritten.nii&#39;</span><span class="p">)</span>
 
 <span class="c1"># Get the shape and affine matrix of the image</span>
 <span class="n">shape</span><span class="p">,</span> <span class="n">affine</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">affine</span>
@@ -987,17 +970,18 @@ to download the full example code.</p>
 <span class="c1"># Assign the computed values to the stimulus weights for the selected parcels</span>
 <span class="n">stim_weights_thr</span><span class="p">[</span><span class="n">inject_stimulus</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
 
-<span class="n">old_path</span> <span class="o">=</span> <span class="s2">&quot;anatomical/example-bem&quot;</span>
-<span class="n">new_path</span> <span class="o">=</span> <span class="s2">&quot;anatomical/example-bem.fif&quot;</span> <span class="c1"># CS</span>
+<span class="n">old_path</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s2">&quot;/anatomical/anatomical/example-bem&quot;</span>
+<span class="n">new_path</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s2">&quot;/anatomical/anatomical/example-bem.fif&quot;</span> <span class="c1"># CS</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">old_path</span><span class="p">,</span> <span class="n">new_path</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Renamed </span><span class="si">{</span><span class="n">old_path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">new_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_path</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">old_path</span><span class="p">,</span> <span class="n">new_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Renamed </span><span class="si">{</span><span class="n">old_path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">new_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="c1"># File paths for transformation, source space, and BEM files</span>
-<span class="n">trans</span> <span class="o">=</span> <span class="s1">&#39;anatomical/example-trans.fif&#39;</span>
-<span class="n">src</span> <span class="o">=</span> <span class="s1">&#39;anatomical/example-src.fif&#39;</span>
+<span class="n">trans</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/anatomical/anatomical/example-trans.fif&#39;</span>
+<span class="n">src</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/anatomical/anatomical/example-src.fif&#39;</span>
 <span class="c1">#bem = &#39;anatomical/example-bem&#39;</span>
-<span class="n">bem</span> <span class="o">=</span> <span class="s1">&#39;anatomical/example-bem.fif&#39;</span>
+<span class="n">bem</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/anatomical/anatomical/example-bem.fif&#39;</span>
 
 <span class="c1"># Create a forward solution using the provided transformation, source space, and BEM files</span>
 <span class="c1"># Only EEG is used here; MEG is disabled</span>
@@ -1021,8 +1005,8 @@ to download the full example code.</p>
 <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">src_hemi</span><span class="p">[</span><span class="s1">&#39;vertno&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">src_hemi</span> <span class="ow">in</span> <span class="n">fwd_fixed</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]]</span>
 
 <span class="c1"># Read annotation files for left and right hemispheres</span>
-<span class="n">lh_vertices</span> <span class="o">=</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">freesurfer</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_annot</span><span class="p">(</span><span class="s1">&#39;anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">rh_vertices</span> <span class="o">=</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">freesurfer</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_annot</span><span class="p">(</span><span class="s1">&#39;anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">lh_vertices</span> <span class="o">=</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">freesurfer</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_annot</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span><span class="s1">&#39;/anatomical/anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">rh_vertices</span> <span class="o">=</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">freesurfer</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_annot</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span><span class="s1">&#39;/anatomical/anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># Extract vertices corresponding to the parcels from the annotation files</span>
 <span class="c1"># Add 100 to right hemisphere vertices to adjust for parcel numbering</span>
@@ -1107,6 +1091,13 @@ to download the full example code.</p>
 <span class="s2">model = RNNJANSEN(params, node_size=node_size, TRs_per_window=TPperWindow, step_size=step_size, output_size=output_size, tr=tr, sc=sc, lm=lm, dist=dist, use_fit_gains=True)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__momi2025.py&quot;</span>, line <span class="m">735</span>
+
+<span class="gr">    ^</span>
+<span class="gr">SyntaxError</span>: <span class="n">EOF while scanning triple-quoted string literal</span>
+</pre></div>
+</div>
 <p>create objective function</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">CostsJR</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </pre></div>
@@ -1116,7 +1107,7 @@ to download the full example code.</p>
 </pre></div>
 </div>
 <section id="model-training">
-<h2>Model Training<a class="headerlink" href="#model-training" title="Link to this heading">#</a></h2>
+<h1>Model Training<a class="headerlink" href="#model-training" title="Link to this heading">#</a></h1>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">,</span> <span class="n">pop_size</span><span class="p">))</span>
 <span class="n">u</span><span class="p">[:,:,</span><span class="mi">65</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span> <span class="mi">2000</span>
 <span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span>  <span class="n">warmupWindow</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -1124,17 +1115,17 @@ to download the full example code.</p>
 </div>
 </section>
 <section id="model-evaluation-with-20-window-for-warmup">
-<h2>Model Evaluation (with 20 window for warmup)<a class="headerlink" href="#model-evaluation-with-20-window-for-warmup" title="Link to this heading">#</a></h2>
+<h1>Model Evaluation (with 20 window for warmup)<a class="headerlink" href="#model-evaluation-with-20-window-for-warmup" title="Link to this heading">#</a></h1>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span><span class="s2">&quot;&quot;&quot;</span>
 
 <span class="s2"># @title 150 training</span>
 
-<span class="s2">from google.colab import drive</span>
-<span class="s2">drive.mount(&#39;/content/drive&#39;)</span>
-<span class="s2">save_path = &#39;/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl&#39;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="kn">from</span><span class="w"> </span><span class="nn">google.colab</span><span class="w"> </span><span class="kn">import</span> <span class="n">drive</span>
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
+<span class="n">save_path</span> <span class="o">=</span> <span class="s1">&#39;/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl&#39;</span>
 
-<span class="s2">with open(save_path, &#39;wb&#39;) as f:</span>
-<span class="s2">    pickle.dump(F, f)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span><span class="s2">&quot;&quot;&quot;</span>
 
 <span class="s2">params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True), </span><span class="se">\</span>
 <span class="s2">              g=par(200), g_f=par(10), g_b=par(10), </span><span class="se">\</span>
@@ -1161,7 +1152,7 @@ to download the full example code.</p>
 </div>
 </section>
 <section id="id1">
-<h2>Model Training<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<h1>Model Training<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">,</span> <span class="n">pop_size</span><span class="p">))</span>
 <span class="n">u</span><span class="p">[:,:,</span><span class="mi">65</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span> <span class="mi">2000</span>
 <span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span>  <span class="n">warmupWindow</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -1169,14 +1160,14 @@ to download the full example code.</p>
 </div>
 </section>
 <section id="id2">
-<h2>Model Evaluation (with 20 window for warmup)<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<h1>Model Evaluation (with 20 window for warmup)<a class="headerlink" href="#id2" title="Link to this heading">#</a></h1>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
 <span class="c1"># @title 2 epoch</span>
 
-<span class="n">load_path</span> <span class="o">=</span> <span class="s1">&#39;/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl&#39;</span>
+<span class="sd">&quot;&quot;&quot;load_path = &#39;/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl&#39;</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">load_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">F</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="sd">with open(load_path, &#39;rb&#39;) as f:</span>
+<span class="sd">    F = pickle.load(f)&quot;&quot;&quot;</span>
 
 <span class="n">time_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">evoked</span><span class="o">.</span><span class="n">times</span><span class="o">==-</span><span class="mf">0.1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">time_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">evoked</span><span class="o">.</span><span class="n">times</span><span class="o">==</span><span class="mf">0.3</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -1203,22 +1194,15 @@ to download the full example code.</p>
 
 <span class="sd">&quot;&quot;&quot;## Virtual_dissection&quot;&quot;&quot;</span>
 
-<span class="err">!</span><span class="n">kaggle</span> <span class="n">datasets</span> <span class="n">download</span> <span class="o">-</span><span class="n">d</span> <span class="n">davi1990</span><span class="o">/</span><span class="n">virtual</span><span class="o">-</span><span class="n">dissection</span>
-<span class="err">!</span><span class="n">unzip</span> <span class="n">virtual</span><span class="o">-</span><span class="n">dissection</span><span class="o">.</span><span class="n">zip</span>
-<span class="err">!</span><span class="n">rm</span> <span class="n">virtual</span><span class="o">-</span><span class="n">dissection</span><span class="o">.</span><span class="n">zip</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">mne</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nilearn</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nibabel</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
 
 <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx&#39;</span>
 <span class="n">colour</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">4</span><span class="p">]</span>
-<span class="n">template_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="s1">&#39;eeg_template.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">template_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/virtual-dissection/eeg_template.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="n">model_results</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model_results.npy&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">model_results</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/virtual-dissection/model_results.npy&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">stim_region</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 <span class="n">stim_region</span> <span class="o">=</span> <span class="n">stim_region</span><span class="p">[</span><span class="s1">&#39;stim_region&#39;</span><span class="p">]</span>
 
@@ -1385,14 +1369,7 @@ to download the full example code.</p>
 
 <span class="sd">&quot;&quot;&quot;## Applying_virtual_dissection&quot;&quot;&quot;</span>
 
-<span class="err">!</span><span class="n">kaggle</span> <span class="n">datasets</span> <span class="n">download</span> <span class="o">-</span><span class="n">d</span> <span class="n">davi1990</span><span class="o">/</span><span class="n">example</span><span class="o">-</span><span class="n">fittingresults</span>
-<span class="err">!</span><span class="n">unzip</span> <span class="n">example</span><span class="o">-</span><span class="n">fittingresults</span><span class="o">.</span><span class="n">zip</span>
-<span class="err">!</span><span class="n">rm</span> <span class="n">example</span><span class="o">-</span><span class="n">fittingresults</span><span class="o">.</span><span class="n">zip</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">mne</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nilearn</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
-<span class="err">!</span><span class="p">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nibabel</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
 
 <span class="c1"># @title Install dependencies</span>
 
@@ -1437,7 +1414,7 @@ to download the full example code.</p>
 <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">200</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">network_indices_arr</span><span class="p">)))</span>
 
 <span class="c1">#already trained file</span>
-<span class="n">fit_file</span> <span class="o">=</span> <span class="s1">&#39;example-fittingresults.pkl&#39;</span>
+<span class="n">fit_file</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/example-fittingresults/example-fittingresults.pkl&#39;</span>
 
 
 <span class="c1"># Define model parameters</span>
@@ -1470,149 +1447,149 @@ to download the full example code.</p>
 <span class="n">final_ouput_eeg</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="c1"># Initialize an empty dictionary to store lesion data</span>
-<span class="n">lesion_data</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="sd">&quot;&quot;&quot;lesion_data = {}</span>
 
-<span class="c1"># Load data from a pickle file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fit_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="sd"># Load data from a pickle file</span>
+<span class="sd">with open(fit_file, &#39;rb&#39;) as f:</span>
+<span class="sd">    data = pickle.load(f)</span>
 
-<span class="c1"># Initialize the state tensor x0 with random values uniformly distributed between state_lb and state_ub</span>
-<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">state_lb</span><span class="p">,</span> <span class="n">state_ub</span><span class="p">,</span>
-              <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">pop_size</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_size</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="sd"># Initialize the state tensor x0 with random values uniformly distributed between state_lb and state_ub</span>
+<span class="sd">x0 = torch.tensor(np.random.uniform(state_lb, state_ub,</span>
+<span class="sd">              (data.model.node_size, pop_size, data.model.state_size)), dtype=torch.float32)</span>
 
-<span class="c1"># Initialize the hemodynamic state tensor he0 with random values uniformly distributed between state_lb and state_ub</span>
-<span class="n">he0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">state_lb</span><span class="p">,</span> <span class="n">state_ub</span><span class="p">,</span>
-               <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">delays_max</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="sd"># Initialize the hemodynamic state tensor he0 with random values uniformly distributed between state_lb and state_ub</span>
+<span class="sd">he0 = torch.tensor(np.random.uniform(state_lb, state_ub,</span>
+<span class="sd">               (data.model.node_size, delays_max)), dtype=torch.float32)</span>
 
-<span class="c1"># Create an input tensor u with zeros, with dimensions 200x10x80xpop_size</span>
-<span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">when_damage</span><span class="p">,</span> <span class="n">pop_size</span><span class="p">))</span>
+<span class="sd"># Create an input tensor u with zeros, with dimensions 200x10x80xpop_size</span>
+<span class="sd">u = np.zeros((200, 10, when_damage, pop_size))</span>
 
-<span class="c1"># Apply a stimulus of 2000 units to a specific time range (65-75ms) for the first population</span>
-<span class="n">u</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">65</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="sd"># Apply a stimulus of 2000 units to a specific time range (65-75ms) for the first population</span>
+<span class="sd">u[:, :, 65:75, 0] = 2000</span>
 
-<span class="c1"># Create a mask with ones of shape 200x200</span>
-<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+<span class="sd"># Create a mask with ones of shape 200x200</span>
+<span class="sd">mask = np.ones((200, 200))</span>
 
-<span class="c1"># Assign the mask to the model&#39;s mask attribute</span>
-<span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
+<span class="sd"># Assign the mask to the model&#39;s mask attribute</span>
+<span class="sd">data.model.mask = mask</span>
 
-<span class="c1"># Initialize data_mean with ones, with dimensions 1x8x(output_size)x(TRs_per_window)</span>
-<span class="n">data_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(([</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">when_damage</span> <span class="o">/</span> <span class="n">TPperWindow</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_size</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">]))</span>
+<span class="sd"># Initialize data_mean with ones, with dimensions 1x8x(output_size)x(TRs_per_window)</span>
+<span class="sd">data_mean = np.ones(([1, int(when_damage / TPperWindow), data.model.output_size, data.model.TRs_per_window]))</span>
 
-<span class="c1"># Evaluate the model with the given input tensor u, empirical data data_mean, and initial states x0 and he0</span>
-<span class="n">data</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">empRec</span><span class="o">=</span><span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">hE</span><span class="o">=</span><span class="n">he0</span><span class="p">,</span> <span class="n">base_window_num</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="sd"># Evaluate the model with the given input tensor u, empirical data data_mean, and initial states x0 and he0</span>
+<span class="sd">data.evaluate(u=u, empRec=data_mean, TPperWindow=data.model.TRs_per_window, X=x0, hE=he0, base_window_num=100)</span>
 
-<span class="c1"># Append the training states for P, E, I, and EEG to their respective final output lists</span>
-<span class="n">final_ouput_P</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">final_ouput_E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">final_ouput_I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">][:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">final_ouput_eeg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;eeg_testing&#39;</span><span class="p">])</span>
+<span class="sd"># Append the training states for P, E, I, and EEG to their respective final output lists</span>
+<span class="sd">final_ouput_P.append(data.trainingStats.states[&#39;testing&#39;][:, 0, 0])</span>
+<span class="sd">final_ouput_E.append(data.trainingStats.states[&#39;testing&#39;][:, 1, 0])</span>
+<span class="sd">final_ouput_I.append(data.trainingStats.states[&#39;testing&#39;][:, 2, 0])</span>
+<span class="sd">final_ouput_eeg.append(data.trainingStats.outputs[&#39;eeg_testing&#39;])</span>
 
-<span class="c1"># Update x0 with the last state of the trainingStats testing states</span>
-<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">][:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="sd"># Update x0 with the last state of the trainingStats testing states</span>
+<span class="sd">x0 = torch.tensor(np.array(data.trainingStats.states[&#39;testing&#39;][:, :, :, -1]))</span>
 
-<span class="c1"># Update he0 by concatenating the reversed first state of the testing states and the remaining part of the original he0</span>
-<span class="n">he0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">][:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-     <span class="n">he0</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()[:,</span> <span class="p">:</span><span class="mi">500</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="sd"># Update he0 by concatenating the reversed first state of the testing states and the remaining part of the original he0</span>
+<span class="sd">he0 = torch.tensor(np.concatenate(</span>
+<span class="sd">    [data.trainingStats.states[&#39;testing&#39;][:, 0, 0][:, ::-1],</span>
+<span class="sd">     he0.detach().numpy()[:, :500 - data.trainingStats.states[&#39;testing&#39;][:, 0, 0].shape[1]]], axis=1))</span>
 
-<span class="c1"># Load data from a pickle file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fit_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="sd"># Load data from a pickle file</span>
+<span class="sd">with open(fit_file, &#39;rb&#39;) as f:</span>
+<span class="sd">    data = pickle.load(f)</span>
 
-<span class="c1"># Create a mask with ones of shape 200x200</span>
-<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+<span class="sd"># Create a mask with ones of shape 200x200</span>
+<span class="sd">mask = np.ones((200, 200))</span>
 
-<span class="c1"># Set the mask elements corresponding to network_indices_arr and diff to 0</span>
-<span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">network_indices_arr</span><span class="p">,</span> <span class="n">diff</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="sd"># Set the mask elements corresponding to network_indices_arr and diff to 0</span>
+<span class="sd">mask[np.ix_(network_indices_arr, diff)] = 0</span>
 
-<span class="c1"># Create an input tensor u with zeros, with dimensions 200x10x(320)xpop_size</span>
-<span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">400</span> <span class="o">-</span> <span class="n">when_damage</span><span class="p">),</span> <span class="n">pop_size</span><span class="p">))</span>
+<span class="sd"># Create an input tensor u with zeros, with dimensions 200x10x(320)xpop_size</span>
+<span class="sd">u = np.zeros((200, 10, int(400 - when_damage), pop_size))</span>
 
-<span class="c1"># Initialize data_mean with ones, with dimensions 1x16x(output_size)x(TRs_per_window)</span>
-<span class="n">data_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(([</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="mi">400</span> <span class="o">-</span> <span class="n">when_damage</span><span class="p">)</span> <span class="o">/</span> <span class="n">TPperWindow</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">output_size</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">]))</span>
+<span class="sd"># Initialize data_mean with ones, with dimensions 1x16x(output_size)x(TRs_per_window)</span>
+<span class="sd">data_mean = np.ones(([1, int((400 - when_damage) / TPperWindow), data.model.output_size, data.model.TRs_per_window]))</span>
 
-<span class="c1"># Evaluate the model with the given input tensor u, empirical data data_mean, initial states x0, he0, and mask</span>
-<span class="n">data</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">empRec</span><span class="o">=</span><span class="n">data_mean</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">hE</span><span class="o">=</span><span class="n">he0</span><span class="p">,</span> <span class="n">TPperWindow</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">TRs_per_window</span><span class="p">,</span> <span class="n">base_window_num</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="sd"># Evaluate the model with the given input tensor u, empirical data data_mean, initial states x0, he0, and mask</span>
+<span class="sd">data.evaluate(u=u, empRec=data_mean, X=x0, hE=he0, TPperWindow=data.model.TRs_per_window, base_window_num=0, mask=mask)</span>
 
-<span class="c1"># Append the training states for P, E, I, and EEG to their respective final output lists</span>
-<span class="n">final_ouput_P</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">final_ouput_E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">final_ouput_I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">][:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">final_ouput_eeg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;eeg_testing&#39;</span><span class="p">])</span>
+<span class="sd"># Append the training states for P, E, I, and EEG to their respective final output lists</span>
+<span class="sd">final_ouput_P.append(data.trainingStats.states[&#39;testing&#39;][:, 0, 0])</span>
+<span class="sd">final_ouput_E.append(data.trainingStats.states[&#39;testing&#39;][:, 1, 0])</span>
+<span class="sd">final_ouput_I.append(data.trainingStats.states[&#39;testing&#39;][:, 2, 0])</span>
+<span class="sd">final_ouput_eeg.append(data.trainingStats.outputs[&#39;eeg_testing&#39;])</span>
 
-<span class="c1"># Concatenate the first and second elements of the final output lists along axis 1</span>
-<span class="n">new_P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">final_ouput_P</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">final_ouput_P</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">new_E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">final_ouput_E</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">final_ouput_E</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">new_I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">final_ouput_I</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">final_ouput_I</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">new_eeg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">final_ouput_eeg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">final_ouput_eeg</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="sd"># Concatenate the first and second elements of the final output lists along axis 1</span>
+<span class="sd">new_P = np.concatenate((final_ouput_P[0], final_ouput_P[1]), axis=1)</span>
+<span class="sd">new_E = np.concatenate((final_ouput_E[0], final_ouput_E[1]), axis=1)</span>
+<span class="sd">new_I = np.concatenate((final_ouput_I[0], final_ouput_I[1]), axis=1)</span>
+<span class="sd">new_eeg = np.concatenate((final_ouput_eeg[0], final_ouput_eeg[1]), axis=1)</span>
 
-<span class="c1"># Read the epoched data from a .fif file</span>
-<span class="n">epoched</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="s1">&#39;example_epoched.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="sd"># Read the epoched data from a .fif file</span>
+<span class="sd">epoched = mne.read_epochs(data_folder + &#39;/empirical-data/example_epoched.fif&#39;, verbose=False)</span>
 
-<span class="c1"># Compute the average evoked response from the epoched data</span>
-<span class="n">evoked</span> <span class="o">=</span> <span class="n">epoched</span><span class="o">.</span><span class="n">average</span><span class="p">()</span>
+<span class="sd"># Compute the average evoked response from the epoched data</span>
+<span class="sd">evoked = epoched.average()</span>
 
-<span class="c1"># Find the index corresponding to the time -0.1 seconds</span>
-<span class="n">time_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">evoked</span><span class="o">.</span><span class="n">times</span> <span class="o">==</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="sd"># Find the index corresponding to the time -0.1 seconds</span>
+<span class="sd">time_start = np.where(evoked.times == -0.1)[0][0]</span>
 
-<span class="c1"># Find the index corresponding to the time 0.3 seconds</span>
-<span class="n">time_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">evoked</span><span class="o">.</span><span class="n">times</span> <span class="o">==</span> <span class="mf">0.3</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="sd"># Find the index corresponding to the time 0.3 seconds</span>
+<span class="sd">time_end = np.where(evoked.times == 0.3)[0][0]</span>
 
-<span class="c1"># Load data from a pickle file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fit_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="sd"># Load data from a pickle file</span>
+<span class="sd">with open(fit_file, &#39;rb&#39;) as f:</span>
+<span class="sd">    data = pickle.load(f)</span>
 
-<span class="c1"># Create a copy of the evoked data for simulation</span>
-<span class="n">simulation</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="sd"># Create a copy of the evoked data for simulation</span>
+<span class="sd">simulation = evoked.copy()</span>
 
-<span class="c1"># Replace the simulation data in the time range from time_start to time_end with the EEG testing data</span>
-<span class="n">simulation</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">time_start</span><span class="p">:</span><span class="n">time_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;eeg_testing&#39;</span><span class="p">]</span>
+<span class="sd"># Replace the simulation data in the time range from time_start to time_end with the EEG testing data</span>
+<span class="sd">simulation.data[:, time_start:time_end] = data.trainingStats.outputs[&#39;eeg_testing&#39;]</span>
 
-<span class="c1"># Find peak locations in specified time windows and store them</span>
-<span class="n">ch</span><span class="p">,</span> <span class="n">peak_locs1</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_peak</span><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=-</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.015</span><span class="p">)</span>
-<span class="n">ch</span><span class="p">,</span> <span class="n">peak_locs2</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_peak</span><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.015</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
-<span class="n">ch</span><span class="p">,</span> <span class="n">peak_locs3</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_peak</span><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
-<span class="n">ch</span><span class="p">,</span> <span class="n">peak_locs4</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_peak</span><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.06</span><span class="p">)</span>
-<span class="n">ch</span><span class="p">,</span> <span class="n">peak_locs5</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_peak</span><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
-<span class="n">ch</span><span class="p">,</span> <span class="n">peak_locs6</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_peak</span><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="sd"># Find peak locations in specified time windows and store them</span>
+<span class="sd">ch, peak_locs1 = simulation.get_peak(ch_type=&#39;eeg&#39;, tmin=-0.05, tmax=0.015)</span>
+<span class="sd">ch, peak_locs2 = simulation.get_peak(ch_type=&#39;eeg&#39;, tmin=0.015, tmax=0.03)</span>
+<span class="sd">ch, peak_locs3 = simulation.get_peak(ch_type=&#39;eeg&#39;, tmin=0.03, tmax=0.04)</span>
+<span class="sd">ch, peak_locs4 = simulation.get_peak(ch_type=&#39;eeg&#39;, tmin=0.04, tmax=0.06)</span>
+<span class="sd">ch, peak_locs5 = simulation.get_peak(ch_type=&#39;eeg&#39;, tmin=0.08, tmax=0.12)</span>
+<span class="sd">ch, peak_locs6 = simulation.get_peak(ch_type=&#39;eeg&#39;, tmin=0.12, tmax=0.2)</span>
 
-<span class="c1"># Set the y-axis limits for plotting</span>
-<span class="n">ymin</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.8e6</span>
-<span class="n">ymax</span> <span class="o">=</span> <span class="mf">1.8e6</span>
+<span class="sd"># Set the y-axis limits for plotting</span>
+<span class="sd">ymin = -1.8e6</span>
+<span class="sd">ymax = 1.8e6</span>
 
-<span class="c1"># Define plotting arguments with x and y limits</span>
-<span class="n">ts_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="n">ylim</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">eeg</span><span class="o">=</span><span class="p">[</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">]))</span>
+<span class="sd"># Define plotting arguments with x and y limits</span>
+<span class="sd">ts_args = dict(xlim=[-0.1, 0.3], ylim=dict(eeg=[ymin, ymax]))</span>
 
-<span class="c1"># List of peak locations to highlight in the plot</span>
-<span class="n">times</span> <span class="o">=</span> <span class="p">[</span><span class="n">peak_locs1</span><span class="p">,</span> <span class="n">peak_locs2</span><span class="p">,</span> <span class="n">peak_locs3</span><span class="p">,</span> <span class="n">peak_locs4</span><span class="p">,</span> <span class="n">peak_locs5</span><span class="p">,</span> <span class="n">peak_locs6</span><span class="p">]</span>
+<span class="sd"># List of peak locations to highlight in the plot</span>
+<span class="sd">times = [peak_locs1, peak_locs2, peak_locs3, peak_locs4, peak_locs5, peak_locs6]</span>
 
-<span class="c1"># Plot the simulation data with specified arguments and peak times</span>
-<span class="n">simulation_st</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">)</span>
+<span class="sd"># Plot the simulation data with specified arguments and peak times</span>
+<span class="sd">simulation_st = simulation.plot_joint(ts_args=ts_args, times=times)</span>
 
-<span class="c1"># Create a copy of the evoked data for lesion simulation</span>
-<span class="n">lesion</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="sd"># Create a copy of the evoked data for lesion simulation</span>
+<span class="sd">lesion = evoked.copy()</span>
 
-<span class="c1"># Replace the lesion data in the time range from time_start to time_end with the new EEG data</span>
-<span class="n">lesion</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">time_start</span><span class="p">:</span><span class="n">time_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_eeg</span>
+<span class="sd"># Replace the lesion data in the time range from time_start to time_end with the new EEG data</span>
+<span class="sd">lesion.data[:, time_start:time_end] = new_eeg</span>
 
-<span class="c1"># Plot the lesion data with specified arguments and peak times</span>
-<span class="n">lesion_st</span> <span class="o">=</span> <span class="n">lesion</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">)</span>
+<span class="sd"># Plot the lesion data with specified arguments and peak times</span>
+<span class="sd">lesion_st = lesion.plot_joint(ts_args=ts_args, times=times)</span>
 
-<span class="c1"># Plot the standard deviation of the EEG testing data across the time dimension</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;eeg_testing&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Intact Structural Connectome&#39;</span><span class="p">)</span>
+<span class="sd"># Plot the standard deviation of the EEG testing data across the time dimension</span>
+<span class="sd">plt.plot(np.std(data.trainingStats.outputs[&#39;eeg_testing&#39;], axis=0), label=&#39;Intact Structural Connectome&#39;)</span>
 
-<span class="c1"># Plot the standard deviation of the new EEG data (after virtual dissection) across the time dimension</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">new_eeg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Virtual Dissection&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="sd"># Plot the standard deviation of the new EEG data (after virtual dissection) across the time dimension</span>
+<span class="sd">plt.plot(np.std(new_eeg, axis=0), label=&#39;Virtual Dissection&#39;, linestyle=&#39;--&#39;)</span>
 
-<span class="c1"># Add labels and title</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time Points&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Global Mean Field Power&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of GMFP: Intact vs. Virtual Dissection&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="sd"># Add labels and title</span>
+<span class="sd">plt.xlabel(&#39;Time Points&#39;)</span>
+<span class="sd">plt.ylabel(&#39;Global Mean Field Power&#39;)</span>
+<span class="sd">plt.title(&#39;Comparison of GMFP: Intact vs. Virtual Dissection&#39;)</span>
+<span class="sd">plt.legend()</span>
 
-<span class="c1"># Show the plot</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="sd"># Show the plot</span>
+<span class="sd">plt.show()&quot;&quot;&quot;</span>
 
 <span class="c1"># @title difference</span>
 </pre></div>
@@ -1629,7 +1606,6 @@ to download the full example code.</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</section>
 </section>
 
 
@@ -1662,11 +1638,12 @@ to download the full example code.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-training">Model Training</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Model Training</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Model Evaluation (with 20 window for warmup)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Model Training</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Model Training</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
+
   </nav></div>
 
 </div></div>
