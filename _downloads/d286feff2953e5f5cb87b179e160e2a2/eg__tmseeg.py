@@ -51,14 +51,14 @@ data_dir = fetch_egtmseeg()
 
 # %%
 # Load EEG data 
-file_name = os.path.join(data_dir, 'Subject_1_low_voltage.fif')
-epoched = mne.read_epochs(file_name, verbose=False);
+eeg_file_name = os.path.join(data_dir, 'Subject_1_low_voltage.fif')
+epoched = mne.read_epochs(eeg_file_name, verbose=False);
 evoked = epoched.average()
 
 # %%
 # Load Atlas
-file_name = os.path.join(data_dir, 'Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt')
-atlas = pd.read_csv(file_name)
+atlas_file_name = os.path.join(data_dir, 'Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt')
+atlas = pd.read_csv(atlas_file_name)
 labels = atlas['ROI Name']
 coords = np.array([atlas['R'], atlas['A'], atlas['S']]).T
 conduction_velocity = 5 #in ms
@@ -190,7 +190,7 @@ F.evaluate(u = u, empRec = data_mean, TPperWindow = batch_size, base_window_num 
 
 # %%
 # Plot the original and simulated EEG data
-epoched = mne.read_epochs(file_name, verbose=False);
+epoched = mne.read_epochs(eeg_file_name, verbose=False);
 evoked = epoched.average()
 ts_args = dict(xlim=[-0.1,0.3])
 ch, peak_locs1 = evoked.get_peak(ch_type='eeg', tmin=-0.05, tmax=0.01)
