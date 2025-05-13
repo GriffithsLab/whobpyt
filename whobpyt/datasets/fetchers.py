@@ -190,12 +190,6 @@ def fetch_egmomi2023(dest_folder=None, redownload=False):
     if os.path.isdir(dest_folder) and redownload == True:
         shutil.rmtree(dest_folder)
 
-    # Create the destination folder if it doesn't exist
-    if not os.path.isdir(dest_folder):
-        os.makedirs(dest_folder)
-
-    os.chdir(dest_folder)
-
     """
     files_to_download = [('10CNgKxKtuF-fHCSzAZszrMWxfiE3npBZ','sub_0_fittingresults_stim_exp.pkl'),
                          ('10EKlRPE3LhMe4g3-etEtcgpGAnUBxX7L','sub_1_fittingresults_stim_exp.pkl'),
@@ -214,19 +208,29 @@ def fetch_egmomi2023(dest_folder=None, redownload=False):
                          ('1-SA-ooEa6s6Jo4uarSUzqqZkId3sYDTg', 'all_avg.mat_avg_high_epoched')]"
      """
 
-    files_to_download = {"10CNgKxKtuF-fHCSzAZszrMWxfiE3npBZ":  "sub_0_fittingresults_stim_exp.pkl",
-                                  "681075a6e72532ce337c5a4a":  "sub_1_fittingresults_stim_exp.pkl",
-                                  "68107596e5ea73185c7c5a7c": "stim_weights",
-                                  "681075a6e72532ce337c5a4a": "Schaefer2018_200Parcels_7Networks_distance.csv",
+    files_dict = {                                   "h7nmz": "sub_0_fittingresults_stim_exp.pkl",
+                                  "681075a6e72532ce337c5a4a": "sub_1_fittingresults_stim_exp.pkl",
+                                  "6810c2f5839107c1b17c5a99": "sub_2_fittingresults_stim_exp.pkl",
+                                  "6810dfaca4dd9539133cc0c2": "sub_3_fittingresults_stim_exp.pkl",
+                                  "681168b4d9b48f0d6d568bda": "sub_4_fittingresults_stim_exp.pkl",
+                                  "681168ce093e4604787c5a8d": "sub_5_fittingresults_stim_exp.pkl",
+                                  "68225ef961764a34f5eadf3c": "sub_0_leadfield",
+                                  "68225efa143105dcdbc4c2bb": "sub_1_leadfield",
+                                  "68225ef7143105dcdbc4c2b7": "sub_2_leadfield",
+                                  "68225ef761764a34f5eadf3a": "sub_3_leadfield",
+                                  "6822923f01f350cd9a9c41a6": "sub_4_leadfield",
+                                  "68229241b71e556932ce9dcf": "sub_5_leadfield",
+                                  "68226048878c115ac49c4483": "stim_weights.npy",
+                                  "6810759b339396b1eb7c5b28": "Schaefer2018_200Parcels_7Networks_distance.csv",
                                   "68107591430f2af683568cb2": "Schaefer2018_200Parcels_7Networks_count.csv",   
                                   "6810758e11d6cb1d67568d05": "rh.Schaefer2018_200Parcels_7Networks_order.annot",
-                           "6810758681075a6e72532ce337c5a4a": "real_EEG",
-                                  "68107567fed207be8f3cbf9f": "only_high_trial.mat",
+                                  "6810758c78cb4eb6283cc01e": "real_EEG",
+                                  "6810758752a8beebd55ef7b9": "only_high_trial.mat",
                                   "681074df24f63ddb219fddf8": "lh.Schaefer2018_200Parcels_7Networks_order.annot",
-                         "1-SA-ooEa6s6Jo4uarSUzqqZkId3sYDTg": "all_avg.mat_avg_high_epoched" }
+                                  '68107567fed207be8f3cbf9f': "all_avg.mat_avg_high_epoched" ,
+                                  "681074d878cb4eb6283cbffa": "leadfield"}
 
-
-    total_files = len(files_to_download)
+    total_files = len(files_dict)
 
     # If the folder does not exist, create it and download the files
     if not os.path.isdir(dest_folder): 
@@ -238,6 +242,9 @@ def fetch_egmomi2023(dest_folder=None, redownload=False):
         for file_code, file_name in files_dict.items():
           dlcode = osf_url_pfx + '/' + file_code
           pull_file(dlcode, file_name, download_method='wget')
+
+
+    os.chdir(cwd)
 
     return dest_folder
 
