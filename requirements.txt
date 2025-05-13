@@ -10,7 +10,8 @@ torch
 scikit-learn
 mne
 kaggle
-
+nilearn
+nilbabel
 
 # Docs requirements
 sphinx >= 7.2	
