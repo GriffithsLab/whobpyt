@@ -110,8 +110,6 @@ sc = sc / np.linalg.norm(sc)
 dist = np.loadtxt(os.path.join(output_dir, 'distance.txt'))
 
 
-
-
 # %%  [markdown]
 # 6. Put it all together and fit the model
 # -------------------------------------------------------------------------
@@ -160,10 +158,6 @@ noise_F.train(u=stim_input)
 noise_F.test(base_batch_num, u=stim_input)
 print("Finished fitting model to noise trials")
 
-
-
-
-
 # %%  [markdown]
 # 7. Let's Compare Simulated & Empirical MEG Activity
 # -------------------------------------------------------------------------
@@ -210,8 +204,8 @@ plt.show()
 # -------------------------------------------------------------------------
 #We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
 #Create longer empty array with same shape and fill with the first 500 ms
-sim_1500_verb = np.zeros((verb_eeg.shape[0], 1500))
-sim_1500_verb[:,:verb_eeg.shape[1]] = verb_eeg*1.0e13
+sim_1500_verb = np.zeros((verb_meg.shape[0], 1500))
+sim_1500_verb[:,:verb_meg.shape[1]] = verb_meg*1.0e13
 node_size = sc.shape[0]
 output_size = sim_1500_verb.shape[0]
 batch_size = 250
@@ -233,8 +227,8 @@ sim_source_verb = verb_F.output_sim.P_test
 sim_sensor_verb = verb_F.output_sim.eeg_test
 
 #repeat for noise trials
-sim_1500_noise = np.zeros((noise_eeg.shape[0], 1500))
-sim_1500_noise[:,:noise_eeg.shape[1]] = noise_eeg*1.0e13
+sim_1500_noise = np.zeros((noise_meg.shape[0], 1500))
+sim_1500_noise[:,:noise_meg.shape[1]] = noise_meg*1.0e13
 node_size = sc.shape[0]
 output_size = sim_1500_noise.shape[0]
 batch_size = 250
