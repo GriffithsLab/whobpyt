@@ -385,19 +385,20 @@ to download the full example code.</p>
 
 
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span><span class="s2">&quot;claires03&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="p">:</span><span class="s2">&quot;ee39084a8974336d9fff7e1ced807e64&quot;</span><span class="p">}</span>
-<span class="n">kaggle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/root/.config&#39;</span><span class="p">,</span> <span class="s1">&#39;kaggle&#39;</span><span class="p">)</span>
+<span class="c1">#kaggle_path = os.path.join(&#39;/root/.config&#39;, &#39;kaggle&#39;)</span>
+<span class="n">kaggle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/.kaggle&#39;</span><span class="p">)</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">kaggle_path</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">kaggle_path</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created directory: </span><span class="si">{</span><span class="n">kaggle_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Directory already exists: </span><span class="si">{</span><span class="n">kaggle_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="n">kaggle_file</span> <span class="o">=</span> <span class="n">kaggle_path</span><span class="o">+</span> <span class="s1">&#39;/kaggle.json&#39;</span>
+<span class="n">kaggle_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">kaggle_path</span><span class="p">,</span> <span class="s1">&#39;kaggle.json&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">kaggle_file</span><span class="p">)</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">kaggle_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">kaggle_file</span><span class="p">,</span> <span class="mo">0o600</span><span class="p">)</span>
+<span class="c1">#os.chmod(kaggle_file, 0o600)</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
@@ -1092,7 +1093,7 @@ to download the full example code.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__momi2025.py&quot;</span>, line <span class="m">735</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__momi2025.py&quot;</span>, line <span class="m">736</span>
 
 <span class="gr">    ^</span>
 <span class="gr">SyntaxError</span>: <span class="n">EOF while scanning triple-quoted string literal</span>
