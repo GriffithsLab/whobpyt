@@ -641,89 +641,6 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <span class="n">eeg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_eeg</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading sub_0_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_1_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_2_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_3_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_4_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_5_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_0_leadfield
-
-
-
-Downloading sub_1_leadfield
-
-
-
-Downloading sub_2_leadfield
-
-
-
-Downloading sub_3_leadfield
-
-
-
-Downloading sub_4_leadfield
-
-
-
-Downloading sub_5_leadfield
-
-
-
-Downloading stim_weights.npy
-
-
-
-Downloading Schaefer2018_200Parcels_7Networks_distance.csv
-
-
-
-Downloading Schaefer2018_200Parcels_7Networks_count.csv
-
-
-
-Downloading rh.Schaefer2018_200Parcels_7Networks_order.annot
-
-
-
-Downloading real_EEG
-
-
-
-Downloading only_high_trial.mat
-
-
-
-Downloading lh.Schaefer2018_200Parcels_7Networks_order.annot
-
-
-
-Downloading all_avg.mat_avg_high_epoched
-
-
-
-Downloading leadfield
-</pre></div>
-</div>
 </section>
 <section id="model-fitting-and-key-results">
 <h2>2 - Model fitting and key results<a class="headerlink" href="#model-fitting-and-key-results" title="Link to this heading">#</a></h2>
@@ -960,11 +877,11 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>sub:  0
 loading leadfield file: /home/runner/.whobpyt/data/eg__momi2023/sub_1_leadfield
 call model fitting
-epoch:  0 7092.1206
-epoch:  0 0.3817275164491342 cos_sim:  0.08935403728738231
-epoch:  1 1368.1514
-epoch:  1 0.4069961332645489 cos_sim:  0.015425583618706764
-running time is  29.791832208633423 &#39;s
+epoch:  0 -3230.3318
+epoch:  0 0.3954606543761424 cos_sim:  0.08748667692509393
+epoch:  1 -6380.061
+epoch:  1 0.4579708818847731 cos_sim:  -0.0158740427583587
+running time is  29.42146873474121 &#39;s
 </pre></div>
 </div>
 <p>check the output of output_sim.eeg_test</p>
@@ -1803,7 +1720,7 @@ TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG ev
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 24.704 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 11.572 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-momi2023-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c0aa0ed03c2583762d5d6226381b960b/eg__momi2023.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__momi2023.ipynb</span></code></a></p>
