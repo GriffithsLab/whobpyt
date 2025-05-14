@@ -256,7 +256,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # --------------------------------------------------
 #
 # Importage:
-# 
+
 # os stuff
 import os
 import sys
@@ -283,31 +283,17 @@ warnings.filterwarnings('ignore')
 
 #neuroimaging packages
 import mne
-
-# viz stuff
-import matplotlib.pyplot as plt
-
-
-
-
-import numpy as np
-import pandas as pd
 import torch
-import pickle
 import scipy
 from scipy import io
 import sklearn
 from sklearn.cluster import KMeans
 import seaborn as sns
-import matplotlib.pyplot as plt
-import mne
 import time
 import glob
 import re
 
 from whobpyt.datasets.fetchers import fetch_egmomi2023
-
-
 
 
 
@@ -322,26 +308,6 @@ file_leadfield = files_dir + '/leadfield'
 file_eeg = files_dir + '/real_EEG'
 eeg = np.load(file_eeg, allow_pickle=True)
 
-"""
-download_data = True
-url = 'https://drive.google.com/drive/folders/1lrju2UiK3_amcNLb5G9gwJmdU_eO0wsi?usp=drive_link'
-
-if download_data: gdown.download_folder(url, quiet=True,  remaining_ok=True, use_cookies=False)
-files_dir = os.path.abspath('data_website')
-
-
-lf_dir = os.path.abspath('data_website/leadfield_from_mne')
-
-sc_file = files_dir + '/Schaefer2018_200Parcels_7Networks_count.csv'
-high_file =files_dir + '/only_high_trial.mat'
-dist_file = files_dir + '/Schaefer2018_200Parcels_7Networks_distance.csv'
-file_eeg = files_dir + '/label_ts_corrected'
-file_leadfield = files_dir + '/leadfield'
-file_eeg = files_dir + '/real_EEG'
-eeg =np.load(file_eeg, allow_pickle=True)
-eeg
-"""
-
 # %%
 # 2 - Model fitting and key results
 # --------------------------------------------------
@@ -349,8 +315,8 @@ eeg
 # %%
 # 2.1 Load the data
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# 
-# leadfield file
+
+# Leadfield file
 lm = np.load(file_leadfield, allow_pickle=True)
 print(lm.max(), lm.min())
 
@@ -434,7 +400,7 @@ simulated_data.plot_joint(ts_args=ts_args, times=times, title='Simulated TEPs fo
 
 
 # %%
-# **Results Description:**
+# **Result Description:**
 # Simulated TMS-evoked potentials (TEPs) for subject only_high_trial[0]
 # This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG studies combining Transcranial Magnetic Stimulation (TMS) and EEG to investigate cortical excitability and connectivity. Each peak or feature in the EEG signal corresponds to specific neural processes triggered by TMS.
 
@@ -528,15 +494,6 @@ for i in range(1):
 
     ax.imshow(np.log1p(sc_mod), cmap = 'bwr')
     plt.show()
-    """filename = '/content/drive/MyDrive/EEG/reproduce_fig/sub_'+str(i)+'_fittingresults_stim_exp.pkl'
-    with open(filename, 'wb') as f:
-        pickle.dump(F, f)
-
-    outfilename = '/content/drive/MyDrive/EEG/reproduce_fig/sub_'+str(i)+'_simEEG_stim_exp.pkl'
-
-
-    with open(outfilename, 'wb') as f:
-        pickle.dump(F.output_sim, f)"""
 
     fig, ax = plt.subplots(1,3, figsize=(12,8))
     ax[0].plot((F.output_sim.E_test-F.output_sim.I_test).T)
@@ -901,7 +858,7 @@ for axes_row in range(nrows):
 
 
 # %%
-# **Results description**  
+# **Result Description**  
 #
 # **Timing and topographies of the prototypical TMS-EEG evoked potential (TEP) response pattern in each subject.**
 #
@@ -1073,7 +1030,7 @@ else:
 
 
 # %%
-# get ready
+
 start_time = time.time()
 
 #files_dir =  '/external/rprshnas01/netdata_kcni/jglab/Data/Davide/reproduce_Momi_et_al_2022/PyTepFit/data'
@@ -1122,7 +1079,7 @@ for sbj2plot in range(num_subjects):
 
 
 # %% 
-# **Result Description: **
+# **Result Description:**
 #
 # Empirical and Simulated TEPs figure for all subjects. Optimized TMS-EEG evoked potential (TEP) models for all subjects.
 #
@@ -1358,7 +1315,7 @@ sim_evoked.plot_joint(ts_args=ts_args, times=times, title='Simulated Grand Mean'
 
 
 # %%
-# **Result Discription: **
+# **Result Description:**
 # TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG evoked potential (TEP) patterns in model-generated electroencephalography (EEG) time series
 #
 # This plot could be found as Panel A in Figure 3.
