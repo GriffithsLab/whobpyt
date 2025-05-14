@@ -591,8 +591,8 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <section id="setup">
 <h2>1. Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
 <p>Importage:</p>
-<p>os stuff</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># os stuff</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2023.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamsJR</span><span class="p">,</span> <span class="n">Model_fitting</span><span class="p">,</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">Costs</span><span class="p">,</span> <span class="n">OutputNM</span>
 
@@ -617,24 +617,12 @@ The following figures from the paper are replicated in the provided Jupyter Note
 
 <span class="c1">#neuroimaging packages</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
-
-<span class="c1"># viz stuff</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-
-
-
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">io</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sklearn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">KMeans</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
@@ -651,26 +639,6 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <span class="n">file_leadfield</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/leadfield&#39;</span>
 <span class="n">file_eeg</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/real_EEG&#39;</span>
 <span class="n">eeg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_eeg</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">download_data = True</span>
-<span class="sd">url = &#39;https://drive.google.com/drive/folders/1lrju2UiK3_amcNLb5G9gwJmdU_eO0wsi?usp=drive_link&#39;</span>
-
-<span class="sd">if download_data: gdown.download_folder(url, quiet=True,  remaining_ok=True, use_cookies=False)</span>
-<span class="sd">files_dir = os.path.abspath(&#39;data_website&#39;)</span>
-
-
-<span class="sd">lf_dir = os.path.abspath(&#39;data_website/leadfield_from_mne&#39;)</span>
-
-<span class="sd">sc_file = files_dir + &#39;/Schaefer2018_200Parcels_7Networks_count.csv&#39;</span>
-<span class="sd">high_file =files_dir + &#39;/only_high_trial.mat&#39;</span>
-<span class="sd">dist_file = files_dir + &#39;/Schaefer2018_200Parcels_7Networks_distance.csv&#39;</span>
-<span class="sd">file_eeg = files_dir + &#39;/label_ts_corrected&#39;</span>
-<span class="sd">file_leadfield = files_dir + &#39;/leadfield&#39;</span>
-<span class="sd">file_eeg = files_dir + &#39;/real_EEG&#39;</span>
-<span class="sd">eeg =np.load(file_eeg, allow_pickle=True)</span>
-<span class="sd">eeg</span>
-<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading sub_0_fittingresults_stim_exp.pkl
@@ -761,8 +729,8 @@ Downloading leadfield
 <h2>2 - Model fitting and key results<a class="headerlink" href="#model-fitting-and-key-results" title="Link to this heading">#</a></h2>
 <section id="load-the-data">
 <h3>2.1 Load the data<a class="headerlink" href="#load-the-data" title="Link to this heading">#</a></h3>
-<p>leadfield file</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_leadfield</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Leadfield file</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_leadfield</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">lm</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
 
 <span class="c1"># TEP data</span>
@@ -885,7 +853,7 @@ Projections have already been applied. Setting proj attribute to True.
 Projections have already been applied. Setting proj attribute to True.
 </pre></div>
 </div>
-<p><strong>Results Description:</strong>
+<p><strong>Result Description:</strong>
 Simulated TMS-evoked potentials (TEPs) for subject only_high_trial[0]
 This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG studies combining Transcranial Magnetic Stimulation (TMS) and EEG to investigate cortical excitability and connectivity. Each peak or feature in the EEG signal corresponds to specific neural processes triggered by TMS.</p>
 </section>
@@ -972,15 +940,6 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">sc_mod</span><span class="p">),</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;filename = &#39;/content/drive/MyDrive/EEG/reproduce_fig/sub_&#39;+str(i)+&#39;_fittingresults_stim_exp.pkl&#39;</span>
-<span class="sd">    with open(filename, &#39;wb&#39;) as f:</span>
-<span class="sd">        pickle.dump(F, f)</span>
-
-<span class="sd">    outfilename = &#39;/content/drive/MyDrive/EEG/reproduce_fig/sub_&#39;+str(i)+&#39;_simEEG_stim_exp.pkl&#39;</span>
-
-
-<span class="sd">    with open(outfilename, &#39;wb&#39;) as f:</span>
-<span class="sd">        pickle.dump(F.output_sim, f)&quot;&quot;&quot;</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
     <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">E_test</span><span class="o">-</span><span class="n">F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">I_test</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
@@ -1001,11 +960,11 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>sub:  0
 loading leadfield file: /home/runner/.whobpyt/data/eg__momi2023/sub_1_leadfield
 call model fitting
-epoch:  0 -3708.6963
-epoch:  0 0.3935063131304958 cos_sim:  0.10713251995122193
-epoch:  1 -6793.708
-epoch:  1 0.42966024970489436 cos_sim:  -0.0027439067835937697
-running time is  29.223504304885864 &#39;s
+epoch:  0 -3705.6138
+epoch:  0 0.4223315429476707 cos_sim:  0.11420351210411356
+epoch:  1 -6796.3535
+epoch:  1 0.41450022035317785 cos_sim:  0.005303006598794719
+running time is  28.8778235912323 &#39;s
 </pre></div>
 </div>
 <p>check the output of output_sim.eeg_test</p>
@@ -1356,7 +1315,7 @@ Compute cosine similarity between eigenvectors and EEG data for specific time wi
     <span class="n">sbj</span><span class="o">=</span><span class="n">sbj</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_eg__momi2023_022.png" srcset="../_images/sphx_glr_eg__momi2023_022.png" alt="59ms after TMS for sbj#0, 69ms after TMS for sbj#1, 62ms after TMS for sbj#2, 63ms after TMS for sbj#3, 68ms after TMS for sbj#4, 69ms after TMS for sbj#5" class = "sphx-glr-single-img"/><p><strong>Results description</strong></p>
+<img src="../_images/sphx_glr_eg__momi2023_022.png" srcset="../_images/sphx_glr_eg__momi2023_022.png" alt="59ms after TMS for sbj#0, 69ms after TMS for sbj#1, 62ms after TMS for sbj#2, 63ms after TMS for sbj#3, 68ms after TMS for sbj#4, 69ms after TMS for sbj#5" class = "sphx-glr-single-img"/><p><strong>Result Description</strong></p>
 <p><strong>Timing and topographies of the prototypical TMS-EEG evoked potential (TEP) response pattern in each subject.</strong></p>
 <p>This figure can be found in Appendix 2—figure 5 Panel A.</p>
 <p>These figures extend the single-subject examples from TEP channel data singular value decompositions (SVD) decompositions in Figure 5.</p>
@@ -1520,7 +1479,6 @@ A significant positive correlation (R2=52%, p=0.02) was found between the modula
 </section>
 <section id="model-vs-data-comparisons-and-visualizations">
 <h2>4 - Model vs. data comparisons and visualizations<a class="headerlink" href="#model-vs-data-comparisons-and-visualizations" title="Link to this heading">#</a></h2>
-<p>get ready</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
 <span class="c1">#files_dir =  &#39;/external/rprshnas01/netdata_kcni/jglab/Data/Davide/reproduce_Momi_et_al_2022/PyTepFit/data&#39;</span>
@@ -1612,7 +1570,7 @@ Projections have already been applied. Setting proj attribute to True.
 Subject 5 processed successfully.
 </pre></div>
 </div>
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a>Result Description: **</p>
+<p><strong>Result Description:</strong></p>
 <p>Empirical and Simulated TEPs figure for all subjects. Optimized TMS-EEG evoked potential (TEP) models for all subjects.</p>
 <p>For every pair of rows, empirical (upper) and simulated (lower) TMS-EEG responses are shown for every study subject, extending main text Figure 2 where a selected subset of subjects’ data are shown. These data reiterate and reinforce the demonstrations in Figure 2 that the model-generated electroencephalography (EEG) activity time series achieve robust recovery of individual subjects’ empirical TEP propagation patterns.</p>
 <p>This is the Appendix 2—figure 1 plot.</p>
@@ -1837,7 +1795,7 @@ Comparison between simulated and empirical TMS-EEG data in channel space.</p>
 Projections have already been applied. Setting proj attribute to True.
 </pre></div>
 </div>
-<p><a href="#id3"><span class="problematic" id="id4">**</span></a>Result Discription: **
+<p><strong>Result Description:</strong>
 TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG evoked potential (TEP) patterns in model-generated electroencephalography (EEG) time series</p>
 <p>This plot could be found as Panel A in Figure 3.</p>
 </section>
@@ -1845,7 +1803,7 @@ TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG ev
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 22.709 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 48.856 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-momi2023-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c0aa0ed03c2583762d5d6226381b960b/eg__momi2023.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__momi2023.ipynb</span></code></a></p>
