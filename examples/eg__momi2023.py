@@ -310,26 +310,6 @@ file_leadfield = files_dir + '/leadfield'
 file_eeg = files_dir + '/real_EEG'
 eeg = np.load(file_eeg, allow_pickle=True)
 
-"""
-download_data = True
-url = 'https://drive.google.com/drive/folders/1lrju2UiK3_amcNLb5G9gwJmdU_eO0wsi?usp=drive_link'
-
-if download_data: gdown.download_folder(url, quiet=True,  remaining_ok=True, use_cookies=False)
-files_dir = os.path.abspath('data_website')
-
-
-lf_dir = os.path.abspath('data_website/leadfield_from_mne')
-
-sc_file = files_dir + '/Schaefer2018_200Parcels_7Networks_count.csv'
-high_file =files_dir + '/only_high_trial.mat'
-dist_file = files_dir + '/Schaefer2018_200Parcels_7Networks_distance.csv'
-file_eeg = files_dir + '/label_ts_corrected'
-file_leadfield = files_dir + '/leadfield'
-file_eeg = files_dir + '/real_EEG'
-eeg =np.load(file_eeg, allow_pickle=True)
-eeg
-"""
-
 # %%
 # 2 - Model fitting and key results
 # --------------------------------------------------
