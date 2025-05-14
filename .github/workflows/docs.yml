@@ -80,10 +80,11 @@ jobs:
       run: |
         python - <<'PY'
         import whobpyt
-        whobpyt.datasets.fetchers.fetch_egmomi2023()
-        whobpyt.datasets.fetchers.fetch_egmomi2025()
-        whobpyt.datasets.fetchers.fetch_egismail2025()
-        whobpyt.datasets.fetchers.fetch_egtmseeg()
+        from whobpyt.datasets.fetchers import fetch_egmomi2023, fetch_egmomi2025,fetch_egtmseeg, fetch_egismail2025  
+        fetch_egmomi2023()
+        fetch_egmomi2025()
+        fetch_egismail2025()
+        fetch_egtmseeg()
         PY
         
     - name: Build docs
