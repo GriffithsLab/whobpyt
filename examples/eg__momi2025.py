@@ -703,50 +703,8 @@ lm = new_leadfield.copy() / 10
 # Initialize random values for the leadfield matrix
 lm_v = 0.01 * np.random.randn(output_size, 200)
 
-"""params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True), \
-              g=par(200), g_f=par(10), g_b=par(10), \
-              c1 = par(135, 135, 1, True), c2 = par(135*0.8, 135*0.8, 1, True), \
-              c3 = par(135*0.25, 135*0.25, 1, True), c4 = par(135*0.25, 135*0.25, 1, True),\
-              std_in= par(np.log(1.1),np.log(1.1), 0.1, True, True), vmax= par(5), v0=par(6), r=par(0.56), \
-                  y0=par(-2, -2, 0.3, True),\
-              mu = par(1,1, 0.1, True), k = par(10,10, .2, True),\
-                  Mr0 = par(0),\
-                  Er0 = par(0), Ir0 = par(0),\
-              cy0 = par(1,1,0.1,True), ki=par(ki0), \
-              lm=par(lm, lm, .1 * np.ones((output_size, node_size))+lm_v, True))
 
-model = RNNJANSEN(params, node_size=node_size, TRs_per_window=TPperWindow, step_size=step_size, output_size=output_size, tr=tr, sc=sc, lm=lm, dist=dist, use_fit_gains=True)
-
-# %%
-# create objective function
-ObjFun = CostsJR(model)
-
-# %%
-# call model fit
-F = Model_fitting(model, ObjFun)
-
-# %%
-# Model Training
-# ---------------------------------------------------
-#
-
-u = np.zeros((node_size,hidden_size,time_dim, pop_size))
-u[:,:,65:75,0]= 2000
-F.train(u = u, empRec = data_mean, num_epochs = num_epochs, TPperWindow = TPperWindow,  warmupWindow=20)
-# %%
-# Model Evaluation (with 20 window for warmup)
-# ---------------------------------------------------
-#
-F.evaluate(u = u, empRec = data_mean, TPperWindow = TPperWindow, base_window_num = 100)"""
-
-# @title 150 training
-
-"""from google.colab import drive
-drive.mount('/content/drive')
-save_path = '/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl'
-
-with open(save_path, 'wb') as f:
-    pickle.dump(F, f)"""
+# training
 
 params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True), \
               g=par(200), g_f=par(10), g_b=par(10), \
