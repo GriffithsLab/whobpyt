@@ -1,6 +1,5 @@
 
 # Analysis Requirements
-
 pandas
 matplotlib
 seaborn
@@ -8,10 +7,10 @@ h5py
 pooch
 torch
 scikit-learn
-mne==1.8.0
-kaggle
+mne==1.9.0
 nilearn
 nibabel
+openpyxl
 
 # Docs requirements
 sphinx >= 7.2	
