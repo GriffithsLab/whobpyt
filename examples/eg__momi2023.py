@@ -283,24 +283,12 @@ warnings.filterwarnings('ignore')
 
 #neuroimaging packages
 import mne
-
-# viz stuff
-import matplotlib.pyplot as plt
-
-
-
-
-import numpy as np
-import pandas as pd
 import torch
-import pickle
 import scipy
 from scipy import io
 import sklearn
 from sklearn.cluster import KMeans
 import seaborn as sns
-import matplotlib.pyplot as plt
-import mne
 import time
 import glob
 import re
