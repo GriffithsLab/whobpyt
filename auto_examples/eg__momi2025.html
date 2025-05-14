@@ -382,23 +382,6 @@ to download the full example code.</p>
 
 <span class="c1">#sys.path.append(&#39;../whobpyt&#39;)</span>
 
-
-
-<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span><span class="s2">&quot;claires03&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="p">:</span><span class="s2">&quot;ee39084a8974336d9fff7e1ced807e64&quot;</span><span class="p">}</span>
-<span class="c1">#kaggle_path = os.path.join(&#39;/root/.config&#39;, &#39;kaggle&#39;)</span>
-<span class="n">kaggle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/.kaggle&#39;</span><span class="p">)</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">kaggle_path</span><span class="p">):</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">kaggle_path</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created directory: </span><span class="si">{</span><span class="n">kaggle_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Directory already exists: </span><span class="si">{</span><span class="n">kaggle_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="n">kaggle_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">kaggle_path</span><span class="p">,</span> <span class="s1">&#39;kaggle.json&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">kaggle_file</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">kaggle_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-
-<span class="c1">#os.chmod(kaggle_file, 0o600)</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
@@ -454,8 +437,8 @@ to download the full example code.</p>
 
 
 
-<span class="n">all_eeg_evoked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/all_eeg_evoked.npy&#39;</span><span class="p">)</span>
-<span class="n">epo_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/example_epoched.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">all_eeg_evoked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/all_eeg_evoked.npy&#39;</span><span class="p">)</span>
+<span class="n">epo_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/example_epoched.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">all_gfma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">all_eeg_evoked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">all_eeg_evoked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
 
@@ -464,7 +447,7 @@ to download the full example code.</p>
     <span class="c1">#Normalized for the baseline for making comparison</span>
     <span class="n">all_gfma</span><span class="p">[</span><span class="n">ses</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">all_gfma</span><span class="p">[</span><span class="n">ses</span><span class="p">,:]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_gfma</span><span class="p">[</span><span class="n">ses</span><span class="p">,</span> <span class="p">:</span><span class="mi">300</span><span class="p">]))</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">dist_Schaefer_1000parcels_7net</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 <span class="n">stim_region</span> <span class="o">=</span> <span class="n">dist_Schaefer_1000parcels_7net</span><span class="p">[</span><span class="s1">&#39;stim_region&#39;</span><span class="p">]</span>
 
@@ -645,7 +628,7 @@ to download the full example code.</p>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/all_epo_seeg.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/all_epo_seeg.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">all_epo_seeg</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
 
@@ -659,7 +642,7 @@ to download the full example code.</p>
     <span class="n">all_gfma</span><span class="p">[</span><span class="n">ses</span><span class="p">,:]</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">epo_seeg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">dist_Schaefer_1000parcels_7net</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 <span class="n">stim_region</span> <span class="o">=</span> <span class="n">dist_Schaefer_1000parcels_7net</span><span class="p">[</span><span class="s1">&#39;stim_region&#39;</span><span class="p">]</span>
 
@@ -814,10 +797,10 @@ to download the full example code.</p>
 <span class="n">ses2use</span> <span class="o">=</span> <span class="mi">10</span>
 
 <span class="c1"># Load the precomputed EEG evoked response data from a file</span>
-<span class="n">all_eeg_evoked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/all_eeg_evoked.npy&#39;</span><span class="p">)</span>
+<span class="n">all_eeg_evoked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/all_eeg_evoked.npy&#39;</span><span class="p">)</span>
 
 <span class="c1"># Read the epoch data from an MNE-formatted file</span>
-<span class="n">epo_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/example_epoched.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">epo_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/example_epoched.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># Compute the average evoked response from the epochs</span>
 <span class="n">evoked</span> <span class="o">=</span> <span class="n">epo_eeg</span><span class="o">.</span><span class="n">average</span><span class="p">()</span>
@@ -826,10 +809,10 @@ to download the full example code.</p>
 <span class="n">evoked</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">all_eeg_evoked</span><span class="p">[</span><span class="n">ses2use</span><span class="p">]</span>
 
 <span class="c1"># Load additional data from pickle files</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/all_epo_seeg.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/all_epo_seeg.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">all_epo_seeg</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">dist_Schaefer_1000parcels_7net</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
 <span class="c1"># Extract the stimulation region data from the loaded pickle file</span>
@@ -921,7 +904,7 @@ to download the full example code.</p>
 <span class="c1"># Count the number of unique regions affected by the threshold</span>
 <span class="n">number_of_region_affected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">abs_value</span> <span class="o">&gt;</span> <span class="n">thr</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/calculate-distance/calculate_distance/example/mri/example_Schaefer2018_200Parcels_7Networks_rewritten.nii&#39;</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/calculate_distance/example_Schaefer2018_200Parcels_7Networks_rewritten.nii&#39;</span><span class="p">)</span>
 
 <span class="c1"># Get the shape and affine matrix of the image</span>
 <span class="n">shape</span><span class="p">,</span> <span class="n">affine</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">affine</span>
@@ -971,18 +954,18 @@ to download the full example code.</p>
 <span class="c1"># Assign the computed values to the stimulus weights for the selected parcels</span>
 <span class="n">stim_weights_thr</span><span class="p">[</span><span class="n">inject_stimulus</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
 
-<span class="n">old_path</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s2">&quot;/anatomical/anatomical/example-bem&quot;</span>
-<span class="n">new_path</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s2">&quot;/anatomical/anatomical/example-bem.fif&quot;</span> <span class="c1"># CS</span>
+<span class="n">old_path</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s2">&quot;/anatomical/example-bem&quot;</span>
+<span class="n">new_path</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s2">&quot;/anatomical/example-bem.fif&quot;</span> <span class="c1"># CS</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_path</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">old_path</span><span class="p">,</span> <span class="n">new_path</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Renamed </span><span class="si">{</span><span class="n">old_path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">new_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="c1"># File paths for transformation, source space, and BEM files</span>
-<span class="n">trans</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/anatomical/anatomical/example-trans.fif&#39;</span>
-<span class="n">src</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/anatomical/anatomical/example-src.fif&#39;</span>
+<span class="n">trans</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/anatomical/example-trans.fif&#39;</span>
+<span class="n">src</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/anatomical/example-src.fif&#39;</span>
 <span class="c1">#bem = &#39;anatomical/example-bem&#39;</span>
-<span class="n">bem</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/anatomical/anatomical/example-bem.fif&#39;</span>
+<span class="n">bem</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/anatomical/example-bem.fif&#39;</span>
 
 <span class="c1"># Create a forward solution using the provided transformation, source space, and BEM files</span>
 <span class="c1"># Only EEG is used here; MEG is disabled</span>
@@ -1006,8 +989,8 @@ to download the full example code.</p>
 <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">src_hemi</span><span class="p">[</span><span class="s1">&#39;vertno&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">src_hemi</span> <span class="ow">in</span> <span class="n">fwd_fixed</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]]</span>
 
 <span class="c1"># Read annotation files for left and right hemispheres</span>
-<span class="n">lh_vertices</span> <span class="o">=</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">freesurfer</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_annot</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span><span class="s1">&#39;/anatomical/anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">rh_vertices</span> <span class="o">=</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">freesurfer</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_annot</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span><span class="s1">&#39;/anatomical/anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">lh_vertices</span> <span class="o">=</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">freesurfer</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_annot</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span><span class="s1">&#39;/anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">rh_vertices</span> <span class="o">=</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">freesurfer</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_annot</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span><span class="s1">&#39;/anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># Extract vertices corresponding to the parcels from the annotation files</span>
 <span class="c1"># Add 100 to right hemisphere vertices to adjust for parcel numbering</span>
@@ -1077,26 +1060,28 @@ to download the full example code.</p>
 <span class="c1"># Initialize random values for the leadfield matrix</span>
 <span class="n">lm_v</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">output_size</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 
-<span class="s2">&quot;&quot;&quot;params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True), </span><span class="se">\</span>
-<span class="s2">              g=par(200), g_f=par(10), g_b=par(10), </span><span class="se">\</span>
-<span class="s2">              c1 = par(135, 135, 1, True), c2 = par(135*0.8, 135*0.8, 1, True), </span><span class="se">\</span>
-<span class="s2">              c3 = par(135*0.25, 135*0.25, 1, True), c4 = par(135*0.25, 135*0.25, 1, True),</span><span class="se">\</span>
-<span class="s2">              std_in= par(np.log(1.1),np.log(1.1), 0.1, True, True), vmax= par(5), v0=par(6), r=par(0.56), </span><span class="se">\</span>
-<span class="s2">                  y0=par(-2, -2, 0.3, True),</span><span class="se">\</span>
-<span class="s2">              mu = par(1,1, 0.1, True), k = par(10,10, .2, True),</span><span class="se">\</span>
-<span class="s2">                  Mr0 = par(0),</span><span class="se">\</span>
-<span class="s2">                  Er0 = par(0), Ir0 = par(0),</span><span class="se">\</span>
-<span class="s2">              cy0 = par(1,1,0.1,True), ki=par(ki0), </span><span class="se">\</span>
-<span class="s2">              lm=par(lm, lm, .1 * np.ones((output_size, node_size))+lm_v, True))</span>
 
-<span class="s2">model = RNNJANSEN(params, node_size=node_size, TRs_per_window=TPperWindow, step_size=step_size, output_size=output_size, tr=tr, sc=sc, lm=lm, dist=dist, use_fit_gains=True)</span>
+<span class="c1"># training</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">ParamsJR</span><span class="p">(</span><span class="n">A</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mf">3.25</span><span class="p">),</span> <span class="n">a</span><span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">B</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">22</span><span class="p">),</span> <span class="n">b</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> \
+              <span class="n">g</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span> <span class="n">g_f</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">g_b</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> \
+              <span class="n">c1</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">135</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> \
+              <span class="n">c3</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">c4</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>\
+              <span class="n">std_in</span><span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.1</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.1</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">v0</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="mf">0.56</span><span class="p">),</span> \
+                  <span class="n">y0</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>\
+              <span class="n">mu</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">k</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span> <span class="mf">.2</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>\
+                  <span class="n">Mr0</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>\
+                  <span class="n">Er0</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">Ir0</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>\
+              <span class="n">cy0</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="kc">True</span><span class="p">),</span> <span class="n">ki</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="n">ki0</span><span class="p">),</span> \
+              <span class="n">lm</span><span class="o">=</span><span class="n">par</span><span class="p">(</span><span class="n">lm</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="mf">.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">output_size</span><span class="p">,</span> <span class="n">node_size</span><span class="p">))</span><span class="o">+</span><span class="n">lm_v</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">RNNJANSEN</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> <span class="n">TRs_per_window</span><span class="o">=</span><span class="n">TPperWindow</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="n">output_size</span><span class="p">,</span> <span class="n">tr</span><span class="o">=</span><span class="n">tr</span><span class="p">,</span> <span class="n">sc</span><span class="o">=</span><span class="n">sc</span><span class="p">,</span> <span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">dist</span><span class="p">,</span> <span class="n">use_fit_gains</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__momi2025.py&quot;</span>, line <span class="m">736</span>
-
-<span class="gr">    ^</span>
-<span class="gr">SyntaxError</span>: <span class="n">EOF while scanning triple-quoted string literal</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__momi2025.py&quot;</span>, line <span class="m">60</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2025.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">par</span><span class="p">,</span> <span class="n">Recording</span><span class="p">,</span> <span class="n">method_arg_type_check</span><span class="p">,</span> <span class="n">dataloader</span>
+<span class="gr">ModuleNotFoundError</span>: <span class="n">No module named &#39;whobpyt.depr.momi2025&#39;</span>
 </pre></div>
 </div>
 <p>create objective function</p>
@@ -1111,57 +1096,12 @@ to download the full example code.</p>
 <h1>Model Training<a class="headerlink" href="#model-training" title="Link to this heading">#</a></h1>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">,</span> <span class="n">pop_size</span><span class="p">))</span>
 <span class="n">u</span><span class="p">[:,:,</span><span class="mi">65</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span> <span class="mi">2000</span>
-<span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span>  <span class="n">warmupWindow</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span>  <span class="n">warmupWindow</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="model-evaluation-with-20-window-for-warmup">
 <h1>Model Evaluation (with 20 window for warmup)<a class="headerlink" href="#model-evaluation-with-20-window-for-warmup" title="Link to this heading">#</a></h1>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span><span class="s2">&quot;&quot;&quot;</span>
-
-<span class="s2"># @title 150 training</span>
-
-<span class="s2">&quot;&quot;&quot;</span><span class="kn">from</span><span class="w"> </span><span class="nn">google.colab</span><span class="w"> </span><span class="kn">import</span> <span class="n">drive</span>
-<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
-<span class="n">save_path</span> <span class="o">=</span> <span class="s1">&#39;/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl&#39;</span>
-
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span><span class="s2">&quot;&quot;&quot;</span>
-
-<span class="s2">params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(50, 50, 1, True), </span><span class="se">\</span>
-<span class="s2">              g=par(200), g_f=par(10), g_b=par(10), </span><span class="se">\</span>
-<span class="s2">              c1 = par(135, 135, 1, True), c2 = par(135*0.8, 135*0.8, 1, True), </span><span class="se">\</span>
-<span class="s2">              c3 = par(135*0.25, 135*0.25, 1, True), c4 = par(135*0.25, 135*0.25, 1, True),</span><span class="se">\</span>
-<span class="s2">              std_in= par(np.log(1.1),np.log(1.1), 0.1, True, True), vmax= par(5), v0=par(6), r=par(0.56), </span><span class="se">\</span>
-<span class="s2">                  y0=par(-2, -2, 0.3, True),</span><span class="se">\</span>
-<span class="s2">              mu = par(1,1, 0.1, True), k = par(10,10, .2, True),</span><span class="se">\</span>
-<span class="s2">                  Mr0 = par(0),</span><span class="se">\</span>
-<span class="s2">                  Er0 = par(0), Ir0 = par(0),</span><span class="se">\</span>
-<span class="s2">              cy0 = par(1,1,0.1,True), ki=par(ki0), </span><span class="se">\</span>
-<span class="s2">              lm=par(lm, lm, .1 * np.ones((output_size, node_size))+lm_v, True))</span>
-
-<span class="s2">model = RNNJANSEN(params, node_size=node_size, TRs_per_window=TPperWindow, step_size=step_size, output_size=output_size, tr=tr, sc=sc, lm=lm, dist=dist, use_fit_gains=True)</span>
-</pre></div>
-</div>
-<p>create objective function</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ObjFun</span> <span class="o">=</span> <span class="n">CostsJR</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>call model fit</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="id1">
-<h1>Model Training<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">,</span> <span class="n">pop_size</span><span class="p">))</span>
-<span class="n">u</span><span class="p">[:,:,</span><span class="mi">65</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span> <span class="mi">2000</span>
-<span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span>  <span class="n">warmupWindow</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="id2">
-<h1>Model Evaluation (with 20 window for warmup)<a class="headerlink" href="#id2" title="Link to this heading">#</a></h1>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
 <span class="c1"># @title 2 epoch</span>
 
@@ -1199,11 +1139,11 @@ to download the full example code.</p>
 
 <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx&#39;</span>
 <span class="n">colour</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">4</span><span class="p">]</span>
-<span class="n">template_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/virtual-dissection/eeg_template.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">template_eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/virtual_dissection/eeg_template.fif&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="n">model_results</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/virtual-dissection/model_results.npy&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">model_results</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/virtual_dissection/model_results.npy&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical-data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/empirical_data/dist_Schaefer_1000parcels_7net.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
     <span class="n">stim_region</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 <span class="n">stim_region</span> <span class="o">=</span> <span class="n">stim_region</span><span class="p">[</span><span class="s1">&#39;stim_region&#39;</span><span class="p">]</span>
 
@@ -1415,7 +1355,7 @@ to download the full example code.</p>
 <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">200</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">network_indices_arr</span><span class="p">)))</span>
 
 <span class="c1">#already trained file</span>
-<span class="n">fit_file</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/example-fittingresults/example-fittingresults.pkl&#39;</span>
+<span class="n">fit_file</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">+</span> <span class="s1">&#39;/example_fittingresults/example-fittingresults.pkl&#39;</span>
 
 
 <span class="c1"># Define model parameters</span>
@@ -1641,8 +1581,6 @@ to download the full example code.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Model Training</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Model Training</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Model Evaluation (with 20 window for warmup)</a></li>
 </ul>
 
   </nav></div>
