@@ -8,7 +8,7 @@ h5py
 pooch
 torch
 scikit-learn
-mne
+mne==1.8.0
 kaggle
 nilearn
 nibabel
