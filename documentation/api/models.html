@@ -1,0 +1,1915 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Models &#8212; MNE  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/fix-sidebar.css?v=52f27943" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.css?v=1395d0ad" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/fix-sidebar.css?v=52f27943" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-5TBCPCRB6X"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-5TBCPCRB6X');
+            </script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-5TBCPCRB6X');
+            </script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/api/models';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="canonical" href="https://mne.tools/stable/documentation/api/models.html" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="auto">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/whobpyt_logo_feet.png" class="logo__image only-light" alt="MNE  documentation - Home"/>
+    <img src="../../_static/whobpyt_logo_feet_dark.png" class="logo__image only-dark pst-js-only" alt="MNE  documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../development/index.html">
+    Contribute
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../development/index.html">
+    Contribute
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+<div>
+  
+  <section id="models">
+<h1>Models<a class="headerlink" href="#models" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.models.jansen_rit.jansen_rit.</span></span><span class="sig-name descname"><span class="pre">JansenRitModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">JansenRitParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TRs_per_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_gains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_laplacian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_lfm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel" title="Link to this definition">#</a></dt>
+<dd><p>A module for forward model (JansenRit) to simulate EEG signals</p>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>createIC(self, ver):</strong></p></td>
+<td><p>Creates the initial conditions for the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>createDelayIC(self, ver):</strong></p></td>
+<td><p>Creates the initial conditions for the delays.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>setModelParameters(self):</strong></p></td>
+<td><p>Sets the parameters of the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>forward(input, noise_out, hx)</strong></p></td>
+<td><p>Forward pass for generating a number of EEG signals with current model parameters</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.T_destination">
+<span class="sig-name descname"><span class="pre">T_destination</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">~T_destination</span></em><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.T_destination" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">JansenRitParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TRs_per_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">...,</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span> <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">...,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_gains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_laplacian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fit_lfm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>node_size: int</strong></dt><dd><p>Number of ROIs</p>
+</dd>
+<dt><strong>TRs_per_window: int # TODO: CHANGE THE NAME</strong></dt><dd><p>Number of EEG signals to simulate</p>
+</dd>
+<dt><strong>step_size: float</strong></dt><dd><p>Integration step for forward model</p>
+</dd>
+<dt><strong>output_size</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">python:int</span></code></span></dt><dd><p>Number of EEG channels.</p>
+</dd>
+<dt><strong>tr</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">python:float</span></code> # TODO: <code class="xref py py-obj docutils literal notranslate"><span class="pre">CHANGE</span></code> <code class="xref py py-obj docutils literal notranslate"><span class="pre">THE</span></code> <code class="xref py py-obj docutils literal notranslate"><span class="pre">NAME</span></code> <code class="xref py py-obj docutils literal notranslate"><span class="pre">TO</span></code> <code class="xref py py-obj docutils literal notranslate"><span class="pre">sampling_rate</span></code></span></dt><dd><p>Sampling rate of the simulated EEG signals</p>
+</dd>
+<dt><strong>sc: ndarray node_size x node_size float array</strong></dt><dd><p>Structural connectivity</p>
+</dd>
+<dt><strong>lm: ndarray float array</strong></dt><dd><p>Leadfield matrix from source space to EEG space</p>
+</dd>
+<dt><strong>dist: ndarray float array</strong></dt><dd><p>Distance matrix</p>
+</dd>
+<dt><strong>use_fit_gains: bool</strong></dt><dd><p>Flag for fitting gains. 1: fit, 0: not fit</p>
+</dd>
+<dt><strong>use_laplacian: bool</strong></dt><dd><p>Flat for using laplacian. 1: yes, 0: no.</p>
+</dd>
+<dt><strong>use_fit_lfm: bool</strong></dt><dd><p>Flag for fitting the leadfield matrix. 1: fit, 0: not fit</p>
+</dd>
+<dt><strong>params: ParamsJR</strong></dt><dd><p>Model parameters object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.add_module">
+<span class="sig-name descname"><span class="pre">add_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.add_module" title="Link to this definition">#</a></dt>
+<dd><p>Add a child module to the current module.</p>
+<p>The module can be accessed as an attribute using the given name.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>name (str): name of the child module. The child module can be</dt><dd><p>accessed from this module using the given name</p>
+</dd>
+</dl>
+<p>module (Module): child module to be added to the module.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.apply" title="Link to this definition">#</a></dt>
+<dd><p>Apply <code class="docutils literal notranslate"><span class="pre">fn</span></code> recursively to every submodule (as returned by <code class="docutils literal notranslate"><span class="pre">.children()</span></code>) as well as self.</p>
+<p>Typical use includes initializing the parameters of a model
+(see also <span class="xref std std-ref">nn-init-doc</span>).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fn (<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> -&gt; None): function to be applied to each submodule</p>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">init_weights</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">==</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">init_weights</span><span class="p">)</span>
+<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="go">Parameter containing:</span>
+<span class="go">tensor([[1., 1.],</span>
+<span class="go">        [1., 1.]], requires_grad=True)</span>
+<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="go">Parameter containing:</span>
+<span class="go">tensor([[1., 1.],</span>
+<span class="go">        [1., 1.]], requires_grad=True)</span>
+<span class="go">Sequential(</span>
+<span class="go">  (0): Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="go">  (1): Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.bfloat16">
+<span class="sig-name descname"><span class="pre">bfloat16</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.bfloat16" title="Link to this definition">#</a></dt>
+<dd><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">bfloat16</span></code> datatype.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.buffers">
+<span class="sig-name descname"><span class="pre">buffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.buffers" title="Link to this definition">#</a></dt>
+<dd><p>Return an iterator over module buffers.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>recurse (bool): if True, then yields buffers of this module</dt><dd><p>and all submodules. Otherwise, yields only buffers that
+are direct members of this module.</p>
+</dd>
+</dl>
+</dd>
+<dt>Yields:</dt><dd><p>torch.Tensor: module buffer</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># xdoctest: +SKIP(&quot;undefined vars&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">buf</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">buffers</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">buf</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+<span class="go">&lt;class &#39;torch.Tensor&#39;&gt; (20L,)</span>
+<span class="go">&lt;class &#39;torch.Tensor&#39;&gt; (20L, 1L, 5L, 5L)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.call_super_init">
+<span class="sig-name descname"><span class="pre">call_super_init</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.call_super_init" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.children">
+<span class="sig-name descname"><span class="pre">children</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.children" title="Link to this definition">#</a></dt>
+<dd><p>Return an iterator over immediate children modules.</p>
+<dl class="simple">
+<dt>Yields:</dt><dd><p>Module: a child module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.compile">
+<span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.compile" title="Link to this definition">#</a></dt>
+<dd><p>Compile this Module’s forward using <code class="xref py py-func docutils literal notranslate"><span class="pre">torch.compile()</span></code>.</p>
+<p>This Module’s <code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code> method is compiled and all arguments are passed as-is
+to <code class="xref py py-func docutils literal notranslate"><span class="pre">torch.compile()</span></code>.</p>
+<p>See <code class="xref py py-func docutils literal notranslate"><span class="pre">torch.compile()</span></code> for details on the arguments for this function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cpu">
+<span class="sig-name descname"><span class="pre">cpu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cpu" title="Link to this definition">#</a></dt>
+<dd><p>Move all model parameters and buffers to the CPU.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC">
+<span class="sig-name descname"><span class="pre">createDelayIC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delays_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_lb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_ub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC" title="Link to this definition">#</a></dt>
+<dd><p>Creates the initial conditions for the delays.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>ver</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">python:int</span></code></span></dt><dd><p>Initial condition version. 
+(in the JR model, the version is not used. It is just for consistency with other models)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></dt><dd><p>Tensor of shape (node_size, delays_max) with random values between <code class="xref py py-obj docutils literal notranslate"><span class="pre">state_lb</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">state_ub</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC">
+<span class="sig-name descname"><span class="pre">createIC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_lb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_ub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC" title="Link to this definition">#</a></dt>
+<dd><p>Creates the initial conditions for the model.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>ver</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">python:int</span></code> # TODO: <code class="xref py py-obj docutils literal notranslate"><span class="pre">ADD</span></code> <code class="xref py py-obj docutils literal notranslate"><span class="pre">MORE</span></code> <code class="xref py py-obj docutils literal notranslate"><span class="pre">DESCRIPTION</span></code></span></dt><dd><p>Initial condition version. (in the JR model, the version is not used. It is just for consistency with other models)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></dt><dd><p>Tensor of shape (node_size, state_size) with random values between <code class="xref py py-obj docutils literal notranslate"><span class="pre">state_lb</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">state_ub</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cuda">
+<span class="sig-name descname"><span class="pre">cuda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">device</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cuda" title="Link to this definition">#</a></dt>
+<dd><p>Move all model parameters and buffers to the GPU.</p>
+<p>This also makes associated parameters and buffers different objects. So
+it should be called before constructing the optimizer if the module will
+live on GPU while being optimized.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>device (int, optional): if specified, all parameters will be</dt><dd><p>copied to that device</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.double">
+<span class="sig-name descname"><span class="pre">double</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.double" title="Link to this definition">#</a></dt>
+<dd><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">double</span></code> datatype.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.dump_patches">
+<span class="sig-name descname"><span class="pre">dump_patches</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.dump_patches" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.eval" title="Link to this definition">#</a></dt>
+<dd><p>Set the module in evaluation mode.</p>
+<p>This has an effect only on certain modules. See the documentation of
+particular modules for details of their behaviors in training/evaluation
+mode, i.e. whether they are affected, e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">Dropout</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchNorm</span></code>,
+etc.</p>
+<p>This is equivalent with <code class="xref py py-meth docutils literal notranslate"><span class="pre">self.train(False)</span></code>.</p>
+<p>See <span class="xref std std-ref">locally-disable-grad-doc</span> for a comparison between
+<a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.eval" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval()</span></code></a> and several similar mechanisms that may be confused with it.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.extra_repr">
+<span class="sig-name descname"><span class="pre">extra_repr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.extra_repr" title="Link to this definition">#</a></dt>
+<dd><p>Return the extra representation of the module.</p>
+<p>To print customized extra information, you should re-implement
+this method in your own modules. Both single-line and multi-line
+strings are acceptable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.float">
+<span class="sig-name descname"><span class="pre">float</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.float" title="Link to this definition">#</a></dt>
+<dd><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">float</span></code> datatype.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward" title="Link to this definition">#</a></dt>
+<dd><p>This function carries out the forward Euler integration method for the JR neural mass model,
+with time delays, connection gains, and external inputs considered. Each population (pyramidal,
+excitatory, inhibitory) in the network is modeled as a nonlinear second order system. The function
+updates the state of each neural population and computes the EEG signals at each time step.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>external</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></span></dt><dd><p>Input tensor of shape (batch_size, num_ROIs) representing the input to the model.</p>
+</dd>
+<dt><strong>hx</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code>]</span></dt><dd><p>Optional tensor of shape (batch_size, state_size, num_ROIs) representing the initial hidden state.</p>
+</dd>
+<dt><strong>hE</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code>]</span></dt><dd><p>Optional tensor of shape (batch_size, num_ROIs, delays_max) representing the initial delays.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>next_state</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">python:dict</span></code></span></dt><dd><p>Dictionary containing the updated current state, EEG signals, and the history of
+each population’s current and voltage at each time step.</p>
+</dd>
+<dt><strong>hE</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></span></dt><dd><p>Tensor representing the updated history of the pyramidal population’s current.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_buffer">
+<span class="sig-name descname"><span class="pre">get_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_buffer" title="Link to this definition">#</a></dt>
+<dd><p>Return the buffer given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throw an error.</p>
+<p>See the docstring for <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> for a more detailed
+explanation of this method’s functionality as well as how to
+correctly specify <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>target: The fully-qualified string name of the buffer</dt><dd><p>to look for. (See <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> for how to specify a
+fully-qualified string.)</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>torch.Tensor: The buffer referenced by <code class="docutils literal notranslate"><span class="pre">target</span></code></p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>AttributeError: If the target string references an invalid</dt><dd><p>path or resolves to something that is not a
+buffer</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_extra_state">
+<span class="sig-name descname"><span class="pre">get_extra_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_extra_state" title="Link to this definition">#</a></dt>
+<dd><p>Return any extra state to include in the module’s state_dict.</p>
+<p>Implement this and a corresponding <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.set_extra_state" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.set_extra_state"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_extra_state()</span></code></a> for your module
+if you need to store extra state. This function is called when building the
+module’s <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict()</span></code></a>.</p>
+<p>Note that extra state should be picklable to ensure working serialization
+of the state_dict. We only provide backwards compatibility guarantees
+for serializing Tensors; other objects may break backwards compatibility if
+their serialized pickled form changes.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>object: Any extra state to store in the module’s state_dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_parameter">
+<span class="sig-name descname"><span class="pre">get_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Parameter</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_parameter" title="Link to this definition">#</a></dt>
+<dd><p>Return the parameter given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throw an error.</p>
+<p>See the docstring for <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> for a more detailed
+explanation of this method’s functionality as well as how to
+correctly specify <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>target: The fully-qualified string name of the Parameter</dt><dd><p>to look for. (See <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> for how to specify a
+fully-qualified string.)</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>torch.nn.Parameter: The Parameter referenced by <code class="docutils literal notranslate"><span class="pre">target</span></code></p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>AttributeError: If the target string references an invalid</dt><dd><p>path or resolves to something that is not an
+<code class="docutils literal notranslate"><span class="pre">nn.Parameter</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_submodule">
+<span class="sig-name descname"><span class="pre">get_submodule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_submodule" title="Link to this definition">#</a></dt>
+<dd><p>Return the submodule given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throw an error.</p>
+<p>For example, let’s say you have an <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> <code class="docutils literal notranslate"><span class="pre">A</span></code> that
+looks like this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>A(
+    (net_b): Module(
+        (net_c): Module(
+            (conv): Conv2d(16, 33, kernel_size=(3, 3), stride=(2, 2))
+        )
+        (linear): Linear(in_features=100, out_features=200, bias=True)
+    )
+)
+</pre></div>
+</div>
+<p>(The diagram shows an <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> <code class="docutils literal notranslate"><span class="pre">A</span></code>. <code class="docutils literal notranslate"><span class="pre">A</span></code> which has a nested
+submodule <code class="docutils literal notranslate"><span class="pre">net_b</span></code>, which itself has two submodules <code class="docutils literal notranslate"><span class="pre">net_c</span></code>
+and <code class="docutils literal notranslate"><span class="pre">linear</span></code>. <code class="docutils literal notranslate"><span class="pre">net_c</span></code> then has a submodule <code class="docutils literal notranslate"><span class="pre">conv</span></code>.)</p>
+<p>To check whether or not we have the <code class="docutils literal notranslate"><span class="pre">linear</span></code> submodule, we
+would call <code class="docutils literal notranslate"><span class="pre">get_submodule(&quot;net_b.linear&quot;)</span></code>. To check whether
+we have the <code class="docutils literal notranslate"><span class="pre">conv</span></code> submodule, we would call
+<code class="docutils literal notranslate"><span class="pre">get_submodule(&quot;net_b.net_c.conv&quot;)</span></code>.</p>
+<p>The runtime of <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> is bounded by the degree
+of module nesting in <code class="docutils literal notranslate"><span class="pre">target</span></code>. A query against
+<code class="docutils literal notranslate"><span class="pre">named_modules</span></code> achieves the same result, but it is O(N) in
+the number of transitive modules. So, for a simple check to see
+if some submodule exists, <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> should always be
+used.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>target: The fully-qualified string name of the submodule</dt><dd><p>to look for. (See above example for how to specify a
+fully-qualified string.)</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>torch.nn.Module: The submodule referenced by <code class="docutils literal notranslate"><span class="pre">target</span></code></p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>AttributeError: If at any point along the path resulting from</dt><dd><p>the target string the (sub)path resolves to a non-existent
+attribute name or an object that is not an instance of <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.half">
+<span class="sig-name descname"><span class="pre">half</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.half" title="Link to this definition">#</a></dt>
+<dd><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">half</span></code> datatype.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.ipu">
+<span class="sig-name descname"><span class="pre">ipu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">device</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.ipu" title="Link to this definition">#</a></dt>
+<dd><p>Move all model parameters and buffers to the IPU.</p>
+<p>This also makes associated parameters and buffers different objects. So
+it should be called before constructing the optimizer if the module will
+live on IPU while being optimized.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Arguments:</dt><dd><dl class="simple">
+<dt>device (int, optional): if specified, all parameters will be</dt><dd><p>copied to that device</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict">
+<span class="sig-name descname"><span class="pre">load_state_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assign</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict" title="Link to this definition">#</a></dt>
+<dd><p>Copy parameters and buffers from <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a> into this module and its descendants.</p>
+<p>If <code class="xref py py-attr docutils literal notranslate"><span class="pre">strict</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then
+the keys of <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a> must exactly match the keys returned
+by this module’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code> function.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If <code class="xref py py-attr docutils literal notranslate"><span class="pre">assign</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> the optimizer must be created after
+the call to <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">load_state_dict</span></code></a> unless
+<code class="xref py py-func docutils literal notranslate"><span class="pre">get_swap_module_params_on_conversion()</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>state_dict (dict): a dict containing parameters and</dt><dd><p>persistent buffers.</p>
+</dd>
+<dt>strict (bool, optional): whether to strictly enforce that the keys</dt><dd><p>in <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a> match the keys returned by this module’s
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code> function. Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+<dt>assign (bool, optional): When set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the properties of the tensors</dt><dd><p>in the current module are preserved whereas setting it to <code class="docutils literal notranslate"><span class="pre">True</span></code> preserves
+properties of the Tensors in the state dict. The only
+exception is the <code class="docutils literal notranslate"><span class="pre">requires_grad</span></code> field of <code class="xref py py-class docutils literal notranslate">
+<span class="pre">Default:</span> <span class="pre">``False`</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> with <code class="docutils literal notranslate"><span class="pre">missing_keys</span></code> and <code class="docutils literal notranslate"><span class="pre">unexpected_keys</span></code> fields:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt><strong>missing_keys</strong> is a list of str containing any keys that are expected</dt><dd><p>by this module but missing from the provided <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>unexpected_keys</strong> is a list of str containing the keys that are not</dt><dd><p>expected by this module but present in the provided <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>Note:</dt><dd><p>If a parameter or buffer is registered as <code class="docutils literal notranslate"><span class="pre">None</span></code> and its corresponding key
+exists in <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>, <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_state_dict()</span></code></a> will raise a
+<code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.modules">
+<span class="sig-name descname"><span class="pre">modules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.modules" title="Link to this definition">#</a></dt>
+<dd><p>Return an iterator over all modules in the network.</p>
+<dl class="simple">
+<dt>Yields:</dt><dd><p>Module: a module in the network</p>
+</dd>
+<dt>Note:</dt><dd><p>Duplicate modules are returned only once. In the following
+example, <code class="docutils literal notranslate"><span class="pre">l</span></code> will be returned only once.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">modules</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+
+<span class="go">0 -&gt; Sequential(</span>
+<span class="go">  (0): Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="go">  (1): Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="go">)</span>
+<span class="go">1 -&gt; Linear(in_features=2, out_features=2, bias=True)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.mtia">
+<span class="sig-name descname"><span class="pre">mtia</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">device</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.mtia" title="Link to this definition">#</a></dt>
+<dd><p>Move all model parameters and buffers to the MTIA.</p>
+<p>This also makes associated parameters and buffers different objects. So
+it should be called before constructing the optimizer if the module will
+live on MTIA while being optimized.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Arguments:</dt><dd><dl class="simple">
+<dt>device (int, optional): if specified, all parameters will be</dt><dd><p>copied to that device</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_buffers">
+<span class="sig-name descname"><span class="pre">named_buffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_duplicate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_buffers" title="Link to this definition">#</a></dt>
+<dd><p>Return an iterator over module buffers, yielding both the name of the buffer as well as the buffer itself.</p>
+<dl>
+<dt>Args:</dt><dd><p>prefix (str): prefix to prepend to all buffer names.
+recurse (bool, optional): if True, then yields buffers of this module</p>
+<blockquote>
+<div><p>and all submodules. Otherwise, yields only buffers that
+are direct members of this module. Defaults to True.</p>
+</div></blockquote>
+<p>remove_duplicate (bool, optional): whether to remove the duplicated buffers in the result. Defaults to True.</p>
+</dd>
+<dt>Yields:</dt><dd><p>(str, torch.Tensor): Tuple containing the name and buffer</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># xdoctest: +SKIP(&quot;undefined vars&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">buf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_buffers</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;running_var&#39;</span><span class="p">]:</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_children">
+<span class="sig-name descname"><span class="pre">named_children</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Module</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_children" title="Link to this definition">#</a></dt>
+<dd><p>Return an iterator over immediate children modules, yielding both the name of the module as well as the module itself.</p>
+<dl class="simple">
+<dt>Yields:</dt><dd><p>(str, Module): Tuple containing a name and child module</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># xdoctest: +SKIP(&quot;undefined vars&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">named_children</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;conv4&#39;</span><span class="p">,</span> <span class="s1">&#39;conv5&#39;</span><span class="p">]:</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="nb">print</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_modules">
+<span class="sig-name descname"><span class="pre">named_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_duplicate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_modules" title="Link to this definition">#</a></dt>
+<dd><p>Return an iterator over all modules in the network, yielding both the name of the module as well as the module itself.</p>
+<dl>
+<dt>Args:</dt><dd><p>memo: a memo to store the set of modules already added to the result
+prefix: a prefix that will be added to the name of the module
+remove_duplicate: whether to remove the duplicated module instances in the result</p>
+<blockquote>
+<div><p>or not</p>
+</div></blockquote>
+</dd>
+<dt>Yields:</dt><dd><p>(str, Module): Tuple of name and module</p>
+</dd>
+<dt>Note:</dt><dd><p>Duplicate modules are returned only once. In the following
+example, <code class="docutils literal notranslate"><span class="pre">l</span></code> will be returned only once.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">named_modules</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+
+<span class="go">0 -&gt; (&#39;&#39;, Sequential(</span>
+<span class="go">  (0): Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="go">  (1): Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="go">))</span>
+<span class="go">1 -&gt; (&#39;0&#39;, Linear(in_features=2, out_features=2, bias=True))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_parameters">
+<span class="sig-name descname"><span class="pre">named_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_duplicate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Parameter</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_parameters" title="Link to this definition">#</a></dt>
+<dd><p>Return an iterator over module parameters, yielding both the name of the parameter as well as the parameter itself.</p>
+<dl>
+<dt>Args:</dt><dd><p>prefix (str): prefix to prepend to all parameter names.
+recurse (bool): if True, then yields parameters of this module</p>
+<blockquote>
+<div><p>and all submodules. Otherwise, yields only parameters that
+are direct members of this module.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>remove_duplicate (bool, optional): whether to remove the duplicated</dt><dd><p>parameters in the result. Defaults to True.</p>
+</dd>
+</dl>
+</dd>
+<dt>Yields:</dt><dd><p>(str, Parameter): Tuple containing the name and parameter</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># xdoctest: +SKIP(&quot;undefined vars&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;bias&#39;</span><span class="p">]:</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="nb">print</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Parameter</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.parameters" title="Link to this definition">#</a></dt>
+<dd><p>Return an iterator over module parameters.</p>
+<p>This is typically passed to an optimizer.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>recurse (bool): if True, then yields parameters of this module</dt><dd><p>and all submodules. Otherwise, yields only parameters that
+are direct members of this module.</p>
+</dd>
+</dl>
+</dd>
+<dt>Yields:</dt><dd><p>Parameter: module parameter</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># xdoctest: +SKIP(&quot;undefined vars&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">param</span><span class="p">),</span> <span class="n">param</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+<span class="go">&lt;class &#39;torch.Tensor&#39;&gt; (20L,)</span>
+<span class="go">&lt;class &#39;torch.Tensor&#39;&gt; (20L, 1L, 5L, 5L)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_backward_hook">
+<span class="sig-name descname"><span class="pre">register_backward_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RemovableHandle</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_backward_hook" title="Link to this definition">#</a></dt>
+<dd><p>Register a backward hook on the module.</p>
+<p>This function is deprecated in favor of <code class="xref py py-meth docutils literal notranslate"><span class="pre">register_full_backward_hook()</span></code> and
+the behavior of this function will change in future versions.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
+<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_buffer">
+<span class="sig-name descname"><span class="pre">register_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persistent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_buffer" title="Link to this definition">#</a></dt>
+<dd><p>Add a buffer to the module.</p>
+<p>This is typically used to register a buffer that should not to be
+considered a model parameter. For example, BatchNorm’s <code class="docutils literal notranslate"><span class="pre">running_mean</span></code>
+is not a parameter, but is part of the module’s state. Buffers, by
+default, are persistent and will be saved alongside parameters. This
+behavior can be changed by setting <code class="xref py py-attr docutils literal notranslate"><span class="pre">persistent</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code>. The
+only difference between a persistent buffer and a non-persistent buffer
+is that the latter will not be a part of this module’s
+<a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
+<p>Buffers can be accessed as attributes using given names.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>name (str): name of the buffer. The buffer can be accessed</dt><dd><p>from this module using the given name</p>
+</dd>
+<dt>tensor (Tensor or None): buffer to be registered. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, then operations</dt><dd><p>that run on buffers, such as <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cuda" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cuda"><code class="xref py py-attr docutils literal notranslate"><span class="pre">cuda</span></code></a>, are ignored. If <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+the buffer is <strong>not</strong> included in the module’s <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
+</dd>
+<dt>persistent (bool): whether the buffer is part of this module’s</dt><dd><p><a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># xdoctest: +SKIP(&quot;undefined vars&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;running_mean&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_features</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_forward_hook">
+<span class="sig-name descname"><span class="pre">register_forward_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">always_call</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RemovableHandle</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_forward_hook" title="Link to this definition">#</a></dt>
+<dd><p>Register a forward hook on the module.</p>
+<p>The hook will be called every time after <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> has computed an output.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">with_kwargs</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> or not specified, the input contains only
+the positional arguments given to the module. Keyword arguments won’t be
+passed to the hooks and only to the <code class="docutils literal notranslate"><span class="pre">forward</span></code>. The hook can modify the
+output. It can modify the input inplace but it will not have effect on
+forward since this is called after <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> is called. The hook
+should have the following signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hook</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">modified</span> <span class="n">output</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">with_kwargs</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the forward hook will be passed the
+<code class="docutils literal notranslate"><span class="pre">kwargs</span></code> given to the forward function and be expected to return the
+output possibly modified. The hook should have the following signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hook</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">modified</span> <span class="n">output</span>
+</pre></div>
+</div>
+<dl>
+<dt>Args:</dt><dd><p>hook (Callable): The user defined hook to be registered.
+prepend (bool): If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the provided <code class="docutils literal notranslate"><span class="pre">hook</span></code> will be fired</p>
+<blockquote>
+<div><p>before all existing <code class="docutils literal notranslate"><span class="pre">forward</span></code> hooks on this
+<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. Otherwise, the provided
+<code class="docutils literal notranslate"><span class="pre">hook</span></code> will be fired after all existing <code class="docutils literal notranslate"><span class="pre">forward</span></code> hooks on
+this <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. Note that global
+<code class="docutils literal notranslate"><span class="pre">forward</span></code> hooks registered with
+<code class="xref py py-func docutils literal notranslate"><span class="pre">register_module_forward_hook()</span></code> will fire before all hooks
+registered by this method.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</div></blockquote>
+<dl class="simple">
+<dt>with_kwargs (bool): If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the <code class="docutils literal notranslate"><span class="pre">hook</span></code> will be passed the</dt><dd><p>kwargs given to the forward function.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt>always_call (bool): If <code class="docutils literal notranslate"><span class="pre">True</span></code> the <code class="docutils literal notranslate"><span class="pre">hook</span></code> will be run regardless of</dt><dd><p>whether an exception is raised while calling the Module.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
+<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_forward_pre_hook">
+<span class="sig-name descname"><span class="pre">register_forward_pre_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RemovableHandle</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_forward_pre_hook" title="Link to this definition">#</a></dt>
+<dd><p>Register a forward pre-hook on the module.</p>
+<p>The hook will be called every time before <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> is invoked.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">with_kwargs</span></code> is false or not specified, the input contains only
+the positional arguments given to the module. Keyword arguments won’t be
+passed to the hooks and only to the <code class="docutils literal notranslate"><span class="pre">forward</span></code>. The hook can modify the
+input. User can either return a tuple or a single modified value in the
+hook. We will wrap the value into a tuple if a single value is returned
+(unless that value is already a tuple). The hook should have the
+following signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hook</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">modified</span> <span class="nb">input</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">with_kwargs</span></code> is true, the forward pre-hook will be passed the
+kwargs given to the forward function. And if the hook modifies the
+input, both the args and kwargs should be returned. The hook should have
+the following signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hook</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">a</span> <span class="nb">tuple</span> <span class="n">of</span> <span class="n">modified</span> <span class="nb">input</span> <span class="ow">and</span> <span class="n">kwargs</span>
+</pre></div>
+</div>
+<dl>
+<dt>Args:</dt><dd><p>hook (Callable): The user defined hook to be registered.
+prepend (bool): If true, the provided <code class="docutils literal notranslate"><span class="pre">hook</span></code> will be fired before</p>
+<blockquote>
+<div><p>all existing <code class="docutils literal notranslate"><span class="pre">forward_pre</span></code> hooks on this
+<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. Otherwise, the provided
+<code class="docutils literal notranslate"><span class="pre">hook</span></code> will be fired after all existing <code class="docutils literal notranslate"><span class="pre">forward_pre</span></code> hooks
+on this <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. Note that global
+<code class="docutils literal notranslate"><span class="pre">forward_pre</span></code> hooks registered with
+<code class="xref py py-func docutils literal notranslate"><span class="pre">register_module_forward_pre_hook()</span></code> will fire before all
+hooks registered by this method.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</div></blockquote>
+<dl class="simple">
+<dt>with_kwargs (bool): If true, the <code class="docutils literal notranslate"><span class="pre">hook</span></code> will be passed the kwargs</dt><dd><p>given to the forward function.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
+<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_full_backward_hook">
+<span class="sig-name descname"><span class="pre">register_full_backward_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RemovableHandle</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_full_backward_hook" title="Link to this definition">#</a></dt>
+<dd><p>Register a backward hook on the module.</p>
+<p>The hook will be called every time the gradients with respect to a module
+are computed, i.e. the hook will execute if and only if the gradients with
+respect to module outputs are computed. The hook should have the following
+signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hook</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">grad_input</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">Tensor</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_input</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_output</span></code> are tuples that contain the gradients
+with respect to the inputs and outputs respectively. The hook should
+not modify its arguments, but it can optionally return a new gradient with
+respect to the input that will be used in place of <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_input</span></code> in
+subsequent computations. <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_input</span></code> will only correspond to the inputs given
+as positional arguments and all kwarg arguments are ignored. Entries
+in <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_input</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_output</span></code> will be <code class="docutils literal notranslate"><span class="pre">None</span></code> for all non-Tensor
+arguments.</p>
+<p>For technical reasons, when this hook is applied to a Module, its forward function will
+receive a view of each Tensor passed to the Module. Similarly the caller will receive a view
+of each Tensor returned by the Module’s forward function.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Modifying inputs or outputs inplace is not allowed when using backward hooks and
+will raise an error.</p>
+</div>
+<dl>
+<dt>Args:</dt><dd><p>hook (Callable): The user-defined hook to be registered.
+prepend (bool): If true, the provided <code class="docutils literal notranslate"><span class="pre">hook</span></code> will be fired before</p>
+<blockquote>
+<div><p>all existing <code class="docutils literal notranslate"><span class="pre">backward</span></code> hooks on this
+<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. Otherwise, the provided
+<code class="docutils literal notranslate"><span class="pre">hook</span></code> will be fired after all existing <code class="docutils literal notranslate"><span class="pre">backward</span></code> hooks on
+this <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. Note that global
+<code class="docutils literal notranslate"><span class="pre">backward</span></code> hooks registered with
+<code class="xref py py-func docutils literal notranslate"><span class="pre">register_module_full_backward_hook()</span></code> will fire before
+all hooks registered by this method.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
+<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_full_backward_pre_hook">
+<span class="sig-name descname"><span class="pre">register_full_backward_pre_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RemovableHandle</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_full_backward_pre_hook" title="Link to this definition">#</a></dt>
+<dd><p>Register a backward pre-hook on the module.</p>
+<p>The hook will be called every time the gradients for the module are computed.
+The hook should have the following signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hook</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_output</span></code> is a tuple. The hook should
+not modify its arguments, but it can optionally return a new gradient with
+respect to the output that will be used in place of <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_output</span></code> in
+subsequent computations. Entries in <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_output</span></code> will be <code class="docutils literal notranslate"><span class="pre">None</span></code> for
+all non-Tensor arguments.</p>
+<p>For technical reasons, when this hook is applied to a Module, its forward function will
+receive a view of each Tensor passed to the Module. Similarly the caller will receive a view
+of each Tensor returned by the Module’s forward function.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Modifying inputs inplace is not allowed when using backward hooks and
+will raise an error.</p>
+</div>
+<dl>
+<dt>Args:</dt><dd><p>hook (Callable): The user-defined hook to be registered.
+prepend (bool): If true, the provided <code class="docutils literal notranslate"><span class="pre">hook</span></code> will be fired before</p>
+<blockquote>
+<div><p>all existing <code class="docutils literal notranslate"><span class="pre">backward_pre</span></code> hooks on this
+<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. Otherwise, the provided
+<code class="docutils literal notranslate"><span class="pre">hook</span></code> will be fired after all existing <code class="docutils literal notranslate"><span class="pre">backward_pre</span></code> hooks
+on this <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. Note that global
+<code class="docutils literal notranslate"><span class="pre">backward_pre</span></code> hooks registered with
+<code class="xref py py-func docutils literal notranslate"><span class="pre">register_module_full_backward_pre_hook()</span></code> will fire before
+all hooks registered by this method.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
+<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_load_state_dict_post_hook">
+<span class="sig-name descname"><span class="pre">register_load_state_dict_post_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_load_state_dict_post_hook" title="Link to this definition">#</a></dt>
+<dd><p>Register a post-hook to be run after module’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">load_state_dict()</span></code> is called.</p>
+<dl class="simple">
+<dt>It should have the following signature::</dt><dd><p>hook(module, incompatible_keys) -&gt; None</p>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">module</span></code> argument is the current module that this hook is registered
+on, and the <code class="docutils literal notranslate"><span class="pre">incompatible_keys</span></code> argument is a <code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> consisting
+of attributes <code class="docutils literal notranslate"><span class="pre">missing_keys</span></code> and <code class="docutils literal notranslate"><span class="pre">unexpected_keys</span></code>. <code class="docutils literal notranslate"><span class="pre">missing_keys</span></code>
+is a <code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code> containing the missing keys and
+<code class="docutils literal notranslate"><span class="pre">unexpected_keys</span></code> is a <code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code> containing the unexpected keys.</p>
+<p>The given incompatible_keys can be modified inplace if needed.</p>
+<p>Note that the checks performed when calling <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_state_dict()</span></code></a> with
+<code class="docutils literal notranslate"><span class="pre">strict=True</span></code> are affected by modifications the hook makes to
+<code class="docutils literal notranslate"><span class="pre">missing_keys</span></code> or <code class="docutils literal notranslate"><span class="pre">unexpected_keys</span></code>, as expected. Additions to either
+set of keys will result in an error being thrown when <code class="docutils literal notranslate"><span class="pre">strict=True</span></code>, and
+clearing out both missing and unexpected keys will avoid an error.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
+<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_load_state_dict_pre_hook">
+<span class="sig-name descname"><span class="pre">register_load_state_dict_pre_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_load_state_dict_pre_hook" title="Link to this definition">#</a></dt>
+<dd><p>Register a pre-hook to be run before module’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">load_state_dict()</span></code> is called.</p>
+<dl class="simple">
+<dt>It should have the following signature::</dt><dd><p>hook(module, state_dict, prefix, local_metadata, strict, missing_keys, unexpected_keys, error_msgs) -&gt; None  # noqa: B950</p>
+</dd>
+<dt>Arguments:</dt><dd><dl class="simple">
+<dt>hook (Callable): Callable hook that will be invoked before</dt><dd><p>loading the state dict.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_module">
+<span class="sig-name descname"><span class="pre">register_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_module" title="Link to this definition">#</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.add_module" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.add_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_module()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_parameter">
+<span class="sig-name descname"><span class="pre">register_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Parameter</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_parameter" title="Link to this definition">#</a></dt>
+<dd><p>Add a parameter to the module.</p>
+<p>The parameter can be accessed as an attribute using given name.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>name (str): name of the parameter. The parameter can be accessed</dt><dd><p>from this module using the given name</p>
+</dd>
+<dt>param (Parameter or None): parameter to be added to the module. If</dt><dd><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, then operations that run on parameters, such as <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cuda" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cuda"><code class="xref py py-attr docutils literal notranslate"><span class="pre">cuda</span></code></a>,
+are ignored. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the parameter is <strong>not</strong> included in the
+module’s <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_state_dict_post_hook">
+<span class="sig-name descname"><span class="pre">register_state_dict_post_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_state_dict_post_hook" title="Link to this definition">#</a></dt>
+<dd><p>Register a post-hook for the <code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code> method.</p>
+<dl class="simple">
+<dt>It should have the following signature::</dt><dd><p>hook(module, state_dict, prefix, local_metadata) -&gt; None</p>
+</dd>
+</dl>
+<p>The registered hooks can modify the <code class="docutils literal notranslate"><span class="pre">state_dict</span></code> inplace.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_state_dict_pre_hook">
+<span class="sig-name descname"><span class="pre">register_state_dict_pre_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_state_dict_pre_hook" title="Link to this definition">#</a></dt>
+<dd><p>Register a pre-hook for the <code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code> method.</p>
+<dl class="simple">
+<dt>It should have the following signature::</dt><dd><p>hook(module, prefix, keep_vars) -&gt; None</p>
+</dd>
+</dl>
+<p>The registered hooks can be used to perform pre-processing before the <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>
+call is made.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.requires_grad_">
+<span class="sig-name descname"><span class="pre">requires_grad_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requires_grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.requires_grad_" title="Link to this definition">#</a></dt>
+<dd><p>Change if autograd should record operations on parameters in this module.</p>
+<p>This method sets the parameters’ <code class="xref py py-attr docutils literal notranslate"><span class="pre">requires_grad</span></code> attributes
+in-place.</p>
+<p>This method is helpful for freezing part of the module for finetuning
+or training parts of a model individually (e.g., GAN training).</p>
+<p>See <span class="xref std std-ref">locally-disable-grad-doc</span> for a comparison between
+<a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.requires_grad_" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.requires_grad_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">requires_grad_()</span></code></a> and several similar mechanisms that may be confused with it.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>requires_grad (bool): whether autograd should record operations on</dt><dd><p>parameters in this module. Default: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters">
+<span class="sig-name descname"><span class="pre">setModelParameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters" title="Link to this definition">#</a></dt>
+<dd><p>Sets the parameters of the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters">
+<span class="sig-name descname"><span class="pre">setModelSCParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">small_constant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters" title="Link to this definition">#</a></dt>
+<dd><p>Sets the parameters of the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.set_extra_state">
+<span class="sig-name descname"><span class="pre">set_extra_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.set_extra_state" title="Link to this definition">#</a></dt>
+<dd><p>Set extra state contained in the loaded <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
+<p>This function is called from <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_state_dict()</span></code></a> to handle any extra state
+found within the <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code></a>. Implement this function and a corresponding
+<a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_extra_state" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_extra_state"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_extra_state()</span></code></a> for your module if you need to store extra state within its
+<a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>state (dict): Extra state from the <a class="reference internal" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.set_submodule">
+<span class="sig-name descname"><span class="pre">set_submodule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.set_submodule" title="Link to this definition">#</a></dt>
+<dd><p>Set the submodule given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throw an error.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">strict</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), the method will replace an existing submodule
+or create a new submodule if the parent module exists. If <code class="docutils literal notranslate"><span class="pre">strict</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>,
+the method will only attempt to replace an existing submodule and throw an error if
+the submodule does not exist.</p>
+</div>
+<p>For example, let’s say you have an <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> <code class="docutils literal notranslate"><span class="pre">A</span></code> that
+looks like this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>A(
+    (net_b): Module(
+        (net_c): Module(
+            (conv): Conv2d(3, 3, 3)
+        )
+        (linear): Linear(3, 3)
+    )
+)
+</pre></div>
+</div>
+<p>(The diagram shows an <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> <code class="docutils literal notranslate"><span class="pre">A</span></code>. <code class="docutils literal notranslate"><span class="pre">A</span></code> has a nested
+submodule <code class="docutils literal notranslate"><span class="pre">net_b</span></code>, which itself has two submodules <code class="docutils literal notranslate"><span class="pre">net_c</span></code>
+and <code class="docutils literal notranslate"><span class="pre">linear</span></code>. <code class="docutils literal notranslate"><span class="pre">net_c</span></code> then has a submodule <code class="docutils literal notranslate"><span class="pre">conv</span></code>.)</p>
+<p>To override the <code class="docutils literal notranslate"><span class="pre">Conv2d</span></code> with a new submodule <code class="docutils literal notranslate"><span class="pre">Linear</span></code>, you
+could call <code class="docutils literal notranslate"><span class="pre">set_submodule(&quot;net_b.net_c.conv&quot;,</span> <span class="pre">nn.Linear(1,</span> <span class="pre">1))</span></code>
+where <code class="docutils literal notranslate"><span class="pre">strict</span></code> could be <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+<p>To add a new submodule <code class="docutils literal notranslate"><span class="pre">Conv2d</span></code> to the existing <code class="docutils literal notranslate"><span class="pre">net_b</span></code> module,
+you would call <code class="docutils literal notranslate"><span class="pre">set_submodule(&quot;net_b.conv&quot;,</span> <span class="pre">nn.Conv2d(1,</span> <span class="pre">1,</span> <span class="pre">1))</span></code>.</p>
+<p>In the above if you set <code class="docutils literal notranslate"><span class="pre">strict=True</span></code> and call
+<code class="docutils literal notranslate"><span class="pre">set_submodule(&quot;net_b.conv&quot;,</span> <span class="pre">nn.Conv2d(1,</span> <span class="pre">1,</span> <span class="pre">1),</span> <span class="pre">strict=True)</span></code>, an AttributeError
+will be raised because <code class="docutils literal notranslate"><span class="pre">net_b</span></code> does not have a submodule named <code class="docutils literal notranslate"><span class="pre">conv</span></code>.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>target: The fully-qualified string name of the submodule</dt><dd><p>to look for. (See above example for how to specify a
+fully-qualified string.)</p>
+</dd>
+</dl>
+<p>module: The module to set the submodule to.
+strict: If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the method will replace an existing submodule</p>
+<blockquote>
+<div><p>or create a new submodule if the parent module exists. If <code class="docutils literal notranslate"><span class="pre">True</span></code>,
+the method will only attempt to replace an existing submodule and throw an error
+if the submodule doesn’t already exist.</p>
+</div></blockquote>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If the <code class="docutils literal notranslate"><span class="pre">target</span></code> string is empty or if <code class="docutils literal notranslate"><span class="pre">module</span></code> is not an instance of <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code>.
+AttributeError: If at any point along the path resulting from</p>
+<blockquote>
+<div><p>the <code class="docutils literal notranslate"><span class="pre">target</span></code> string the (sub)path resolves to a non-existent
+attribute name or an object that is not an instance of <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code>.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.share_memory">
+<span class="sig-name descname"><span class="pre">share_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.share_memory" title="Link to this definition">#</a></dt>
+<dd><p>See <code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.share_memory_()</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict">
+<span class="sig-name descname"><span class="pre">state_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict" title="Link to this definition">#</a></dt>
+<dd><p>Return a dictionary containing references to the whole state of the module.</p>
+<p>Both parameters and persistent buffers (e.g. running averages) are
+included. Keys are corresponding parameter and buffer names.
+Parameters and buffers set to <code class="docutils literal notranslate"><span class="pre">None</span></code> are not included.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The returned object is a shallow copy. It contains references
+to the module’s parameters and buffers.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Currently <code class="docutils literal notranslate"><span class="pre">state_dict()</span></code> also accepts positional arguments for
+<code class="docutils literal notranslate"><span class="pre">destination</span></code>, <code class="docutils literal notranslate"><span class="pre">prefix</span></code> and <code class="docutils literal notranslate"><span class="pre">keep_vars</span></code> in order. However,
+this is being deprecated and keyword arguments will be enforced in
+future releases.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please avoid the use of argument <code class="docutils literal notranslate"><span class="pre">destination</span></code> as it is not
+designed for end-users.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>destination (dict, optional): If provided, the state of module will</dt><dd><p>be updated into the dict and the same object is returned.
+Otherwise, an <code class="docutils literal notranslate"><span class="pre">OrderedDict</span></code> will be created and returned.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt>prefix (str, optional): a prefix added to parameter and buffer</dt><dd><p>names to compose the keys in state_dict. Default: <code class="docutils literal notranslate"><span class="pre">''</span></code>.</p>
+</dd>
+<dt>keep_vars (bool, optional): by default the <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code> s</dt><dd><p>returned in the state dict are detached from autograd. If it’s
+set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, detaching will not be performed.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>dict:</dt><dd><p>a dictionary containing a whole state of the module</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># xdoctest: +SKIP(&quot;undefined vars&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;bias&#39;, &#39;weight&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.to" title="Link to this definition">#</a></dt>
+<dd><p>Move and/or cast the parameters and buffers.</p>
+<p>This can be called as</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memory_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.channels_last</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>Its signature is similar to <code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.to()</span></code>, but only accepts
+floating point or complex <code class="xref py py-attr docutils literal notranslate"><span class="pre">dtype</span></code>s. In addition, this method will
+only cast the floating point or complex parameters and buffers to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dtype</span></code>
+(if given). The integral parameters and buffers will be moved
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">device</span></code>, if that is given, but with dtypes unchanged. When
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">non_blocking</span></code> is set, it tries to convert/move asynchronously
+with respect to the host if possible, e.g., moving CPU Tensors with
+pinned memory to CUDA devices.</p>
+<p>See below for examples.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>device (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.device</span></code>): the desired device of the parameters</dt><dd><p>and buffers in this module</p>
+</dd>
+<dt>dtype (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.dtype</span></code>): the desired floating point or complex dtype of</dt><dd><p>the parameters and buffers in this module</p>
+</dd>
+<dt>tensor (torch.Tensor): Tensor whose dtype and device are the desired</dt><dd><p>dtype and device for all parameters and buffers in this module</p>
+</dd>
+<dt>memory_format (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.memory_format</span></code>): the desired memory</dt><dd><p>format for 4D parameters and buffers in this module (keyword
+only argument)</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># xdoctest: +IGNORE_WANT(&quot;non-deterministic&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
+<span class="go">Parameter containing:</span>
+<span class="go">tensor([[ 0.1913, -0.3420],</span>
+<span class="go">        [-0.5113, -0.2325]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
+<span class="go">Parameter containing:</span>
+<span class="go">tensor([[ 0.1913, -0.3420],</span>
+<span class="go">        [-0.5113, -0.2325]], dtype=torch.float64)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># xdoctest: +REQUIRES(env:TORCH_DOCTEST_CUDA1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gpu1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">gpu1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">half</span><span class="p">,</span> <span class="n">non_blocking</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
+<span class="go">Parameter containing:</span>
+<span class="go">tensor([[ 0.1914, -0.3420],</span>
+<span class="go">        [-0.5112, -0.2324]], dtype=torch.float16, device=&#39;cuda:1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cpu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cpu</span><span class="p">)</span>
+<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
+<span class="go">Parameter containing:</span>
+<span class="go">tensor([[ 0.1914, -0.3420],</span>
+<span class="go">        [-0.5112, -0.2324]], dtype=torch.float16)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cdouble</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
+<span class="go">Parameter containing:</span>
+<span class="go">tensor([[ 0.3741+0.j,  0.2382+0.j],</span>
+<span class="go">        [ 0.5593+0.j, -0.4443+0.j]], dtype=torch.complex128)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cdouble</span><span class="p">))</span>
+<span class="go">tensor([[0.6122+0.j, 0.1150+0.j],</span>
+<span class="go">        [0.6122+0.j, 0.1150+0.j],</span>
+<span class="go">        [0.6122+0.j, 0.1150+0.j]], dtype=torch.complex128)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.to_empty">
+<span class="sig-name descname"><span class="pre">to_empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">device</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.to_empty" title="Link to this definition">#</a></dt>
+<dd><p>Move the parameters and buffers to the specified device without copying storage.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>device (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.device</span></code>): The desired device of the parameters</dt><dd><p>and buffers in this module.</p>
+</dd>
+<dt>recurse (bool): Whether parameters and buffers of submodules should</dt><dd><p>be recursively moved to the specified device.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.train" title="Link to this definition">#</a></dt>
+<dd><p>Set the module in training mode.</p>
+<p>This has an effect only on certain modules. See the documentation of
+particular modules for details of their behaviors in training/evaluation
+mode, i.e., whether they are affected, e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">Dropout</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchNorm</span></code>,
+etc.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>mode (bool): whether to set training mode (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or evaluation</dt><dd><p>mode (<code class="docutils literal notranslate"><span class="pre">False</span></code>). Default: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.training" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.type">
+<span class="sig-name descname"><span class="pre">type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dst_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dtype</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.type" title="Link to this definition">#</a></dt>
+<dd><p>Casts all parameters and buffers to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dst_type</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dst_type (type or string): the desired type</p>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.xpu">
+<span class="sig-name descname"><span class="pre">xpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">device</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.xpu" title="Link to this definition">#</a></dt>
+<dd><p>Move all model parameters and buffers to the XPU.</p>
+<p>This also makes associated parameters and buffers different objects. So
+it should be called before constructing optimizer if the module will
+live on XPU while being optimized.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the module in-place.</p>
+</div>
+<dl class="simple">
+<dt>Arguments:</dt><dd><dl class="simple">
+<dt>device (int, optional): if specified, all parameters will be</dt><dd><p>copied to that device</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Module: self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.zero_grad">
+<span class="sig-name descname"><span class="pre">zero_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_to_none</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.zero_grad" title="Link to this definition">#</a></dt>
+<dd><p>Reset gradients of all model parameters.</p>
+<p>See similar function under <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.Optimizer</span></code> for more context.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>set_to_none (bool): instead of setting to zero, set the grads to None.</dt><dd><p>See <code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.optim.Optimizer.zero_grad()</span></code> for details.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+  
+</div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel"><code class="docutils literal notranslate"><span class="pre">JansenRitModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.T_destination"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.T_destination</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.__init__"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.add_module"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.add_module()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.apply"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.apply()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.bfloat16"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.bfloat16()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.buffers"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.buffers()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.call_super_init"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.call_super_init</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.children"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.children()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.compile"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.compile()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cpu"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.cpu()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createDelayIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createDelayIC()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.createIC"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.createIC()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.cuda"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.cuda()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.double"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.double()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.dump_patches"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.dump_patches</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.eval"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.eval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.extra_repr"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.extra_repr()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.float"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.float()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.forward"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.forward()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_buffer"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.get_buffer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_extra_state"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.get_extra_state()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_parameter"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.get_parameter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.get_submodule"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.get_submodule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.half"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.half()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.info"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.ipu"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.ipu()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.load_state_dict"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.load_state_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.modules"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.modules()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.mtia"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.mtia()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_buffers"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.named_buffers()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_children"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.named_children()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_modules"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.named_modules()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.named_parameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.named_parameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.parameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.parameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_backward_hook"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_backward_hook()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_buffer"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_buffer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_forward_hook"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_forward_hook()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_forward_pre_hook"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_forward_pre_hook()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_full_backward_hook"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_full_backward_hook()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_full_backward_pre_hook"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_full_backward_pre_hook()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_load_state_dict_post_hook"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_load_state_dict_post_hook()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_load_state_dict_pre_hook"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_load_state_dict_pre_hook()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_module"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_module()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_parameter"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_parameter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_state_dict_post_hook"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_state_dict_post_hook()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.register_state_dict_pre_hook"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.register_state_dict_pre_hook()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.requires_grad_"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.requires_grad_()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelParameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.setModelSCParameters"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.setModelSCParameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.set_extra_state"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.set_extra_state()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.set_submodule"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.set_submodule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.share_memory"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.share_memory()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.state_dict"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.state_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.to"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.to_empty"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.to_empty()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.train"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.train()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.training"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.training</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.type"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.type()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.xpu"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.xpu()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.models.jansen_rit.jansen_rit.JansenRitModel.zero_grad"><code class="docutils literal notranslate"><span class="pre">JansenRitModel.zero_grad()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+    <script src="https://mne.tools/versionwarning.js"></script>
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><p class="text-center small">&copy; Copyright </p></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
