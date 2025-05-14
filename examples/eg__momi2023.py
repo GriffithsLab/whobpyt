@@ -256,7 +256,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # --------------------------------------------------
 #
 # Importage:
-# 
+
 # os stuff
 import os
 import sys
@@ -294,8 +294,6 @@ import glob
 import re
 
 from whobpyt.datasets.fetchers import fetch_egmomi2023
-
-
 
 
 
