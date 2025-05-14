@@ -8,9 +8,9 @@ pooch
 torch
 scikit-learn
 mne==1.9.0
-kaggle
 nilearn
 nibabel
+openpyxl
 
 # Docs requirements
 sphinx >= 7.2	
