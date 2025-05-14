@@ -12,8 +12,10 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
+    env:
+      WHOBPYT_DATA: $HOME/.whobpyt/data
     
+    steps:
     - name: Checkout repo  
       uses: actions/checkout@v3  
       with:  
@@ -63,6 +65,27 @@ jobs:
         key: ${{ runner.os }}-sphinx-${{ hashFiles('examples/**/*.py', 'doc/**/*', 'conf.py') }}
         restore-keys: |
           ${{ runner.os }}-sphinx-
+
+    - name: Restore cached whobpyt data
+      id: cache-whobpyt
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.WHOBPYT_DATA }}
+        key: ${{ runner.os }}-whobpyt-data-v1      # bump to v2 if you need a fresh copy
+        restore-keys: |
+          ${{ runner.os }}-whobpyt-data-
+
+    - name: Fetch datasets (first run only)
+      if: steps.cache-whobpyt.outputs.cache-hit != 'true'
+      run: |
+        python - <<'PY'
+        import whobpyt
+        from whobpyt.datasets.fetchers import fetch_egmomi2023, fetch_egmomi2025,fetch_egtmseeg, fetch_egismail2025  
+        fetch_egmomi2023()
+        fetch_egmomi2025()
+        fetch_egismail2025()
+        fetch_egtmseeg()
+        PY
         
     - name: Build docs
       run: |
