@@ -403,17 +403,208 @@ inhibition to drive laterality. This work provides a developmental framework for
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__ismail2025.py&quot;</span>, line <span class="m">46</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.ismail2025.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamsModel</span><span class="p">,</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">Model_fitting</span><span class="p">,</span> <span class="n">dataloader</span>
-<span class="gr">ModuleNotFoundError</span>: <span class="n">No module named &#39;whobpyt.depr.ismail2025&#39;</span>
-</pre></div>
-</div>
 </section>
 <section id="download-data">
 <h2>2. Download data<a class="headerlink" href="#download-data" title="Link to this heading">#</a></h2>
 <p>We use an example dataset for one subject on a public Google Drive folder</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">fetch_egismail2025</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading file 1 of 12: distance.txt
+
+
+Downloading distance.txt
+
+Downloading...
+From: https://drive.google.com/uc?id=1P4WSVLiWDdoK_S2cSlDyt1V7JuphfsaZ
+To: /home/runner/.whobpyt/data/eg__ismail2025/distance.txt
+
+  0%|          | 0.00/569k [00:00&lt;?, ?B/s]
+ 92%|█████████▏| 524k/569k [00:00&lt;00:00, 4.57MB/s]
+100%|██████████| 569k/569k [00:00&lt;00:00, 4.88MB/s]
+Downloading file 2 of 12: emp_noise_source.npy
+
+
+Downloading emp_noise_source.npy
+
+Downloading...
+From (original): https://drive.google.com/uc?id=1hubOoaJcCExawBKk-fpxNXSmSi-dx2-v
+From (redirected): https://drive.google.com/uc?id=1hubOoaJcCExawBKk-fpxNXSmSi-dx2-v&amp;confirm=t&amp;uuid=078556eb-2d78-4a73-8509-9dad888c60c0
+To: /home/runner/.whobpyt/data/eg__ismail2025/emp_noise_source.npy
+
+  0%|          | 0.00/200M [00:00&lt;?, ?B/s]
+  0%|          | 524k/200M [00:00&lt;00:45, 4.39MB/s]
+  3%|▎         | 6.82M/200M [00:00&lt;00:06, 29.4MB/s]
+  7%|▋         | 13.1M/200M [00:00&lt;00:06, 30.2MB/s]
+ 10%|▉         | 19.4M/200M [00:00&lt;00:04, 38.4MB/s]
+ 12%|█▏        | 23.6M/200M [00:00&lt;00:05, 33.4MB/s]
+ 14%|█▎        | 27.3M/200M [00:00&lt;00:05, 30.0MB/s]
+ 16%|█▌        | 32.0M/200M [00:01&lt;00:05, 30.8MB/s]
+ 18%|█▊        | 35.7M/200M [00:01&lt;00:05, 31.8MB/s]
+ 20%|██        | 40.4M/200M [00:01&lt;00:05, 30.2MB/s]
+ 22%|██▏       | 43.5M/200M [00:01&lt;00:06, 23.9MB/s]
+ 25%|██▌       | 50.9M/200M [00:01&lt;00:04, 32.9MB/s]
+ 30%|██▉       | 59.2M/200M [00:01&lt;00:03, 38.5MB/s]
+ 32%|███▏      | 63.4M/200M [00:01&lt;00:03, 36.5MB/s]
+ 36%|███▌      | 71.8M/200M [00:02&lt;00:03, 39.0MB/s]
+ 41%|████      | 82.3M/200M [00:02&lt;00:03, 38.7MB/s]
+ 47%|████▋     | 94.9M/200M [00:02&lt;00:02, 49.1MB/s]
+ 50%|█████     | 100M/200M [00:02&lt;00:02, 48.8MB/s]
+ 54%|█████▎    | 107M/200M [00:02&lt;00:02, 41.0MB/s]
+ 59%|█████▉    | 118M/200M [00:03&lt;00:02, 40.2MB/s]
+ 65%|██████▌   | 131M/200M [00:03&lt;00:01, 44.1MB/s]
+ 68%|██████▊   | 135M/200M [00:03&lt;00:01, 44.4MB/s]
+ 73%|███████▎  | 145M/200M [00:03&lt;00:01, 44.5MB/s]
+ 80%|███████▉  | 160M/200M [00:03&lt;00:00, 58.2MB/s]
+ 87%|████████▋ | 175M/200M [00:04&lt;00:00, 67.4MB/s]
+ 92%|█████████▏| 184M/200M [00:04&lt;00:00, 72.4MB/s]
+ 96%|█████████▌| 192M/200M [00:04&lt;00:00, 59.2MB/s]
+ 99%|█████████▉| 199M/200M [00:04&lt;00:00, 60.6MB/s]
+100%|██████████| 200M/200M [00:04&lt;00:00, 44.4MB/s]
+Downloading file 3 of 12: emp_verb_source.npy
+
+
+Downloading emp_verb_source.npy
+
+Downloading...
+From (original): https://drive.google.com/uc?id=1frpLiDxwdduE1LAOWGPCSDTETTWjkKUh
+From (redirected): https://drive.google.com/uc?id=1frpLiDxwdduE1LAOWGPCSDTETTWjkKUh&amp;confirm=t&amp;uuid=a747290e-bd32-4499-a14c-979875c91918
+To: /home/runner/.whobpyt/data/eg__ismail2025/emp_verb_source.npy
+
+  0%|          | 0.00/209M [00:00&lt;?, ?B/s]
+  0%|          | 524k/209M [00:00&lt;00:45, 4.62MB/s]
+  3%|▎         | 6.82M/209M [00:00&lt;00:08, 23.5MB/s]
+  6%|▋         | 13.1M/209M [00:00&lt;00:05, 35.4MB/s]
+  8%|▊         | 17.3M/209M [00:00&lt;00:05, 34.8MB/s]
+ 11%|█▏        | 23.6M/209M [00:00&lt;00:05, 35.9MB/s]
+ 14%|█▍        | 29.9M/209M [00:00&lt;00:05, 32.4MB/s]
+ 18%|█▊        | 38.3M/209M [00:01&lt;00:04, 36.9MB/s]
+ 21%|██▏       | 44.6M/209M [00:01&lt;00:04, 39.8MB/s]
+ 23%|██▎       | 48.8M/209M [00:01&lt;00:05, 30.9MB/s]
+ 27%|██▋       | 57.1M/209M [00:01&lt;00:04, 33.7MB/s]
+ 33%|███▎      | 69.7M/209M [00:01&lt;00:02, 49.0MB/s]
+ 36%|███▌      | 75.5M/209M [00:01&lt;00:02, 49.4MB/s]
+ 41%|████▏     | 86.5M/209M [00:02&lt;00:01, 61.7MB/s]
+ 45%|████▍     | 93.8M/209M [00:02&lt;00:02, 57.2MB/s]
+ 49%|████▉     | 103M/209M [00:02&lt;00:01, 64.3MB/s]
+ 53%|█████▎    | 111M/209M [00:02&lt;00:01, 59.6MB/s]
+ 56%|█████▌    | 117M/209M [00:02&lt;00:02, 41.0MB/s]
+ 63%|██████▎   | 132M/209M [00:02&lt;00:01, 59.4MB/s]
+ 67%|██████▋   | 140M/209M [00:03&lt;00:01, 46.5MB/s]
+ 71%|███████▏  | 149M/209M [00:03&lt;00:01, 49.9MB/s]
+ 78%|███████▊  | 163M/209M [00:03&lt;00:00, 64.2MB/s]
+ 82%|████████▏ | 171M/209M [00:03&lt;00:00, 61.9MB/s]
+ 86%|████████▌ | 179M/209M [00:03&lt;00:00, 66.0MB/s]
+ 91%|█████████ | 189M/209M [00:03&lt;00:00, 67.0MB/s]
+ 97%|█████████▋| 202M/209M [00:03&lt;00:00, 75.8MB/s]
+100%|██████████| 209M/209M [00:04&lt;00:00, 51.0MB/s]
+Downloading file 4 of 12: info.pkl
+
+
+Downloading info.pkl
+
+Downloading...
+From: https://drive.google.com/uc?id=1HpMJzTzxNn-YItSo_GJvCpI3EEuvVWUP
+To: /home/runner/.whobpyt/data/eg__ismail2025/info.pkl
+
+  0%|          | 0.00/59.0k [00:00&lt;?, ?B/s]
+100%|██████████| 59.0k/59.0k [00:00&lt;00:00, 1.26MB/s]
+Downloading file 5 of 12: leadfield_3d.mat
+
+
+Downloading leadfield_3d.mat
+
+Downloading...
+From (original): https://drive.google.com/uc?id=1gtVxgl1z6QQKDyuxlWdePUpU__i2Njba
+From (redirected): https://drive.google.com/uc?id=1gtVxgl1z6QQKDyuxlWdePUpU__i2Njba&amp;confirm=t&amp;uuid=9ebfc1ed-fe0e-4853-af44-5c04ae1fc18e
+To: /home/runner/.whobpyt/data/eg__ismail2025/leadfield_3d.mat
+
+  0%|          | 0.00/1.16M [00:00&lt;?, ?B/s]
+ 45%|████▌     | 524k/1.16M [00:00&lt;00:00, 4.40MB/s]
+100%|██████████| 1.16M/1.16M [00:00&lt;00:00, 7.93MB/s]
+Downloading file 6 of 12: noise_evoked.npy
+
+
+Downloading noise_evoked.npy
+
+Downloading...
+From: https://drive.google.com/uc?id=1rgaPu3fRPYxRb6EHkFac4ahC0McbBBJb
+To: /home/runner/.whobpyt/data/eg__ismail2025/noise_evoked.npy
+
+  0%|          | 0.00/1.09M [00:00&lt;?, ?B/s]
+ 96%|█████████▌| 1.05M/1.09M [00:00&lt;00:00, 8.49MB/s]
+100%|██████████| 1.09M/1.09M [00:00&lt;00:00, 8.75MB/s]
+Downloading file 7 of 12: sim_noise_sensor.npy
+
+
+Downloading sim_noise_sensor.npy
+
+Downloading...
+From: https://drive.google.com/uc?id=1Lr3VV69jBVkNWqz7iPxJHVmflgBTsyYq
+To: /home/runner/.whobpyt/data/eg__ismail2025/sim_noise_sensor.npy
+
+  0%|          | 0.00/1.64M [00:00&lt;?, ?B/s]
+ 64%|██████▍   | 1.05M/1.64M [00:00&lt;00:00, 8.49MB/s]
+100%|██████████| 1.64M/1.64M [00:00&lt;00:00, 11.9MB/s]
+Downloading file 8 of 12: sim_noise_source.npy
+
+
+Downloading sim_noise_source.npy
+
+Downloading...
+From: https://drive.google.com/uc?id=18os1jbGZS2si7_0p1bb7nplHEKYqW54J
+To: /home/runner/.whobpyt/data/eg__ismail2025/sim_noise_source.npy
+
+  0%|          | 0.00/1.10M [00:00&lt;?, ?B/s]
+ 47%|████▋     | 524k/1.10M [00:00&lt;00:00, 4.38MB/s]
+100%|██████████| 1.10M/1.10M [00:00&lt;00:00, 7.62MB/s]
+Downloading file 9 of 12: sim_verb_sensor.npy
+
+
+Downloading sim_verb_sensor.npy
+
+Downloading...
+From: https://drive.google.com/uc?id=1pSVY_YPic5mFAoU3xX99HzejS5Fq0ezW
+To: /home/runner/.whobpyt/data/eg__ismail2025/sim_verb_sensor.npy
+
+  0%|          | 0.00/1.64M [00:00&lt;?, ?B/s]
+ 32%|███▏      | 524k/1.64M [00:00&lt;00:00, 4.70MB/s]
+100%|██████████| 1.64M/1.64M [00:00&lt;00:00, 11.5MB/s]
+Downloading file 10 of 12: sim_verb_source.npy
+
+
+Downloading sim_verb_source.npy
+
+Downloading...
+From: https://drive.google.com/uc?id=1DCLLXr7e6y4o9Gs9sQhGDWrRO6HJU7Oe
+To: /home/runner/.whobpyt/data/eg__ismail2025/sim_verb_source.npy
+
+  0%|          | 0.00/1.10M [00:00&lt;?, ?B/s]
+ 47%|████▋     | 524k/1.10M [00:00&lt;00:00, 4.71MB/s]
+100%|██████████| 1.10M/1.10M [00:00&lt;00:00, 8.12MB/s]
+Downloading file 11 of 12: verb_evoked.npy
+
+
+Downloading verb_evoked.npy
+
+Downloading...
+From: https://drive.google.com/uc?id=1VKCFgHQ78rraTvyJxVWBYevm4omMYMxG
+To: /home/runner/.whobpyt/data/eg__ismail2025/verb_evoked.npy
+
+  0%|          | 0.00/1.09M [00:00&lt;?, ?B/s]
+ 48%|████▊     | 524k/1.09M [00:00&lt;00:00, 4.35MB/s]
+100%|██████████| 1.09M/1.09M [00:00&lt;00:00, 7.53MB/s]
+Downloading file 12 of 12: weights.csv
+
+
+Downloading weights.csv
+
+Downloading...
+From: https://drive.google.com/uc?id=1zFBPr25WZEPJVICLx19-JS3XQESsQVNu
+To: /home/runner/.whobpyt/data/eg__ismail2025/weights.csv
+
+  0%|          | 0.00/288k [00:00&lt;?, ?B/s]
+100%|██████████| 288k/288k [00:00&lt;00:00, 2.89MB/s]
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
@@ -504,6 +695,38 @@ inhibition to drive laterality. This work provides a developmental framework for
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished fitting model to noise trials&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Parameter containing:
+tensor([[-0.1354,  0.0776, -0.3546,  ..., -0.5318,  0.3608,  0.1398],
+        [-0.0584,  0.5889, -0.1881,  ..., -1.1742,  0.8451,  0.1247],
+        [-0.0075,  0.9291, -0.1317,  ..., -1.4089,  1.1756,  0.1074],
+        ...,
+        [ 0.3200,  0.1148,  0.5392,  ..., -0.2084, -0.3164, -0.3620],
+        [ 0.0573, -0.0587,  0.2405,  ..., -0.1508, -0.1246, -0.0396],
+        [ 0.6634,  0.8082,  0.7389,  ..., -0.5438, -0.9416, -0.7796]],
+       requires_grad=True)
+epoch:  0 -225486.31
+epoch:  0 0.29209338089332126 cos_sim:  -0.04631145562466394
+epoch:  1 -226143.17
+epoch:  1 0.3649451944411494 cos_sim:  0.043605152446536774
+0.4088382697301332 cos_sim:  0.1321695880595414
+Finished fitting model to verb trials
+Parameter containing:
+tensor([[-0.1354,  0.0776, -0.3546,  ..., -0.5318,  0.3608,  0.1398],
+        [-0.0584,  0.5889, -0.1881,  ..., -1.1742,  0.8451,  0.1247],
+        [-0.0075,  0.9291, -0.1317,  ..., -1.4089,  1.1756,  0.1074],
+        ...,
+        [ 0.3200,  0.1148,  0.5392,  ..., -0.2084, -0.3164, -0.3620],
+        [ 0.0573, -0.0587,  0.2405,  ..., -0.1508, -0.1246, -0.0396],
+        [ 0.6634,  0.8082,  0.7389,  ..., -0.5438, -0.9416, -0.7796]],
+       requires_grad=True)
+epoch:  0 -225486.02
+epoch:  0 0.218397492742242 cos_sim:  -0.13520747570052444
+epoch:  1 -226139.58
+epoch:  1 0.2832010513822372 cos_sim:  -0.08030556578007374
+0.2915126135904031 cos_sim:  -0.04592149038990294
+Finished fitting model to noise trials
+</pre></div>
+</div>
 <ol class="arabic simple" start="7">
 <li><p>Let’s Compare Simulated &amp; Empirical MEG Activity</p></li>
 </ol>
@@ -531,6 +754,12 @@ inhibition to drive laterality. This work provides a developmental framework for
 <span class="c1"># Plot simulated noise trial</span>
 <span class="n">sim_noise_evoked</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Simulated Noise&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mf">0.07</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1585</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__ismail2025.py&quot;</span>, line <span class="m">169</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="n">info</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gr">AttributeError</span>: <span class="n">Can&#39;t get attribute &#39;SubjectInfo&#39; on &lt;module &#39;mne._fiff.meas_info&#39; from &#39;/opt/hostedtoolcache/Python/3.9.22/x64/lib/python3.9/site-packages/mne/_fiff/meas_info.py&#39;&gt;</span>
 </pre></div>
 </div>
 <dl class="simple">
@@ -658,7 +887,7 @@ We will load the empirical source data (model was fitted with sensor MEG data) a
 </div>
 <p><strong>Results Description:</strong>
 Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model’s capacity to link temporal and spectral features of neural dynamics during the task. For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference. Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed. In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E).</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.184 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (4 minutes 22.514 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-ismail2025-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fa46508a782571b79143e92910a4f1a8/eg__ismail2025.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__ismail2025.ipynb</span></code></a></p>

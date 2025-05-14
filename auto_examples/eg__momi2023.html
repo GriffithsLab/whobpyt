@@ -642,12 +642,6 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datasets.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_egmomi2023</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__momi2023.py&quot;</span>, line <span class="m">263</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2023.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamsJR</span><span class="p">,</span> <span class="n">Model_fitting</span><span class="p">,</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">Costs</span><span class="p">,</span> <span class="n">OutputNM</span>
-<span class="gr">ModuleNotFoundError</span>: <span class="n">No module named &#39;whobpyt.depr.momi2023&#39;</span>
-</pre></div>
-</div>
 <p>Download data</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">files_dir</span> <span class="o">=</span> <span class="n">fetch_egmomi2023</span><span class="p">()</span>
 <span class="n">sc_file</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/Schaefer2018_200Parcels_7Networks_count.csv&#39;</span>
@@ -679,6 +673,89 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading sub_0_fittingresults_stim_exp.pkl
+
+
+
+Downloading sub_1_fittingresults_stim_exp.pkl
+
+
+
+Downloading sub_2_fittingresults_stim_exp.pkl
+
+
+
+Downloading sub_3_fittingresults_stim_exp.pkl
+
+
+
+Downloading sub_4_fittingresults_stim_exp.pkl
+
+
+
+Downloading sub_5_fittingresults_stim_exp.pkl
+
+
+
+Downloading sub_0_leadfield
+
+
+
+Downloading sub_1_leadfield
+
+
+
+Downloading sub_2_leadfield
+
+
+
+Downloading sub_3_leadfield
+
+
+
+Downloading sub_4_leadfield
+
+
+
+Downloading sub_5_leadfield
+
+
+
+Downloading stim_weights.npy
+
+
+
+Downloading Schaefer2018_200Parcels_7Networks_distance.csv
+
+
+
+Downloading Schaefer2018_200Parcels_7Networks_count.csv
+
+
+
+Downloading rh.Schaefer2018_200Parcels_7Networks_order.annot
+
+
+
+Downloading real_EEG
+
+
+
+Downloading only_high_trial.mat
+
+
+
+Downloading lh.Schaefer2018_200Parcels_7Networks_order.annot
+
+
+
+Downloading all_avg.mat_avg_high_epoched
+
+
+
+Downloading leadfield
+</pre></div>
+</div>
 </section>
 <section id="model-fitting-and-key-results">
 <h2>2 - Model fitting and key results<a class="headerlink" href="#model-fitting-and-key-results" title="Link to this heading">#</a></h2>
@@ -691,6 +768,10 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <span class="c1"># TEP data</span>
 <span class="n">data_high</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">high_file</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">data_high</span><span class="p">[</span><span class="s1">&#39;only_high_trial&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>268.31223 -125.81516
+(20, 62, 2000)
 </pre></div>
 </div>
 </section>
@@ -764,6 +845,44 @@ The following figures from the paper are replicated in the provided Jupyter Note
 <span class="n">simulated_data</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">900</span><span class="p">:</span><span class="mi">1300</span><span class="p">]</span><span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">eeg_test</span>
 
 <span class="n">simulated_data</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Simulated TEPs for sub&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sbj2plot</span><span class="p">)</span> <span class="p">);</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_eg__momi2023_001.png" srcset="../_images/sphx_glr_eg__momi2023_001.png" alt="Empirical TEPs for Subject 1, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_002.png" srcset="../_images/sphx_glr_eg__momi2023_002.png" alt="Simulated TEPs for Subject 1, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_003.png" srcset="../_images/sphx_glr_eg__momi2023_003.png" alt="Empirical TEPs for Subject 2, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_004.png" srcset="../_images/sphx_glr_eg__momi2023_004.png" alt="Simulated TEPs for Subject 2, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_005.png" srcset="../_images/sphx_glr_eg__momi2023_005.png" alt="Empirical TEPs for Subject 3, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_006.png" srcset="../_images/sphx_glr_eg__momi2023_006.png" alt="Simulated TEPs for Subject 3, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_007.png" srcset="../_images/sphx_glr_eg__momi2023_007.png" alt="Empirical TEPs for Subject 4, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_008.png" srcset="../_images/sphx_glr_eg__momi2023_008.png" alt="Simulated TEPs for Subject 4, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_009.png" srcset="../_images/sphx_glr_eg__momi2023_009.png" alt="Empirical TEPs for Subject 5, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_010.png" srcset="../_images/sphx_glr_eg__momi2023_010.png" alt="Simulated TEPs for Subject 5, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_011.png" srcset="../_images/sphx_glr_eg__momi2023_011.png" alt="Empirical TEPs for Subject 6, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_012.png" srcset="../_images/sphx_glr_eg__momi2023_012.png" alt="Simulated TEPs for Subject 6, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_013.png" srcset="../_images/sphx_glr_eg__momi2023_013.png" alt="Empirical TEPs for sub0, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_014.png" srcset="../_images/sphx_glr_eg__momi2023_014.png" alt="Simulated TEPs for sub0, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Processing Subject 1
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Processing Subject 2
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Processing Subject 3
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Processing Subject 4
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Processing Subject 5
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Processing Subject 6
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
 </pre></div>
 </div>
 <p><strong>Results Description:</strong>
@@ -875,6 +994,20 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;running time is  </span><span class="si">{0}</span><span class="s1"> </span><span class="se">\&#39;</span><span class="s1">s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span> <span class="p">))</span>
 </pre></div>
 </div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_eg__momi2023_015.png" srcset="../_images/sphx_glr_eg__momi2023_015.png" alt="eg  momi2023" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_016.png" srcset="../_images/sphx_glr_eg__momi2023_016.png" alt="Test: sourced EEG, Test, empirical" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>sub:  0
+loading leadfield file: /home/runner/.whobpyt/data/eg__momi2023/sub_1_leadfield
+call model fitting
+epoch:  0 -3718.862
+epoch:  0 0.33107767242789027 cos_sim:  0.10218903234794932
+epoch:  1 -6503.324
+epoch:  1 0.4688152329441537 cos_sim:  -0.016812678973268425
+running time is  28.4811589717865 &#39;s
+</pre></div>
+</div>
 <p>check the output of output_sim.eeg_test</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># files_dir =  &#39;/external/rprshnas01/netdata_kcni/jglab/Data/Davide/reproduce_Momi_et_al_2022/PyTepFit/data&#39;</span>
 <span class="n">pck_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/*_fittingresults_stim_exp.pkl&#39;</span><span class="p">))</span>
@@ -885,6 +1018,9 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
     <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">eeg_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(62, 400)
 </pre></div>
 </div>
 </section>
@@ -997,6 +1133,24 @@ Create arrays to store different types of simulation data based on their dimensi
 <span class="nb">print</span><span class="p">(</span><span class="n">new_df1</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>           a        a_m        a_v  ...        mu      mu_m       mu_v
+0  99.347740  99.349411  13.423514  ...  0.724521  0.724521  26.806150
+1  97.902908  97.906097  17.277964  ...  1.257499  1.257499  26.730782
+2  96.159073  96.155228  17.785526  ...  0.884640  0.887312  27.587242
+3  97.962982  97.962212  18.689106  ...  1.154494  1.151102  26.320961
+4  97.748863  97.741402  17.297514  ...  1.025875  1.021145  26.105455
+
+[5 rows x 29 columns]
+           a          b          c1  ...            g         k        mu
+0  99.347740  51.732155  134.248627  ...  1010.790710  8.622959  0.724521
+1  97.902908  50.919029  132.442017  ...   995.457092  8.491941  1.257499
+2  96.159073  48.930202  132.071304  ...  1006.695007  5.207799  0.884640
+3  97.962982  49.428665  140.498962  ...  1001.789185  7.374860  1.154494
+4  97.748863  49.748447  136.682190  ...  1000.929565  8.237830  1.025875
+
+[5 rows x 9 columns]
+</pre></div>
+</div>
 <section id="plot-distributions-of-data-features">
 <h3>3.2 Plot Distributions of Data Features<a class="headerlink" href="#plot-distributions-of-data-features" title="Link to this heading">#</a></h3>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;darkgrid&#39;</span><span class="p">,{</span><span class="s1">&#39;axes.edgecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;.9&#39;</span><span class="p">},)</span>
@@ -1017,7 +1171,7 @@ Create arrays to store different types of simulation data based on their dimensi
 <span class="c1">#f.savefig(&#39;/content/drive/MyDrive/TORONTO/TMS_EEG_model/saving-a-high-resolution-seaborn-plot.png&#39;, dpi=300)</span>
 </pre></div>
 </div>
-<p><strong>Summary of Results:</strong></p>
+<img src="../_images/sphx_glr_eg__momi2023_017.png" srcset="../_images/sphx_glr_eg__momi2023_017.png" alt="eg  momi2023" class = "sphx-glr-single-img"/><p><strong>Summary of Results:</strong></p>
 <p>This plot can be found in Appendix 2—figure 3</p>
 <p>Distributions of physiological parameter estimates over subjects.
 Histograms and kernel density estimates of the estimated values for the Jansen-Rit model physiological parameters over all subjects. Also shown are prior and posterior parameter values for anatomical connectome weights for a single example subject (bottom right). Parameter estimation was performed using our novel automatic differentiation and gradient-based approach inspired by current techniques in deep learning (Griffiths et al., 2022).</p>
@@ -1069,7 +1223,7 @@ Histograms and kernel density estimates of the estimated values for the Jansen-R
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Result Description:</strong>
+<img src="../_images/sphx_glr_eg__momi2023_018.png" srcset="../_images/sphx_glr_eg__momi2023_018.png" alt="Parameter Histograms and Structural Connectomes, average synaptic time constant excitatory population (a=1/τe), Local gain from pyramidal to excitatory population (C2), Global gain (g), Average synaptic time constant inhibitory population (b=1/τi), Local gain from inhibitory to pyramidal population (C3), Local gain from pyramidal to inhibitory population (C4), Local gain from excitatory to pyramidal population (C1), Empirical Structural Connectome, Fitted Structural Connectome" class = "sphx-glr-single-img"/><p><strong>Result Description:</strong>
 This plot can be found in Appendix 2—figure 3
 Distributions of physiological parameter estimates over subjects.
 Histograms and kernel density estimates of the estimated values for the Jansen-Rit model physiological parameters over all subjects. Also shown are prior and posterior parameter values for anatomical connectome weights for a single example subject (bottom right). Parameter estimation was performed using our novel automatic differentiation and gradient-based approach inspired by current techniques in deep learning (Griffiths et al., 2022).</p>
@@ -1143,6 +1297,10 @@ Histograms and kernel density estimates of the estimated values for the Jansen-R
 <span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;eigenvector#5 variance explained &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">S_PC</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_eg__momi2023_019.png" srcset="../_images/sphx_glr_eg__momi2023_019.png" alt="eigenvector#1 variance explained 40.57%, eigenvector#2 variance explained 27.18%, eigenvector#3 variance explained 8.49%, eigenvector#4 variance explained 5.45%, eigenvector#5 variance explained 4.08%" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_020.png" srcset="../_images/sphx_glr_eg__momi2023_020.png" alt="eigenvector#1 variance explained 38.03%, eigenvector#2 variance explained 28.93%, eigenvector#3 variance explained 9.33%, eigenvector#4 variance explained 5.31%, eigenvector#5 variance explained 3.95%" class = "sphx-glr-multi-img"/></li>
+</ul>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 
 <span class="n">_arr1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1154,7 +1312,7 @@ Histograms and kernel density estimates of the estimated values for the Jansen-R
 <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">_arr3</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 </div>
-</section>
+<img src="../_images/sphx_glr_eg__momi2023_021.png" srcset="../_images/sphx_glr_eg__momi2023_021.png" alt="eg  momi2023" class = "sphx-glr-single-img"/></section>
 <section id="compute-and-visualize-similarity-and-visualize-topomaps-for-maximum-similarity">
 <h3>3.4 Compute and Visualize Similarity and Visualize Topomaps for Maximum Similarity<a class="headerlink" href="#compute-and-visualize-similarity-and-visualize-topomaps-for-maximum-similarity" title="Link to this heading">#</a></h3>
 <p>%%
@@ -1198,7 +1356,7 @@ Compute cosine similarity between eigenvectors and EEG data for specific time wi
     <span class="n">sbj</span><span class="o">=</span><span class="n">sbj</span>
 </pre></div>
 </div>
-<p><strong>Results description</strong></p>
+<img src="../_images/sphx_glr_eg__momi2023_022.png" srcset="../_images/sphx_glr_eg__momi2023_022.png" alt="59ms after TMS for sbj#0, 69ms after TMS for sbj#1, 62ms after TMS for sbj#2, 63ms after TMS for sbj#3, 68ms after TMS for sbj#4, 69ms after TMS for sbj#5" class = "sphx-glr-single-img"/><p><strong>Results description</strong></p>
 <p><strong>Timing and topographies of the prototypical TMS-EEG evoked potential (TEP) response pattern in each subject.</strong></p>
 <p>This figure can be found in Appendix 2—figure 5 Panel A.</p>
 <p>These figures extend the single-subject examples from TEP channel data singular value decompositions (SVD) decompositions in Figure 5.</p>
@@ -1206,7 +1364,7 @@ Compute cosine similarity between eigenvectors and EEG data for specific time wi
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">max_similairty</span><span class="p">)</span> <span class="o">+</span> <span class="n">start_tp</span> <span class="o">-</span> <span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<img src="../_images/sphx_glr_eg__momi2023_023.png" srcset="../_images/sphx_glr_eg__momi2023_023.png" alt="eg  momi2023" class = "sphx-glr-single-img"/></section>
 <section id="extract-peaks-from-eeg-data-and-correlate-features-with-peaks">
 <h3>3.5 Extract Peaks from EEG Data and Correlate Features with Peaks<a class="headerlink" href="#extract-peaks-from-eeg-data-and-correlate-features-with-peaks" title="Link to this heading">#</a></h3>
 <ol class="arabic simple">
@@ -1282,6 +1440,10 @@ Compute cosine similarity between eigenvectors and EEG data for specific time wi
 <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">p_lat</span><span class="o">&lt;</span><span class="mf">0.05</span><span class="p">))</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(array([3]),)
+(array([6]),)
+</pre></div>
+</div>
 <p>Visualize the results</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize the relationship between the first EEG peak&#39;s amplitude or latency and a variable of interest from new_df1.</span>
 <span class="c1"># Optionally exclude outliers to ensure robust analysis.</span>
@@ -1347,6 +1509,9 @@ Compute cosine similarity between eigenvectors and EEG data for specific time wi
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Latency R^2=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">r_lat</span><span class="p">[</span><span class="n">key2plot</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;  p=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">p_lat</span><span class="p">[</span><span class="n">key2plot</span><span class="p">],</span> <span class="mi">2</span><span class="p">)))</span>
 </pre></div>
 </div>
+<img src="../_images/sphx_glr_eg__momi2023_024.png" srcset="../_images/sphx_glr_eg__momi2023_024.png" alt="Amplitude R^2=0.35  p=0.21" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>outliers=[]
+</pre></div>
+</div>
 <p><strong>Result Description:</strong>
 This figure could be found at Appendix 2—figure 10.
 <strong>Structural connectivity predictor of TMS-EEG propagation.</strong>
@@ -1400,6 +1565,51 @@ A significant positive correlation (R2=52%, p=0.02) was found between the modula
     <span class="n">simulated_data</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Simulated TEPs for sub </span><span class="si">{</span><span class="n">sbj2plot</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Subject </span><span class="si">{</span><span class="n">sbj2plot</span><span class="si">}</span><span class="s2"> processed successfully.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_eg__momi2023_025.png" srcset="../_images/sphx_glr_eg__momi2023_025.png" alt="Empirical TEPs for sub 0, 0.020 s, 0.084 s, 0.123 s, 0.151 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_026.png" srcset="../_images/sphx_glr_eg__momi2023_026.png" alt="Simulated TEPs for sub 0, 0.020 s, 0.084 s, 0.123 s, 0.151 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_027.png" srcset="../_images/sphx_glr_eg__momi2023_027.png" alt="Empirical TEPs for sub 1, 0.015 s, 0.092 s, 0.139 s, 0.190 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_028.png" srcset="../_images/sphx_glr_eg__momi2023_028.png" alt="Simulated TEPs for sub 1, 0.015 s, 0.092 s, 0.139 s, 0.190 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_029.png" srcset="../_images/sphx_glr_eg__momi2023_029.png" alt="Empirical TEPs for sub 2, 0.018 s, 0.020 s, 0.150 s, 0.188 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_030.png" srcset="../_images/sphx_glr_eg__momi2023_030.png" alt="Simulated TEPs for sub 2, 0.018 s, 0.020 s, 0.150 s, 0.188 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_031.png" srcset="../_images/sphx_glr_eg__momi2023_031.png" alt="Empirical TEPs for sub 3, 0.029 s, 0.029 s, 0.120 s, 0.196 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_032.png" srcset="../_images/sphx_glr_eg__momi2023_032.png" alt="Simulated TEPs for sub 3, 0.029 s, 0.029 s, 0.120 s, 0.196 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_033.png" srcset="../_images/sphx_glr_eg__momi2023_033.png" alt="Empirical TEPs for sub 4, 0.040 s, 0.100 s, 0.150 s, 0.161 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_034.png" srcset="../_images/sphx_glr_eg__momi2023_034.png" alt="Simulated TEPs for sub 4, 0.040 s, 0.100 s, 0.150 s, 0.161 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_035.png" srcset="../_images/sphx_glr_eg__momi2023_035.png" alt="Empirical TEPs for sub 5, 0.026 s, 0.100 s, 0.120 s, 0.200 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_036.png" srcset="../_images/sphx_glr_eg__momi2023_036.png" alt="Simulated TEPs for sub 5, 0.026 s, 0.100 s, 0.120 s, 0.200 s" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Processing Subject: 0
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Subject 0 processed successfully.
+
+Processing Subject: 1
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Subject 1 processed successfully.
+
+Processing Subject: 2
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Subject 2 processed successfully.
+
+Processing Subject: 3
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Subject 3 processed successfully.
+
+Processing Subject: 4
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Subject 4 processed successfully.
+
+Processing Subject: 5
+Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+Subject 5 processed successfully.
 </pre></div>
 </div>
 <p><a href="#id1"><span class="problematic" id="id2">**</span></a>Result Description: **</p>
@@ -1530,7 +1740,7 @@ A significant positive correlation (R2=52%, p=0.02) was found between the modula
   <span class="n">barlist</span><span class="p">[</span><span class="n">xx</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">([</span><span class="n">rgba</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">rgba</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">rgba</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
 </pre></div>
 </div>
-<p><strong>Comparison between simulated and empirical TMS-EEG data in source space.</strong>
+<img src="../_images/sphx_glr_eg__momi2023_037.png" srcset="../_images/sphx_glr_eg__momi2023_037.png" alt="eg  momi2023" class = "sphx-glr-single-img"/><p><strong>Comparison between simulated and empirical TMS-EEG data in source space.</strong>
 Bar plot showing high vertex-wise cosine similarity between empirical and simulated sources for all the subjects.
 This plot can be found in Figure 3 Panel E</p>
 <p>Creating function for calculating PCI</p>
@@ -1569,7 +1779,7 @@ This plot can be found in Figure 3 Panel E</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+<img src="../_images/sphx_glr_eg__momi2023_038.png" srcset="../_images/sphx_glr_eg__momi2023_038.png" alt="eg  momi2023" class = "sphx-glr-single-img"/><div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">df2plot</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">PCI_sim</span><span class="p">,</span> <span class="n">PCI_emp</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PCI_sim&#39;</span><span class="p">,</span> <span class="s1">&#39;PCI_emp&#39;</span><span class="p">])</span>
 
 <span class="n">scatter</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lmplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;PCI_sim&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;PCI_emp&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df2plot</span><span class="p">);</span>
@@ -1578,7 +1788,7 @@ This plot can be found in Figure 3 Panel E</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;R2=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39; p=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
 </pre></div>
 </div>
-<p><strong>Those two plots above can be found in Figure 2 Panel D</strong>
+<img src="../_images/sphx_glr_eg__momi2023_039.png" srcset="../_images/sphx_glr_eg__momi2023_039.png" alt="R2=0.35 p=0.49" class = "sphx-glr-single-img"/><p><strong>Those two plots above can be found in Figure 2 Panel D</strong>
 Comparison between simulated and empirical TMS-EEG data in channel space.</p>
 <blockquote>
 <div><p>Perturbational complexity index (PCI) values extracted from the empirical (orange) and simulated (blue) TMS-EEG time series (left). A significant positive correlation (R2=80%, p&lt;0.001) was found between the simulated and the empirical PCI (right), demonstrating high correspondence between empirical and simulated data.</p>
@@ -1619,6 +1829,14 @@ Comparison between simulated and empirical TMS-EEG data in channel space.</p>
 <span class="n">sim_evoked</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Simulated Grand Mean&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_eg__momi2023_040.png" srcset="../_images/sphx_glr_eg__momi2023_040.png" alt="Empirical Grand Mean, 0.029 s, 0.057 s, 0.120 s, 0.189 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__momi2023_041.png" srcset="../_images/sphx_glr_eg__momi2023_041.png" alt="Simulated Grand Mean, 0.040 s, 0.059 s, 0.120 s, 0.188 s" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+</pre></div>
+</div>
 <p><a href="#id3"><span class="problematic" id="id4">**</span></a>Result Discription: **
 TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG evoked potential (TEP) patterns in model-generated electroencephalography (EEG) time series</p>
 <p>This plot could be found as Panel A in Figure 3.</p>
@@ -1627,6 +1845,7 @@ TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG ev
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 20.581 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-momi2023-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c0aa0ed03c2583762d5d6226381b960b/eg__momi2023.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__momi2023.ipynb</span></code></a></p>
