@@ -208,6 +208,96 @@ times = [peak_locs1, peak_locs2, peak_locs3, peak_locs4, peak_locs5]
 simulated_joint_st = simulated_EEG_st.plot_joint(ts_args=ts_args, times=times)
 
 
+#### rest is extral analysis on the neural states on different networks
+
+### get labels for Yeo 200
+url = 'https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv'
+atlas = pd.read_csv(url)
+labels = atlas['ROI Name']
+
+# get networks 
+nets = [label.split('_')[2] for label in labels]
+net_names = np.unique(np.array(nets))
+
+
+
+
+
+#### plot E response on each networks 
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+
+for i, net in enumerate(net_names):
+    mask = np.array(nets) == net
+    ax[i//4, i%4].plot(t, F.lastRec['E'].npTS()[mask,:].mean(0).T)
+    ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: E')
+plt.show()
+
+### plot I response at each networks
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+
+for i, net in enumerate(net_names):
+    mask = np.array(nets) == net
+    ax[i//4, i%4].plot(t, F.lastRec['I'].npTS()[mask,:].mean(0).T)
+    ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: I')
+plt.show()
+
+### plot P response at each networks
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+
+for i, net in enumerate(net_names):
+    mask = np.array(nets) == net
+    ax[i//4, i%4].plot(t, F.lastRec['P'].npTS()[mask,:].mean(0).T)
+    ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: P')
+plt.show()
+
+
+### plot phase of E at each network
+j = complex(0,1)
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+
+phase = np.angle(F.lastRec['E'].npTS()+j*F.lastRec['Ev'].npTS())
+for i, net in enumerate(net_names):
+    mask = np.array(nets) == net
+    ax[i//4, i%4].plot(t, phase[mask,:].mean(0).T)
+    ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: phase E')
+plt.show()
+
+### plot I phase at each network
+j = complex(0,1)
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+
+phase = np.angle(F.lastRec['I'].npTS()+j*F.lastRec['Iv'].npTS())
+for i, net in enumerate(net_names):
+    mask = np.array(nets) == net
+    ax[i//4, i%4].plot(t, phase[mask,:].mean(0).T)
+    ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: phase I')
+plt.show()
+
+### plot P phase at each network
+
+j = complex(0,1)
+fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
+t = np.linspace(-0.1,0.3, 400)
+
+phase = np.angle(F.lastRec['P'].npTS()+j*F.lastRec['Pv'].npTS())
+for i, net in enumerate(net_names):
+    mask = np.array(nets) == net
+    ax[i//4, i%4].plot(t, phase[mask,:].mean(0).T)
+    ax[i//4, i%4].set_title(net)
+plt.suptitle('Test: phase P')
+plt.show()
+
+
 # %%
 # Results Description
 # ---------------------------------------------------
