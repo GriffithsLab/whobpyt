@@ -302,53 +302,64 @@ def fetch_egismail2025(dest_folder=None, redownload=False):
 
     return dest_folder
 
-def  fetch_egmomi2025(dest_folder=None, redownload=False):
-    #
-    # -----
-    # Usage
-    # -----
-    #
-    # res = fetch_egmomi2025()
-    #
-    """data = {"username":"claires03","key":"ee39084a8974336d9fff7e1ced807e64"}
-    kaggle_path = os.path.join('/root/.config', 'kaggle')
-    if not os.path.exists(kaggle_path):
-        os.makedirs(kaggle_path)
-        print(f"Created directory: {kaggle_path}")
-    else:
-        print(f"Directory already exists: {kaggle_path}")
+
+
+def fetch_egmomi2025(dest_folder=None, redownload=False):
+    """
+    Fetch multiple files for Momi2025 using pull_file function.
+    """
     
-    kaggle_file = os.path.join(kaggle_path, '/kaggle.json')
-    with open(kaggle_file, 'w') as f:
-        json.dump(data, f)
-    
-    os.chmod(kaggle_file, 0o600)"""
-    
-    from kaggle.api.kaggle_api_extended import KaggleApi
-    api = KaggleApi()
-    api.config_values['username'] = "claires03"
-    api.config_values['key'] = "ee39084a8974336d9fff7e1ced807e64"
-    files_dict = {'davi1990/empirical-data':'empirical-data',
-                  'davi1990/anatomical':'anatomical',
-                  'davi1990/calculate-distance':'calculate-distance',
-                  'davi1990/virtual-dissection':'virtual-dissection',
-        'davi1990/example-fittingresults':'example-fittingresults'
-    }
+    osf_url_pfx = 'https://osf.io/download'    
     cwd = os.getcwd()
-    #
+
     if dest_folder is None:
         defpath = get_localdefaultdatapath()
         dest_folder = os.path.join(defpath, 'eg__momi2025')
+
     # If input instruction was to re-download and folder is already present, remove it
     if os.path.isdir(dest_folder) and redownload == True:
-        os.system('rm -rf %s' %dest_folder)
+        shutil.rmtree(dest_folder)
+
+    files_dict = {'6824a8c71ff4f0e5d9ce9f63': 'anatomical/example-bem',
+                  '6824a8b613f407a746c4c0f0': 'anatomical/example-src.fif',
+                  '6824a8a91ff4f0e5d9ce9f59': 'anatomical/example-trans.fif',
+                  '6824a8ac83462d95da9c415e': 'anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot',
+                  '6824a8ae66baea5d447a1b32': 'anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot',
+                  '6824a8b193c4fffcc97a1c1e': 'anatomical/sub_dist.pickle',
+                  '6824a75c66baea5d447a1afc': 'calculate_distance/example_ieeg.fif',
+                  '6824c8b91fc5936557c4c0a7': 'calculate_distance/example_Schaefer2018_200Parcels_7Networks_rewritten.nii',
+                  '6824a80bcae9ca1675c4c1fb': 'empirical_data/all_eeg_evoked.npy',
+                  '6824c909325133be06eae20a': 'empirical_data/all_epo_seeg.pkl',
+                  '6824c8ef57a8ae682f9c4456': 'empirical_data/example_epoched.fif',
+                  '6824c8f1f0bdacd73cce9eb7': 'empirical_data/dist_Schaefer_1000parcels_7net.pkl',
+                  '6824b6d93bf9c82dfbce9fa1': 'example_fittingresults/example-fittingresults.pkl',
+                  '6824a6f7b8afb1d4399c43bc': 'virtual_dissection/dist_Schaefer_1000parcels_7net.pkl',
+                  '6824a6f57de85602327a1bc5': 'virtual_dissection/eeg_template.fif',
+                  '6824a73282323cc35c9c4207': 'virtual_dissection/model_results.npy'}
+
+    total_files = len(files_dict)
+
     # If the folder does not exist, create it and download the files
-    if not os.path.isdir(dest_folder):
+    if not os.path.isdir(dest_folder): 
+
         os.makedirs(dest_folder)
+   
+        dest_subfolders = ['anatomical', 'calculate_distance', 'empirical_data', 
+                           'example_fittingresults', 'virtual_dissection']
+        for sf in dest_subfolders:
+            os.makedirs(os.path.join(dest_folder, sf))
+
         os.chdir(dest_folder)
+
+        
+
         for file_code, file_name in files_dict.items():
-          dest_sub_folder = os.path.join(dest_folder, file_name)
-          if not os.path.isdir(dest_sub_folder):
-              os.makedirs(dest_sub_folder)
-              api.dataset_download_files(file_code, path= dest_sub_folder, unzip=True)
+          dlcode = osf_url_pfx + '/' + file_code
+          pull_file(dlcode, file_name, download_method='wget')
+
+
+    os.chdir(cwd)
+
     return dest_folder
+
+

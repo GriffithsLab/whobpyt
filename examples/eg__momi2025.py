@@ -25,23 +25,6 @@ import json
 
 #sys.path.append('../whobpyt')
 
-
-
-data = {"username":"claires03","key":"ee39084a8974336d9fff7e1ced807e64"}
-#kaggle_path = os.path.join('/root/.config', 'kaggle')
-kaggle_path = os.path.expanduser('~/.kaggle')
-if not os.path.exists(kaggle_path):
-    os.makedirs(kaggle_path)
-    print(f"Created directory: {kaggle_path}")
-else:
-    print(f"Directory already exists: {kaggle_path}")
-
-kaggle_file = os.path.join(kaggle_path, 'kaggle.json')
-print(kaggle_file)
-with open(kaggle_file, 'w') as f:
-    json.dump(data, f)
-
-#os.chmod(kaggle_file, 0o600)
 import time
 import warnings
 warnings.filterwarnings('ignore')
@@ -97,8 +80,8 @@ start_time = time.time()
 
 
 
-all_eeg_evoked = np.load(data_folder + '/empirical-data/all_eeg_evoked.npy')
-epo_eeg = mne.read_epochs(data_folder + '/empirical-data/example_epoched.fif', verbose=False)
+all_eeg_evoked = np.load(data_folder + '/empirical_data/all_eeg_evoked.npy')
+epo_eeg = mne.read_epochs(data_folder + '/empirical_data/example_epoched.fif', verbose=False)
 
 all_gfma = np.zeros((all_eeg_evoked.shape[0], all_eeg_evoked.shape[2]))
 
@@ -107,7 +90,7 @@ for ses in range(all_eeg_evoked.shape[0]):
     #Normalized for the baseline for making comparison
     all_gfma[ses,:] = np.abs(all_gfma[ses,:] - np.mean(all_gfma[ses, :300]))
 
-with open(data_folder + '/empirical-data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
+with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
 stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
@@ -288,7 +271,7 @@ plt.tight_layout()  # Adjust the spacing between subplots if needed
 
 plt.show()
 
-with open(data_folder + '/empirical-data/all_epo_seeg.pkl', 'rb') as handle:
+with open(data_folder + '/empirical_data/all_epo_seeg.pkl', 'rb') as handle:
     all_epo_seeg = pickle.load(handle)
 
 
@@ -302,7 +285,7 @@ for ses in range(len(list(all_epo_seeg.keys()))):
     all_gfma[ses,:] =  np.std(epo_seeg, axis=0)
 
 
-with open(data_folder + '/empirical-data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
+with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
 stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
@@ -457,10 +440,10 @@ start_time = time.time()
 ses2use = 10
 
 # Load the precomputed EEG evoked response data from a file
-all_eeg_evoked = np.load(data_folder + '/empirical-data/all_eeg_evoked.npy')
+all_eeg_evoked = np.load(data_folder + '/empirical_data/all_eeg_evoked.npy')
 
 # Read the epoch data from an MNE-formatted file
-epo_eeg = mne.read_epochs(data_folder + '/empirical-data/example_epoched.fif', verbose=False)
+epo_eeg = mne.read_epochs(data_folder + '/empirical_data/example_epoched.fif', verbose=False)
 
 # Compute the average evoked response from the epochs
 evoked = epo_eeg.average()
@@ -469,10 +452,10 @@ evoked = epo_eeg.average()
 evoked.data = all_eeg_evoked[ses2use]
 
 # Load additional data from pickle files
-with open(data_folder + '/empirical-data/all_epo_seeg.pkl', 'rb') as handle:
+with open(data_folder + '/empirical_data/all_epo_seeg.pkl', 'rb') as handle:
     all_epo_seeg = pickle.load(handle)
 
-with open(data_folder + '/empirical-data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
+with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
 
 # Extract the stimulation region data from the loaded pickle file
@@ -564,7 +547,7 @@ thr = mean + (4 * std)
 # Count the number of unique regions affected by the threshold
 number_of_region_affected = np.unique(np.where(abs_value > thr)[0]).shape[0]
 
-img = nib.load(data_folder + '/calculate-distance/calculate_distance/example/mri/example_Schaefer2018_200Parcels_7Networks_rewritten.nii')
+img = nib.load(data_folder + '/calculate_distance/example_Schaefer2018_200Parcels_7Networks_rewritten.nii')
 
 # Get the shape and affine matrix of the image
 shape, affine = img.shape[:3], img.affine
@@ -614,18 +597,18 @@ stim_weights_thr = np.zeros((len(label)))
 # Assign the computed values to the stimulus weights for the selected parcels
 stim_weights_thr[inject_stimulus] = values
 
-old_path = data_folder + "/anatomical/anatomical/example-bem"
-new_path = data_folder + "/anatomical/anatomical/example-bem.fif" # CS
+old_path = data_folder + "/anatomical/example-bem"
+new_path = data_folder + "/anatomical/example-bem.fif" # CS
 
 if not os.path.exists(new_path):
     os.rename(old_path, new_path)
     print(f"Renamed {old_path} to {new_path}")
 
 # File paths for transformation, source space, and BEM files
-trans = data_folder + '/anatomical/anatomical/example-trans.fif'
-src = data_folder + '/anatomical/anatomical/example-src.fif'
+trans = data_folder + '/anatomical/example-trans.fif'
+src = data_folder + '/anatomical/example-src.fif'
 #bem = 'anatomical/example-bem'
-bem = data_folder + '/anatomical/anatomical/example-bem.fif'
+bem = data_folder + '/anatomical/example-bem.fif'
 
 # Create a forward solution using the provided transformation, source space, and BEM files
 # Only EEG is used here; MEG is disabled
@@ -649,8 +632,8 @@ src = mne.read_source_spaces(src, verbose=False)
 vertices = [src_hemi['vertno'] for src_hemi in fwd_fixed['src']]
 
 # Read annotation files for left and right hemispheres
-lh_vertices = nibabel.freesurfer.io.read_annot(data_folder +'/anatomical/anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot')[0]
-rh_vertices = nibabel.freesurfer.io.read_annot(data_folder +'/anatomical/anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot')[0]
+lh_vertices = nibabel.freesurfer.io.read_annot(data_folder +'/anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot')[0]
+rh_vertices = nibabel.freesurfer.io.read_annot(data_folder +'/anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot')[0]
 
 # Extract vertices corresponding to the parcels from the annotation files
 # Add 100 to right hemisphere vertices to adjust for parcel numbering
@@ -836,11 +819,11 @@ simulated_joint_st = simulated_EEG_st.plot_joint(ts_args=ts_args, times=times)
 
 url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
 colour = pd.read_excel(url, header=None)[4]
-template_eeg = mne.read_epochs(data_folder + '/virtual-dissection/eeg_template.fif', verbose=False)
+template_eeg = mne.read_epochs(data_folder + '/virtual_dissection/eeg_template.fif', verbose=False)
 
-model_results =np.load(data_folder + '/virtual-dissection/model_results.npy', allow_pickle=True).item()
+model_results =np.load(data_folder + '/virtual_dissection/model_results.npy', allow_pickle=True).item()
 
-with open(data_folder + '/empirical-data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
+with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     stim_region = pickle.load(handle)
 stim_region = stim_region['stim_region']
 
@@ -1052,7 +1035,7 @@ network_indices_arr = np.array(network_indices[sti_net])
 diff = np.array(list(set(np.arange(200)) - set(network_indices_arr)))
 
 #already trained file
-fit_file = data_folder + '/example-fittingresults/example-fittingresults.pkl'
+fit_file = data_folder + '/example_fittingresults/example-fittingresults.pkl'
 
 
 # Define model parameters
