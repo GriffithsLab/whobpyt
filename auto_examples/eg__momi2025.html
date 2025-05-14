@@ -386,7 +386,8 @@ to download the full example code.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 
-
+<span class="c1"># Add custom module paths</span>
+<span class="c1">#from whobpyt.depr.momi2025.euclidean_distance import euclidean_distance</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
@@ -414,8 +415,13 @@ to download the full example code.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">whobpyt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datasets.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_egmomi2025</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2025.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">par</span><span class="p">,</span> <span class="n">Recording</span><span class="p">,</span> <span class="n">method_arg_type_check</span><span class="p">,</span> <span class="n">dataloader</span>
+
+
+<span class="c1">#from whobpyt.datasets.dataload import dataload</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.depr.momi2025.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">RNNJANSEN</span><span class="p">,</span> <span class="n">ParamsJR</span><span class="p">,</span> <span class="n">CostsJR</span><span class="p">,</span> <span class="n">Model_fitting</span>
 
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">euclidean_distance</span><span class="p">(</span><span class="n">coord1</span><span class="p">,</span> <span class="n">coord2</span><span class="p">):</span>
     <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">coord1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coord1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coord1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">coord2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coord2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coord2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -1142,7 +1148,7 @@ Downloading eeg_template.fif
 
 Downloading model_results.npy
 
-Elapsed time: 5.405322074890137 seconds
+Elapsed time: 2.6928820610046387 seconds
 Renamed /home/runner/.whobpyt/data/eg__momi2025/anatomical/example-bem to /home/runner/.whobpyt/data/eg__momi2025/anatomical/example-bem.fif
     Average patch normals will be employed in the rotation to the local surface coordinates....
     Converting to surface-based source orientations...
@@ -1166,10 +1172,10 @@ Renamed /home/runner/.whobpyt/data/eg__momi2025/anatomical/example-bem to /home/
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
 torch.Size([200, 3, 2])
-eeg epoch:  0 loss: 1.6742594 Pseudo FC_cor:  0.4732896043279263 cos_sim:  0.05178143582981674
+eeg epoch:  0 loss: 1.7759367 Pseudo FC_cor:  0.4506504767527661 cos_sim:  0.0920808551906863
 Epoch:  1
 torch.Size([200, 3, 2])
-eeg epoch:  1 loss: 0.80296344 Pseudo FC_cor:  0.47532841071058785 cos_sim:  0.24433999890011515
+eeg epoch:  1 loss: 0.8551462 Pseudo FC_cor:  0.5176688773161551 cos_sim:  0.2710221325178575
 </pre></div>
 </div>
 </section>
@@ -1615,12 +1621,12 @@ eeg epoch:  1 loss: 0.80296344 Pseudo FC_cor:  0.47532841071058785 cos_sim:  0.2
 <li><img src="../_images/sphx_glr_eg__momi2025_010.png" srcset="../_images/sphx_glr_eg__momi2025_010.png" alt="Response 1, Response 2, Response 3" class = "sphx-glr-multi-img"/></li>
 <li><img src="../_images/sphx_glr_eg__momi2025_011.png" srcset="../_images/sphx_glr_eg__momi2025_011.png" alt="eg  momi2025" class = "sphx-glr-multi-img"/></li>
 </ul>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>eeg Pseudo FC_cor:  0.7891346776094897 cos_sim:  0.5876567879004216
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>eeg Pseudo FC_cor:  0.7998412661121203 cos_sim:  0.6296139509835131
 No projector specified for this dataset. Please consider the method self.add_proj.
 No projector specified for this dataset. Please consider the method self.add_proj.
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (5 minutes 55.548 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (3 minutes 19.115 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-momi2025-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/694c0473fd3cc452e452ca5b16880f15/eg__momi2025.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__momi2025.ipynb</span></code></a></p>
