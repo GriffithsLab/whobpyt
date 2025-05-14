@@ -317,8 +317,8 @@ eeg = np.load(file_eeg, allow_pickle=True)
 # %%
 # 2.1 Load the data
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# 
-# leadfield file
+
+# Leadfield file
 lm = np.load(file_leadfield, allow_pickle=True)
 print(lm.max(), lm.min())
 
@@ -496,15 +496,6 @@ for i in range(1):
 
     ax.imshow(np.log1p(sc_mod), cmap = 'bwr')
     plt.show()
-    """filename = '/content/drive/MyDrive/EEG/reproduce_fig/sub_'+str(i)+'_fittingresults_stim_exp.pkl'
-    with open(filename, 'wb') as f:
-        pickle.dump(F, f)
-
-    outfilename = '/content/drive/MyDrive/EEG/reproduce_fig/sub_'+str(i)+'_simEEG_stim_exp.pkl'
-
-
-    with open(outfilename, 'wb') as f:
-        pickle.dump(F.output_sim, f)"""
 
     fig, ax = plt.subplots(1,3, figsize=(12,8))
     ax[0].plot((F.output_sim.E_test-F.output_sim.I_test).T)
@@ -1326,7 +1317,7 @@ sim_evoked.plot_joint(ts_args=ts_args, times=times, title='Simulated Grand Mean'
 
 
 # %%
-# **Result Discription: **
+# **Result Description: **
 # TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG evoked potential (TEP) patterns in model-generated electroencephalography (EEG) time series
 #
 # This plot could be found as Panel A in Figure 3.
