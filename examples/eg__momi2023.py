@@ -400,7 +400,7 @@ simulated_data.plot_joint(ts_args=ts_args, times=times, title='Simulated TEPs fo
 
 
 # %%
-# **Results Description:**
+# **Result Description:**
 # Simulated TMS-evoked potentials (TEPs) for subject only_high_trial[0]
 # This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG studies combining Transcranial Magnetic Stimulation (TMS) and EEG to investigate cortical excitability and connectivity. Each peak or feature in the EEG signal corresponds to specific neural processes triggered by TMS.
 
@@ -858,7 +858,7 @@ for axes_row in range(nrows):
 
 
 # %%
-# **Results description**  
+# **Result Description**  
 #
 # **Timing and topographies of the prototypical TMS-EEG evoked potential (TEP) response pattern in each subject.**
 #
@@ -1030,7 +1030,7 @@ else:
 
 
 # %%
-# get ready
+
 start_time = time.time()
 
 #files_dir =  '/external/rprshnas01/netdata_kcni/jglab/Data/Davide/reproduce_Momi_et_al_2022/PyTepFit/data'
@@ -1079,7 +1079,7 @@ for sbj2plot in range(num_subjects):
 
 
 # %% 
-# **Result Description: **
+# **Result Description:**
 #
 # Empirical and Simulated TEPs figure for all subjects. Optimized TMS-EEG evoked potential (TEP) models for all subjects.
 #
@@ -1315,7 +1315,7 @@ sim_evoked.plot_joint(ts_args=ts_args, times=times, title='Simulated Grand Mean'
 
 
 # %%
-# **Result Description: **
+# **Result Description:**
 # TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG evoked potential (TEP) patterns in model-generated electroencephalography (EEG) time series
 #
 # This plot could be found as Panel A in Figure 3.
