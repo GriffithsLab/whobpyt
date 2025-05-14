@@ -29,8 +29,7 @@ import time
 import warnings
 warnings.filterwarnings('ignore')
 
-# Add custom module paths
-#from whobpyt.depr.momi2025.euclidean_distance import euclidean_distance
+
 import re
 import math
 import glob
@@ -58,13 +57,8 @@ import torch
 import whobpyt
 from whobpyt.datasets.fetchers import fetch_egmomi2025
 from whobpyt.depr.momi2025.jansen_rit import par, Recording, method_arg_type_check, dataloader
-
-
-#from whobpyt.datasets.dataload import dataload
 from whobpyt.depr.momi2025.jansen_rit import RNNJANSEN, ParamsJR, CostsJR, Model_fitting
 
-
-import math
 def euclidean_distance(coord1, coord2):
     x1, y1, z1 = coord1[0], coord1[1], coord1[2]
     x2, y2, z2 = coord2[0], coord2[1], coord2[2]
