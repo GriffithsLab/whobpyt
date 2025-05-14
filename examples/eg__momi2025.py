@@ -28,19 +28,20 @@ import json
 
 
 data = {"username":"claires03","key":"ee39084a8974336d9fff7e1ced807e64"}
-kaggle_path = os.path.join('/root/.config', 'kaggle')
+#kaggle_path = os.path.join('/root/.config', 'kaggle')
+kaggle_path = os.path.expanduser('~/.kaggle')
 if not os.path.exists(kaggle_path):
     os.makedirs(kaggle_path)
     print(f"Created directory: {kaggle_path}")
 else:
     print(f"Directory already exists: {kaggle_path}")
 
-kaggle_file = kaggle_path+ '/kaggle.json'
+kaggle_file = os.path.join(kaggle_path, 'kaggle.json')
 print(kaggle_file)
 with open(kaggle_file, 'w') as f:
     json.dump(data, f)
 
-os.chmod(kaggle_file, 0o600)
+#os.chmod(kaggle_file, 0o600)
 import time
 import warnings
 warnings.filterwarnings('ignore')
