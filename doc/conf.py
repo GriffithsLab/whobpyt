@@ -529,7 +529,7 @@ sphinx_gallery_conf = {
      #   r"mne.datasets.*",
     },
     "show_api_usage": "unused",
-    "copyfile_regex": r".*index\.rst" #,  # allow custom index.rst files
+    "copyfile_regex": r".*index\.rst", #,  # allow custom index.rst files
     "n_jobs": -1  }
     #"api_usage_ignore": (),
     #
