@@ -36,6 +36,7 @@ pydata-sphinx-theme
 gdown
 kaggle
 #jinja2<3.1
+joblib
 
 
 # Test requirements
