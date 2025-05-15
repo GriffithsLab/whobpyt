@@ -93,8 +93,9 @@ jobs:
           echo 'Run 1'  # first run: skip plots
           sphinx-build -b html -nT --keep-going -D plot_gallery=0 . _build/html           
           echo 'Run 2'  # second run: don't remove anything, add the plots          
-          sphinx-build -b html -nT --keep-going . _build/html   
-      continue-on-error: true  
+          #sphinx-build -b html -nT --keep-going . _build/html   
+          make html SPHINXOPTS="-j auto"
+      continue-on-error: true 
       
     - name: Deploy Docs
       uses: peaceiris/actions-gh-pages@v3
