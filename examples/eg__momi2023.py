@@ -110,10 +110,12 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # somatic and dendritic membrane response to an incoming pulse of action potentials is 
 # described by the second-order differential equation:
 #
-# .. figure:: https://latex.codecogs.com/png.latex?%5CDdot%7Bv%7D%5Cleft%28t%5Cright%29%20&plus;%5Cfrac%7B2%7D%7B%5Ctau_%7Be%2Ci%7D%7D%5Cdot%7Bv%7D%5Cleft%28t%5Cright%29&plus;%5Cfrac%7B1%7D%7B%5Ctau_%7Be.i%7D%5E2%7Dv%5Cleft%28t%5Cright%29%20%3D%20%5Cfrac%7BH_%7Be%2Ci%7D%7D%7B%5Ctau_%7Be%2Ci%7D%7Dm%5Cleft%28t%5Cright%29>
-#   :alt: Momi 2023 Eqn. 
-#   :width: 300px
-#   :align: center
+# .. math::
+#   :label: eq:eq01
+#
+#   \begin{align}
+#   \ddot{\nu}(t) + \frac{2}{\tau_{e,i}} \dot{\nu}(t) + \frac{1}{\tau_{e,i}^2} \nu(t) &= \frac{H_{e,i}}{\tau_{e,i}} m(t)
+#   \end{align}
 #  
 # which is equivalent to a convolution of incoming activity with a synaptic impulse response function 
 #
