@@ -1,9 +1,41 @@
-# -*- coding: utf-8 -*-
-"""momi_2025_example.ipynb
 
-Original file is located at
-    https://colab.research.google.com/drive/1dD_XqTVleoW8VgH_T_y5SrFxBNOu_ZRz
+# sphinx_gallery_thumbnail_path = '../_static/momi2025__Figure_2.PNG'
+
 """
+.. _ex-momi2025:
+
+====================================================================================================
+Gradients of Excitability and Recurrence Revealed by Stimulation Mapping and Whole-Brain Modelling 
+====================================================================================================
+
+This example gives a replication and didactic explanation of the multi-site Steroetactic (s)EEG modelling 
+and results reported in Momi et al. (Nature Comms 2025). 
+
+The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.
+
+Please read our `paper <https://elifesciences.org/articles/83232>`_, and if you use this code, please cite it:
+
+Momi D.,...,.... Griffiths J.D. (2025).
+"Gradients kf Excitability in. Human Cortex Revealsd by Stimulation Mapping and Whole-Brain Modelling."
+eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
+"""
+
+# %%
+# 0. Overview of study and summary of key results
+# ---------------------------------------------------
+#
+# *(content modified from GriffithsLab/Momi2025 github repo, and the paper itself)*
+#
+#
+# Study Overview
+# ^^^^^^^^^^^^^^^
+#
+# ...
+
+# Replication 
+# ^^^^^^^^^^^^^^^
+#
+# ...
 
 
 

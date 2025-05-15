@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Model Training &#8212; MNE  documentation</title>
+    <title>Gradients of Excitability and Recurrence Revealed by Stimulation Mapping and Whole-Brain Modelling &#8212; MNE  documentation</title>
   
   
   
@@ -362,12 +362,29 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-eg-momi2025-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<p class="sphx-glr-example-title" id="sphx-glr-auto-examples-eg-momi2025-py">momi_2025_example.ipynb</p>
-<dl class="simple">
-<dt>Original file is located at</dt><dd><p><a class="reference external" href="https://colab.research.google.com/drive/1dD_XqTVleoW8VgH_T_y5SrFxBNOu_ZRz">https://colab.research.google.com/drive/1dD_XqTVleoW8VgH_T_y5SrFxBNOu_ZRz</a></p>
-</dd>
-</dl>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Commented out IPython magic to ensure Python compatibility.</span>
+<section class="sphx-glr-example-title" id="gradients-of-excitability-and-recurrence-revealed-by-stimulation-mapping-and-whole-brain-modelling">
+<span id="ex-momi2025"></span><span id="sphx-glr-auto-examples-eg-momi2025-py"></span><h1>Gradients of Excitability and Recurrence Revealed by Stimulation Mapping and Whole-Brain Modelling<a class="headerlink" href="#gradients-of-excitability-and-recurrence-revealed-by-stimulation-mapping-and-whole-brain-modelling" title="Link to this heading">#</a></h1>
+<p>This example gives a replication and didactic explanation of the multi-site Steroetactic (s)EEG modelling
+and results reported in Momi et al. (Nature Comms 2025).</p>
+<p>The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.</p>
+<p>Please read our <a class="reference external" href="https://elifesciences.org/articles/83232">paper</a>, and if you use this code, please cite it:</p>
+<p>Momi D.,…,…. Griffiths J.D. (2025).
+“Gradients kf Excitability in. Human Cortex Revealsd by Stimulation Mapping and Whole-Brain Modelling.”
+eLife, <a class="reference external" href="https://elifesciences.org/articles/83232">doi: 10.7554/eLife.83232</a>.</p>
+<section id="overview-of-study-and-summary-of-key-results">
+<h2>0. Overview of study and summary of key results<a class="headerlink" href="#overview-of-study-and-summary-of-key-results" title="Link to this heading">#</a></h2>
+<p><em>(content modified from GriffithsLab/Momi2025 github repo, and the paper itself)</em></p>
+<section id="study-overview">
+<h3>Study Overview<a class="headerlink" href="#study-overview" title="Link to this heading">#</a></h3>
+<p>…</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replication</span>
+<span class="c1"># ^^^^^^^^^^^^^^^</span>
+<span class="c1">#</span>
+<span class="c1"># ...</span>
+
+
+
+<span class="c1"># Commented out IPython magic to ensure Python compatibility.</span>
 </pre></div>
 </div>
 <p>!pip install mne
@@ -1080,7 +1097,7 @@ to download the full example code.</p>
 <li><img src="../_images/sphx_glr_eg__momi2025_005.png" srcset="../_images/sphx_glr_eg__momi2025_005.png" alt="eg  momi2025" class = "sphx-glr-multi-img"/></li>
 <li><img src="../_images/sphx_glr_eg__momi2025_006.png" srcset="../_images/sphx_glr_eg__momi2025_006.png" alt="Early response -2-37ms, Late response 37-78ms, Late response 78-400ms" class = "sphx-glr-multi-img"/></li>
 </ul>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time: 1.898057460784912 seconds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Elapsed time: 4.205663204193115 seconds
 Renamed /home/runner/.whobpyt/data/eg__momi2025/anatomical/example-bem to /home/runner/.whobpyt/data/eg__momi2025/anatomical/example-bem.fif
     Average patch normals will be employed in the rotation to the local surface coordinates....
     Converting to surface-based source orientations...
@@ -1095,8 +1112,10 @@ Renamed /home/runner/.whobpyt/data/eg__momi2025/anatomical/example-bem to /home/
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ObjFun</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+</section>
 <section id="model-training">
-<h1>Model Training<a class="headerlink" href="#model-training" title="Link to this heading">#</a></h1>
+<h2>Model Training<a class="headerlink" href="#model-training" title="Link to this heading">#</a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">time_dim</span><span class="p">,</span> <span class="n">pop_size</span><span class="p">))</span>
 <span class="n">u</span><span class="p">[:,:,</span><span class="mi">65</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span> <span class="mi">2000</span>
 <span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span>  <span class="n">warmupWindow</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -1104,15 +1123,15 @@ Renamed /home/runner/.whobpyt/data/eg__momi2025/anatomical/example-bem to /home/
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
 torch.Size([200, 3, 2])
-eeg epoch:  0 loss: 1.801856 Pseudo FC_cor:  0.5104064527402569 cos_sim:  0.0700158870452705
+eeg epoch:  0 loss: 2.2567613 Pseudo FC_cor:  0.5167073802925254 cos_sim:  0.06258604191564729
 Epoch:  1
 torch.Size([200, 3, 2])
-eeg epoch:  1 loss: 0.8513525 Pseudo FC_cor:  0.5389094561511211 cos_sim:  0.26478452606829
+eeg epoch:  1 loss: 1.2774265 Pseudo FC_cor:  0.32811259826845796 cos_sim:  0.2528841136156998
 </pre></div>
 </div>
 </section>
 <section id="model-evaluation-with-20-window-for-warmup">
-<h1>Model Evaluation (with 20 window for warmup)<a class="headerlink" href="#model-evaluation-with-20-window-for-warmup" title="Link to this heading">#</a></h1>
+<h2>Model Evaluation (with 20 window for warmup)<a class="headerlink" href="#model-evaluation-with-20-window-for-warmup" title="Link to this heading">#</a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">TPperWindow</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
 <span class="c1"># @title 2 epoch</span>
 
@@ -1553,12 +1572,12 @@ eeg epoch:  1 loss: 0.8513525 Pseudo FC_cor:  0.5389094561511211 cos_sim:  0.264
 <li><img src="../_images/sphx_glr_eg__momi2025_010.png" srcset="../_images/sphx_glr_eg__momi2025_010.png" alt="Response 1, Response 2, Response 3" class = "sphx-glr-multi-img"/></li>
 <li><img src="../_images/sphx_glr_eg__momi2025_011.png" srcset="../_images/sphx_glr_eg__momi2025_011.png" alt="eg  momi2025" class = "sphx-glr-multi-img"/></li>
 </ul>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>eeg Pseudo FC_cor:  0.8350968188849439 cos_sim:  0.6410839045231086
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>eeg Pseudo FC_cor:  0.8485675461842828 cos_sim:  0.5659454366128586
 No projector specified for this dataset. Please consider the method self.add_proj.
 No projector specified for this dataset. Please consider the method self.add_proj.
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 20.452 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 48.270 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-momi2025-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/694c0473fd3cc452e452ca5b16880f15/eg__momi2025.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__momi2025.ipynb</span></code></a></p>
@@ -1571,6 +1590,7 @@ No projector specified for this dataset. Please consider the method self.add_pro
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 </section>
 
 
@@ -1603,10 +1623,13 @@ No projector specified for this dataset. Please consider the method self.add_pro
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Model Training</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview-of-study-and-summary-of-key-results">0. Overview of study and summary of key results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#study-overview">Study Overview</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-training">Model Training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-evaluation-with-20-window-for-warmup">Model Evaluation (with 20 window for warmup)</a></li>
+</ul>
   </nav></div>
 
 </div></div>
