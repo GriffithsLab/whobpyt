@@ -94,7 +94,7 @@ jobs:
           sphinx-build -b html -nT --keep-going -D plot_gallery=0 . _build/html           
           echo 'Run 2'  # second run: don't remove anything, add the plots          
           #sphinx-build -b html -nT --keep-going . _build/html   
-          make html
+          make html SPHINXOPTS="-j auto"
       continue-on-error: true 
       
     - name: Deploy Docs
