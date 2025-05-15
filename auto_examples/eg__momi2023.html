@@ -449,10 +449,10 @@ but not to each other, and so the overall circuit motif contains one positive an
 negative feedback loop. For each of the three neural populations, the post-synaptic
 somatic and dendritic membrane response to an incoming pulse of action potentials is
 described by the second-order differential equation:</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="https://latex.codecogs.com/png.latex?%5CDdot%7Bv%7D%5Cleft%28t%5Cright%29%20&amp;plus;%5Cfrac%7B2%7D%7B%5Ctau_%7Be%2Ci%7D%7D%5Cdot%7Bv%7D%5Cleft%28t%5Cright%29&amp;plus;%5Cfrac%7B1%7D%7B%5Ctau_%7Be.i%7D%5E2%7Dv%5Cleft%28t%5Cright%29%20%3D%20%5Cfrac%7BH_%7Be%2Ci%7D%7D%7B%5Ctau_%7Be%2Ci%7D%7Dm%5Cleft%28t%5Cright%29&gt;"><img alt="Momi 2023 Eqn." src="https://latex.codecogs.com/png.latex?%5CDdot%7Bv%7D%5Cleft%28t%5Cright%29%20&amp;plus;%5Cfrac%7B2%7D%7B%5Ctau_%7Be%2Ci%7D%7D%5Cdot%7Bv%7D%5Cleft%28t%5Cright%29&amp;plus;%5Cfrac%7B1%7D%7B%5Ctau_%7Be.i%7D%5E2%7Dv%5Cleft%28t%5Cright%29%20%3D%20%5Cfrac%7BH_%7Be%2Ci%7D%7D%7B%5Ctau_%7Be%2Ci%7D%7Dm%5Cleft%28t%5Cright%29&gt;" style="width: 300px;" />
-</a>
-</figure>
+<div class="math notranslate nohighlight" id="equation-eq-eq01">
+<span class="eqno">(1)<a class="headerlink" href="#equation-eq-eq01" title="Link to this equation">#</a></span>\[\begin{align}
+\ddot{\nu}(t) + \frac{2}{\tau_{e,i}} \dot{\nu}(t) + \frac{1}{\tau_{e,i}^2} \nu(t) &amp;= \frac{H_{e,i}}{\tau_{e,i}} m(t)
+\end{align}\]</div>
 <p>which is equivalent to a convolution of incoming activity with a synaptic impulse response function</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="https://latex.codecogs.com/png.latex?v%28t%29%20%3D%20%5Cint%5Climits_0%5E%7B%5Cinfty%7D%20d%20%5Ctau%20m%28%5Ctau%29%20%5Ccdot%20h_%7Be%2Ci%7D%20%28t-%5Ctau%29"><img alt="Momi 2023 Eqn." src="https://latex.codecogs.com/png.latex?v%28t%29%20%3D%20%5Cint%5Climits_0%5E%7B%5Cinfty%7D%20d%20%5Ctau%20m%28%5Ctau%29%20%5Ccdot%20h_%7Be%2Ci%7D%20%28t-%5Ctau%29" style="width: 300px;" />
@@ -877,11 +877,11 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>sub:  0
 loading leadfield file: /home/runner/.whobpyt/data/eg__momi2023/sub_1_leadfield
 call model fitting
-epoch:  0 933.5421
-epoch:  0 0.390631633692497 cos_sim:  0.12142077198390401
-epoch:  1 -4337.9927
-epoch:  1 0.4075980920792226 cos_sim:  0.025729154843838975
-running time is  28.773032426834106 &#39;s
+epoch:  0 -3305.2092
+epoch:  0 0.3716616977905731 cos_sim:  0.09908242400606694
+epoch:  1 -6365.268
+epoch:  1 0.4160328258290053 cos_sim:  0.0060127068135687805
+running time is  59.66052985191345 &#39;s
 </pre></div>
 </div>
 <p>check the output of output_sim.eeg_test</p>
@@ -1720,7 +1720,7 @@ TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG ev
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 7.368 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 0.688 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-momi2023-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c0aa0ed03c2583762d5d6226381b960b/eg__momi2023.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__momi2023.ipynb</span></code></a></p>
