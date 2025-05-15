@@ -530,7 +530,7 @@ sphinx_gallery_conf = {
     },
     "show_api_usage": "unused",
     "copyfile_regex": r".*index\.rst", #,  # allow custom index.rst files
-    "n_jobs": -1  }
+    "parallel": True  }
     #"api_usage_ignore": (),
     #
     #    "("
