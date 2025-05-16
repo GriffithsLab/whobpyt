@@ -22,41 +22,128 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 
 # %%
 # 0. Overview of study and summary of key results
-# ---------------------------------------------------
+# ------------------------------------------------
 #
-# *(content modified from GriffithsLab/Momi2025 github repo, and the paper itself)*
-#
+# The human brain exhibits a modular and hierarchical structure, spanning low-order sensorimotor 
+# to high-order cognitive/affective systems. What is the mechanistic significance of this organization 
+# for brain dynamics and information processing properties? We investigated this question using rare 
+# simultaneous multimodal electrophysiology (stereotactic and scalp electroencephalography - EEG) 
+# recordings in 36 patients with drug-resistant focal epilepsy during presurgical intracerebral 
+# electrical stimulation (iES) (323 stimulation sessions). Our analyses revealed an anatomical gradient 
+# of excitability across the cortex, with stronger iES-evoked EEG responses in high-order compared to 
+# low-order regions. Mathematical modeling further showed that this variation in excitability levels 
+# results from a differential dependence on recurrent feedback from non-stimulated regions across the 
+# anatomical hierarchy, and could be extinguished by suppressing those connections in-silico. High-order 
+# brain regions/networks thus show an activity pattern characterized by more inter-network functional 
+# integration than low-order ones, which manifests as a spatial gradient of excitability that is emergent 
+# from, and causally dependent on, the underlying hierarchical network structure. These findings offer 
+# new insights into how hierarchical brain organization influences cognitive functions and could inform 
+# strategies for targeted neuromodulation therapies.
 #
 # Study Overview
 # ^^^^^^^^^^^^^^^
 #
-# ...
-
-# Replication 
-# ^^^^^^^^^^^^^^^
+# .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig1_momi2025.png?raw=true
+#   :alt: diagram fig 2025 
+#   :width: 600px
 #
-# ...
+# A Intracerebral electrical stimulation (iES) applied to an intracortical target region generates 
+# an early (~20-30 ms) response (evoked-related potential (ERP) waveform component) at high-density 
+# scalp electroencephalography (hd-EEG) channels sensitive to that region and its immediate neighbors 
+# (red arrows). This also appears in more distal connected regions after a short delay due to axonal 
+# conduction and polysynaptic transmission. Subsequent second (~60–80 ms) and third (~140–200 ms) late 
+# evoked components are frequently observed (blue arrows). After identifying the stimulated network in 
+# this way, we aim to determine the extent to which this second component relies on intrinsic network 
+# activity versus recurrent whole-brain feedback. 
+#
+# B Schematic of the hierarchical spatial layout of 
+# canonical RSNs as demonstrated in Margulies and colleagues12, spanning low-order networks showing 
+# greater functional segregation to high-order networks showing greater functional integration15. 
+# Networks are distributed based on their position along the first principal gradient. The stimulation 
+# sites are distributed across different levels of this gradient. 
+#
+# C Schematic of virtual dissection 
+# methodology and key hypotheses tested. We first fit personalized connectome-based computational models 
+# of iES-evoked responses to the hd-EEG time series, for each patient and stimulation location. Then, 
+# precisely timed communication interruptions (virtual dissections) were introduced to the fitted models,
+# and the resulting changes in the iES-evoked propagation pattern were evaluated. We hypothesized that 
+# lesioning would lead to activity suppression (C, right side) in high-order but not low-order networks.
+#
+# Results 
+# ^^^^^^^
+#
+# .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig2_momi2025.png?raw=true
+#   :alt: results1 fig 2025 
+#   :width: 600px
+#
+# A The histogram illustrates the distance in centimeters between the electrode’s centroid delivering 
+# the electrical stimulus and the center of the nearest Schaefer’s parcel87. The results indicate a high 
+# level of spatial precision, with 97.2% of sessions showing distances of less than 1 cm. 
+#
+# B Global mean 
+# field power (GMFP) of hd-EEG averaged across all 36 subjects and 323 sessions, revealing three 
+# consistent response peaks/clusters within strict confidence intervals at ~40 ms, ~80 ms, and ~370 ms, 
+# consistent with prior electrophysiological research44. 
+#
+# C GMFP of every stimulated Resting-State Network
+# (RSN) for hd-EEG (top row) and sEEG (bottom row). The bar plot of the normalized area under the curve 
+# (AUC) of the three clusters revealed a significantly stronger global activation pattern when the 
+# stimulus targeted high-order networks, such as the Default mode network (DMN) and Frontoparietal 
+# Network (FPN), particularly for the late evoked responses (third cluster at ~370 ms). Data are 
+# presented as mean values ± standard error of the mean (SEM) (error bars), with individual subject data 
+# points overlaid (36 independent subjects, 323 stimulation sessions). In the GMFP time course plots, 
+# shaded areas represent ±SEM around the mean. Notably, this trend aligns with the “principal gradient” 
+# hierarchy reported in the functional magnetic resonance imaging (fMRI) literature12, which describes 
+# a general pattern from low-order to high-order regions
+#
+# .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig3_momi2025.png?raw=true
+#   :alt: results2 fig 2025 
+#   :width: 600px
+#
+# A Global mean field power (GMFP) for every stimulated network for model-generated high-density 
+# electroencephalography (hd-EEG) data run with both the intact (continuous line) and disconnected 
+# (dashed line) structural connectome. Findings show a more pronounced decrease in evoked late responses 
+# for high-order networks (LN Limbic Network, SN Salience Network, DAN Dorsal attention network, 
+# FPN Frontoparietal Network, DMN Default mode network). 
+#
+# B Area under the curve (AUC) differences 
+# comparing the simulation run with the intact versus the lesioned structural connectome. The bar plot 
+# shows differences across three time windows (1st response: 0−37 ms, 2nd response: 37–78 ms, 
+# 3rd response: 78–373 ms). Data are presented as mean values ± standard error of the mean (SEM) 
+# (error bars), with individual subject data points overlaid (36 independent subjects, 323 stimulation 
+# sessions). A significant reduction in the AUC was found for late responses (78−373 ms) of high-order 
+# networks (LN, SN, DAN, FPN, and DMN) compared to low-order networks (Visual Network [VN] and 
+# Somatomotor Network [SMN]), indicated by asterisks (*P < 0.05). 
+#
+# C Demonstration of the network 
+# recurrence-based theory for two representative sessions. Simulations of evoked dynamics are run using 
+# the intact (left) and lesioned (right) anatomical connectome. In the latter case, the connections were 
+# removed to isolate the stimulated networks for SMN (top) and DMN (bottom). In the case of the low-order 
+# network, this virtual dissection does not significantly impact the evoked potentials, while for the 
+# high-order network, a substantial reduction or disappearance of evoked components was observed.
+#
+# Conclusions 
+# ^^^^^^^^^^^
+#
+# a. Using a computational framework recently developed for personalized neurostimulation modeling
+#
+# b. Using model Uncover neural states across netoworks: able to study how the brain signals 
+# propagate across networks
+#
+# c. using model as simulator to minics patients and treatment potentially
+#
+#
+#
+# 1. Setup
+# -------------------------------------------
+#
+#
+# Importage
 
-
-
-# Commented out IPython magic to ensure Python compatibility.
-# %%capture
-# 
-# !pip install mne
-# !pip install nilearn
-# 
-# 
-# #@title Install dependencies
-
-# @title whobpyt Package
-
-
+# general stuff
 import os
 import sys
 import json
-
-#sys.path.append('../whobpyt')
-
 import time
 import warnings
 warnings.filterwarnings('ignore')
@@ -68,6 +155,7 @@ import glob
 import pickle
 import requests
 
+#python stuff
 import numpy as np
 import pandas as pd
 import scipy
@@ -75,37 +163,45 @@ import scipy.io
 from scipy.signal import find_peaks
 import sklearn
 
+# plot stuff
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# imaging stuff
 import mne
 import nibabel
 import nibabel as nib
 from nilearn import plotting, surface
 from nilearn.image import load_img
 
-# WHOBPYT
+# WHOBPYT stuff
 import torch
 import whobpyt
 from whobpyt.datasets.fetchers import fetch_egmomi2025
 from whobpyt.depr.momi2025.jansen_rit import par, Recording, method_arg_type_check, dataloader
 from whobpyt.depr.momi2025.jansen_rit import RNNJANSEN, ParamsJR, CostsJR, Model_fitting
 
-def euclidean_distance(coord1, coord2):
-    x1, y1, z1 = coord1[0], coord1[1], coord1[2]
-    x2, y2, z2 = coord2[0], coord2[1], coord2[2]
-    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
 
-"""## Empirical Result"""
-
+# %%
+# Download data
 data_folder = fetch_egmomi2025()
 
-# @title Download Data
+# %%
+# 2 - Model fitting and key results
+# --------------------------------------------------
 
 start_time = time.time()
 
+# %%
+# 2.1 Empirical Data Analysis
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# 
 
+# loading data
 
+# loading the file from the GitHub URL
+url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
+colour = pd.read_excel(url, header=None)[4]
 all_eeg_evoked = np.load(data_folder + '/empirical_data/all_eeg_evoked.npy')
 epo_eeg = mne.read_epochs(data_folder + '/empirical_data/example_epoched.fif', verbose=False)
 
@@ -120,6 +216,9 @@ with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'r
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
 stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
+
+# %%
+# plot evoked eeg gfma at each network
 
 networks = ['Vis', 'SomMot', 'DorsAttn', 'SalVentAttn', 'Limbic', 'Cont', 'Default']
 # Create a dictionary to store the network indices
@@ -145,9 +244,7 @@ for key, value in net_gfma.items():
 
 averages = np.array(averages)
 
-# Download the file from the GitHub URL
-url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
-colour = pd.read_excel(url, header=None)[4]
+
 
 # Define the desired figure size
 fig = plt.figure(figsize=(20, 6))
@@ -158,6 +255,9 @@ for net in range(len(networks)):
 
 # Display the plot
 plt.show()
+
+# %% 
+# plot peaks
 
 # Calculate the mean array as you mentioned
 time_series = np.mean((averages[:, :] - np.mean(averages[:, :300])), axis=0)
@@ -182,6 +282,11 @@ plt.xlabel('Index')
 plt.ylabel('Value')
 plt.title('Time Series with First 3 Peaks')
 plt.show()
+
+# %%
+# plot evoked response variation across sessions
+
+
 
 # Assuming you have a 2D array all_gfma with shape (323, 1001)
 # Calculate the mean and standard deviation along the first axis (sessions)
@@ -219,6 +324,10 @@ if len(epo_eeg.times) == len(time_series):
 else:
     print("The lengths of 'epo_eeg.times' and 'time_series' don't match.")
 
+
+# %%
+# plot AUC
+
 windows = 3
 AUC = np.zeros((3,all_gfma.shape[0]))
 
@@ -255,9 +364,6 @@ for idx, key in enumerate(net_AUC.keys()):
 AUC_averages = AUC_averages *100000
 
 
-# Download the file from the GitHub URL
-url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
-colour = pd.read_excel(url, header=None)[4]
 
 
 
@@ -296,6 +402,9 @@ plt.tight_layout()  # Adjust the spacing between subplots if needed
 
 
 plt.show()
+
+# %%
+# plot seeg at each network
 
 with open(data_folder + '/empirical_data/all_epo_seeg.pkl', 'rb') as handle:
     all_epo_seeg = pickle.load(handle)
@@ -357,6 +466,10 @@ for net in range(len(networks)):
 
 plt.show()
 
+
+# %%
+# plot seeg AUC
+
 # Calculate the mean array as you mentioned
 time_series = np.mean((averages[:, :] - np.mean(averages[:, :300])), axis=0)
 
@@ -411,11 +524,6 @@ AUC_averages = AUC_averages*1000
 # AUC_averages = (AUC_averages / np.max(AUC_averages, axis=0)) * 100
 
 
-# Download the file from the GitHub URL
-url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
-colour = pd.read_excel(url, header=None)[4]
-
-
 
 # Create the figure and subplots
 fig, axs = plt.subplots(1, 3, figsize=(13, 6))  # 2 rows, 1 column
@@ -455,12 +563,14 @@ end_time = time.time()
 elapsed_time = end_time - start_time
 print(f"Elapsed time: {elapsed_time} seconds")
 
-"""## Model_fitting"""
+# %%
+# 2.2 Model fitting
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# 
 
 
-# @title Install dependencies
 
-start_time = time.time()
+
 
 # Select the session number to use: Please do not change it as we are using subject-specific anatomy
 ses2use = 10
@@ -525,7 +635,13 @@ stim_coords = coords_1000[stim_idx]
 # The network name is the part after the underscore in the stimulation region label
 stim_net = stim_region[ses2use].split('_')[1]
 
-import math
+
+#define dist function
+def euclidean_distance(coord1, coord2):
+    x1, y1, z1 = coord1[0], coord1[1], coord1[2]
+    x2, y2, z2 = coord2[0], coord2[1], coord2[2]
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+
 # Initialize an empty list to store distances
 distances = []
 
@@ -597,7 +713,6 @@ for xx in range(1, 201):
 
     # Calculate the mean coordinates in millimeters for the current parcel
     sub_coords[:, xx - 1] = np.mean(mm_coords[vox_x, vox_y, vox_z], axis=0)
-
 
 
 # Initialize an empty list to store distances
@@ -754,20 +869,17 @@ ObjFun = CostsJR(model)
 # call model fit
 F = Model_fitting(model, ObjFun)
 
-# %%
+
 # Model Training
-# ---------------------------------------------------
-#
 
 u = np.zeros((node_size,hidden_size,time_dim, pop_size))
 u[:,:,65:75,0]= 2000
 F.train(u = u, empRec = data_mean, num_epochs = 2, TPperWindow = TPperWindow,  warmupWindow=20)
-# %%
+
 # Model Evaluation (with 20 window for warmup)
-# ---------------------------------------------------
-#
+
 F.evaluate(u = u, empRec = data_mean, TPperWindow = TPperWindow, base_window_num = 100)
-# @title 2 epoch
+
 
 """load_path = '/content/drive/MyDrive/ClaireShao_WhoBPyT_Replications_Project/Paper 2- Momi_et_al_2025/training_result_momi_2025.pkl'
 
@@ -797,7 +909,12 @@ simulated_EEG_st.data[:,time_start:time_end] = F.trainingStats.outputs['eeg_test
 
 simulated_joint_st = simulated_EEG_st.plot_joint(ts_args=ts_args, times=times)
 
-"""## Virtual_dissection"""
+
+# %%
+# 2.3 Virtual_dissection
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# 
+
 
 
 
@@ -972,11 +1089,10 @@ for net in range(len(networks)):
 
 plt.show()
 
-"""## Applying_virtual_dissection"""
-
-
-
-# @title Install dependencies
+# %%
+# 2.4 Apply virtual dissection
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# 
 
 # URL of the CSV file containing centroid coordinates for Schaefer2018 atlas
 url = 'https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv'
@@ -1196,4 +1312,3 @@ plt.legend()
 # Show the plot
 plt.show()"""
 
-# @title difference
