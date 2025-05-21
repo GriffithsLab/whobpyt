@@ -207,7 +207,7 @@ simulated_EEG_st.data[:,time_start:time_end] = F.lastRec['eeg'].npTS()
 times = [peak_locs1, peak_locs2, peak_locs3, peak_locs4, peak_locs5]
 simulated_joint_st = simulated_EEG_st.plot_joint(ts_args=ts_args, times=times)
 
-
+# %%
 #### rest is extral analysis on the neural states on different networks
 
 ### get labels for Yeo 200
@@ -222,7 +222,7 @@ net_names = np.unique(np.array(nets))
 
 
 
-
+# %%
 #### plot E response on each networks 
 fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
 t = np.linspace(-0.1,0.3, 400)
@@ -234,6 +234,8 @@ for i, net in enumerate(net_names):
 plt.suptitle('Test: E')
 plt.show()
 
+
+# %%
 ### plot I response at each networks
 fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
 t = np.linspace(-0.1,0.3, 400)
@@ -245,6 +247,7 @@ for i, net in enumerate(net_names):
 plt.suptitle('Test: I')
 plt.show()
 
+# %%
 ### plot P response at each networks
 fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
 t = np.linspace(-0.1,0.3, 400)
@@ -257,6 +260,7 @@ plt.suptitle('Test: P')
 plt.show()
 
 
+# %%
 ### plot phase of E at each network
 j = complex(0,1)
 fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
@@ -270,6 +274,7 @@ for i, net in enumerate(net_names):
 plt.suptitle('Test: phase E')
 plt.show()
 
+# %%
 ### plot I phase at each network
 j = complex(0,1)
 fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
@@ -283,6 +288,7 @@ for i, net in enumerate(net_names):
 plt.suptitle('Test: phase I')
 plt.show()
 
+# %%
 ### plot P phase at each network
 
 j = complex(0,1)
