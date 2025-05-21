@@ -119,15 +119,21 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #  
 # which is equivalent to a convolution of incoming activity with a synaptic impulse response function 
 #
-# .. figure:: https://latex.codecogs.com/png.latex?v%28t%29%20%3D%20%5Cint%5Climits_0%5E%7B%5Cinfty%7D%20d%20%5Ctau%20m%28%5Ctau%29%20%5Ccdot%20h_%7Be%2Ci%7D%20%28t-%5Ctau%29
-#   :alt: Momi 2023 Eqn. 
-#   :width: 300px
+# .. math::
+#   :label: eq:eq02
+#
+#   \begin{align}
+#   \ddot{\nu}(t)  &= \int_{0}^{\infty} d\tau(m\tau) h_{e,i}(t-\tau) d \tau
+#   \end{align}
 # 
 # whose kernel :math:`h_{e,i}(t)` is given by
 #
-# .. figure:: https://latex.codecogs.com/png.latex?h_%7Be%2Ci%7D%20%3D%20%5Cfrac%7BH_%7Be%2Ci%7D%7D%7B%5Ctau_%7Be%2Ci%7D%7D%20%5Ccdot%20t%20%5Ccdot%20exp%28%20-%5Cfrac%7Bt%7D%7B%5Ctau_%7Be%2Ci%7D%7D%20%29
-#   :alt: Momi 2023 Eqn. 
-#   :width: 300px
+# .. math::
+#   :label: eq:eq03
+#
+#   \begin{align}
+#   h_{e,i}  &= \frac{ H_{e,i}}{ \tau_{e,i}} \cdot t \cdot exp (\frac{t}{\tau_{e,i}})
+#   \end{align}
 # 
 # where :math:`m(t)` is the (population-average) presynaptic input, :math:`v(t)` is the postsynaptic membrane 
 # potential, :math:`H_{e,i}` is the maximum postsynaptic potential and :math:`\tau_{e,i}`  
@@ -136,37 +142,61 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # This synaptic response function, also known as a pulse-to-wave operator `(Freeman et al., 1975) <https://www.sciencedirect.com/book/9780122671500/mass-action-in-the-nervous-system>`_), determines the excitability of the population, as parameterized by the rate constants $a$ and $b$, which are of particular interest in the present study. Complementing the pulse-to-wave operator for the synaptic response, each neural population also has wave-to-pulse operator [Freeman et al., 1975](https://www.sciencedirect.com/book/9780122671500/mass-action-in-the-nervous-system) that determines the its output - the (population-average) firing rate - which is an instantaneous function of the somatic membrane potential that takes the sigmoidal form
 #
 # 
-# .. figure:: https://latex.codecogs.com/png.latex?Su%28t%29%20%3D%20%5Cbegin%7Bcases%7D%20%5Cfrac%7Be_%7B0%7D%7D%7B1-exp%28r%28v_%7B0%7D%20-%20v%28t%29%29%29%7D%20%26%20t%5Cgeq%200%20%5C%5C%200%20%26%20t%5Cleq%200%20%5C%5C%20%5Cend%7Bcases%7D
-#   :alt: Momi 2023 Eqn. 
-#   :width: 300px
+# .. math::
+#   :label: eq:eq04
+#
+#   
+#   Su(t) = \left\{\begin{align} 
+#             \frac{e_0}{ 1 + exp(r(\nu_0 - \nu(t)))} \; & \; t > 0 \\
+#               0 \; & \; t \leq 0
+#           \end{align} \right.
+#   
 # 
 # where :math:`e_{0}` is the maximum pulse, :math:`r` is the steepness of the sigmoid function, and :math:`v_0` is the postsynaptic potential for which half of the maximum pulse rate is achieved.
 #
 # In practice, we re-write the three sets of second-order differential equations that follow the form in (1) as pairs of coupled first-order differential equations, and so the full JR system for each individual cortical area :math:`j \in i:N` in our network of :math:`N=200` regions is given by the following six equations:
 # 
-# .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bv%7D_%7Bj1%7D%20%3D%20x_%7Bj1%7D
-#   :alt: Momi 2023 Eqn. 
-#   :width: 100px
-# 
-# .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bx%7D_%7Bj1%7D%20%3D%20%5Cfrac%7BH_e%7D%7B%5Ctau_e%7D%5Cleft%28p%28t%29&plus;%5Cmathrm%7Bconn%7D_j&plus;S%28v_%7Bj2%7D%29%5Cright%29%20-%20%5Cfrac%7B2%7D%7B%5Ctau_e%7Dx_%7Bj1%7D%20-%20%5Cfrac%7B1%7D%7B%5Ctau_e%5E2%7Dv_%7Bj1%7D
-#   :alt: Momi 2023 Eqn. 
-#   :width: 300px
+# .. math::
+#   :label: eq:eq05
 #
-# .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bv%7D_%7Bj2%7D%20%3D%20x_%7Bj2%7D
-#   :alt: Momi 2023 Eqn. 
-#   :width: 100px
+#   \begin{align}
+#   \dot{\nu}_{j1}  &= x_{j1}
+#   \end{align}
+# 
+# .. math::
+#   :label: eq:eq06
 #
-# .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bx%7D_%7Bj2%7D%20%3D%20%5Cfrac%7BH_i%7D%7B%5Ctau_i%7D%5Cleft%28S%28v_%7B3j%7D%29%5Cright%29%20-%20%5Cfrac%7B2%7D%7B%5Ctau_i%7Dx_%7Bj2%7D%20-%20%5Cfrac%7B1%7D%7B%5Ctau_i%5E2%7Dv_%7Bj2%7D
-#   :alt: Momi 2023 Eqn. 
-#   :width: 300px
+#   \begin{align}
+#   \dot{x}_{j1}  &= \frac{ H_{e}}{ \tau_{e}} (p(t) + \rm{conn}_j + S(\nu_{j3})) -\frac{2}{\tau_e} x_{j1} - \frac{1}{\tau_e^2}\nu_{j1}
+#   \end{align}
+#
+# .. math::
+#   :label: eq:eq07
+#
+#   \begin{align}
+#   \dot{\nu}_{j2}  &= x_{j2}
+#   \end{align}
+#
+# .. math::
+#   :label: eq:eq08
+#
+#   \begin{align}
+#   \dot{x}_{j2}  &= \frac{ H_{i}}{ \tau_{i}} ( S(\nu_{j3})) -\frac{2}{\tau_i} x_{j2} - \frac{1}{\tau_i^2}\nu_{j2}
+#   \end{align}
 # 
-# .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bv%7D_%7Bj3%7D%20%3D%20x_%7Bj3%7D
-#   :alt: Momi 2023 Eqn. 
-#   :width: 100px
+# .. math::
+#   :label: eq:eq09
+#
+#   \begin{align}
+#   \dot{\nu}_{j3}  &= x_{j3}
+#   \end{align}
 # 
-# .. figure:: https://latex.codecogs.com/png.latex?%5Cdot%7Bx%7D_%7Bj3%7D%20%3D%20%5Cfrac%7BH_e%7D%7B%5Ctau_e%7D%5Cleft%28S%28v_%7Bj1%7D%20-%20v_%7Bj2%7D%29%5Cright%29%20-%20%5Cfrac%7B2%7D%7B%5Ctau_e%7Dx_%7Bj3%7D%20-%20%5Cfrac%7B1%7D%7B%5Ctau_e%5E2%7Dv_%7Bj3%7D
-#   :alt: Momi 2023 Eqn. 
-#   :width: 300px
+# .. math::
+#   :label: eq:eq010
+#
+#   \begin{align}
+#   \dot{x}_{j3}  &= \frac{ H_{e}}{ \tau_{e}} (S(\nu_{j1} - \nu_{j3})) -\frac{2}{\tau_e} x_{j3} - \frac{1}{\tau_e^2}\nu_{j3}
+#   \end{align}
 #
 # where :math:`v_{1,2,3}` is the average postsynaptic membrane potential of populations of the excitatory stellate cells, inhibitory interneuron, and excitatory pyramidal cell populations, respectively.
 # The output :math:`y(t) = v_1(t) - v_2(t)` is the EEG signal.
