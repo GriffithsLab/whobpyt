@@ -796,14 +796,15 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 </section>
 <section id="model-setup-and-training">
 <h3>2.4 Model Setup and Training<a class="headerlink" href="#model-setup-and-training" title="Link to this heading">#</a></h3>
-<p>Run a shorter version with num_epochs = 2 to check the process without overwriting the results of the full run.</p>
+<p>Run a shorter version with num_epochs = 2 to check the process without overwriting the results of the full run.
+for the convergence 100-200 epochs need to run for the trainning</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">node_size</span> <span class="o">=</span> <span class="n">stim_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">output_size</span> <span class="o">=</span> <span class="mi">62</span> <span class="c1">##gm.shape[0]</span>
 <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">50</span>
 <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span>
 <span class="n">input_size</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">num_epoches</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">tr</span> <span class="o">=</span> <span class="mf">0.001</span>
 <span class="n">state_size</span> <span class="o">=</span><span class="mi">6</span>
 <span class="n">base_batch_num</span> <span class="o">=</span> <span class="mi">20</span>
@@ -814,8 +815,9 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 <span class="c1">#for i in range(data_high[&#39;only_high_trial&#39;].shape[0]):</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sub: &#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-    <span class="n">data_mean</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_high</span><span class="p">[</span><span class="s1">&#39;only_high_trial&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span><span class="o">*</span><span class="n">num_epoches</span>
-    <span class="c1">#data_mean = [gm]*num_epoches</span>
+    <span class="n">data_mean</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_high</span><span class="p">[</span><span class="s1">&#39;only_high_trial&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span><span class="o">*</span><span class="n">num_epochs</span>
+    <span class="c1">#data_mean = [gm]*num_epochs</span>
+
     <span class="n">data_mean</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_mean</span><span class="p">)</span>
     <span class="c1">#file_leadfield = lf_dir+f&#39;/sub{str(i+1).zfill(3)}/leadfield.npy&#39;</span>
     <span class="n">sub_file_leadfield</span> <span class="o">=</span> <span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/sub_</span><span class="si">%s</span><span class="s1">_leadfield&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
@@ -834,7 +836,7 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;call model fitting&#39;</span><span class="p">)</span>
     <span class="c1"># call model fit method</span>
-    <span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">[:,:,</span><span class="mi">900</span><span class="p">:</span><span class="mi">1300</span><span class="p">],</span> <span class="n">num_epoches</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">Model_fitting</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">[:,:,</span><span class="mi">900</span><span class="p">:</span><span class="mi">1300</span><span class="p">],</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># fit data(train)</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">node_size</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">400</span><span class="p">))</span>
@@ -878,11 +880,11 @@ This plot simulates the TMS-evoked potentials (TEPs), typically observed in EEG 
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>sub:  0
 loading leadfield file: /home/runner/.whobpyt/data/eg__momi2023/sub_1_leadfield
 call model fitting
-epoch:  0 -3692.3608
-epoch:  0 0.3255892099304835 cos_sim:  0.09377862953109618
-epoch:  1 -6815.775
-epoch:  1 0.42923892226556903 cos_sim:  0.0038734349350829163
-running time is  65.30589413642883 &#39;s
+epoch:  0 -3598.632
+epoch:  0 0.3743202460507105 cos_sim:  0.10364196635318468
+epoch:  1 -6761.2393
+epoch:  1 0.41882077612208995 cos_sim:  0.012287847830697338
+running time is  54.53155255317688 &#39;s
 </pre></div>
 </div>
 <p>check the output of output_sim.eeg_test</p>
@@ -904,9 +906,8 @@ running time is  65.30589413642883 &#39;s
 </section>
 <section id="exploring-model-parameters">
 <h2>3 - Exploring model parameters<a class="headerlink" href="#exploring-model-parameters" title="Link to this heading">#</a></h2>
-<p>%%
-3.1 Load and Sort Simulation Result Files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</p>
+<section id="load-and-sort-simulation-result-files">
+<h3>3.1 Load and Sort Simulation Result Files<a class="headerlink" href="#load-and-sort-simulation-result-files" title="Link to this heading">#</a></h3>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pck_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files_dir</span> <span class="o">+</span> <span class="s1">&#39;/*_fittingresults_stim_exp.pkl&#39;</span><span class="p">))</span>
 <span class="n">pck_files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">var</span><span class="p">:[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^0-9]|[0-9]+&#39;</span><span class="p">,</span> <span class="n">var</span><span class="p">)])</span>
 </pre></div>
@@ -1028,8 +1029,9 @@ Create arrays to store different types of simulation data based on their dimensi
 [5 rows x 9 columns]
 </pre></div>
 </div>
-<section id="plot-distributions-of-data-features">
-<h3>3.2 Plot Distributions of Data Features<a class="headerlink" href="#plot-distributions-of-data-features" title="Link to this heading">#</a></h3>
+</section>
+<section id="plot-post-distributions-of-the-fitted-model-parameters">
+<h3>3.2 Plot Post Distributions of the fitted model parameters<a class="headerlink" href="#plot-post-distributions-of-the-fitted-model-parameters" title="Link to this heading">#</a></h3>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;darkgrid&#39;</span><span class="p">,{</span><span class="s1">&#39;axes.edgecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;.9&#39;</span><span class="p">},)</span>
 <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">13</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;patch.force_edgecolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1050,8 +1052,7 @@ Create arrays to store different types of simulation data based on their dimensi
 </div>
 <img src="../_images/sphx_glr_eg__momi2023_017.png" srcset="../_images/sphx_glr_eg__momi2023_017.png" alt="eg  momi2023" class = "sphx-glr-single-img"/><p><strong>Summary of Results:</strong></p>
 <p>This plot can be found in Appendix 2—figure 3</p>
-<p>Distributions of physiological parameter estimates over subjects.
-Histograms and kernel density estimates of the estimated values for the Jansen-Rit model physiological parameters over all subjects. Also shown are prior and posterior parameter values for anatomical connectome weights for a single example subject (bottom right). Parameter estimation was performed using our novel automatic differentiation and gradient-based approach inspired by current techniques in deep learning (Griffiths et al., 2022).</p>
+<p>Prior Distributions of physiological parameter estimates over subjects.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;average synaptic time constant excitatory population (a=1/τe)&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">98</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
@@ -1080,27 +1081,29 @@ Histograms and kernel density estimates of the estimated values for the Jansen-R
     <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span>
                  <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">keys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-
-<span class="c1"># Plot Empirical Structural Connectome</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">empirical_connectome</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Empirical Structural Connectome&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">&quot;Empirical</span><span class="se">\n</span><span class="s2">Structural Connectome&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">),</span>
-                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">))</span>
-
-<span class="c1"># Plot Fitted Structural Connectome</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">fitted_connectome</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Fitted Structural Connectome&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">&quot;Fitted</span><span class="se">\n</span><span class="s2">Structural Connectome&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">),</span>
-                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">))</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="c1"># Final layout and title</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Parameter Histograms and Structural Connectomes&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="sd">&quot;&quot;&quot;# Plot Empirical Structural Connectome</span>
+<span class="sd">sns.heatmap(empirical_connectome, ax=axes[2][1], cmap=&#39;viridis&#39;, cbar=True, vmin=0, vmax=0.001)</span>
+<span class="sd">axes[2][1].set_title(&quot;Empirical Structural Connectome&quot;, fontsize=12)</span>
+<span class="sd">axes[2][1].annotate(&quot;Empirical\nStructural Connectome&quot;, xy=(50, -20), xytext=(-60, -90),</span>
+<span class="sd">                    textcoords=&#39;offset points&#39;, fontsize=10, arrowprops=dict(arrowstyle=&quot;-&gt;&quot;))</span>
+
+<span class="sd"># Plot Fitted Structural Connectome</span>
+<span class="sd">sns.heatmap(fitted_connectome, ax=axes[2][2], cmap=&#39;viridis&#39;, cbar=True, vmin=0, vmax=0.001)</span>
+<span class="sd">axes[2][2].set_title(&quot;Fitted Structural Connectome&quot;, fontsize=12)</span>
+<span class="sd">axes[2][2].annotate(&quot;Fitted\nStructural Connectome&quot;, xy=(50, -20), xytext=(60, -90),</span>
+<span class="sd">                    textcoords=&#39;offset points&#39;, fontsize=10, arrowprops=dict(arrowstyle=&quot;-&gt;&quot;))</span>
+<span class="sd">axes[2][0].axis(&#39;off&#39;)</span>
+
+<span class="sd"># Final layout and title</span>
+<span class="sd">plt.tight_layout()</span>
+<span class="sd">plt.suptitle(&quot;Parameter Histograms and Structural Connectomes&quot;, fontsize=16, y=1.02)</span>
+<span class="sd">plt.show()</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_eg__momi2023_018.png" srcset="../_images/sphx_glr_eg__momi2023_018.png" alt="Parameter Histograms and Structural Connectomes, average synaptic time constant excitatory population (a=1/τe), Local gain from pyramidal to excitatory population (C2), Global gain (g), Average synaptic time constant inhibitory population (b=1/τi), Local gain from inhibitory to pyramidal population (C3), Local gain from pyramidal to inhibitory population (C4), Local gain from excitatory to pyramidal population (C1), Empirical Structural Connectome, Fitted Structural Connectome" class = "sphx-glr-single-img"/><p><strong>Result Description:</strong>
+<img src="../_images/sphx_glr_eg__momi2023_018.png" srcset="../_images/sphx_glr_eg__momi2023_018.png" alt="average synaptic time constant excitatory population (a=1/τe), Local gain from pyramidal to excitatory population (C2), Global gain (g), Average synaptic time constant inhibitory population (b=1/τi), Local gain from inhibitory to pyramidal population (C3), Local gain from pyramidal to inhibitory population (C4), Local gain from excitatory to pyramidal population (C1)" class = "sphx-glr-single-img"/><p><strong>Result Description:</strong>
 This plot can be found in Appendix 2—figure 3
 Distributions of physiological parameter estimates over subjects.
 Histograms and kernel density estimates of the estimated values for the Jansen-Rit model physiological parameters over all subjects. Also shown are prior and posterior parameter values for anatomical connectome weights for a single example subject (bottom right). Parameter estimation was performed using our novel automatic differentiation and gradient-based approach inspired by current techniques in deep learning (Griffiths et al., 2022).</p>
@@ -1721,7 +1724,7 @@ TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG ev
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 8.155 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 5.541 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-momi2023-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c0aa0ed03c2583762d5d6226381b960b/eg__momi2023.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__momi2023.ipynb</span></code></a></p>
@@ -1785,7 +1788,8 @@ TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG ev
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-model-parameters">3 - Exploring model parameters</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-distributions-of-data-features">3.2 Plot Distributions of Data Features</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-and-sort-simulation-result-files">3.1 Load and Sort Simulation Result Files</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-post-distributions-of-the-fitted-model-parameters">3.2 Plot Post Distributions of the fitted model parameters</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#singular-value-decomposition-svd-of-empirical-and-simulated-eeg">3.3 Singular Value Decomposition (SVD) of Empirical and Simulated EEG</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-and-visualize-similarity-and-visualize-topomaps-for-maximum-similarity">3.4 Compute and Visualize Similarity and Visualize Topomaps for Maximum Similarity</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-peaks-from-eeg-data-and-correlate-features-with-peaks">3.5 Extract Peaks from EEG Data and Correlate Features with Peaks</a></li>

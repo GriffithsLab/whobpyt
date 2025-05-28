@@ -464,6 +464,7 @@ ki0 =stim_weights[:,np.newaxis]
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
 # Run a shorter version with num_epochs = 2 to check the process without overwriting the results of the full run.
+# for the convergence 100-200 epochs need to run for the trainning
 #
 start_time = time.time()
 node_size = stim_weights.shape[0]
@@ -471,7 +472,7 @@ output_size = 62 ##gm.shape[0]
 batch_size = 50
 step_size = 0.0001
 input_size = 3
-num_epoches = 2
+num_epochs = 2
 tr = 0.001
 state_size =6
 base_batch_num = 20
@@ -482,8 +483,9 @@ lm_v = np.zeros((output_size,node_size))
 #for i in range(data_high['only_high_trial'].shape[0]):
 for i in range(1):
     print('sub: ', i)
-    data_mean = [data_high['only_high_trial'][i]]*num_epoches
-    #data_mean = [gm]*num_epoches
+    data_mean = [data_high['only_high_trial'][i]]*num_epochs
+    #data_mean = [gm]*num_epochs
+
     data_mean =np.array(data_mean)
     #file_leadfield = lf_dir+f'/sub{str(i+1).zfill(3)}/leadfield.npy'
     sub_file_leadfield = files_dir + '/sub_%s_leadfield' % (i+1) 
@@ -502,7 +504,7 @@ for i in range(1):
 
     print('call model fitting')
     # call model fit method
-    F = Model_fitting(model, data_mean[:,:,900:1300], num_epoches, 0)
+    F = Model_fitting(model, data_mean[:,:,900:1300], num_epochs, 0)
 
     # fit data(train)
     u = np.zeros((node_size,10,400))
@@ -560,7 +562,7 @@ print(data.output_sim.eeg_test.shape)
 # 3 - Exploring model parameters
 # --------------------------------------------------
 # 
-#
+
 # %%
 # 3.1 Load and Sort Simulation Result Files
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -675,7 +677,7 @@ print(new_df1.head())
 
 
 # %%
-# 3.2 Plot Distributions of Data Features
+# 3.2 Plot Post Distributions of the fitted model parameters
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 sns.set_style('darkgrid',{'axes.edgecolor': '.9'},)
@@ -700,8 +702,8 @@ for k in new_df1.keys():
 #
 # This plot can be found in Appendix 2—figure 3
 #
-# Distributions of physiological parameter estimates over subjects.
-# Histograms and kernel density estimates of the estimated values for the Jansen-Rit model physiological parameters over all subjects. Also shown are prior and posterior parameter values for anatomical connectome weights for a single example subject (bottom right). Parameter estimation was performed using our novel automatic differentiation and gradient-based approach inspired by current techniques in deep learning (Griffiths et al., 2022).
+# Prior Distributions of physiological parameter estimates over subjects.
+# 
 
 # %% 
 np.random.seed(50)
@@ -732,8 +734,9 @@ for i, ax in enumerate(axes.flat[:7]):
     sns.histplot(parameters[keys[i]], bins=10, kde=True, color='lightblue',
                  edgecolor="grey", linewidth=2.5, ax=ax)
     ax.set_title(keys[i], fontsize=10)
+plt.show()
 
-# Plot Empirical Structural Connectome
+"""# Plot Empirical Structural Connectome
 sns.heatmap(empirical_connectome, ax=axes[2][1], cmap='viridis', cbar=True, vmin=0, vmax=0.001)
 axes[2][1].set_title("Empirical Structural Connectome", fontsize=12)
 axes[2][1].annotate("Empirical\nStructural Connectome", xy=(50, -20), xytext=(-60, -90),
@@ -750,7 +753,7 @@ axes[2][0].axis('off')
 plt.tight_layout()
 plt.suptitle("Parameter Histograms and Structural Connectomes", fontsize=16, y=1.02)
 plt.show()
-
+"""
 
 # %% 
 # **Result Description:**

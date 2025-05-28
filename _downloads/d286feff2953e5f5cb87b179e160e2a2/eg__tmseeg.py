@@ -5,13 +5,9 @@
 Modelling TMS-EEG evoked responses
 ========================================================
 
-This example runs a minimal example based on the analysis in the paaper :footcite:`MomiEtAl2023`:
-
-Momi, D., Wang, Z., Griffiths, J.D. (2023).
- "TMS-evoked responses are driven by recurrent large-scale network dynamics."
-# eLife, [doi: 10.7554/eLife.83232](https://elifesciences.org/articles/83232)
-
-The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.
+This example shows how to organize the empirical eeg data, set-up JR model with user-defined learnable model
+parameters and train model. After train how to test model with new inputs (noises) to generate simulated EEG.
+Furethermore, show some analysis based on uncovered neural states from the model.
 
 """
 # %%  
@@ -64,7 +60,7 @@ coords = np.array([atlas['R'], atlas['A'], atlas['S']]).T
 conduction_velocity = 5 #in ms
 
 # %%
-# Compute the distance matrix
+# Compute the distance matrix which is used to calculate delay between regions
 dist = np.zeros((coords.shape[0], coords.shape[0]))
 
 for roi1 in range(coords.shape[0]):
@@ -93,7 +89,8 @@ ki0 =stim_weights_thr[:,np.newaxis]
 delays = dist/conduction_velocity
 
 # %%
-# define options for JR model
+# define options for JR model: batch size integration step and sampling rate of the empirical eeg
+# the number of regions in the parcellation and the number of channels
 eeg_data = evoked.data.copy()
 time_start = np.where(evoked.times==-0.1)[0][0]
 time_end = np.where(evoked.times==0.3)[0][0]
@@ -113,7 +110,7 @@ hidden_size = int(tr/step_size)
 
 
 # %%
-# prepare data structure of the model
+# prepare empirical data structure of the model
 data_mean = Timeseries(eeg_data, num_epochs, batch_size)
 
 # %%
@@ -171,7 +168,7 @@ ObjFun = CostsJR(model)
 F = ModelFitting(model, ObjFun)
 
 # %%
-# model training
+# model training given time-varing the stimulus
 u = np.zeros((node_size,hidden_size,time_dim))
 u[:,:,80:120]= 1000
 F.train(u=u, empRecs = [data_mean], num_epochs = num_epochs, TPperWindow = batch_size)
@@ -183,6 +180,7 @@ F.evaluate(u = u, empRec = data_mean, TPperWindow = batch_size, base_window_num 
 
 # %%
 # load in a previously completed model fitting results object
+# run evaluate to generate the simulated eeg with new inputs based on the forward model
 full_run_fname = os.path.join(data_dir, 'Subject_1_low_voltage_fittingresults_stim_exp.pkl')
 F = pickle.load(open(full_run_fname, 'rb'))
 F.evaluate(u = u, empRec = data_mean, TPperWindow = batch_size, base_window_num = 20)
@@ -208,6 +206,22 @@ times = [peak_locs1, peak_locs2, peak_locs3, peak_locs4, peak_locs5]
 simulated_joint_st = simulated_EEG_st.plot_joint(ts_args=ts_args, times=times)
 
 # %%
+# Plots of loss over Training (loss should be decressing with nosie)
+plt.plot(np.arange(1,len(F.trainingStats.loss)+1), F.trainingStats.loss)
+plt.title("Total Loss over Training Epochs")
+
+# %%
+# Plots of parameter values over Training (check if converges)
+plt.plot(F.trainingStats.fit_params['a'], label = "a")
+plt.plot(F.trainingStats.fit_params['b'], label = "b")
+plt.plot(F.trainingStats.fit_params['c1'], label = "c1")
+plt.plot(F.trainingStats.fit_params['c2'], label = "c2")
+plt.plot(F.trainingStats.fit_params['c3'], label = "c3")
+plt.plot(F.trainingStats.fit_params['c4'], label = "c4")
+plt.legend()
+plt.title("Select Variables Changing Over Training Epochs")
+
+# %%
 #### rest is extral analysis on the neural states on different networks
 
 ### get labels for Yeo 200
@@ -215,7 +229,7 @@ url = 'https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_project
 atlas = pd.read_csv(url)
 labels = atlas['ROI Name']
 
-# get networks 
+# get 7 networks 
 nets = [label.split('_')[2] for label in labels]
 net_names = np.unique(np.array(nets))
 
@@ -261,6 +275,7 @@ plt.show()
 
 
 # %%
+### model provides a current and voltage which can be used to calculate the phase (no need Hilbert Transform)
 ### plot phase of E at each network
 j = complex(0,1)
 fig, ax = plt.subplots(2,4, figsize=(12,10), sharey= True)
