@@ -186,8 +186,6 @@ data_folder = fetch_egmomi2025()
 # 2 - Model fitting and key results
 # --------------------------------------------------
 
-start_time = time.time()
-
 # %%
 # 2.1 Empirical Data Analysis
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -196,7 +194,8 @@ start_time = time.time()
 # %%
 # Loading data
 
-# Loading the file from the GitHub URL
+start_time = time.time() # For estimating run time of the empirical analysis
+# Loading network colour filw from the GitHub URL
 url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
 colour = pd.read_excel(url, header=None)[4]
 # Evoked data
@@ -211,7 +210,7 @@ for ses in range(all_eeg_evoked.shape[0]):
     # Normalized to the baseline for comparison 
     all_gfma[ses,:] = np.abs(all_gfma[ses,:] - np.mean(all_gfma[ses, :300]))
 
-# Open Schaefer 1000 parcels 7 networks
+# Load Schaefer 1000 parcels 7 networks
 with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
 # Extract the stimulation region data from the loaded pickle file    
@@ -221,9 +220,11 @@ stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 # %%
 # Plot evoked EEG GFMA at each network
 
+# 7 networks definition
 networks = ['Vis', 'SomMot', 'DorsAttn', 'SalVentAttn', 'Limbic', 'Cont', 'Default']
 # Create a dictionary to store the network indices
 stim_network_indices = {network: [] for network in networks}
+# Iterate over stim region
 for i, label in enumerate(stim_region):
     # Iterate over each network
     for network in networks:
@@ -232,10 +233,12 @@ for i, label in enumerate(stim_region):
             break
 
 net_gfma = {}
+# Iterate over each network
 for network in networks:
+    # GFMA for each network
     net_gfma[network] = all_gfma[stim_network_indices[network]]
 
-# Get the averages for each network
+# Get the GFMA averages for each network
 averages = []
 for key, value in net_gfma.items():
     average = sum(value) / len(value)
@@ -299,10 +302,8 @@ margin_of_error = z_score * (std_all_gfma / np.sqrt(len(all_gfma)))
 upper_bound = mean_all_gfma + margin_of_error
 lower_bound = mean_all_gfma - margin_of_error
 
-
 upper_bound =upper_bound - np.mean(upper_bound[:300])
 lower_bound =lower_bound - np.mean(lower_bound[:300])
-
 
 if len(epo_eeg.times) == len(time_series):
     # Plot the time series and the identified peaks
@@ -333,7 +334,6 @@ first_peak = epo_eeg.times[first_3_peak_indices_sorted[0]]
 second_peak = epo_eeg.times[first_3_peak_indices_sorted[1]]
 third_peak = epo_eeg.times[first_3_peak_indices_sorted[2]]
 
-
 for ses in range(all_gfma.shape[0]):
     AUC[0, ses] = np.trapz(all_gfma[ses, np.where(epo_eeg.times==0)[0][0]:np.where(epo_eeg.times==first_peak)[0][0]]
                            - np.mean(all_gfma[ses, :300]), dx=5)
@@ -351,11 +351,11 @@ net_AUC = {}
 
 # Iterate over each network
 for network in networks:
+    # AUC for each network
     net_AUC[network] = AUC[:,stim_network_indices[network]]
 
-
+# Obtain the average AUC 
 AUC_averages = np.zeros((len(networks), windows))
-
 for idx, key in enumerate(net_AUC.keys()):
     AUC_averages[idx, :] = np.mean(net_AUC[key], axis=1)
 
@@ -386,7 +386,6 @@ axs[1].set_title('Late response ' + str(round(first_peak*1000)) + '-' + str(roun
 axs[1].set_ylabel('AUC')
 axs[1].set_ylim(0, 2)  # Adjust the y-axis limits as needed
 
-
 # Plot in the second subplot (same as the first subplot)
 axs[2].bar(range(AUC_averages[:, 2].shape[0]), AUC_averages[:, 2], color=colour)
 axs[2].set_xticks(range(AUC_averages[:, 0].shape[0]))
@@ -398,7 +397,6 @@ axs[2].set_ylim(0, 2)  # Adjust the y-axis limits as needed
 
 plt.tight_layout()  # Adjust the spacing between subplots if needed
 
-
 plt.show()
 
 # %%
@@ -407,7 +405,6 @@ plt.show()
 # Load sEEG epochs
 with open(data_folder + '/empirical_data/all_epo_seeg.pkl', 'rb') as handle:
     all_epo_seeg = pickle.load(handle)
-
 
 all_gfma = np.zeros((len(list(all_epo_seeg.keys())), epo_eeg._data.shape[2]))
 
@@ -437,11 +434,12 @@ for i, label in enumerate(stim_region):
 
 
 net_gfma = {}
-
+# Iterate over each network
 for network in networks:
+    # GFMS for each network
     net_gfma[network] = all_gfma[stim_network_indices[network]]
 
-# Compute the average
+# Compute the GFMA averages
 averages = []
 for key, value in net_gfma.items():
     average = sum(value) / len(value)
@@ -461,8 +459,6 @@ for net in range(len(networks)):
     plt.plot(epo_eeg.times, averages[net, :] - np.mean(averages[net, :300]), colour[net], linewidth=5)
 
 # Display the plot
-
-
 plt.show()
 
 
@@ -479,10 +475,8 @@ peak_values = time_series[peaks]
 
 # Get the indices of the first 3 peaks in descending order of amplitude
 first_3_peak_indices = peaks[np.argsort(peak_values)[::-1][:3]]
-
 first_3_peak_indices = np.array([298, 337, 378, 700])
 first_3_peak_amplitudes = time_series[first_3_peak_indices]
-
 
 windows = 3
 AUC = np.zeros((3,all_gfma.shape[0]))
@@ -491,7 +485,6 @@ first_peak = epo_eeg.times[first_3_peak_indices[0]]
 second_peak = epo_eeg.times[first_3_peak_indices[1]]
 third_peak = epo_eeg.times[first_3_peak_indices[2]]
 fourth_peak = epo_eeg.times[first_3_peak_indices[3]]
-
 
 for ses in range(all_gfma.shape[0]):
     AUC[0, ses] = np.trapz(all_gfma[ses, np.where(epo_eeg.times==first_peak)[0][0]:np.where(epo_eeg.times==second_peak)[0][0]]
@@ -502,26 +495,23 @@ for ses in range(all_gfma.shape[0]):
                            - np.mean(all_gfma[ses, :300]), dx=5)
 
 
-
 AUC[0,:] = AUC[0,:] / 33
 AUC[1,:] = AUC[1,:] / 45
 AUC[2,:] = AUC[2,:] / 319
 
 net_AUC = {}
-
+# Iterate over each network
 for network in networks:
+    # AUC for each network
     net_AUC[network] = AUC[:,stim_network_indices[network]]
 
-
+# Obtain AUC averages
 AUC_averages = np.zeros((len(networks), windows))
-
 for idx, key in enumerate(net_AUC.keys()):
     AUC_averages[idx, :] = np.mean(net_AUC[key], axis=1)
 
-
 AUC_averages = AUC_averages*1000
 # AUC_averages = (AUC_averages / np.max(AUC_averages, axis=0)) * 100
-
 
 
 # Create the figure and subplots
@@ -545,8 +535,7 @@ axs[1].set_title('Late response ' + str(round(second_peak*1000)) + '-' + str(rou
 axs[1].set_ylabel('AUC')
 axs[1].set_ylim(0, 3)  # Adjust the y-axis limits as needed
 
-
-# Plot in the second subplot (same as the first subplot)
+# Plot in the third subplot (same as the first subplot)
 axs[2].bar(range(AUC_averages[:, 2].shape[0]), AUC_averages[:, 2], color=colour)
 axs[2].set_xticks(range(AUC_averages[:, 0].shape[0]))
 axs[2].set_xticklabels(networks, rotation=45)
