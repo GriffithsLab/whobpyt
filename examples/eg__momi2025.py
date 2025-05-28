@@ -193,23 +193,28 @@ start_time = time.time()
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
 
-# loading data
+# %%
+# Loading data
 
-# loading the file from the GitHub URL
+# Loading the file from the GitHub URL
 url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
 colour = pd.read_excel(url, header=None)[4]
+# Evoked data
 all_eeg_evoked = np.load(data_folder + '/empirical_data/all_eeg_evoked.npy')
+# Epoched example
 epo_eeg = mne.read_epochs(data_folder + '/empirical_data/example_epoched.fif', verbose=False)
-
+# GFMA data
 all_gfma = np.zeros((all_eeg_evoked.shape[0], all_eeg_evoked.shape[2]))
 
 for ses in range(all_eeg_evoked.shape[0]):
     all_gfma[ses,:] =  np.std(all_eeg_evoked[ses,:,:],axis=0) #np.mean(np.mean(epo_eeg._data, axis=0),axis=0)
-    #Normalized for the baseline for making comparison
+    # Normalized to the baseline for comparison 
     all_gfma[ses,:] = np.abs(all_gfma[ses,:] - np.mean(all_gfma[ses, :300]))
 
+# Open Schaefer 1000 parcels 7 networks
 with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
+# Extract the stimulation region data from the loaded pickle file    
 stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
 
@@ -227,13 +232,11 @@ for i, label in enumerate(stim_region):
             break
 
 net_gfma = {}
-
 for network in networks:
     net_gfma[network] = all_gfma[stim_network_indices[network]]
 
-
+# Get the averages for each network
 averages = []
-
 for key, value in net_gfma.items():
     average = sum(value) / len(value)
     averages.append(average)
@@ -346,6 +349,7 @@ AUC[2,:] = AUC[2,:] / (first_3_peak_indices_sorted[2] - first_3_peak_indices_sor
 
 net_AUC = {}
 
+# Iterate over each network
 for network in networks:
     net_AUC[network] = AUC[:,stim_network_indices[network]]
 
@@ -400,6 +404,7 @@ plt.show()
 # %%
 # Plot sEEG at each network
 
+# Load sEEG epochs
 with open(data_folder + '/empirical_data/all_epo_seeg.pkl', 'rb') as handle:
     all_epo_seeg = pickle.load(handle)
 
@@ -413,16 +418,17 @@ for ses in range(len(list(all_epo_seeg.keys()))):
 
     all_gfma[ses,:] =  np.std(epo_seeg, axis=0)
 
-
+# Load Schaefer 1000 parcels
 with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
+# Extract the stimulation region data from the loaded pickle file
 stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
 networks = ['Vis', 'SomMot', 'DorsAttn', 'SalVentAttn', 'Limbic', 'Cont', 'Default']
 # Create a dictionary to store the network indices
 stim_network_indices = {network: [] for network in networks}
 for i, label in enumerate(stim_region):
-    #if dist_Schaefer_1000parcels_7net['dist'][i] < 7:
+    # if dist_Schaefer_1000parcels_7net['dist'][i] < 7:
             # Iterate over each network
             for network in networks:
                 if network in label:
@@ -435,16 +441,15 @@ net_gfma = {}
 for network in networks:
     net_gfma[network] = all_gfma[stim_network_indices[network]]
 
-
+# Compute the average
 averages = []
-
 for key, value in net_gfma.items():
     average = sum(value) / len(value)
     averages.append(average)
 
 averages = np.array(averages)
 
-# Download the file from the GitHub URL
+# Download the network colour file from the GitHub URL
 url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
 colour = pd.read_excel(url, header=None)[4]
 
@@ -630,7 +635,7 @@ stim_coords = coords_1000[stim_idx]
 stim_net = stim_region[ses2use].split('_')[1]
 
 
-#define dist function
+# Define distance function
 def euclidean_distance(coord1, coord2):
     x1, y1, z1 = coord1[0], coord1[1], coord1[2]
     x2, y2, z2 = coord2[0], coord2[1], coord2[2]
@@ -683,6 +688,7 @@ thr = mean + (4 * std)
 # Count the number of unique regions affected by the threshold
 number_of_region_affected = np.unique(np.where(abs_value > thr)[0]).shape[0]
 
+# Load the rewritten Schaeffer 200 parcels
 img = nib.load(data_folder + '/calculate_distance/example_Schaefer2018_200Parcels_7Networks_rewritten.nii')
 
 # Get the shape and affine matrix of the image
