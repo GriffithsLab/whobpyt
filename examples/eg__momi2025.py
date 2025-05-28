@@ -126,8 +126,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #
 # A. Using a computational framework recently developed for personalized neurostimulation modelling.
 #
-# B. Using model to uncover neural states across netoworks: able to study how the brain signals 
-# propagate across networks
+# B. Using model to uncover neural states across netoworks: able to study how the brain signals propagate across networks
 #
 # C. Using model as a simulator to mimic patient dynamics and potential treatment effects.
 #
@@ -139,7 +138,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #
 # Importage
 
-# general stuff
+# General imports
 import os
 import sys
 import json
@@ -152,7 +151,7 @@ import glob
 import pickle
 import requests
 
-#python stuff
+# Python imports
 import numpy as np
 import pandas as pd
 import scipy
@@ -160,18 +159,18 @@ import scipy.io
 from scipy.signal import find_peaks
 import sklearn
 
-# plot stuff
+# Plot imports
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# imaging stuff
+# Imaging imports
 import mne
 import nibabel
 import nibabel as nib
 from nilearn import plotting, surface
 from nilearn.image import load_img
 
-# WHOBPYT stuff
+# WHOBPYT imports
 import torch
 import whobpyt
 from whobpyt.datasets.fetchers import fetch_egmomi2025
