@@ -21,6 +21,6 @@ Happy Questing!
 
 .. _CAMH Krembil Centre for Neuroinformatics: https://www.krembilneuroinformatics.ca
 
-.. _documentation pages: https://www.griffithslab.github.io/whobpyt
+.. _documentation pages: https://griffithslab.github.io/whobpyt
 
 
