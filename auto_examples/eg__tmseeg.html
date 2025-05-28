@@ -527,16 +527,16 @@ to download the full example code.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
-epoch:  0 loss: 4.524551 Pseudo FC_cor:  0.007537434864075364 cos_sim:  0.0003112746682567729
+epoch:  0 loss: 3.7596214 Pseudo FC_cor:  0.03237309028409861 cos_sim:  -0.016702673886092725
 Epoch:  1
-epoch:  1 loss: 3.197778 Pseudo FC_cor:  0.04882640018633579 cos_sim:  -0.026608131582738545
+epoch:  1 loss: 3.1785278 Pseudo FC_cor:  0.05234286086835488 cos_sim:  -0.05318172750848197
 </pre></div>
 </div>
 <p>quick test run with 2 epochs</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.06107402077257089 cos_sim:  0.056732280332495416
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.028184747330612752 cos_sim:  0.10791818860827797
 </pre></div>
 </div>
 <p>load in a previously completed model fitting results object</p>
@@ -545,7 +545,7 @@ epoch:  1 loss: 3.197778 Pseudo FC_cor:  0.04882640018633579 cos_sim:  -0.026608
 <span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.4410426708848206 cos_sim:  0.38445714336070874
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.45024574968360387 cos_sim:  0.38917457618305024
 </pre></div>
 </div>
 <p>Plot the original and simulated EEG data</p>
@@ -674,7 +674,7 @@ to capture key features of the EEG signal.</p>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 18.855 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 22.330 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-tmseeg-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/adddac552e627b5207e7ec47e04b862e/eg__tmseeg.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__tmseeg.ipynb</span></code></a></p>
