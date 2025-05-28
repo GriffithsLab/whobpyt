@@ -146,8 +146,6 @@ import json
 import time
 import warnings
 warnings.filterwarnings('ignore')
-
-
 import re
 import math
 import glob
@@ -217,7 +215,7 @@ stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
 
 # %%
-# plot evoked eeg gfma at each network
+# Plot evoked EEG GFMA at each network
 
 networks = ['Vis', 'SomMot', 'DorsAttn', 'SalVentAttn', 'Limbic', 'Cont', 'Default']
 # Create a dictionary to store the network indices
@@ -244,7 +242,6 @@ for key, value in net_gfma.items():
 averages = np.array(averages)
 
 
-
 # Define the desired figure size
 fig = plt.figure(figsize=(20, 6))
 
@@ -256,9 +253,9 @@ for net in range(len(networks)):
 plt.show()
 
 # %% 
-# plot peaks
+# Plot peaks
 
-# Calculate the mean array as you mentioned
+# Calculate the mean array
 time_series = np.mean((averages[:, :] - np.mean(averages[:, :300])), axis=0)
 
 # Find peaks in the time series data
@@ -283,7 +280,7 @@ plt.title('Time Series with First 3 Peaks')
 plt.show()
 
 # %%
-# plot evoked response variation across sessions
+# Plot evoked response variation across sessions
 
 
 
@@ -313,7 +310,6 @@ if len(epo_eeg.times) == len(time_series):
     plt.plot(epo_eeg.times, upper_bound,'-r', label='upper')
     plt.plot(epo_eeg.times, lower_bound,'-g', label='lower')
     plt.fill_between(epo_eeg.times, upper_bound, lower_bound, color="k", alpha=0.15)  # Use 'epo_eeg.times'
-
     plt.legend()
     plt.xlabel('Time (s)')  # Set the x-axis label to 'Time (s)'
     plt.ylabel('Value')
@@ -325,7 +321,7 @@ else:
 
 
 # %%
-# plot AUC
+# Plot AUC
 
 windows = 3
 AUC = np.zeros((3,all_gfma.shape[0]))
@@ -403,7 +399,7 @@ plt.tight_layout()  # Adjust the spacing between subplots if needed
 plt.show()
 
 # %%
-# plot seeg at each network
+# Plot sEEG at each network
 
 with open(data_folder + '/empirical_data/all_epo_seeg.pkl', 'rb') as handle:
     all_epo_seeg = pickle.load(handle)
@@ -467,7 +463,7 @@ plt.show()
 
 
 # %%
-# plot seeg AUC
+# Plot sEEG AUC
 
 # Calculate the mean array as you mentioned
 time_series = np.mean((averages[:, :] - np.mean(averages[:, :300])), axis=0)
@@ -861,11 +857,11 @@ params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(
 model = RNNJANSEN(params, node_size=node_size, TRs_per_window=TPperWindow, step_size=step_size, output_size=output_size, tr=tr, sc=sc, lm=lm, dist=dist, use_fit_gains=True)
 
 # %%
-# create objective function
+# Create objective function
 ObjFun = CostsJR(model)
 
 # %%
-# call model fit
+# Call model fit
 F = Model_fitting(model, ObjFun)
 
 
