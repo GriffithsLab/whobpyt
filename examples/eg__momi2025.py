@@ -47,7 +47,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #   :alt: diagram fig 2025 
 #   :width: 600px
 #
-# A Intracerebral electrical stimulation (iES) applied to an intracortical target region generates 
+# A. Intracerebral electrical stimulation (iES) applied to an intracortical target region generates 
 # an early (~20-30 ms) response (evoked-related potential (ERP) waveform component) at high-density 
 # scalp electroencephalography (hd-EEG) channels sensitive to that region and its immediate neighbors 
 # (red arrows). This also appears in more distal connected regions after a short delay due to axonal 
@@ -56,13 +56,13 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # this way, we aim to determine the extent to which this second component relies on intrinsic network 
 # activity versus recurrent whole-brain feedback. 
 #
-# B Schematic of the hierarchical spatial layout of 
+# B. Schematic of the hierarchical spatial layout of 
 # canonical RSNs as demonstrated in Margulies and colleagues12, spanning low-order networks showing 
 # greater functional segregation to high-order networks showing greater functional integration15. 
 # Networks are distributed based on their position along the first principal gradient. The stimulation 
 # sites are distributed across different levels of this gradient. 
 #
-# C Schematic of virtual dissection 
+# C. Schematic of virtual dissection 
 # methodology and key hypotheses tested. We first fit personalized connectome-based computational models 
 # of iES-evoked responses to the hd-EEG time series, for each patient and stimulation location. Then, 
 # precisely timed communication interruptions (virtual dissections) were introduced to the fitted models,
@@ -76,16 +76,15 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #   :alt: results1 fig 2025 
 #   :width: 600px
 #
-# A The histogram illustrates the distance in centimeters between the electrode’s centroid delivering 
-# the electrical stimulus and the center of the nearest Schaefer’s parcel87. The results indicate a high 
+# A. The histogram illustrates the distance in centimeters between the electrode’s centroid delivering 
+# the electrical stimulus and the center of the nearest Schaefer’s parcel. The results indicate a high 
 # level of spatial precision, with 97.2% of sessions showing distances of less than 1 cm. 
 #
-# B Global mean 
-# field power (GMFP) of hd-EEG averaged across all 36 subjects and 323 sessions, revealing three 
+# B. Global mean field power (GMFP) of hd-EEG averaged across all 36 subjects and 323 sessions, revealing three 
 # consistent response peaks/clusters within strict confidence intervals at ~40 ms, ~80 ms, and ~370 ms, 
-# consistent with prior electrophysiological research44. 
+# consistent with prior electrophysiological research. 
 #
-# C GMFP of every stimulated Resting-State Network
+# C. GMFP of every stimulated Resting-State Network
 # (RSN) for hd-EEG (top row) and sEEG (bottom row). The bar plot of the normalized area under the curve 
 # (AUC) of the three clusters revealed a significantly stronger global activation pattern when the 
 # stimulus targeted high-order networks, such as the Default mode network (DMN) and Frontoparietal 
@@ -93,20 +92,20 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # presented as mean values ± standard error of the mean (SEM) (error bars), with individual subject data 
 # points overlaid (36 independent subjects, 323 stimulation sessions). In the GMFP time course plots, 
 # shaded areas represent ±SEM around the mean. Notably, this trend aligns with the “principal gradient” 
-# hierarchy reported in the functional magnetic resonance imaging (fMRI) literature12, which describes 
+# hierarchy reported in the functional magnetic resonance imaging (fMRI) literature, which describes 
 # a general pattern from low-order to high-order regions
 #
 # .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig3_momi2025.png?raw=true
 #   :alt: results2 fig 2025 
 #   :width: 600px
 #
-# A Global mean field power (GMFP) for every stimulated network for model-generated high-density 
+# A. Global mean field power (GMFP) for every stimulated network for model-generated high-density 
 # electroencephalography (hd-EEG) data run with both the intact (continuous line) and disconnected 
 # (dashed line) structural connectome. Findings show a more pronounced decrease in evoked late responses 
-# for high-order networks (LN Limbic Network, SN Salience Network, DAN Dorsal attention network, 
-# FPN Frontoparietal Network, DMN Default mode network). 
+# for high-order networks (LN: Limbic Network, SN: Salience Network, DAN: Dorsal attention network, 
+# FPN: Frontoparietal Network, DMN: Default mode network). 
 #
-# B Area under the curve (AUC) differences 
+# B. Area under the curve (AUC) differences 
 # comparing the simulation run with the intact versus the lesioned structural connectome. The bar plot 
 # shows differences across three time windows (1st response: 0−37 ms, 2nd response: 37–78 ms, 
 # 3rd response: 78–373 ms). Data are presented as mean values ± standard error of the mean (SEM) 
@@ -115,7 +114,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # networks (LN, SN, DAN, FPN, and DMN) compared to low-order networks (Visual Network [VN] and 
 # Somatomotor Network [SMN]), indicated by asterisks (*P < 0.05). 
 #
-# C Demonstration of the network 
+# C. Demonstration of the network 
 # recurrence-based theory for two representative sessions. Simulations of evoked dynamics are run using 
 # the intact (left) and lesioned (right) anatomical connectome. In the latter case, the connections were 
 # removed to isolate the stimulated networks for SMN (top) and DMN (bottom). In the case of the low-order 
@@ -125,12 +124,12 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # Conclusions 
 # ^^^^^^^^^^^
 #
-# a. Using a computational framework recently developed for personalized neurostimulation modeling
+# A. Using a computational framework recently developed for personalized neurostimulation modelling.
 #
-# b. Using model Uncover neural states across netoworks: able to study how the brain signals 
+# B. Using model to uncover neural states across netoworks: able to study how the brain signals 
 # propagate across networks
 #
-# c. using model as simulator to minics patients and treatment potentially
+# C. Using model as a simulator to mimic patient dynamics and potential treatment effects.
 #
 #
 #
