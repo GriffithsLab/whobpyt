@@ -16,7 +16,7 @@ The code includes data fetching, model fitting, and result visualization based o
 Please read our `paper <https://elifesciences.org/articles/83232>`_, and if you use this code, please cite it:
 
 Momi D.,...,.... Griffiths J.D. (2025).
-"Gradients kf Excitability in. Human Cortex Revealsd by Stimulation Mapping and Whole-Brain Modelling."
+"Gradients of Excitability in Human Cortex Revealed by Stimulation Mapping and Whole-Brain Modelling."
 eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 """
 
@@ -31,7 +31,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # recordings in 36 patients with drug-resistant focal epilepsy during presurgical intracerebral 
 # electrical stimulation (iES) (323 stimulation sessions). Our analyses revealed an anatomical gradient 
 # of excitability across the cortex, with stronger iES-evoked EEG responses in high-order compared to 
-# low-order regions. Mathematical modeling further showed that this variation in excitability levels 
+# low-order regions. Mathematical modelling further showed that this variation in excitability levels 
 # results from a differential dependence on recurrent feedback from non-stimulated regions across the 
 # anatomical hierarchy, and could be extinguished by suppressing those connections in-silico. High-order 
 # brain regions/networks thus show an activity pattern characterized by more inter-network functional 
