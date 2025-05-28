@@ -25,7 +25,7 @@ WhoBPyT Homepage
 
 .. rst-class:: text-center font-weight-light my-4
    
-*WhoBPyT* is a PyTorch-based Python library for mathematical modelling of large-scale brain network dynamics, obtuse literary allusion, and model-based analysis of neuroimaging and neurophysiology data. It is developed primarily by researchers in the `Whole-Brain Modelling <https://www.grifflab.com>`_ and `Cognitive Network Modelling <https://www.cognemo.com>`_ groups at the `CAMH Krembil Centre for Neuroinformatics <https://www.krembilneuroinformatics.ca>`_ & University of Toronto. 
+*WhoBPyT* is a PyTorch-based Python library for mathematical modelling of large-scale brain network dynamics, obtuse literary allusion, and model-based analysis of neuroimaging and neurophysiology data. It is developed primarily by researchers in the `Whole-Brain Modelling <https://www.grifflab.com>`_ and `Cognitive Network Modelling <https://www.cognemo.com>`_ groups at the `CAMH Krembil Centre for Neuroinformatics <http://www.krembilneuroinformatics.ca>`_ & University of Toronto. 
 The general philosophical/theoretical perspective on brain organization that WhoBPyT represents, called 
 (surprise surprise) *Whole-Brain Modelling*, is reviewed in 
 `this paper <https://www.grifflab.com/publication/2022-griffiths-et-al-wbm-pastpresentfuture/>`_. 
