@@ -16,7 +16,7 @@ The code includes data fetching, model fitting, and result visualization based o
 Please read our `paper <https://elifesciences.org/articles/83232>`_, and if you use this code, please cite it:
 
 Momi D.,...,.... Griffiths J.D. (2025).
-"Gradients kf Excitability in. Human Cortex Revealsd by Stimulation Mapping and Whole-Brain Modelling."
+"Gradients of Excitability in Human Cortex Revealed by Stimulation Mapping and Whole-Brain Modelling."
 eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 """
 
@@ -31,7 +31,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # recordings in 36 patients with drug-resistant focal epilepsy during presurgical intracerebral 
 # electrical stimulation (iES) (323 stimulation sessions). Our analyses revealed an anatomical gradient 
 # of excitability across the cortex, with stronger iES-evoked EEG responses in high-order compared to 
-# low-order regions. Mathematical modeling further showed that this variation in excitability levels 
+# low-order regions. Mathematical modelling further showed that this variation in excitability levels 
 # results from a differential dependence on recurrent feedback from non-stimulated regions across the 
 # anatomical hierarchy, and could be extinguished by suppressing those connections in-silico. High-order 
 # brain regions/networks thus show an activity pattern characterized by more inter-network functional 
@@ -47,7 +47,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #   :alt: diagram fig 2025 
 #   :width: 600px
 #
-# A Intracerebral electrical stimulation (iES) applied to an intracortical target region generates 
+# A. Intracerebral electrical stimulation (iES) applied to an intracortical target region generates 
 # an early (~20-30 ms) response (evoked-related potential (ERP) waveform component) at high-density 
 # scalp electroencephalography (hd-EEG) channels sensitive to that region and its immediate neighbors 
 # (red arrows). This also appears in more distal connected regions after a short delay due to axonal 
@@ -56,13 +56,13 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # this way, we aim to determine the extent to which this second component relies on intrinsic network 
 # activity versus recurrent whole-brain feedback. 
 #
-# B Schematic of the hierarchical spatial layout of 
+# B. Schematic of the hierarchical spatial layout of 
 # canonical RSNs as demonstrated in Margulies and colleagues12, spanning low-order networks showing 
 # greater functional segregation to high-order networks showing greater functional integration15. 
 # Networks are distributed based on their position along the first principal gradient. The stimulation 
 # sites are distributed across different levels of this gradient. 
 #
-# C Schematic of virtual dissection 
+# C. Schematic of virtual dissection 
 # methodology and key hypotheses tested. We first fit personalized connectome-based computational models 
 # of iES-evoked responses to the hd-EEG time series, for each patient and stimulation location. Then, 
 # precisely timed communication interruptions (virtual dissections) were introduced to the fitted models,
@@ -76,16 +76,15 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #   :alt: results1 fig 2025 
 #   :width: 600px
 #
-# A The histogram illustrates the distance in centimeters between the electrode’s centroid delivering 
-# the electrical stimulus and the center of the nearest Schaefer’s parcel87. The results indicate a high 
+# A. The histogram illustrates the distance in centimeters between the electrode’s centroid delivering 
+# the electrical stimulus and the center of the nearest Schaefer’s parcel. The results indicate a high 
 # level of spatial precision, with 97.2% of sessions showing distances of less than 1 cm. 
 #
-# B Global mean 
-# field power (GMFP) of hd-EEG averaged across all 36 subjects and 323 sessions, revealing three 
+# B. Global mean field power (GMFP) of hd-EEG averaged across all 36 subjects and 323 sessions, revealing three 
 # consistent response peaks/clusters within strict confidence intervals at ~40 ms, ~80 ms, and ~370 ms, 
-# consistent with prior electrophysiological research44. 
+# consistent with prior electrophysiological research. 
 #
-# C GMFP of every stimulated Resting-State Network
+# C. GMFP of every stimulated Resting-State Network
 # (RSN) for hd-EEG (top row) and sEEG (bottom row). The bar plot of the normalized area under the curve 
 # (AUC) of the three clusters revealed a significantly stronger global activation pattern when the 
 # stimulus targeted high-order networks, such as the Default mode network (DMN) and Frontoparietal 
@@ -93,20 +92,20 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # presented as mean values ± standard error of the mean (SEM) (error bars), with individual subject data 
 # points overlaid (36 independent subjects, 323 stimulation sessions). In the GMFP time course plots, 
 # shaded areas represent ±SEM around the mean. Notably, this trend aligns with the “principal gradient” 
-# hierarchy reported in the functional magnetic resonance imaging (fMRI) literature12, which describes 
+# hierarchy reported in the functional magnetic resonance imaging (fMRI) literature, which describes 
 # a general pattern from low-order to high-order regions
 #
 # .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig3_momi2025.png?raw=true
 #   :alt: results2 fig 2025 
 #   :width: 600px
 #
-# A Global mean field power (GMFP) for every stimulated network for model-generated high-density 
+# A. Global mean field power (GMFP) for every stimulated network for model-generated high-density 
 # electroencephalography (hd-EEG) data run with both the intact (continuous line) and disconnected 
 # (dashed line) structural connectome. Findings show a more pronounced decrease in evoked late responses 
-# for high-order networks (LN Limbic Network, SN Salience Network, DAN Dorsal attention network, 
-# FPN Frontoparietal Network, DMN Default mode network). 
+# for high-order networks (LN: Limbic Network, SN: Salience Network, DAN: Dorsal attention network, 
+# FPN: Frontoparietal Network, DMN: Default mode network). 
 #
-# B Area under the curve (AUC) differences 
+# B. Area under the curve (AUC) differences 
 # comparing the simulation run with the intact versus the lesioned structural connectome. The bar plot 
 # shows differences across three time windows (1st response: 0−37 ms, 2nd response: 37–78 ms, 
 # 3rd response: 78–373 ms). Data are presented as mean values ± standard error of the mean (SEM) 
@@ -115,7 +114,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # networks (LN, SN, DAN, FPN, and DMN) compared to low-order networks (Visual Network [VN] and 
 # Somatomotor Network [SMN]), indicated by asterisks (*P < 0.05). 
 #
-# C Demonstration of the network 
+# C. Demonstration of the network 
 # recurrence-based theory for two representative sessions. Simulations of evoked dynamics are run using 
 # the intact (left) and lesioned (right) anatomical connectome. In the latter case, the connections were 
 # removed to isolate the stimulated networks for SMN (top) and DMN (bottom). In the case of the low-order 
@@ -125,12 +124,11 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # Conclusions 
 # ^^^^^^^^^^^
 #
-# a. Using a computational framework recently developed for personalized neurostimulation modeling
+# A. Using a computational framework recently developed for personalized neurostimulation modelling.
 #
-# b. Using model Uncover neural states across netoworks: able to study how the brain signals 
-# propagate across networks
+# B. Using model to uncover neural states across netoworks: able to study how the brain signals propagate across networks
 #
-# c. using model as simulator to minics patients and treatment potentially
+# C. Using model as a simulator to mimic patient dynamics and potential treatment effects.
 #
 #
 #
@@ -140,22 +138,20 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #
 # Importage
 
-# general stuff
+# General imports
 import os
 import sys
 import json
 import time
 import warnings
 warnings.filterwarnings('ignore')
-
-
 import re
 import math
 import glob
 import pickle
 import requests
 
-#python stuff
+# Python imports
 import numpy as np
 import pandas as pd
 import scipy
@@ -163,18 +159,18 @@ import scipy.io
 from scipy.signal import find_peaks
 import sklearn
 
-# plot stuff
+# Plot imports
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# imaging stuff
+# Imaging imports
 import mne
 import nibabel
 import nibabel as nib
 from nilearn import plotting, surface
 from nilearn.image import load_img
 
-# WHOBPYT stuff
+# WHOBPYT imports
 import torch
 import whobpyt
 from whobpyt.datasets.fetchers import fetch_egmomi2025
@@ -190,39 +186,45 @@ data_folder = fetch_egmomi2025()
 # 2 - Model fitting and key results
 # --------------------------------------------------
 
-start_time = time.time()
-
 # %%
 # 2.1 Empirical Data Analysis
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
 
-# loading data
+# %%
+# Loading data
 
-# loading the file from the GitHub URL
+start_time = time.time() # For estimating run time of the empirical analysis
+# Loading network colour filw from the GitHub URL
 url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
 colour = pd.read_excel(url, header=None)[4]
+# Evoked data
 all_eeg_evoked = np.load(data_folder + '/empirical_data/all_eeg_evoked.npy')
+# Epoched example
 epo_eeg = mne.read_epochs(data_folder + '/empirical_data/example_epoched.fif', verbose=False)
-
+# GFMA data
 all_gfma = np.zeros((all_eeg_evoked.shape[0], all_eeg_evoked.shape[2]))
 
 for ses in range(all_eeg_evoked.shape[0]):
     all_gfma[ses,:] =  np.std(all_eeg_evoked[ses,:,:],axis=0) #np.mean(np.mean(epo_eeg._data, axis=0),axis=0)
-    #Normalized for the baseline for making comparison
+    # Normalized to the baseline for comparison 
     all_gfma[ses,:] = np.abs(all_gfma[ses,:] - np.mean(all_gfma[ses, :300]))
 
+# Load Schaefer 1000 parcels 7 networks
 with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
+# Extract the stimulation region data from the loaded pickle file    
 stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
 
 # %%
-# plot evoked eeg gfma at each network
+# Plot evoked EEG GFMA at each network
 
+# 7 networks definition
 networks = ['Vis', 'SomMot', 'DorsAttn', 'SalVentAttn', 'Limbic', 'Cont', 'Default']
 # Create a dictionary to store the network indices
 stim_network_indices = {network: [] for network in networks}
+# Iterate over stim region
 for i, label in enumerate(stim_region):
     # Iterate over each network
     for network in networks:
@@ -231,19 +233,18 @@ for i, label in enumerate(stim_region):
             break
 
 net_gfma = {}
-
+# Iterate over each network
 for network in networks:
+    # GFMA for each network
     net_gfma[network] = all_gfma[stim_network_indices[network]]
 
-
+# Get the GFMA averages for each network
 averages = []
-
 for key, value in net_gfma.items():
     average = sum(value) / len(value)
     averages.append(average)
 
 averages = np.array(averages)
-
 
 
 # Define the desired figure size
@@ -257,9 +258,9 @@ for net in range(len(networks)):
 plt.show()
 
 # %% 
-# plot peaks
+# Plot peaks
 
-# Calculate the mean array as you mentioned
+# Calculate the mean array
 time_series = np.mean((averages[:, :] - np.mean(averages[:, :300])), axis=0)
 
 # Find peaks in the time series data
@@ -284,7 +285,7 @@ plt.title('Time Series with First 3 Peaks')
 plt.show()
 
 # %%
-# plot evoked response variation across sessions
+# Plot evoked response variation across sessions
 
 
 
@@ -301,10 +302,8 @@ margin_of_error = z_score * (std_all_gfma / np.sqrt(len(all_gfma)))
 upper_bound = mean_all_gfma + margin_of_error
 lower_bound = mean_all_gfma - margin_of_error
 
-
 upper_bound =upper_bound - np.mean(upper_bound[:300])
 lower_bound =lower_bound - np.mean(lower_bound[:300])
-
 
 if len(epo_eeg.times) == len(time_series):
     # Plot the time series and the identified peaks
@@ -314,7 +313,6 @@ if len(epo_eeg.times) == len(time_series):
     plt.plot(epo_eeg.times, upper_bound,'-r', label='upper')
     plt.plot(epo_eeg.times, lower_bound,'-g', label='lower')
     plt.fill_between(epo_eeg.times, upper_bound, lower_bound, color="k", alpha=0.15)  # Use 'epo_eeg.times'
-
     plt.legend()
     plt.xlabel('Time (s)')  # Set the x-axis label to 'Time (s)'
     plt.ylabel('Value')
@@ -326,7 +324,7 @@ else:
 
 
 # %%
-# plot AUC
+# Plot AUC
 
 windows = 3
 AUC = np.zeros((3,all_gfma.shape[0]))
@@ -335,7 +333,6 @@ first_3_peak_indices_sorted = sorted(first_3_peak_indices)
 first_peak = epo_eeg.times[first_3_peak_indices_sorted[0]]
 second_peak = epo_eeg.times[first_3_peak_indices_sorted[1]]
 third_peak = epo_eeg.times[first_3_peak_indices_sorted[2]]
-
 
 for ses in range(all_gfma.shape[0]):
     AUC[0, ses] = np.trapz(all_gfma[ses, np.where(epo_eeg.times==0)[0][0]:np.where(epo_eeg.times==first_peak)[0][0]]
@@ -352,12 +349,13 @@ AUC[2,:] = AUC[2,:] / (first_3_peak_indices_sorted[2] - first_3_peak_indices_sor
 
 net_AUC = {}
 
+# Iterate over each network
 for network in networks:
+    # AUC for each network
     net_AUC[network] = AUC[:,stim_network_indices[network]]
 
-
+# Obtain the average AUC 
 AUC_averages = np.zeros((len(networks), windows))
-
 for idx, key in enumerate(net_AUC.keys()):
     AUC_averages[idx, :] = np.mean(net_AUC[key], axis=1)
 
@@ -388,7 +386,6 @@ axs[1].set_title('Late response ' + str(round(first_peak*1000)) + '-' + str(roun
 axs[1].set_ylabel('AUC')
 axs[1].set_ylim(0, 2)  # Adjust the y-axis limits as needed
 
-
 # Plot in the second subplot (same as the first subplot)
 axs[2].bar(range(AUC_averages[:, 2].shape[0]), AUC_averages[:, 2], color=colour)
 axs[2].set_xticks(range(AUC_averages[:, 0].shape[0]))
@@ -400,15 +397,14 @@ axs[2].set_ylim(0, 2)  # Adjust the y-axis limits as needed
 
 plt.tight_layout()  # Adjust the spacing between subplots if needed
 
-
 plt.show()
 
 # %%
-# plot seeg at each network
+# Plot sEEG at each network
 
+# Load sEEG epochs
 with open(data_folder + '/empirical_data/all_epo_seeg.pkl', 'rb') as handle:
     all_epo_seeg = pickle.load(handle)
-
 
 all_gfma = np.zeros((len(list(all_epo_seeg.keys())), epo_eeg._data.shape[2]))
 
@@ -419,16 +415,17 @@ for ses in range(len(list(all_epo_seeg.keys()))):
 
     all_gfma[ses,:] =  np.std(epo_seeg, axis=0)
 
-
+# Load Schaefer 1000 parcels
 with open(data_folder + '/empirical_data/dist_Schaefer_1000parcels_7net.pkl', 'rb') as handle:
     dist_Schaefer_1000parcels_7net = pickle.load(handle)
+# Extract the stimulation region data from the loaded pickle file
 stim_region = dist_Schaefer_1000parcels_7net['stim_region']
 
 networks = ['Vis', 'SomMot', 'DorsAttn', 'SalVentAttn', 'Limbic', 'Cont', 'Default']
 # Create a dictionary to store the network indices
 stim_network_indices = {network: [] for network in networks}
 for i, label in enumerate(stim_region):
-    #if dist_Schaefer_1000parcels_7net['dist'][i] < 7:
+    # if dist_Schaefer_1000parcels_7net['dist'][i] < 7:
             # Iterate over each network
             for network in networks:
                 if network in label:
@@ -437,20 +434,20 @@ for i, label in enumerate(stim_region):
 
 
 net_gfma = {}
-
+# Iterate over each network
 for network in networks:
+    # GFMS for each network
     net_gfma[network] = all_gfma[stim_network_indices[network]]
 
-
+# Compute the GFMA averages
 averages = []
-
 for key, value in net_gfma.items():
     average = sum(value) / len(value)
     averages.append(average)
 
 averages = np.array(averages)
 
-# Download the file from the GitHub URL
+# Download the network colour file from the GitHub URL
 url = 'https://github.com/Davi1990/DissNet/raw/main/examples/network_colour.xlsx'
 colour = pd.read_excel(url, header=None)[4]
 
@@ -462,13 +459,11 @@ for net in range(len(networks)):
     plt.plot(epo_eeg.times, averages[net, :] - np.mean(averages[net, :300]), colour[net], linewidth=5)
 
 # Display the plot
-
-
 plt.show()
 
 
 # %%
-# plot seeg AUC
+# Plot sEEG AUC
 
 # Calculate the mean array as you mentioned
 time_series = np.mean((averages[:, :] - np.mean(averages[:, :300])), axis=0)
@@ -480,10 +475,8 @@ peak_values = time_series[peaks]
 
 # Get the indices of the first 3 peaks in descending order of amplitude
 first_3_peak_indices = peaks[np.argsort(peak_values)[::-1][:3]]
-
 first_3_peak_indices = np.array([298, 337, 378, 700])
 first_3_peak_amplitudes = time_series[first_3_peak_indices]
-
 
 windows = 3
 AUC = np.zeros((3,all_gfma.shape[0]))
@@ -492,7 +485,6 @@ first_peak = epo_eeg.times[first_3_peak_indices[0]]
 second_peak = epo_eeg.times[first_3_peak_indices[1]]
 third_peak = epo_eeg.times[first_3_peak_indices[2]]
 fourth_peak = epo_eeg.times[first_3_peak_indices[3]]
-
 
 for ses in range(all_gfma.shape[0]):
     AUC[0, ses] = np.trapz(all_gfma[ses, np.where(epo_eeg.times==first_peak)[0][0]:np.where(epo_eeg.times==second_peak)[0][0]]
@@ -503,26 +495,23 @@ for ses in range(all_gfma.shape[0]):
                            - np.mean(all_gfma[ses, :300]), dx=5)
 
 
-
 AUC[0,:] = AUC[0,:] / 33
 AUC[1,:] = AUC[1,:] / 45
 AUC[2,:] = AUC[2,:] / 319
 
 net_AUC = {}
-
+# Iterate over each network
 for network in networks:
+    # AUC for each network
     net_AUC[network] = AUC[:,stim_network_indices[network]]
 
-
+# Obtain AUC averages
 AUC_averages = np.zeros((len(networks), windows))
-
 for idx, key in enumerate(net_AUC.keys()):
     AUC_averages[idx, :] = np.mean(net_AUC[key], axis=1)
 
-
 AUC_averages = AUC_averages*1000
 # AUC_averages = (AUC_averages / np.max(AUC_averages, axis=0)) * 100
-
 
 
 # Create the figure and subplots
@@ -546,8 +535,7 @@ axs[1].set_title('Late response ' + str(round(second_peak*1000)) + '-' + str(rou
 axs[1].set_ylabel('AUC')
 axs[1].set_ylim(0, 3)  # Adjust the y-axis limits as needed
 
-
-# Plot in the second subplot (same as the first subplot)
+# Plot in the third subplot (same as the first subplot)
 axs[2].bar(range(AUC_averages[:, 2].shape[0]), AUC_averages[:, 2], color=colour)
 axs[2].set_xticks(range(AUC_averages[:, 0].shape[0]))
 axs[2].set_xticklabels(networks, rotation=45)
@@ -636,7 +624,7 @@ stim_coords = coords_1000[stim_idx]
 stim_net = stim_region[ses2use].split('_')[1]
 
 
-#define dist function
+# Define distance function
 def euclidean_distance(coord1, coord2):
     x1, y1, z1 = coord1[0], coord1[1], coord1[2]
     x2, y2, z2 = coord2[0], coord2[1], coord2[2]
@@ -689,6 +677,7 @@ thr = mean + (4 * std)
 # Count the number of unique regions affected by the threshold
 number_of_region_affected = np.unique(np.where(abs_value > thr)[0]).shape[0]
 
+# Load the rewritten Schaeffer 200 parcels
 img = nib.load(data_folder + '/calculate_distance/example_Schaefer2018_200Parcels_7Networks_rewritten.nii')
 
 # Get the shape and affine matrix of the image
@@ -862,11 +851,11 @@ params = ParamsJR(A = par(3.25), a= par(100,100, 2, True), B = par(22), b = par(
 model = RNNJANSEN(params, node_size=node_size, TRs_per_window=TPperWindow, step_size=step_size, output_size=output_size, tr=tr, sc=sc, lm=lm, dist=dist, use_fit_gains=True)
 
 # %%
-# create objective function
+# Create objective function
 ObjFun = CostsJR(model)
 
 # %%
-# call model fit
+# Call model fit
 F = Model_fitting(model, ObjFun)
 
 
