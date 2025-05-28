@@ -66,28 +66,31 @@ def pull_folder(dlcode: str, newfolder_name: str, dest_folder = None, download_m
     newfolder = os.path.join(dest_folder, newfolder_name)
 
     # Create dest folder if it does not exist
-    if not os.path.exists(newfolder): os.makedirs(newfolder) 
+    if not os.path.exists(newfolder): 
 
-    # cd to dest folder, grab the download, cd back to current dir  
-    cwd = os.getcwd()
-    os.chdir(newfolder)
+      os.makedirs(newfolder) 
 
-    if download_method == 'gdown':
+      # cd to dest folder, grab the download, cd back to current dir  
+      cwd = os.getcwd()
+      os.chdir(newfolder)
 
-      # Assemble gdown gdrive url target
-      url = "https://drive.google.com/drive/folders/" + dlcode
-      gdown.download_folder(url, remaining_ok=True)
+      if download_method == 'gdown':
 
-    elif download_method == 'wget':
+        # Assemble gdown gdrive url target
+        url = "https://drive.google.com/drive/folders/" + dlcode
+        gdown.download_folder(url, remaining_ok=True)
 
-      url = dlcode
-      os.system('wget %s -O download.zip' %url)
-      os.system('unzip download.zip')
-      os.system('rm download.zip')
+      elif download_method == 'wget':
 
-    os.chdir(cwd)
+        url = dlcode
+        os.system('wget %s -O download.zip' %url)
+        os.system('unzip download.zip')
+        os.system('rm download.zip')
 
-    print('\n\nDownloaded \n\n%s \n\nto \n\n%s\n\n' %(url,newfolder))           
+      print('\n\nDownloaded \n\n%s \n\nto \n\n%s\n\n' %(url,newfolder))           
+
+      os.chdir(cwd)
+
     return newfolder
 
 
