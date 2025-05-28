@@ -7,14 +7,10 @@
 #
 
 # Importage
-import os,sys,glob,shutil,numpy as np, pandas as pd
-import requests, zipfile,gdown
+import os,sys,glob,json,shutil,pathlib,numpy as np, pandas as pd
+import requests,zipfile,gdown
 from datetime import datetime
 #from kaggle.api.kaggle_api_extended import KaggleApi
-
-import os 
-import json
-
 
 
 WHOBPYT_DATA_FOLDER = '~/.whobpyt/data'
@@ -57,15 +53,12 @@ def pull_file(dlcode,destination,download_method):
           f.write(chunk)
 
 
-def pull_folder(dlcode: str, newfolder_name: str, dest_folder = None):
+def pull_folder(dlcode: str, newfolder_name: str, dest_folder = None, download_method='wget'):
 
     # Creates a new folder `newfolder_name` inside `dest_folder`, 
     # downloads the data into that location, 
     # and returns the location as a string
 
-    # Assemble gdown gdrive url target
-    url = "https://drive.google.com/drive/folders/" + dlcode
-  
     # (dest_folder is the location this folder will be downloaded into)
 
     # if no dest folder supplied, use the default location in user's home    
@@ -78,7 +71,20 @@ def pull_folder(dlcode: str, newfolder_name: str, dest_folder = None):
     # cd to dest folder, grab the download, cd back to current dir  
     cwd = os.getcwd()
     os.chdir(newfolder)
-    gdown.download_folder(url, remaining_ok=True)
+
+    if download_method == 'gdown':
+
+      # Assemble gdown gdrive url target
+      url = "https://drive.google.com/drive/folders/" + dlcode
+      gdown.download_folder(url, remaining_ok=True)
+
+    elif download_method == 'wget':
+
+      url = dlcode
+      os.system('wget %s -O download.zip' %url)
+      os.system('unzip download.zip')
+      os.system('rm download.zip')
+
     os.chdir(cwd)
 
     print('\n\nDownloaded \n\n%s \n\nto \n\n%s\n\n' %(url,newfolder))           
@@ -169,9 +175,8 @@ def fetch_egtmseeg(dest_folder=None, redownload=False):
     
         os.chdir(dest_folder)
 
-        for file_code, file_name in files_dict.items():
-          dlcode = osf_url_pfx + '/' + file_code
-          pull_file(dlcode, file_name, download_method='wget')
+        dlcode = osf_folder_url
+        pull_file(dlcode, file_name, download_method='wget')
    
         os.chdir(cwd)
 
@@ -361,5 +366,38 @@ def fetch_egmomi2025(dest_folder=None, redownload=False):
     os.chdir(cwd)
 
     return dest_folder
+
+
+
+def fetch_eggriffiths2022(dest_folder=None, redownload=False):
+    """
+    Fetch multiple files for Griffiths 2022 using pull_file function.
+    """
+    
+    # url for entire folder download
+    osf_folder_url = "https://files.ca-1.osf.io/v1/resources/u7kgw/providers/osfstorage/6837772e428f2b32e585b232/?zip="
+    
+    cwd = os.getcwd()
+
+    newfolder_name = 'eg__griffiths2022'
+    
+    if dest_folder is None:
+        newfolder_parent = get_localdefaultdatapath()
+        newfolder = os.path.join(newfolder_parent, newfolder_name)
+
+    # If input instruction was to re-download and folder is already present, remove it
+    if os.path.isdir(newfolder) and redownload == True:
+        shutil.rmtree(newfolder)
+
+    # If the folder does not exist, create it and download the files
+    #if not os.path.isdir(dest_folder): 
+    #    os.makedirs(dest_folder)
+    #    os.chdir(dest_folder)
+
+    dlcode = osf_folder_url
+        
+    pull_folder(dlcode, dest_folder=newfolder_parent, newfolder_name=newfolder_name, download_method='wget')
+
+    return newfolder
 
 
