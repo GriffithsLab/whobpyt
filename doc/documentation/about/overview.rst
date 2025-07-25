@@ -1,15 +1,60 @@
 Overview
 ================
 
-Whole Brain Modelling in PyTorch (WhoBPyT) is a Python package for fitting parameters of Whole Brain Models (WBM) to neuroimaging data. In particular, differential equation based WBMs such as Connectome-based Neural Mass Models (CNMM) can be implemented in PyTorch, and by doing so the simulated neuoimaging data can be backpropagated through time to update model parameters. This is the deep learning approach that WhoBPyT uses. 
+WHOBPYT (Whole-Brain Optimization for Biophysical PYThon models) is a flexible, PyTorch-compatible simulation and inversion toolkit for large-scale brain models. It supports neural mass models, neural field models, and conductance-based models, enabling biophysically informed inference from EEG and power spectral density (PSD) data.
 
-In order to use this package, a brain model, objective function, and parameter fitting paradigm must be chosen. The appropriate choices will depend on the research question and the neuroimaging data avaliable. Data must be processed ahead of time into a consistent parcellated format.
+This package is designed for researchers in computational neuroscience, brain modeling, and mental health, offering tools to fit EEG/PSD data to biologically interpretable models with variational inference and gradient-based optimization.
 
-After fitting, the result will be one or more sets of paramters. It's important to verify these parameters in another model implementation, as the models implemented in PyTorch may have default or optional moditications that deviate from the original model's dynamics. 
+🔁 Supported Models
 
-If you use this package, please consider citing the following papers:
+🧠 1. Jansen-Rit Neural Mass Model
 
-Griffiths JD, Wang Z, Ather SH, Momi D, Rich S, Diaconescu A, McIntosh AR, Shen K. Deep Learning-Based Parameter Estimation for Neurophysiological Models of Neuroimaging Data. bioRxiv. 2022 May 19:2022-05.
+Cortical column dynamics (pyramidal, excitatory, inhibitory populations)
 
-Momi D, Wang Z, Griffiths JD. TMS-evoked responses are driven by recurrent large-scale network dynamics. Elife. 2023;12.
+EEG simulation and inversion
 
+Time-domain fitting via variational free energy or gradient descent
+
+🌐 2. Robinson Neural Field Model 
+
+Spatially extended cortical field equations
+
+Frequency-domain fitting (PSD inversion)
+
+Saturation dynamics for realistic response to external input
+
+Fast convolution and efficient frequency-domain inversion
+
+⚡ 3. Conductance-Based Neural Mass Models
+
+Biophysically realistic membrane dynamics
+
+Voltage-dependent synapses (e.g., NMDA, GABA)
+
+Inversion from EEG using  free energy gradients
+
+🎯 Key Features
+
+🔍 EEG and PSD Inversion: Time and frequency domain fitting
+
+🧠 Biomarker Extraction: E/I balance, alpha peak, Lyapunov exponents
+
+🧪 Model Comparison: Fit and compare multiple neural models to EEG
+
+🧬 Connectome Integration: Multi-node networks and distance-based delays
+
+⚡ GPU Acceleration: PyTorch backends for fast training and simulation
+
+🧰 Modular Design: Swap models, priors, and solvers with minimal code changes
+
+🧠 Applications
+
+Mental health modeling (depression, ADHD, schizophrenia, Alzheimer’s)
+
+Real-time or offline EEG inversion
+
+Biomarker discovery for neuromodulation (TMS, tACS)
+
+Dynamic circuit modeling under pharmacological modulation
+
+Seizure modeling and prediction
