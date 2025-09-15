@@ -28,7 +28,7 @@ class Model_fitting_fq:
     """
 
     # from sklearn.metrics.pairwise import cosine_similarity
-    def __init__(self, psd, num_epoches, model: AbstractNMM, cost: AbstractLoss,):
+    def __init__(self, psd, num_epoches, model: AbstractNeuralModel, cost: AbstractLoss,):
         """
         Parameters
         ----------
