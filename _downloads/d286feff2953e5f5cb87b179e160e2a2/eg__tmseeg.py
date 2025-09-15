@@ -25,7 +25,7 @@ from whobpyt.datatypes import Parameter as par, Timeseries
 from whobpyt.models.jansen_rit import JansenRitModel,JansenRitParams
 from whobpyt.run import ModelFitting
 from whobpyt.optimization.custom_cost_JR import CostsJR
-from whobpyt.datasets.fetchers import fetch_egtmseeg
+from whobpyt.datasets.fetchers import fetch_momi2023
 
 # Python Packages used for processing and displaying given analytical data (supported for .mat and Google Drive files)
 import numpy as np
@@ -43,7 +43,7 @@ import mne # Neuroimaging package
 
 # %%
 # Download and load example data
-data_dir = fetch_egtmseeg()
+data_dir = fetch_momi2023()
 
 # %%
 # Load EEG data 
