@@ -10,6 +10,7 @@ from torch import (tensor as pttensor, float32 as ptfloat32, sum as ptsum, exp a
 # Numpy stuff
 from numpy.random import uniform 
 from numpy import ones,zeros
+import numpy as np
 
 # WhoBPyT stuff
 from ...datatypes import AbstractNeuralModel, AbstractParams, Parameter as par
@@ -44,7 +45,7 @@ class ParamsLinearFreqs(AbstractParams):
 
         self.setParamsAsattr()
 
-class LINEAR_FQ(AbstractNMM):
+class LINEAR_FQ(AbstractNeuralModel):
     """
     A module for Robinson model from freqency to power spectrum
     Attibutes
