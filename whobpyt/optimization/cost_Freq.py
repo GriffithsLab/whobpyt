@@ -1,4 +1,5 @@
 import numpy as np  # for numerical operations
+import torch
 from torch import (Tensor as ptTensor, reshape as ptreshape, mean as ptmean, matmul as ptmatmul, transpose as pttranspose, 
                    diag as ptdiag, reciprocal as ptreciprocal, sqrt as ptsqrt, tril as pttril, ones_like as ptones_like, 
                    zeros_like as ptzeros_like, greater as ptgreater, masked_select as ptmasked_select, sum as ptsum, 
@@ -12,7 +13,7 @@ class CostsFreqs(AbstractLoss):
         self.model = model
 
 
-    def loss(self, simData: dict, empData: torch.Tensor):
+    def loss(self, simData: dict, empData: ptTensor):
         """
         Calculate the Pearson Correlation between the simFC and empFC.
         From there, compute the probability and negative log-likelihood.
@@ -27,7 +28,7 @@ class CostsFreqs(AbstractLoss):
         method_arg_type_check(self.loss) # Check that the passed arguments (excluding self) abide by their expected data types
         sim = simData
         emp = empData
-        loss_main = torch.sqrt(torch.mean((torch.log(sim) - torch.log(emp)) ** 2))  #
+        loss_main = ptsqrt(ptmean((ptlog(sim) - ptlog(emp)) ** 2))  #
         model = self.model
 
         # define some constants
