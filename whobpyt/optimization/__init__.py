@@ -4,3 +4,4 @@ from .cost_FC import CostsFixedFC
 from .cost_Mean import CostsMean
 from .cost_PSD import CostsPSD
 from .cost_PSD import CostsFixedPSD
+from .cost_Freq import CostsFreqs
