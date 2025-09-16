@@ -23,7 +23,7 @@ sys.path.append('..')
 import whobpyt
 from whobpyt.datatypes import Parameter as par, Timeseries
 from whobpyt.models.linear_fq import LINEAR_FQ, ParamsLinearFreqs
-from whobpyt.run import ModelFitting
+from whobpyt.run import Model_fitting_fq
 from whobpyt.optimization.cost_Freq import CostsFreqs
 from whobpyt.datasets.fetchers import fetch_egtmseeg
 
@@ -49,7 +49,8 @@ data_dir = fetch_egtmseeg()
 # Load EEG data 
 eeg_file_name = os.path.join(data_dir, 'Subject_1_low_voltage.fif')
 epoched = mne.read_epochs(eeg_file_name, verbose=False);
-evoked = epoched.average()
+evoked = epoched.get_data()
+eeg = np.concatenate(list(evoked), axis=1)
 
 # %%
 # Load Atlas
@@ -82,21 +83,22 @@ sc_df = pd.read_csv(sc_file, header=None, sep=' ')
 sc = sc_df.values
 sc = np.log1p(sc) / np.linalg.norm(np.log1p(sc))
 
+u_l, s_l, v_l = np.linalg.svd(sc)
+
 # %%
 # Load the leadfield matrix
-lm = os.path.join(data_dir, 'Subject_1_low_voltage_lf.npy')
+lm_file = os.path.join(data_dir, 'Subject_1_low_voltage_lf.npy')
+lm = np.load(lm_file)
+print(lm.shape)
 ki0 =stim_weights_thr[:,np.newaxis]
 delays = dist/conduction_velocity
 
 # %%
 # define options for JR model: batch size integration step and sampling rate of the empirical eeg
 # the number of regions in the parcellation and the number of channels
-eeg_data = evoked.data.copy()
-time_start = np.where(evoked.times==-0.1)[0][0]
-time_end = np.where(evoked.times==0.3)[0][0]
-eeg_data = eeg_data[:,time_start:time_end]/np.abs(eeg_data).max()*4
+
 node_size = sc.shape[0]
-output_size = eeg_data.shape[0]
+output_size = eeg.shape[0]
 
 sim_psd_source, sim_freqs_source = mne.time_frequency.psd_array_welch(eeg, sfreq=1000,fmin=1,fmax=50,n_fft=1900, n_per_seg=2000)
 
@@ -116,7 +118,7 @@ for i in range(epochs_size):
         #print(sim_freqs_source[ind-1], w, sim_freqs_source[ind])
         per = np.abs(w-sim_freqs_source[ind-1])/(np.abs(w-sim_freqs_source[ind])+np.abs(w-sim_freqs_source[ind-1]))
         #print(sim_psd_source.T[ind-1][0], ((1-per)*per*sim_psd_source.T[ind-1] +per*sim_psd_source.T[ind])[0], sim_psd_source.T[ind][0])
-        sim_psd_test.append(1e14*((1-per)*sim_psd_source.T[ind-1] +per*sim_psd_source.T[ind]))
+        sim_psd_test.append(1*((1-per)*sim_psd_source.T[ind-1] +per*sim_psd_source.T[ind]))
 
     psd_train['psd'].append(np.array(sim_psd_test).T)
 
@@ -124,8 +126,8 @@ psd_train['fq'] = np.array(psd_train['fq'])
 psd_train['psd'] = np.array(psd_train['psd'])
 lm_v = 0.01*np.random.randn(output_size,200)
 params = ParamsLinearFreqs(mu = par(5,5, 0.5, True), g = par(100,100,1,True), eigvals= par(s_l, s_l, .1 * np.ones((node_size,1)), True),a = par(50, 50, 1, True), \
-                           b = par(20,20, 0.5,True), A = par(3, 3, 0.2, True), B = par(22), C = par(100, 100, 1, True),c = par(0.2, 0.2, 0.001, True),
-                        lm=par(lf.T, lf.T, .1 * np.ones((output_size, node_size))+lm_v, True),std_in= par(1))
+                           b = par(20,20, 0.5,True), A = par(3, 3, 0.2, True), B = par(22), C1 = par(100, 100, 1, True), C2 = par(30, 30, 1, True),c = par(0.2, 0.2, 0.001, True),
+                        lm=par(lm, lm, .1 * np.ones((output_size, node_size))+lm_v, True),std_in= par(1000000))
 
 
 # %%
