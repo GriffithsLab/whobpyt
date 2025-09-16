@@ -5,14 +5,15 @@ from torch import (Tensor as ptTensor, reshape as ptreshape, mean as ptmean, mat
                    zeros_like as ptzeros_like, greater as ptgreater, masked_select as ptmasked_select, sum as ptsum, 
                    multiply as ptmultiply, log as ptlog, device as ptdevice)
 
-from ..datatypes import AbstractLoss 
+from ..datatypes import AbstractLoss
+from ..datatypes import Parameter as par
 from ..functions.arg_type_check import method_arg_type_check
 
 class CostsFreqs(AbstractLoss):
     def __init__(self, model):
         self.model = model
 
-
+     
     def loss(self, simData: dict, empData: ptTensor):
         """
         Calculate the Pearson Correlation between the simFC and empFC.
@@ -53,12 +54,12 @@ class CostsFreqs(AbstractLoss):
         variables_p = [a for a in dir(model.params) if (type(getattr(model.params, a)) == par)]
 
         for var_name in variables_p:
-            var = getattr(model.params, var_name)
-            if var.fit_hyper and \
-                        var_name not in exclude_param:
-                loss_prior.append(torch.sum(( m(var.prior_var_inv) * \
-                                            (m(var.val) - m(var.prior_mean)) ** 2)) \
-                                  + torch.sum(-torch.log( m(var.prior_var_inv))))
+            # print(var)
+            var = getattr(self.model.params, var_name)
+            if var.fit_hyper:
+                loss_prior.append(torch.sum((lb + m(var.prior_precision)) * \
+                                                (m(var.val) - m(var.prior_mean)) ** 2) \
+                                      + torch.sum(-torch.log(lb + m(var.prior_precision)))) 
 
         # total loss
         loss = 200 * w_cost * loss_main + 1 * sum(loss_prior) + 1 * loss_EI
