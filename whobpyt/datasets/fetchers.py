@@ -171,6 +171,9 @@ def fetch_egtmseeg(dest_folder=None, redownload=False):
     if os.path.isdir(dest_folder) and redownload == True:
         os.system('rm -rf %s' %dest_folder)
 
+    
+    total_files = len(files_dict)
+
     # If the folder does not exist, create it and download the files
     if not os.path.isdir(dest_folder): 
 
@@ -178,10 +181,13 @@ def fetch_egtmseeg(dest_folder=None, redownload=False):
     
         os.chdir(dest_folder)
 
-        dlcode = osf_folder_url
-        pull_file(dlcode, file_name, download_method='wget')
-   
-        os.chdir(cwd)
+        for file_code, file_name in files_dict.items():
+          dlcode = osf_url_pfx + '/' + file_code
+          pull_file(dlcode, file_name, download_method='wget')
+
+
+    os.chdir(cwd)
+    
 
     return dest_folder 
 
