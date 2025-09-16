@@ -1,4 +1,5 @@
 # PyTorch stuff
+import torch
 from torch.nn.parameter import Parameter as ptParameter
 from torch.nn import ReLU as ptReLU
 from torch.linalg import norm as ptnorm
@@ -33,17 +34,17 @@ class ParamsLinearFreqs(AbstractParams):
         """
 
         super(ParamsLinearFreqs, self).__init__(**kwargs)
-        params = {
+        param = {
             "std_in": par(0.1),
 
             "eigvals": par(1),
             "mu": par(5)
         }
-        for var in params:
-            if var not in self.params:
-                self.params[var] = params[var]
+        for var in param:
+            setattr(self, var, param[var])
 
-        self.setParamsAsattr()
+        for var in kwargs:
+            setattr(self, var, kwargs[var])
 
 class LINEAR_FQ(AbstractNeuralModel):
     """
@@ -109,7 +110,8 @@ class LINEAR_FQ(AbstractNeuralModel):
         dist = torch.tensor(self.dist, dtype=torch.float32)
         u_sc = torch.tensor(self.sc_eigvecs, dtype=torch.float32)
         lm = self.params.lm.value()
-        tau_mode = torch.diag(m(u_sc.T @ dist/mu @ u_sc))
+        tau_mode = m(u_sc.T @ dist/mu @ u_sc)
+        sc = u_sc[:,:n_mode] @ torch.diag(eigvals[:,0]) @ (u_sc[:,:n_mode]).T
 
 
 
@@ -124,12 +126,12 @@ class LINEAR_FQ(AbstractNeuralModel):
             tf_e = A*a/(s**2 +2*a*s +a**2 )
             tf_i = B*b/(s**2 +2*b*s +b**2 )
             tf_ei = (1-0*C1*tf_i)*tf_e/(1+ C1*C2*tf_e*tf_i)
-            tf_close = (1/(s+c))*tf_ei/(1+g* torch.exp(-s*tau_mode)*eigvals[:,0]*tf_ei)
+            tf_close = (1/(s+c))*tf_ei*torch.linalg.inv(1+g* torch.exp(-s*tau_mode)*sc*tf_ei)
 
             """lap = torch.diag((u_sc @ (torch.diag(eigvals[:,0]) ) @ u_sc.T).sum(1)) \
                 - (u_sc @ (torch.diag(eigvals) ) @ u_sc.T)
             u_l, d_l, l_l = torch.svd(lap)"""
-            tf = std_in * ((u_sc[:,:n_mode]+0*j) @ torch.diag(tf_close ) @ (u_sc[:,:n_mode]+0*j).T).sum(1)[:,np.newaxis]
+            tf = std_in * tf_close.sum(0)[:,np.newaxis]
 
 
 
