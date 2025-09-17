@@ -380,7 +380,7 @@ Furethermore, show some analysis based on uncovered neural states from the model
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.models.jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">JansenRitModel</span><span class="p">,</span><span class="n">JansenRitParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelFitting</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.optimization.custom_cost_JR</span><span class="w"> </span><span class="kn">import</span> <span class="n">CostsJR</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datasets.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_momi2023</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datasets.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_egtmseeg</span>
 
 <span class="c1"># Python Packages used for processing and displaying given analytical data (supported for .mat and Google Drive files)</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -395,14 +395,8 @@ Furethermore, show some analysis based on uncovered neural states from the model
 <span class="kn">import</span><span class="w"> </span><span class="nn">mne</span> <span class="c1"># Neuroimaging package</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/runner/work/whobpyt/whobpyt/examples/eg__tmseeg.py&quot;</span>, line <span class="m">28</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datasets.fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_momi2023</span>
-<span class="gr">ImportError</span>: <span class="n">cannot import name &#39;fetch_momi2023&#39; from &#39;whobpyt.datasets.fetchers&#39; (/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/whobpyt/datasets/fetchers.py)</span>
-</pre></div>
-</div>
 <p>Download and load example data</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">fetch_momi2023</span><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">fetch_egtmseeg</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Load EEG data</p>
@@ -529,8 +523,17 @@ the number of regions in the parcellation and the number of channels</p>
 <span class="n">F</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">empRecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_mean</span><span class="p">],</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
+epoch:  0 loss: 3.1903496 Pseudo FC_cor:  0.01815491914589494 cos_sim:  0.0035286493173182043
+Epoch:  1
+epoch:  1 loss: 2.13037 Pseudo FC_cor:  0.002816911738832476 cos_sim:  0.007507054628865226
+</pre></div>
+</div>
 <p>quick test run with 2 epochs</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.014400264697889088 cos_sim:  0.012414333719809436
 </pre></div>
 </div>
 <p>load in a previously completed model fitting results object
@@ -538,6 +541,9 @@ run evaluate to generate the simulated eeg with new inputs based on the forward 
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">full_run_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;Subject_1_low_voltage_fittingresults_stim_exp.pkl&#39;</span><span class="p">)</span>
 <span class="n">F</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">full_run_fname</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
 <span class="n">F</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <span class="n">data_mean</span><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.47388586726011656 cos_sim:  0.3935271771785366
 </pre></div>
 </div>
 <p>Plot the original and simulated EEG data</p>
@@ -559,12 +565,20 @@ run evaluate to generate the simulated eeg with new inputs based on the forward 
 <span class="n">simulated_joint_st</span> <span class="o">=</span> <span class="n">simulated_EEG_st</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">ts_args</span><span class="o">=</span><span class="n">ts_args</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">)</span>
 </pre></div>
 </div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_eg__tmseeg_001.png" srcset="../_images/sphx_glr_eg__tmseeg_001.png" alt="EEG (60 channels), 0.005 s, 0.020 s, 0.040 s, 0.078 s, 0.150 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__tmseeg_002.png" srcset="../_images/sphx_glr_eg__tmseeg_002.png" alt="EEG (60 channels), 0.005 s, 0.020 s, 0.040 s, 0.078 s, 0.150 s" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+</pre></div>
+</div>
 <p>Plots of loss over Training (loss should be decressing with nosie)</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Total Loss over Training Epochs&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Plots of parameter values over Training (check if converges)</p>
+<img src="../_images/sphx_glr_eg__tmseeg_003.png" srcset="../_images/sphx_glr_eg__tmseeg_003.png" alt="Total Loss over Training Epochs" class = "sphx-glr-single-img"/><p>Plots of parameter values over Training (check if converges)</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;c1&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;c1&quot;</span><span class="p">)</span>
@@ -575,7 +589,7 @@ run evaluate to generate the simulated eeg with new inputs based on the forward 
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Select Variables Changing Over Training Epochs&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<section id="results-description">
+<img src="../_images/sphx_glr_eg__tmseeg_004.png" srcset="../_images/sphx_glr_eg__tmseeg_004.png" alt="Select Variables Changing Over Training Epochs" class = "sphx-glr-single-img"/><section id="results-description">
 <h2>Results Description<a class="headerlink" href="#results-description" title="Link to this heading">#</a></h2>
 <p>The plot above shows the original EEG data and the simulated EEG data using the fitted Jansen-Rit model.
 The simulated data closely resembles the original EEG data, indicating that the model fitting was successful.
@@ -585,7 +599,7 @@ to capture key features of the EEG signal.</p>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.237 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 5.242 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-tmseeg-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/adddac552e627b5207e7ec47e04b862e/eg__tmseeg.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__tmseeg.ipynb</span></code></a></p>
