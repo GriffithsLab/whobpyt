@@ -24,7 +24,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
-        python-version: 3.10.17
+        python-version: 3.10.18
         
     - name: Install dependencies
       run: |
@@ -80,11 +80,11 @@ jobs:
       run: |
         python - <<'PY'
         import whobpyt
-        from whobpyt.datasets.fetchers import fetch_egmomi2023, fetch_egmomi2025,fetch_egtmseeg, fetch_egismail2025  
+        from whobpyt.datasets.fetchers import fetch_egmomi2023, fetch_egmomi2025, fetch_egtmseeg, fetch_egismail2025  
         fetch_egmomi2023()
         fetch_egmomi2025()
-        fetch_egismail2025()
         fetch_egtmseeg()
+        fetch_egismail2025()
         PY
         
     - name: Build docs
@@ -98,8 +98,10 @@ jobs:
       continue-on-error: true 
       
     - name: Deploy Docs
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
-      if: always() 
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: doc/_build/html  
+        publish_dir: doc/_build/html
+
+

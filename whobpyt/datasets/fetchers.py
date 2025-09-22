@@ -173,15 +173,12 @@ def fetch_egtmseeg(dest_folder=None, redownload=False):
 
     # If the folder does not exist, create it and download the files
     if not os.path.isdir(dest_folder): 
-
-        os.makedirs(dest_folder)
-    
+        os.makedirs(dest_folder)    
         os.chdir(dest_folder)
-
-        dlcode = osf_folder_url
-        pull_file(dlcode, file_name, download_method='wget')
-   
-        os.chdir(cwd)
+        for file_code, file_name in files_dict.items():
+            dlcode = osf_url_pfx + '/' + file_code
+            pull_file(dlcode, file_name, download_method='wget')        
+        os.chdir(cwd) # go back to where we started
 
     return dest_folder 
 
