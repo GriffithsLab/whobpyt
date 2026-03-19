@@ -7,7 +7,8 @@ on:
     branches: [ main, dev ]
 
 permissions:
-  contents: write  
+  contents: write
+  pull-requests: write
   
 jobs:
   build:
@@ -24,7 +25,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
-        python-version: 3.10.18
+        python-version: 3.10.20
         
     - name: Install dependencies
       run: |
@@ -104,4 +105,47 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: doc/_build/html
 
+    - name: Deploy PR Preview
+      if: github.event_name == 'pull_request'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: doc/_build/html
+        destination_dir: pr-${{ github.event.pull_request.number }}
+        keep_files: true
+
+    - name: Comment PR Preview URL
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+          const previewUrl = `https://griffithslab.github.io/whobpyt/pr-${pr.number}/`;
+          const body = `📖 **Documentation preview** for this PR is available at:\n${previewUrl}\n\n_This preview will be updated as you push new commits to this PR._`;
+
+          const comments = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: pr.number,
+          });
+
+          const botComment = comments.data.find(c =>
+            c.user.type === 'Bot' && c.body.includes('Documentation preview')
+          );
+
+          if (botComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body,
+            });
+          }
 
