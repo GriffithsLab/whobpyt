@@ -309,6 +309,50 @@ def fetch_egismail2025(dest_folder=None, redownload=False):
 
 
 
+def fetch_egismail2026(dest_folder=None, redownload=False):
+    """
+    Fetch multiple files for Ismail 2026 using pull_file function.
+    """
+    
+    osf_url_pfx = 'https://osf.io/download'    
+    cwd = os.getcwd()
+
+    if dest_folder is None:
+        defpath = get_localdefaultdatapath()
+        dest_folder = os.path.join(defpath, 'eg__ismail2026')
+
+    # If input instruction was to re-download and folder is already present, remove it
+    if os.path.isdir(dest_folder) and redownload == True:
+        shutil.rmtree(dest_folder)
+
+    files_dict = {'4xw2t': 'distance.txt',
+                  'dbwp9': 'emp_noise_source.npy',
+                  'h6gjx': 'emp_verb_source.npy',
+                  '5e68s': 'info.pkl',
+                  'rkzjw': 'leadfield_3d.mat',
+                  'edcg2': 'noise_evoked.npy',
+                  'gmr72': 'sim_noise_sensor.npy',
+                  'ud9vf': 'sim_noise_source.npy',
+                  '5tw97': 'sim_verb_sensor.npy',
+                  'wgcza': 'sim_verb_source.npy',
+                  'mp5ut': 'verb_evoked.npy',
+                  'cz8bj': 'weights.csv'}
+
+    total_files = len(files_dict)
+
+    # If the folder does not exist, create it and download the files
+    if not os.path.isdir(dest_folder): 
+        os.makedirs(dest_folder)
+        os.chdir(dest_folder)
+        for file_code, file_name in files_dict.items():
+          dlcode = osf_url_pfx + '/' + file_code
+          pull_file(dlcode, file_name, download_method='wget')
+    os.chdir(cwd)
+
+    return dest_folder
+
+
+
 def fetch_egmomi2025(dest_folder=None, redownload=False):
     """
     Fetch multiple files for Momi2025 using pull_file function.
@@ -346,22 +390,16 @@ def fetch_egmomi2025(dest_folder=None, redownload=False):
 
     # If the folder does not exist, create it and download the files
     if not os.path.isdir(dest_folder): 
-
         os.makedirs(dest_folder)
-   
         dest_subfolders = ['anatomical', 'calculate_distance', 'empirical_data', 
                            'example_fittingresults', 'virtual_dissection']
         for sf in dest_subfolders:
             os.makedirs(os.path.join(dest_folder, sf))
-
         os.chdir(dest_folder)
-
-        
 
         for file_code, file_name in files_dict.items():
           dlcode = osf_url_pfx + '/' + file_code
           pull_file(dlcode, file_name, download_method='wget')
-
 
     os.chdir(cwd)
 
