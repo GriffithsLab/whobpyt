@@ -104,6 +104,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: doc/_build/html
+        keep_files: true
 
     - name: Deploy PR Preview
       if: github.event_name == 'pull_request'
