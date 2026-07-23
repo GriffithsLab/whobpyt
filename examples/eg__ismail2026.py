@@ -154,7 +154,7 @@ print("Finished fitting model to noise trials")
 verb_meg_sim = np.load(os.path.join(output_dir, 'sim_verb_sensor.npy'))
 noise_meg_sim = np.load(os.path.join(output_dir, 'sim_noise_sensor.npy'))
 # Use existing MEG channel structure to use MNE format
-with open(os.path.join(output_dir, 'info.pkl'), 'rb') as f:
+with open(os.path.join(output_dir, 'info_nosubjinfo.pkl'), 'rb') as f:
     info = pickle.load(f)
 # Convert empirical data to MNE format
 emp_verb_evoked = mne.EvokedArray(verb_meg[:, 0:], info, tmin=-0.1)

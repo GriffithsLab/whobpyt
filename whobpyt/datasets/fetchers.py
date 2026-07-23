@@ -329,6 +329,7 @@ def fetch_egismail2026(dest_folder=None, redownload=False):
                   'dbwp9': 'emp_noise_source.npy',
                   'h6gjx': 'emp_verb_source.npy',
                   '5e68s': 'info.pkl',
+                  's6wvn': 'info_nosubjinfo.pkl',
                   'rkzjw': 'leadfield_3d.mat',
                   'edcg2': 'noise_evoked.npy',
                   'gmr72': 'sim_noise_sensor.npy',
