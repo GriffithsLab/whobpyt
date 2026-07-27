@@ -5,6 +5,7 @@ matplotlib
 seaborn
 h5py
 pooch
+scipy<1.15
 torch
 scikit-learn
 mne==1.9.0
@@ -50,6 +51,5 @@ nbval
 # Types
 
 types-requests
-
 
 
