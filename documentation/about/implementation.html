@@ -257,6 +257,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -399,7 +403,92 @@
   
   <section id="algorithms-and-other-implementation-details">
 <span id="implementation"></span><h1>Algorithms and other implementation details<a class="headerlink" href="#algorithms-and-other-implementation-details" title="Link to this heading">#</a></h1>
-<p>Coming soon…</p>
+<p>WhoBPyT is organized around composable building blocks for differentiable whole-brain modeling:</p>
+<ul class="simple">
+<li><p><strong>Model classes</strong> in <code class="docutils literal notranslate"><span class="pre">whobpyt.models</span></code> implement neural dynamics and forward simulation.</p></li>
+<li><p><strong>Datatypes</strong> in <code class="docutils literal notranslate"><span class="pre">whobpyt.datatypes</span></code> define shared interfaces and containers (for example <code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel</span></code>, <code class="docutils literal notranslate"><span class="pre">Parameter</span></code>, <code class="docutils literal notranslate"><span class="pre">Timeseries</span></code>, <code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code>).</p></li>
+<li><p><strong>Objective functions</strong> in <code class="docutils literal notranslate"><span class="pre">whobpyt.optimization</span></code> implement fitting criteria such as time-series error and FC-based losses.</p></li>
+<li><p><strong>Fitting paradigms</strong> in <code class="docutils literal notranslate"><span class="pre">whobpyt.run</span></code> implement optimization workflows (for example <code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code>, <code class="docutils literal notranslate"><span class="pre">FittingBatch</span></code>, <code class="docutils literal notranslate"><span class="pre">FittingFNGFPG</span></code>).</p></li>
+</ul>
+<p>The current mainline model implementation is the Jansen-Rit neural mass model
+(<code class="docutils literal notranslate"><span class="pre">whobpyt/models/jansen_rit/jansen_rit.py</span></code>), with state variables
+<code class="docutils literal notranslate"><span class="pre">E</span></code>, <code class="docutils literal notranslate"><span class="pre">Ev</span></code>, <code class="docutils literal notranslate"><span class="pre">I</span></code>, <code class="docutils literal notranslate"><span class="pre">Iv</span></code>, <code class="docutils literal notranslate"><span class="pre">P</span></code>, <code class="docutils literal notranslate"><span class="pre">Pv</span></code> and output <code class="docutils literal notranslate"><span class="pre">eeg</span></code>.</p>
+<section id="core-simulation-and-training-flow">
+<h2>Core simulation and training flow<a class="headerlink" href="#core-simulation-and-training-flow" title="Link to this heading">#</a></h2>
+<p>At a high level, model fitting uses gradient-based optimization over parameters
+registered as trainable <code class="docutils literal notranslate"><span class="pre">torch.nn.Parameter</span></code> objects through <code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel.setModelParameters</span></code>.</p>
+<p>The standard <code class="docutils literal notranslate"><span class="pre">ModelFitting.train</span></code> workflow is:</p>
+<ol class="arabic simple">
+<li><p>Initialize model state and (if used) delay history via <code class="docutils literal notranslate"><span class="pre">createIC</span></code> and <code class="docutils literal notranslate"><span class="pre">createDelayIC</span></code>.</p></li>
+<li><p>Convert empirical recordings into windows with <code class="docutils literal notranslate"><span class="pre">Timeseries.windowedTensor</span></code>.</p></li>
+<li><p>For each epoch and each window, call the model <code class="docutils literal notranslate"><span class="pre">forward</span></code> pass.</p></li>
+<li><p>Compute loss via a selected objective function (and optional prior terms).</p></li>
+<li><p>Backpropagate with <code class="docutils literal notranslate"><span class="pre">loss.backward()</span></code> and update parameters using Adam optimizers.</p></li>
+<li><p>Store fit diagnostics in <code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code>.</p></li>
+</ol>
+<p>Within <code class="docutils literal notranslate"><span class="pre">JansenRitModel.forward</span></code>, numerical integration is implemented as an
+explicit Euler update over <code class="docutils literal notranslate"><span class="pre">steps_per_TR</span></code> integration steps per sampled output
+time point, with:</p>
+<ul class="simple">
+<li><p>local population interactions,</p></li>
+<li><p>long-range coupling weighted by structural connectivity (<code class="docutils literal notranslate"><span class="pre">sc</span></code>),</p></li>
+<li><p>optional distance-based delays (<code class="docutils literal notranslate"><span class="pre">dist</span></code>),</p></li>
+<li><p>optional Laplacian-like self-coupling terms,</p></li>
+<li><p>stochastic input noise and external drive.</p></li>
+</ul>
+</section>
+<section id="objective-functions-and-priors">
+<h2>Objective functions and priors<a class="headerlink" href="#objective-functions-and-priors" title="Link to this heading">#</a></h2>
+<p>The optimization module provides reusable loss components, including:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CostsTS</span></code>: time-series RMSE-style loss,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CostsFC</span></code> / <code class="docutils literal notranslate"><span class="pre">CostsFixedFC</span></code>: FC similarity based on lower-triangle Pearson-correlation structure,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CostsMean</span></code>: target mean-value matching for selected variables.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">AbstractLoss.prior_loss</span></code> provides a prior-based penalty term when fitting
+parameter hyperparameters (for example prior mean/precision in <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> objects).</p>
+</section>
+<section id="alternative-fitting-paradigms">
+<h2>Alternative fitting paradigms<a class="headerlink" href="#alternative-fitting-paradigms" title="Link to this heading">#</a></h2>
+<p>Besides <code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code>, the repository includes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FittingBatch</span></code>: batched simulation/optimization workflow,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FittingFNGFPG</span></code>: a serial-forward then blocked-gradient workflow for long-duration simulations.</p></li>
+</ul>
+<p>These paradigms reuse the same model/loss abstractions, so objective functions
+and model classes can be mixed as long as tensor shapes and expected keys align.</p>
+</section>
+<section id="data-handling-in-practice">
+<h2>Data handling in practice<a class="headerlink" href="#data-handling-in-practice" title="Link to this heading">#</a></h2>
+<p>The repository includes both synthetic generators (for example <code class="docutils literal notranslate"><span class="pre">datasets.generators.gen_cube</span></code>)
+and dataset fetchers (<code class="docutils literal notranslate"><span class="pre">datasets.fetchers</span></code>) for example and reproduction workflows.
+Common data objects across fitting APIs are:</p>
+<ul class="simple">
+<li><p>structural connectivity matrices,</p></li>
+<li><p>distance matrices for delays,</p></li>
+<li><p>lead-field matrices for source-to-sensor mapping,</p></li>
+<li><p>empirical <code class="docutils literal notranslate"><span class="pre">Timeseries</span></code> objects in region- or channel-space.</p></li>
+</ul>
+</section>
+<section id="relation-to-published-work">
+<h2>Relation to published work<a class="headerlink" href="#relation-to-published-work" title="Link to this heading">#</a></h2>
+<p>WhoBPyT’s implementation follows the same general project direction described in
+the published and linked work: differentiable large-scale neural modeling in
+PyTorch, fitted against empirical neuroimaging/neurophysiology targets.</p>
+<p>In this repository, that relation is visible through:</p>
+<ul class="simple">
+<li><p>explicit dataset helpers and example paths named for these studies (for example
+<code class="docutils literal notranslate"><span class="pre">fetch_MomiEtAlELife2023</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch_egmomi2025</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch_egismail2026</span></code>),</p></li>
+<li><p>archived/deprecated study-specific code under <code class="docutils literal notranslate"><span class="pre">whobpyt/depr/*</span></code>,</p></li>
+<li><p>core reusable abstractions in <code class="docutils literal notranslate"><span class="pre">datatypes</span></code>, <code class="docutils literal notranslate"><span class="pre">models</span></code>, <code class="docutils literal notranslate"><span class="pre">optimization</span></code>, and <code class="docutils literal notranslate"><span class="pre">run</span></code> used to support similar workflows across studies.</p></li>
+</ul>
+<p>References:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://elifesciences.org/articles/83232">Momi et al. (2023), eLife</a></p></li>
+<li><p><a class="reference external" href="https://www.nature.com/articles/s41467-025-58187-6">Momi et al. (2025), Nature Communications</a></p></li>
+<li><p><a class="reference external" href="https://www.nature.com/articles/s41467-026-71918-7">Ismail et al. (2026), Nature Communications</a></p></li>
+</ul>
+</section>
 </section>
 
 
@@ -437,6 +526,28 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-simulation-and-training-flow">Core simulation and training flow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-functions-and-priors">Objective functions and priors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alternative-fitting-paradigms">Alternative fitting paradigms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-handling-in-practice">Data handling in practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relation-to-published-work">Relation to published work</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

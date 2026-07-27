@@ -399,7 +399,42 @@
   
   <section id="glossary">
 <h1>Glossary<a class="headerlink" href="#glossary" title="Link to this heading">#</a></h1>
-<p>Coming soon…</p>
+<dl class="simple glossary">
+<dt id="term-Connectome-based-neural-mass-model-CNMM">Connectome-based neural mass model (CNMM)<a class="headerlink" href="#term-Connectome-based-neural-mass-model-CNMM" title="Link to this term">#</a></dt><dd><p>In this project, a neural mass model coupled by a structural connectivity matrix (<code class="docutils literal notranslate"><span class="pre">sc</span></code>), with optional distance-based delays (<code class="docutils literal notranslate"><span class="pre">dist</span></code>) and a measurement model.</p>
+</dd>
+<dt id="term-Distance-matrix">Distance matrix<a class="headerlink" href="#term-Distance-matrix" title="Link to this term">#</a></dt><dd><p>Pairwise inter-regional distances (<code class="docutils literal notranslate"><span class="pre">dist</span></code>), used to compute integer delay indices in delayed coupling terms.</p>
+</dd>
+<dt id="term-External-input-stimulus">External input / stimulus<a class="headerlink" href="#term-External-input-stimulus" title="Link to this term">#</a></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">u</span></code> or <code class="docutils literal notranslate"><span class="pre">external</span></code> input tensor supplied to forward simulation for resting-state (often zero) or evoked/stimulus-driven modeling.</p>
+</dd>
+<dt id="term-Fitting-paradigm">Fitting paradigm<a class="headerlink" href="#term-Fitting-paradigm" title="Link to this term">#</a></dt><dd><p>A training workflow class (for example <code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code>, <code class="docutils literal notranslate"><span class="pre">FittingBatch</span></code>, <code class="docutils literal notranslate"><span class="pre">FittingFNGFPG</span></code>) that defines simulation, optimization, and bookkeeping behavior.</p>
+</dd>
+<dt id="term-FNG-FPG">FNG-FPG<a class="headerlink" href="#term-FNG-FPG" title="Link to this term">#</a></dt><dd><p><code class="docutils literal notranslate"><span class="pre">FittingFNGFPG</span></code> (“Forward No Gradient, Forward Parallel Gradient”), a specialized approach for long simulations using a serial pass for initial conditions and a gradient-enabled blocked pass.</p>
+</dd>
+<dt id="term-Lead-field-matrix">Lead field matrix<a class="headerlink" href="#term-Lead-field-matrix" title="Link to this term">#</a></dt><dd><p>A source-to-sensor projection matrix (<code class="docutils literal notranslate"><span class="pre">lm</span></code>) used to map simulated source activity to M/EEG channel space.</p>
+</dd>
+<dt id="term-Neural-mass-model-NMM">Neural mass model (NMM)<a class="headerlink" href="#term-Neural-mass-model-NMM" title="Link to this term">#</a></dt><dd><p>A reduced biophysical model of population activity per region. In WhoBPyT, NMMs inherit from <code class="docutils literal notranslate"><span class="pre">whobpyt.datatypes.AbstractNeuralModel</span></code>.</p>
+</dd>
+<dt id="term-Objective-function-loss">Objective function / loss<a class="headerlink" href="#term-Objective-function-loss" title="Link to this term">#</a></dt><dd><p>A differentiable criterion minimized during fitting, implemented via <code class="docutils literal notranslate"><span class="pre">AbstractLoss</span></code> and concrete classes such as <code class="docutils literal notranslate"><span class="pre">CostsTS</span></code>, <code class="docutils literal notranslate"><span class="pre">CostsFC</span></code>, and <code class="docutils literal notranslate"><span class="pre">CostsMean</span></code>.</p>
+</dd>
+<dt id="term-Output-variables">Output variables<a class="headerlink" href="#term-Output-variables" title="Link to this term">#</a></dt><dd><p>Simulated observables exposed by a model for fitting. For the current Jansen-Rit implementation, <code class="docutils literal notranslate"><span class="pre">output_names</span> <span class="pre">=</span> <span class="pre">[&quot;eeg&quot;]</span></code>.</p>
+</dd>
+<dt id="term-Parameter-object">Parameter object<a class="headerlink" href="#term-Parameter-object" title="Link to this term">#</a></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">whobpyt.datatypes.Parameter</span></code> class storing a value, optional prior mean/precision, and flags controlling whether values and/or priors are trainable.</p>
+</dd>
+<dt id="term-Prior-loss">Prior loss<a class="headerlink" href="#term-Prior-loss" title="Link to this term">#</a></dt><dd><p>A regularization term from <code class="docutils literal notranslate"><span class="pre">AbstractLoss.prior_loss</span></code> that penalizes deviation from parameter priors when hyperparameters are fit.</p>
+</dd>
+<dt id="term-State-variables">State variables<a class="headerlink" href="#term-State-variables" title="Link to this term">#</a></dt><dd><p>Dynamical variables integrated by the model at each step. For <code class="docutils literal notranslate"><span class="pre">JansenRitModel</span></code> these are <code class="docutils literal notranslate"><span class="pre">E</span></code>, <code class="docutils literal notranslate"><span class="pre">Ev</span></code>, <code class="docutils literal notranslate"><span class="pre">I</span></code>, <code class="docutils literal notranslate"><span class="pre">Iv</span></code>, <code class="docutils literal notranslate"><span class="pre">P</span></code>, and <code class="docutils literal notranslate"><span class="pre">Pv</span></code>.</p>
+</dd>
+<dt id="term-Structural-connectivity-SC">Structural connectivity (SC)<a class="headerlink" href="#term-Structural-connectivity-SC" title="Link to this term">#</a></dt><dd><p>The inter-regional coupling matrix used for long-range interactions (for example <code class="docutils literal notranslate"><span class="pre">sc</span></code> in <code class="docutils literal notranslate"><span class="pre">JansenRitModel</span></code>), often derived from diffusion MRI tractography.</p>
+</dd>
+<dt id="term-Timeseries">Timeseries<a class="headerlink" href="#term-Timeseries" title="Link to this term">#</a></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">whobpyt.datatypes.Timeseries</span></code> container for empirical or simulated data, typically shaped as <code class="docutils literal notranslate"><span class="pre">num_regions</span> <span class="pre">x</span> <span class="pre">ts_length</span></code>.</p>
+</dd>
+<dt id="term-Training-statistics">Training statistics<a class="headerlink" href="#term-Training-statistics" title="Link to this term">#</a></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code> record of losses, tracked parameters, and selected matrices (for example fitted connectivity/lead-field terms) across optimization.</p>
+</dd>
+<dt id="term-Whole-brain-model-WBM">Whole-brain model (WBM)<a class="headerlink" href="#term-Whole-brain-model-WBM" title="Link to this term">#</a></dt><dd><p>A dynamical systems model that simulates activity across many brain regions at once, using region-to-region coupling and neural state equations.</p>
+</dd>
+<dt id="term-Windowed-fitting">Windowed fitting<a class="headerlink" href="#term-Windowed-fitting" title="Link to this term">#</a></dt><dd><p>A training pattern where longer recordings are split into windows (<code class="docutils literal notranslate"><span class="pre">Timeseries.windowedTensor</span></code>), and gradients are backpropagated window-by-window.</p>
+</dd>
+</dl>
 </section>
 
 

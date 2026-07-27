@@ -574,34 +574,34 @@ Downloading weights.csv
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Parameter containing:
-tensor([[-0.1353,  0.0553, -0.3489,  ..., -0.5593,  0.3612,  0.1145],
-        [-0.0528,  0.6103, -0.2012,  ..., -1.1676,  0.8351,  0.1219],
-        [ 0.0030,  0.9160, -0.1353,  ..., -1.4177,  1.1758,  0.1088],
+tensor([[-0.1314,  0.0603, -0.3396,  ..., -0.5228,  0.3425,  0.1289],
+        [-0.0658,  0.6015, -0.1943,  ..., -1.1773,  0.8666,  0.1453],
+        [-0.0022,  0.9258, -0.1182,  ..., -1.4171,  1.1790,  0.0949],
         ...,
-        [ 0.3156,  0.0969,  0.5255,  ..., -0.2303, -0.3093, -0.3408],
-        [ 0.0735, -0.0602,  0.2351,  ..., -0.1462, -0.1257, -0.0220],
-        [ 0.6561,  0.8073,  0.7459,  ..., -0.5199, -0.9494, -0.7864]],
+        [ 0.2980,  0.0902,  0.5365,  ..., -0.2365, -0.3144, -0.3099],
+        [ 0.0746, -0.0647,  0.2382,  ..., -0.1662, -0.1258, -0.0419],
+        [ 0.6545,  0.8262,  0.7342,  ..., -0.5290, -0.9459, -0.8041]],
        requires_grad=True)
-epoch:  0 -225550.62
-epoch:  0 0.2822246925919803 cos_sim:  -0.009020070133796017
-epoch:  1 -226209.06
-epoch:  1 0.3529834546677681 cos_sim:  0.04199667228119436
-0.4095337321702249 cos_sim:  0.11934838363237017
+epoch:  0 -225605.44
+epoch:  0 0.3039164386305202 cos_sim:  -0.00090447370255394
+epoch:  1 -226269.97
+epoch:  1 0.37657339369462833 cos_sim:  0.10223680287340385
+0.399255533055472 cos_sim:  0.12744768195586498
 Finished fitting model to verb trials
 Parameter containing:
-tensor([[-0.1353,  0.0553, -0.3489,  ..., -0.5593,  0.3612,  0.1145],
-        [-0.0528,  0.6103, -0.2012,  ..., -1.1676,  0.8351,  0.1219],
-        [ 0.0030,  0.9160, -0.1353,  ..., -1.4177,  1.1758,  0.1088],
+tensor([[-0.1314,  0.0603, -0.3396,  ..., -0.5228,  0.3425,  0.1289],
+        [-0.0658,  0.6015, -0.1943,  ..., -1.1773,  0.8666,  0.1453],
+        [-0.0022,  0.9258, -0.1182,  ..., -1.4171,  1.1790,  0.0949],
         ...,
-        [ 0.3156,  0.0969,  0.5255,  ..., -0.2303, -0.3093, -0.3408],
-        [ 0.0735, -0.0602,  0.2351,  ..., -0.1462, -0.1257, -0.0220],
-        [ 0.6561,  0.8073,  0.7459,  ..., -0.5199, -0.9494, -0.7864]],
+        [ 0.2980,  0.0902,  0.5365,  ..., -0.2365, -0.3144, -0.3099],
+        [ 0.0746, -0.0647,  0.2382,  ..., -0.1662, -0.1258, -0.0419],
+        [ 0.6545,  0.8262,  0.7342,  ..., -0.5290, -0.9459, -0.8041]],
        requires_grad=True)
-epoch:  0 -225546.58
-epoch:  0 0.22435863935261163 cos_sim:  -0.12189160779683675
-epoch:  1 -226207.31
-epoch:  1 0.27796272946429146 cos_sim:  -0.07511932448190738
-0.2719540883369244 cos_sim:  -0.021905485416072373
+epoch:  0 -225607.78
+epoch:  0 0.2289504807647204 cos_sim:  -0.14954820596925641
+epoch:  1 -226254.34
+epoch:  1 0.3006233375207066 cos_sim:  -0.11876567927951685
+0.3489533751463334 cos_sim:  -0.12734867142417147
 Finished fitting model to noise trials
 </pre></div>
 </div>
@@ -704,8 +704,8 @@ Create longer empty array with same shape and fill with the first 500 ms</p>
 <span class="n">sim_sensor_noise</span> <span class="o">=</span> <span class="n">noise_F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">eeg_test</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.43399389007846556 cos_sim:  0.09361423521898267
-0.25744365206729886 cos_sim:  -0.04348713758437745
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.41742861368540835 cos_sim:  0.1054241259377924
+0.38583460288649496 cos_sim:  -0.014285416017508028
 </pre></div>
 </div>
 <ol class="arabic simple" start="9">
@@ -779,7 +779,7 @@ We will load the empirical source data (model was fitted with sensor MEG data) a
 </div>
 <p><strong>Results Description:</strong>
 Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model’s capacity to link temporal and spectral features of neural dynamics during the task. For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference. Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed. In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E).</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (7 minutes 57.464 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (5 minutes 45.171 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-ismail2026-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/053c9953b94e62892b145c5f664b294e/eg__ismail2026.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__ismail2026.ipynb</span></code></a></p>
