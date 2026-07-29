@@ -6,14 +6,14 @@ module for cost calculation
 
 import numpy as np  # for numerical operations
 import torch
-from whobpyt.datatypes.parameter import par
-from whobpyt.datatypes.AbstractLoss import AbstractLoss
-from whobpyt.datatypes.AbstractNMM import AbstractNMM
+from whobpyt.datatypes.parameter import Parameter
+from whobpyt.datatypes import AbstractLoss
+from whobpyt.datatypes import AbstractNeuralModel
 from whobpyt.optimization.cost_FC import CostsFC
 from whobpyt.functions.arg_type_check import method_arg_type_check
 
 class CostsRWW(AbstractLoss):
-    def __init__(self, model : AbstractNMM):
+    def __init__(self, model : AbstractNeuralModel):
         self.simKey = model.output_names[0]
         self.mainLoss = CostsFC(simKey = self.simKey, model = model)
 
