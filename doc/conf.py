@@ -62,7 +62,8 @@ sys.path.append(str(curpath / "sphinxext"))
 
 # -- Project information -----------------------------------------------------
 
-project = "MNE"
+project = "WhoBPyT"
+copyright = f"2022–{datetime.now(tz=timezone.utc).year}, the WhoBPyT developers"  # noqa: A001
 td = datetime.now(tz=timezone.utc)
 
 # We need to triage which date type we use so that incremental builds work
@@ -701,6 +702,9 @@ linkcheck_report_timeouts_as_broken = False
 # autodoc / autosummary
 autosummary_generate = True
 autodoc_default_options = {"inherited-members": None}
+# Show default argument values as written in the source (e.g. ``np.ones((200, 200))``)
+# instead of dumping the full evaluated array into the rendered signature.
+autodoc_preserve_defaults = True
 
 # sphinxcontrib-bibtex
 bibtex_bibfiles = ["./references.bib"]
@@ -788,7 +792,8 @@ html_theme_options = {
     "collapse_navigation": False, #True, # False, # True,
     "footer_start": ["copyright"],
     "secondary_sidebar_items": ["page-toc", "edit-this-page"],
-    "analytics": dict(google_analytics_id="G-5TBCPCRB6X"),
+    # To enable Google Analytics, add this project's own measurement ID here:
+    # "analytics": dict(google_analytics_id="G-XXXXXXXXXX"),
     #"switcher": { "json_url": "https://mne.tools/dev/_static/versions.json", "version_match": switcher_version_match,
     "back_to_top_button": False,
     "logo": {
@@ -819,6 +824,10 @@ html_favicon = "_static/favicon.ico"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+# Canonical URL of the deployed docs (used for <link rel="canonical"> and sitemaps)
+html_baseurl = "https://griffithslab.github.io/whobpyt/"
+html_title = project
 #html_css_files = [
 #    "style.css",
 #]

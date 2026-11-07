@@ -34,13 +34,13 @@ The specific methodological approach to this that WhoBPyT uses incorporates elem
 nonlinear control, and dynamical systems theory, and was first described by us 
 `here <https://www.grifflab.com/publication/2022-griffiths-et-al-deeplearningbasedparameterestimation/>`_ 
 and `here <https://www.grifflab.com/publication/2023-momi-et-al-tmsevokedresponses/>`_. Consult the 
-docs :doc:`docs <documentation/about>`, the `code <https://www.github.com/GriffithsLab/WhoBPyT>`_, 
+:doc:`docs <documentation/about/index>`, the `code <https://www.github.com/GriffithsLab/WhoBPyT>`_, 
 and :doc:`papers using WhoBPyT <documentation/about/cited>` for more info on scientific background, 
 mathematical foundations, and technical implementation. 
 
 **To jump straight in**, follow the :doc:`installation instructions <documentation/usage/installation>`, 
 and then explore some of the detailed worked examples linked to below and in the 
-:doc:`examples gallery <auto_examples/>`. 
+:doc:`examples gallery <auto_examples/index>`. 
 
 
 .. frontpage gallery is added by a conditional in _templates/layout.html
@@ -52,4 +52,4 @@ and then explore some of the detailed worked examples linked to below and in the
    Documentation <documentation/index>
    Science <documentation/science/index>  
    Contribute <documentation/development/index>  
-   Examples <documentation/../../examples/index>
+   Examples <auto_examples/index>

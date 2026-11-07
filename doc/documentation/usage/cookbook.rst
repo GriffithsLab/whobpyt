@@ -1,7 +1,6 @@
 .. _cookbook:
 
-# Cookbook
+Cookbook
+========
 
-
-coming coon...
-
+Coming soon...
