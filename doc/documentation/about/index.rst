@@ -16,6 +16,12 @@ neuroimaging and neurophysiology data, such as EEG, MEG and TMS-EEG.
 
       What WhoBPyT does and the deep-learning approach it uses.
 
+   .. grid-item-card:: Code architecture
+      :link: architecture
+      :link-type: doc
+
+      How the library is organised and how to extend it.
+
    .. grid-item-card:: Implementation
       :link: implementation
       :link-type: doc
@@ -57,6 +63,7 @@ neuroimaging and neurophysiology data, such as EEG, MEG and TMS-EEG.
    :hidden:
 
    Overview <overview>
+   Code Architecture <architecture>
    Implementation <implementation>
    Design Philosophy <design_philosophy>
    Datasets <datasets>

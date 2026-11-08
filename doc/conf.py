@@ -30,7 +30,7 @@ extensions = [
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "**/*.md"]  # the .md files are outdated drafts
+exclude_patterns = ["_build"]
 root_doc = "index"
 default_role = "py:obj"
 

@@ -4,7 +4,7 @@ Algorithms and other implementation details
 ===========================================
 
 This page describes *how* WhoBPyT actually simulates and fits Whole Brain Models (WBMs), as
-distinct from the "Code Architecture" page, which describes how the classes are organized.
+distinct from the :doc:`architecture` page, which describes how the classes are organized.
 In short: a WBM is implemented as a PyTorch ``nn.Module`` whose
 ``forward()`` method numerically integrates a set of coupled differential equations, and
 "fitting" the model means backpropagating a loss computed from the simulated output through
