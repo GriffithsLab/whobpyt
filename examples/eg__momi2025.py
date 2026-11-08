@@ -44,7 +44,7 @@ Nature Communications 16, 3222, `doi: 10.1038/s41467-025-58187-6 <https://doi.or
 # Study Overview
 # ^^^^^^^^^^^^^^^
 #
-# .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig1_momi2025.png?raw=true
+# .. figure:: /_static/fig1_momi2025.png
 #   :alt: diagram fig 2025 
 #   :width: 600px
 #
@@ -73,7 +73,7 @@ Nature Communications 16, 3222, `doi: 10.1038/s41467-025-58187-6 <https://doi.or
 # Results 
 # ^^^^^^^
 #
-# .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig2_momi2025.png?raw=true
+# .. figure:: /_static/fig2_momi2025.png
 #   :alt: results1 fig 2025 
 #   :width: 600px
 #
@@ -96,7 +96,7 @@ Nature Communications 16, 3222, `doi: 10.1038/s41467-025-58187-6 <https://doi.or
 # hierarchy reported in the functional magnetic resonance imaging (fMRI) literature, which describes 
 # a general pattern from low-order to high-order regions
 #
-# .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig3_momi2025.png?raw=true
+# .. figure:: /_static/fig3_momi2025.png
 #   :alt: results2 fig 2025 
 #   :width: 600px
 #
