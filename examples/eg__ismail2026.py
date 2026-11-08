@@ -1,8 +1,17 @@
 """
+.. _ex-ismail2026:
 
 ==============================================================
 Replicating Ismail et al. 2026
 ==============================================================
+
+This example replicates the whole-brain modelling in Ismail et al.
+(Nature Communications 2026). If you use this code, please cite the paper:
+
+Ismail M.M., Momi D., Wang Z., Bastiaens S.P., Oveisi M.P., Greiner H.M., Mabbott D.J.,
+Griffiths J.D., Kadis D.S. (2026).
+"Developmental disinhibition gates language lateralization in childhood."
+Nature Communications, `doi: 10.1038/s41467-026-71918-7 <https://doi.org/10.1038/s41467-026-71918-7>`_.
 """
 # sphinx_gallery_thumbnail_number = 1
 # %% [markdown]

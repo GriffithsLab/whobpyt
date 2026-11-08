@@ -15,7 +15,8 @@ The code includes data fetching, model fitting, and result visualization based o
 
 Please read our `paper <https://doi.org/10.1038/s41467-025-58187-6>`_, and if you use this code, please cite it:
 
-Momi D., ..., Griffiths J.D. (2025).
+Momi D., Wang Z., Parmigiani S., Mikulan E., Bastiaens S.P., Oveisi M.P., Kadak K., Gaglioti G.,
+Waters A.C., Hill S., Pigorini A., Keller C.J., Griffiths J.D. (2025).
 "Stimulation mapping and whole-brain modeling reveal gradients of excitability and recurrence in cortical networks."
 Nature Communications 16, 3222, `doi: 10.1038/s41467-025-58187-6 <https://doi.org/10.1038/s41467-025-58187-6>`_.
 """

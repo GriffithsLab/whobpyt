@@ -55,7 +55,7 @@ Overview
        simulated source and sensor time series, lead field, structural
        weights and distances.
    * - ``fetch_egismail2026``
-     - Replicating Ismail et al. 2026
+     - :ref:`ex-ismail2026`
      - The same kinds of files as ``fetch_egismail2025``.
 
 
