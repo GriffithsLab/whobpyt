@@ -1,5 +1,5 @@
 
-# sphinx_gallery_thumbnail_path = '../_static/momi2025__Figure_2.PNG'
+# sphinx_gallery_thumbnail_path = '../_static/momi2025__SummaryFigure.png'
 
 """
 .. _ex-momi2025:
@@ -112,7 +112,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # (error bars), with individual subject data points overlaid (36 independent subjects, 323 stimulation 
 # sessions). A significant reduction in the AUC was found for late responses (78−373 ms) of high-order 
 # networks (LN, SN, DAN, FPN, and DMN) compared to low-order networks (Visual Network [VN] and 
-# Somatomotor Network [SMN]), indicated by asterisks (*P < 0.05). 
+# Somatomotor Network [SMN]), indicated by asterisks (\*P < 0.05). 
 #
 # C. Demonstration of the network 
 # recurrence-based theory for two representative sessions. Simulations of evoked dynamics are run using 

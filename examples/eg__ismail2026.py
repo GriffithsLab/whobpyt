@@ -21,13 +21,13 @@ Replicating Ismail et al. 2026
 # transplant experiments, we show that the reduction in local inhibition allows pre-existing asymmetries in interhemispheric 
 # inhibition to drive laterality. This work provides a developmental framework for understanding how inhibitory circuits shape language networks.
 
-#%%  [markdown]
-#.. image:: https://github.com/griffithslab/whobpyt/doc/_static/Ismail2025_Figure1.png
+# %%  [markdown]
+# .. image:: /_static/Ismail2025_Figure1.png
 #   :alt: Ismail et al. 2026 Figure 1
 #   :align: center
 
-#%%
-#This is Figure 1 from the paper, we will begin by replicating the results for one subject in this figure
+# %%
+# This is Figure 1 from the paper, we will begin by replicating the results for one subject in this figure
 
 # %%  [markdown]
 # 1. Setup
@@ -65,7 +65,7 @@ output_dir = fetch_egismail2026()
 # 3. Load Functional Data 
 # -------------------------------------------------------------------------
 # We will use MEG data recorded during a covert verb generation task in verb generation trials and noise trials 
-#Evoked MEG data averaged across trials (-100 to 400 ms)
+# Evoked MEG data averaged across trials (-100 to 400 ms)
 verb_meg_raw = np.load(os.path.join(output_dir, 'verb_evoked.npy'))   # (time, channels)
 noise_meg_raw = np.load(os.path.join(output_dir, 'noise_evoked.npy')) # (time, channels)
 # Normalize both signals
@@ -150,7 +150,7 @@ print("Finished fitting model to noise trials")
 # %%  [markdown]
 # 7. Let's Compare Simulated & Empirical MEG Activity
 # -------------------------------------------------------------------------
-#we will use the simulations from the fully trained model in the downloaded directory
+# we will use the simulations from the fully trained model in the downloaded directory
 verb_meg_sim = np.load(os.path.join(output_dir, 'sim_verb_sensor.npy'))
 noise_meg_sim = np.load(os.path.join(output_dir, 'sim_noise_sensor.npy'))
 # Use existing MEG channel structure to use MNE format
@@ -177,14 +177,14 @@ plt.show()
 # %%
 # **Results Description:**
 # Models successfully reproduced the timing and spatial topography of the early evoked MEG components (0-400 ms) observed for both conditions. 
-#Figure 1C shows the model-generated and empirical MEG time series during noun and noise trials for an exemplar subject. 
+# Figure 1C shows the model-generated and empirical MEG time series during noun and noise trials for an exemplar subject. 
 
 
 # %%  [markdown]
 # 8. Simulate models for longer (model was fitted with 500 ms of data, we will simulate 1500 ms!)
-# -------------------------------------------------------------------------
-#We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
-#Create longer empty array with same shape and fill with the first 500 ms
+# -----------------------------------------------------------------------------------------------
+# We are interested in capturing changes in beta power between verb and noise trials observed from 700-1200 ms
+# Create longer empty array with same shape and fill with the first 500 ms
 sim_1500_verb = np.zeros((verb_meg.shape[0], 1500))
 sim_1500_verb[:,:verb_meg.shape[1]] = verb_meg*1.0e13
 node_size = sc.shape[0]
@@ -233,9 +233,9 @@ sim_sensor_noise = noise_F.output_sim.eeg_test
 
 # %%  [markdown]
 # 9. Compare empirical and simulated change in beta power between verb and noise trials for one subject
-# -------------------------------------------------------------------------
-#We are replicating figure 1D (Adolescents) for one subject
-#We will load the empirical source data (model was fitted with sensor MEG data) and simulated source from pretrained model
+# -----------------------------------------------------------------------------------------------------
+# We are replicating figure 1D (Adolescents) for one subject
+# We will load the empirical source data (model was fitted with sensor MEG data) and simulated source from pretrained model
 emp_source_noise = np.load(os.path.join(output_dir, 'emp_noise_source.npy'))
 emp_source_verb = np.load(os.path.join(output_dir, 'emp_verb_source.npy'))
 sim_source_noise = np.load(os.path.join(output_dir, 'sim_noise_source.npy'))
