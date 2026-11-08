@@ -31,7 +31,7 @@ Nature Communications, `doi: 10.1038/s41467-026-71918-7 <https://doi.org/10.1038
 # inhibition to drive laterality. This work provides a developmental framework for understanding how inhibitory circuits shape language networks.
 
 # %%  [markdown]
-# .. image:: /_static/Ismail2025_Figure1.png
+# .. image:: /_static/Ismail2026_Figure1.png
 #   :alt: Ismail et al. 2026 Figure 1
 #   :align: center
 
@@ -52,7 +52,7 @@ import pickle
 import os
 import gdown
 from scipy.io import loadmat
-from whobpyt.depr.ismail2025.jansen_rit import ParamsModel, RNNJANSEN, Model_fitting, dataloader
+from whobpyt.depr.ismail2026.jansen_rit import ParamsModel, RNNJANSEN, Model_fitting, dataloader
 from whobpyt.datasets.fetchers import fetch_egismail2026
 import mne
 import matplotlib.pyplot as plt
