@@ -1,0 +1,767 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Algorithms and other implementation details &#8212; WhoBPyT</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.css?v=b3df3ca5" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/fix-sidebar.css?v=52f27943" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/about/implementation';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://griffithslab.github.io/whobpyt/documentation/about/implementation.html" />
+    <link rel="icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Design philosophy" href="design_philosophy.html" />
+    <link rel="prev" title="Code architecture" href="architecture.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="auto">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/whobpyt_logo_feet.png" class="logo__image only-light" alt="WhoBPyT - Home"/>
+    <img src="../../_static/whobpyt_logo_feet_dark.png" class="logo__image only-dark pst-js-only" alt="WhoBPyT - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../development/index.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../development/index.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Code Architecture</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design_philosophy.html">Design Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cite.html">How to Cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cited.html">Papers Using WhoBPyT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+<div>
+  
+  <section id="algorithms-and-other-implementation-details">
+<span id="implementation"></span><h1>Algorithms and other implementation details<a class="headerlink" href="#algorithms-and-other-implementation-details" title="Link to this heading">#</a></h1>
+<p>This page describes <em>how</em> WhoBPyT actually simulates and fits Whole Brain Models (WBMs), as
+distinct from the <a class="reference internal" href="architecture.html"><span class="doc">Code architecture</span></a> page, which describes how the classes are organized.
+In short: a WBM is implemented as a PyTorch <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> whose
+<code class="docutils literal notranslate"><span class="pre">forward()</span></code> method numerically integrates a set of coupled differential equations, and
+“fitting” the model means backpropagating a loss computed from the simulated output through
+that numerical integration in order to update the equations’ parameters with gradient
+descent. The sections below unpack each part of that pipeline: the numerical solver, the
+connectivity/delay machinery, how parameters and priors are represented, the objective
+functions, and the windowed training loop that ties it all together.
+WhoBPyT is organized around composable building blocks for differentiable whole-brain modeling:</p>
+<ul class="simple">
+<li><p><strong>Model classes</strong> in <code class="docutils literal notranslate"><span class="pre">whobpyt.models</span></code> implement neural dynamics and forward simulation.</p></li>
+<li><p><strong>Datatypes</strong> in <code class="docutils literal notranslate"><span class="pre">whobpyt.datatypes</span></code> define shared interfaces and containers (for example <code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel</span></code>, <code class="docutils literal notranslate"><span class="pre">Parameter</span></code>, <code class="docutils literal notranslate"><span class="pre">Timeseries</span></code>, <code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code>).</p></li>
+<li><p><strong>Objective functions</strong> in <code class="docutils literal notranslate"><span class="pre">whobpyt.optimization</span></code> implement fitting criteria such as time-series error and FC-based losses.</p></li>
+<li><p><strong>Fitting paradigms</strong> in <code class="docutils literal notranslate"><span class="pre">whobpyt.run</span></code> implement optimization workflows (for example <code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code>, <code class="docutils literal notranslate"><span class="pre">FittingBatch</span></code>, <code class="docutils literal notranslate"><span class="pre">FittingFNGFPG</span></code>).</p></li>
+</ul>
+<p>The current mainline model implementation is the Jansen-Rit neural mass model
+(<code class="docutils literal notranslate"><span class="pre">whobpyt/models/jansen_rit/jansen_rit.py</span></code>), with state variables
+<code class="docutils literal notranslate"><span class="pre">E</span></code>, <code class="docutils literal notranslate"><span class="pre">Ev</span></code>, <code class="docutils literal notranslate"><span class="pre">I</span></code>, <code class="docutils literal notranslate"><span class="pre">Iv</span></code>, <code class="docutils literal notranslate"><span class="pre">P</span></code>, <code class="docutils literal notranslate"><span class="pre">Pv</span></code> and output <code class="docutils literal notranslate"><span class="pre">eeg</span></code>.</p>
+<section id="core-simulation-and-training-flow">
+<h2>Core simulation and training flow<a class="headerlink" href="#core-simulation-and-training-flow" title="Link to this heading">#</a></h2>
+<p>At a high level, model fitting uses gradient-based optimization over parameters
+registered as trainable <code class="docutils literal notranslate"><span class="pre">torch.nn.Parameter</span></code> objects through <code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel.setModelParameters</span></code>.</p>
+<p>The standard <code class="docutils literal notranslate"><span class="pre">ModelFitting.train</span></code> workflow is:</p>
+<ol class="arabic simple">
+<li><p>Initialize model state and (if used) delay history via <code class="docutils literal notranslate"><span class="pre">createIC</span></code> and <code class="docutils literal notranslate"><span class="pre">createDelayIC</span></code>.</p></li>
+<li><p>Convert empirical recordings into windows with <code class="docutils literal notranslate"><span class="pre">Timeseries.windowedTensor</span></code>.</p></li>
+<li><p>For each epoch and each window, call the model <code class="docutils literal notranslate"><span class="pre">forward</span></code> pass.</p></li>
+<li><p>Compute loss via a selected objective function (and optional prior terms).</p></li>
+<li><p>Backpropagate with <code class="docutils literal notranslate"><span class="pre">loss.backward()</span></code> and update parameters using Adam optimizers.</p></li>
+<li><p>Store fit diagnostics in <code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code>.</p></li>
+</ol>
+<p>Within <code class="docutils literal notranslate"><span class="pre">JansenRitModel.forward</span></code>, numerical integration is implemented as an
+explicit Euler update over <code class="docutils literal notranslate"><span class="pre">steps_per_TR</span></code> integration steps per sampled output
+time point, with:</p>
+<ul class="simple">
+<li><p>local population interactions,</p></li>
+<li><p>long-range coupling weighted by structural connectivity (<code class="docutils literal notranslate"><span class="pre">sc</span></code>),</p></li>
+<li><p>optional distance-based delays (<code class="docutils literal notranslate"><span class="pre">dist</span></code>),</p></li>
+<li><p>optional Laplacian-like self-coupling terms,</p></li>
+<li><p>stochastic input noise and external drive.</p></li>
+</ul>
+</section>
+<section id="objective-functions-and-priors">
+<h2>Objective functions and priors<a class="headerlink" href="#objective-functions-and-priors" title="Link to this heading">#</a></h2>
+<p>The optimization module provides reusable loss components, including:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CostsTS</span></code>: time-series RMSE-style loss,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CostsFC</span></code> / <code class="docutils literal notranslate"><span class="pre">CostsFixedFC</span></code>: FC similarity based on lower-triangle Pearson-correlation structure,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CostsMean</span></code>: target mean-value matching for selected variables.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">AbstractLoss.prior_loss</span></code> provides a prior-based penalty term when fitting
+parameter hyperparameters (for example prior mean/precision in <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> objects).</p>
+</section>
+<section id="alternative-fitting-paradigms">
+<h2>Alternative fitting paradigms<a class="headerlink" href="#alternative-fitting-paradigms" title="Link to this heading">#</a></h2>
+<p>Besides <code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code>, the repository includes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FittingBatch</span></code>: batched simulation/optimization workflow,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FittingFNGFPG</span></code>: a serial-forward then blocked-gradient workflow for long-duration simulations.</p></li>
+</ul>
+<p>These paradigms reuse the same model/loss abstractions, so objective functions
+and model classes can be mixed as long as tensor shapes and expected keys align.</p>
+</section>
+<section id="data-handling-in-practice">
+<h2>Data handling in practice<a class="headerlink" href="#data-handling-in-practice" title="Link to this heading">#</a></h2>
+<p>The repository includes both synthetic generators (for example <code class="docutils literal notranslate"><span class="pre">datasets.generators.gen_cube</span></code>)
+and dataset fetchers (<code class="docutils literal notranslate"><span class="pre">datasets.fetchers</span></code>) for example and reproduction workflows.
+Common data objects across fitting APIs are:</p>
+<ul class="simple">
+<li><p>structural connectivity matrices,</p></li>
+<li><p>distance matrices for delays,</p></li>
+<li><p>lead-field matrices for source-to-sensor mapping,</p></li>
+<li><p>empirical <code class="docutils literal notranslate"><span class="pre">Timeseries</span></code> objects in region- or channel-space.</p></li>
+</ul>
+</section>
+<section id="relation-to-published-work">
+<h2>Relation to published work<a class="headerlink" href="#relation-to-published-work" title="Link to this heading">#</a></h2>
+<p>WhoBPyT’s implementation follows the same general project direction described in
+the published and linked work: differentiable large-scale neural modeling in
+PyTorch, fitted against empirical neuroimaging/neurophysiology targets.</p>
+<p>In this repository, that relation is visible through:</p>
+<ul class="simple">
+<li><p>explicit dataset helpers and example paths named for these studies (for example
+<code class="docutils literal notranslate"><span class="pre">fetch_MomiEtAlELife2023</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch_egmomi2025</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch_egismail2026</span></code>),</p></li>
+<li><p>archived/deprecated study-specific code under <code class="docutils literal notranslate"><span class="pre">whobpyt/depr/*</span></code>,</p></li>
+<li><p>core reusable abstractions in <code class="docutils literal notranslate"><span class="pre">datatypes</span></code>, <code class="docutils literal notranslate"><span class="pre">models</span></code>, <code class="docutils literal notranslate"><span class="pre">optimization</span></code>, and <code class="docutils literal notranslate"><span class="pre">run</span></code> used to support similar workflows across studies.</p></li>
+</ul>
+<p>References:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://elifesciences.org/articles/83232">Momi et al. (2023), eLife</a></p></li>
+<li><p><a class="reference external" href="https://www.nature.com/articles/s41467-025-58187-6">Momi et al. (2025), Nature Communications</a></p></li>
+<li><p><a class="reference external" href="https://www.nature.com/articles/s41467-026-71918-7">Ismail et al. (2026), Nature Communications</a></p></li>
+</ul>
+</section>
+<section id="simulation-as-a-recurrent-computation-graph">
+<h2>Simulation as a recurrent computation graph<a class="headerlink" href="#simulation-as-a-recurrent-computation-graph" title="Link to this heading">#</a></h2>
+<p>Every model in <code class="docutils literal notranslate"><span class="pre">whobpyt.models</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">JansenRitModel</span></code>) subclasses
+<code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel</span></code>, which in turn subclasses <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. Its <code class="docutils literal notranslate"><span class="pre">forward()</span></code>
+method advances the model’s state variables (e.g. the current and voltage of the pyramidal,
+excitatory, and inhibitory populations in the Jansen-Rit model) forward in time using a
+fixed-step explicit numerical solver, currently the <strong>forward Euler method</strong>:</p>
+<div class="math notranslate nohighlight">
+\[x_{t + \Delta t} = x_t + \Delta t \cdot f(x_t, \theta)\]</div>
+<p>where <span class="math notranslate nohighlight">\(f\)</span> is the model’s system of ODEs/SDEs and <span class="math notranslate nohighlight">\(\theta\)</span> is the set of model
+parameters (see <a class="reference internal" href="#parameters-and-priors">Parameters and priors</a> below). Because integration is expressed with
+standard PyTorch tensor operations, the entire sequence of Euler updates is a differentiable
+computation graph: gradients of any scalar function of the simulated output (i.e. an
+objective/loss function) can be backpropagated all the way through the numerical solver to
+the model’s parameters, using PyTorch’s automatic differentiation (<code class="docutils literal notranslate"><span class="pre">autograd</span></code>). This is the
+central mechanism that WhoBPyT exploits and the reason for implementing WBMs in PyTorch
+rather than, say, NumPy or MATLAB: it turns classical parameter estimation for neural mass
+models into a deep-learning-style optimization problem.</p>
+<p>Simulation time is organized into four nested loops, matching the loops used in
+<code class="docutils literal notranslate"><span class="pre">ModelFitting.train()</span></code>:</p>
+<ol class="arabic simple">
+<li><p><strong>Epochs</strong> — full passes through the training dataset.</p></li>
+<li><p><strong>Recordings</strong> — one or more empirical time series (each represented as a
+<code class="docutils literal notranslate"><span class="pre">Timeseries</span></code>/<code class="docutils literal notranslate"><span class="pre">Recording</span></code> object) that make up a training dataset.</p></li>
+<li><p><strong>Windows</strong> — each recording is split into fixed-length windows of <code class="docutils literal notranslate"><span class="pre">TPperWindow</span></code> time
+points; one gradient update happens per window.</p></li>
+<li><p><strong>Integration steps</strong> — within a window, the solver takes many small time steps
+(<code class="docutils literal notranslate"><span class="pre">step_size</span></code>) for every simulated output sample (<code class="docutils literal notranslate"><span class="pre">steps_per_TR</span></code>), and only the state
+at the end of each <code class="docutils literal notranslate"><span class="pre">steps_per_TR</span></code> block is kept as one time point of simulated output.</p></li>
+</ol>
+<p>This nesting is what allows the very small integration step required for numerical stability
+(fractions of a millisecond) to coexist with the much coarser sampling rate of the empirical
+neuroimaging data (e.g. TR of ~1s for fMRI, ~1ms for EEG).</p>
+</section>
+<section id="connectivity-gains-and-delays">
+<h2>Connectivity, gains, and delays<a class="headerlink" href="#connectivity-gains-and-delays" title="Link to this heading">#</a></h2>
+<p>Whole Brain Models couple many local neural mass “nodes” (one per brain region/ROI) through a
+structural connectivity (SC) matrix. WhoBPyT treats the <em>strength</em> of these connections as
+learnable in the same way as any other model parameter:</p>
+<ul class="simple">
+<li><p>A raw SC matrix (from tractography, for example) is supplied at model construction.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">use_fit_gains=True</span></code>, an additional learnable gain matrix (or matrices, e.g.
+<code class="docutils literal notranslate"><span class="pre">w_p2e</span></code>, <code class="docutils literal notranslate"><span class="pre">w_p2i</span></code>, <code class="docutils literal notranslate"><span class="pre">w_p2p</span></code> for pyramidal-to-excitatory, pyramidal-to-inhibitory, and
+pyramidal-to-pyramidal connections in the Jansen-Rit model) is exponentiated,
+elementwise-multiplied with the SC matrix, and normalized, so that the <em>effective</em>
+connectivity used at each forward pass is always non-negative and can be optimized
+by gradient descent without leaving that constraint.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">use_laplacian=True</span></code>, a graph-Laplacian term (row sums placed on the diagonal, with a
+negative sign) is added to the connectivity operator, which is a common way of keeping
+large-scale network dynamics stable when connection weights are themselves being learned.</p></li>
+</ul>
+<p>Conduction delays between nodes are handled with an explicit <strong>delay buffer</strong>: a rolling
+history <code class="docutils literal notranslate"><span class="pre">hE</span></code> of a state variable (e.g. the pyramidal population current) is kept for as
+many past integration steps as the longest delay requires. At every step, each node’s delayed
+input is read out of this buffer at an index computed from a distance matrix and a
+conduction-velocity-like parameter (<code class="docutils literal notranslate"><span class="pre">mu</span></code>), i.e. <code class="docutils literal notranslate"><span class="pre">delay</span> <span class="pre">=</span> <span class="pre">distance</span> <span class="pre">/</span> <span class="pre">mu</span></code>. The buffer is
+carried over between windows (but, as described below, detached from the autograd graph),
+so that delayed dynamics are continuous across the training loop even though the loss is only
+backpropagated through one window at a time.</p>
+</section>
+<section id="parameters-and-priors">
+<h2>Parameters and priors<a class="headerlink" href="#parameters-and-priors" title="Link to this heading">#</a></h2>
+<p>Every model-specific numerical constant (e.g. <code class="docutils literal notranslate"><span class="pre">A</span></code>, <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">B</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code> in the Jansen-Rit
+model) is wrapped in a small <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> object (<code class="docutils literal notranslate"><span class="pre">whobpyt.datatypes.Parameter</span></code>)
+rather than being a plain float. This wrapper is what lets the same model class support a
+spectrum of use cases, from a completely fixed forward simulation to a fully hierarchical
+Bayesian-flavoured fit, with no change to the equations themselves. A <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> stores:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code> — the current value (or, for spatially-varying parameters, one value per node).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prior_mean</span></code> / <code class="docutils literal notranslate"><span class="pre">prior_precision</span></code> — an optional Gaussian prior on the value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fit_par</span></code> — whether <code class="docutils literal notranslate"><span class="pre">val</span></code> should be registered as a <code class="docutils literal notranslate"><span class="pre">torch.nn.Parameter</span></code> and thus
+optimized directly.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fit_hyper</span></code> — whether the <em>prior</em> itself (<code class="docutils literal notranslate"><span class="pre">prior_mean</span></code>/<code class="docutils literal notranslate"><span class="pre">prior_precision</span></code>) should also
+be optimized, giving a second, hierarchical level of learnable “hyperparameters”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">asLog</span></code> — whether <code class="docutils literal notranslate"><span class="pre">val</span></code> is internally stored in log-space, which is a simple and
+effective way of constraining a parameter (e.g. a rate constant or standard deviation) to
+stay positive throughout optimization without needing a constrained optimizer.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel.setModelParameters()</span></code> walks over all <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> attributes of a
+model’s params object and sorts them into two groups, <code class="docutils literal notranslate"><span class="pre">modelparameter</span></code> and
+<code class="docutils literal notranslate"><span class="pre">hyperparameter</span></code>, which are optimized with two separate <code class="docutils literal notranslate"><span class="pre">torch.optim.Adam</span></code> instances (see
+<a class="reference internal" href="#training-loop">Training loop</a>) — this is what allows model parameters and their priors to be updated with
+independent learning rates.</p>
+</section>
+<section id="objective-functions">
+<h2>Objective functions<a class="headerlink" href="#objective-functions" title="Link to this heading">#</a></h2>
+<p>Objective/loss functions subclass <code class="docutils literal notranslate"><span class="pre">AbstractLoss</span></code> and implement a <code class="docutils literal notranslate"><span class="pre">main_loss(simData,</span>
+<span class="pre">empData)</span></code> method that compares a simulated output (indexed out of the model’s forward-pass
+output dictionary by a <code class="docutils literal notranslate"><span class="pre">simKey</span></code> such as <code class="docutils literal notranslate"><span class="pre">&quot;eeg&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;bold&quot;</span></code>) against the corresponding
+empirical data for that training window. Several are provided out of the box, operating over
+different summary statistics of the signal rather than the raw time series itself, which
+tends to be more robust to arbitrary phase/timing mismatches between simulated and empirical
+data:</p>
+<ul class="simple">
+<li><p><strong>CostsFC</strong> — correlation between simulated and empirical functional connectivity (FC)
+matrices.</p></li>
+<li><p><strong>CostsTS</strong> — direct time series similarity.</p></li>
+<li><p><strong>CostsPSD</strong> — power spectral density similarity.</p></li>
+<li><p><strong>CostsMean</strong> — target mean value of a state variable.</p></li>
+</ul>
+<p>The total loss used for backpropagation is the data-fit term above plus an optional
+<strong>prior loss</strong>, computed generically by <code class="docutils literal notranslate"><span class="pre">AbstractLoss.prior_loss()</span></code> for every parameter
+that has <code class="docutils literal notranslate"><span class="pre">fit_hyper=True</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_{\text{prior}} = \sum_{\theta}
+    \big(\lambda + \text{precision}_\theta\big)\,\big(\theta - \mu_\theta\big)^2
+    - \log\big(\lambda + \text{precision}_\theta\big)\]</div>
+<p>This is a Gaussian negative log-likelihood penalty that pulls each hierarchically-fit
+parameter back towards its (also-learnable) prior mean, weighted by its (also-learnable)
+prior precision — i.e. the model is discouraged from moving a parameter far from its prior
+unless the data strongly support it. Custom objective functions (e.g.
+<code class="docutils literal notranslate"><span class="pre">custom_cost_JR.py</span></code>) simply combine <code class="docutils literal notranslate"><span class="pre">main_loss</span></code> and <code class="docutils literal notranslate"><span class="pre">prior_loss</span></code> terms, optionally with
+their own weighting.</p>
+</section>
+<section id="training-loop">
+<h2>Training loop<a class="headerlink" href="#training-loop" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ModelFitting.train()</span></code> (<code class="docutils literal notranslate"><span class="pre">whobpyt.run.model_fitting</span></code>) implements gradient-based fitting as
+<strong>truncated backpropagation through time (BPTT)</strong>:</p>
+<ol class="arabic simple">
+<li><p>At the start of each recording, a short <em>warm-up</em> period (100 windows on the first epoch,
+<code class="docutils literal notranslate"><span class="pre">warmupWindow</span></code> thereafter) is simulated with gradients disabled, purely to let the state
+variables and delay buffer settle away from their arbitrary initial conditions.</p></li>
+<li><p>For each subsequent window, the model is run forward for exactly one window’s worth of
+time points, a loss is computed against the corresponding empirical window, and
+<code class="docutils literal notranslate"><span class="pre">loss.backward()</span></code> is called.</p></li>
+<li><p>Both optimizers (<code class="docutils literal notranslate"><span class="pre">modelparameter_optimizer</span></code> and <code class="docutils literal notranslate"><span class="pre">hyperparameter_optimizer</span></code>, each
+<code class="docutils literal notranslate"><span class="pre">torch.optim.Adam</span></code>, optionally with a <code class="docutils literal notranslate"><span class="pre">OneCycleLR</span></code> schedule) take a step.</p></li>
+<li><p>Critically, the state (<code class="docutils literal notranslate"><span class="pre">X</span></code>) and delay buffer (<code class="docutils literal notranslate"><span class="pre">hE</span></code>) that are carried forward into the
+<em>next</em> window are <strong>detached</strong> from the autograd graph before the next window starts
+(<code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">=</span> <span class="pre">next_window['current_state'].detach().clone()</span></code>). This bounds the length of the
+computation graph that gradients are backpropagated through to a single window, which
+keeps memory and compute roughly constant regardless of how long the empirical recording
+is, at the cost of gradients not seeing the effect of a parameter change on windows before
+the current one. This is what makes training WBMs on long recordings (whole resting-state
+scans, for example) tractable.</p></li>
+</ol>
+<p>Across an epoch, the loss for every window and the current value of every tracked parameter
+(including the fitted SC/gain matrices) are logged into a <code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code> object, which is
+what the visualization utilities in <code class="docutils literal notranslate"><span class="pre">whobpyt.visualization</span></code> plot to inspect convergence.</p>
+</section>
+<section id="practical-notes">
+<h2>Practical notes<a class="headerlink" href="#practical-notes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Device.</strong> All the classes above accept a <code class="docutils literal notranslate"><span class="pre">torch.device</span></code>, so the same code path runs on
+CPU or GPU; the numerical operations are ordinary batched tensor ops with no
+device-specific logic.</p></li>
+<li><p><strong>Reproducibility.</strong> <code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel</span></code> records the current git commit hash of the
+installed package at construction time, so a saved/pickled fit can be traced back to the
+exact version of the equations that produced it.</p></li>
+<li><p><strong>Verifying fitted parameters.</strong> Because the PyTorch implementation of a model may include
+optional numerical modifications relative to the original published equations (see the
+model-specific <code class="docutils literal notranslate"><span class="pre">README</span></code> files, e.g. <code class="docutils literal notranslate"><span class="pre">whobpyt/models/jansen_rit/README.md</span></code>), it is good
+practice to re-simulate with the fitted parameters in an independent implementation of the
+model before drawing scientific conclusions from them.</p></li>
+<li><p><strong>Saving/loading.</strong> A <code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code> instance — model, objective function, and training
+history together — can be serialized as a single object with <code class="docutils literal notranslate"><span class="pre">ModelFitting.save()</span></code>
+(pickle-based), so a fit can be resumed or inspected later without re-running training.</p></li>
+</ul>
+</section>
+</section>
+
+
+  
+</div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="architecture.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Code architecture</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="design_philosophy.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Design philosophy</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-simulation-and-training-flow">Core simulation and training flow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-functions-and-priors">Objective functions and priors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alternative-fitting-paradigms">Alternative fitting paradigms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-handling-in-practice">Data handling in practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relation-to-published-work">Relation to published work</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-as-a-recurrent-computation-graph">Simulation as a recurrent computation graph</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connectivity-gains-and-delays">Connectivity, gains, and delays</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-and-priors">Parameters and priors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-functions">Objective functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-loop">Training loop</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-notes">Practical notes</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><p class="text-center small">&copy; Copyright 2022–2026, the WhoBPyT developers</p></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
