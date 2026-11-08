@@ -8,16 +8,16 @@
 Gradients of Excitability and Recurrence Revealed by Stimulation Mapping and Whole-Brain Modelling 
 ====================================================================================================
 
-This example gives a replication and didactic explanation of the multi-site Steroetactic (s)EEG modelling 
+This example gives a replication and didactic explanation of the multi-site stereotactic (s)EEG modelling 
 and results reported in Momi et al. (Nature Comms 2025). 
 
 The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.
 
-Please read our `paper <https://elifesciences.org/articles/83232>`_, and if you use this code, please cite it:
+Please read our `paper <https://doi.org/10.1038/s41467-025-58187-6>`_, and if you use this code, please cite it:
 
-Momi D.,...,.... Griffiths J.D. (2025).
-"Gradients of Excitability in Human Cortex Revealed by Stimulation Mapping and Whole-Brain Modelling."
-eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
+Momi D., ..., Griffiths J.D. (2025).
+"Stimulation mapping and whole-brain modeling reveal gradients of excitability and recurrence in cortical networks."
+Nature Communications 16, 3222, `doi: 10.1038/s41467-025-58187-6 <https://doi.org/10.1038/s41467-025-58187-6>`_.
 """
 
 # %%
