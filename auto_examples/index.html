@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>&lt;no title&gt; &#8212; MNE  documentation</title>
+    <title>WhoBPyT Examples &#8212; WhoBPyT</title>
   
   
   
@@ -31,16 +31,13 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/fix-sidebar.css?v=52f27943" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/style.css?v=1395d0ad" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css?v=b3df3ca5" />
     <link rel="stylesheet" type="text/css" href="../_static/css/fix-sidebar.css?v=52f27943" />
   
   <!-- So that users can add custom icons -->
@@ -56,30 +53,15 @@
     <script src="../_static/copybutton.js?v=fd10adb8"></script>
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('consent', 'default', {
-                    'ad_storage': 'denied',
-                    'ad_user_data': 'denied',
-                    'ad_personalization': 'denied',
-                    'analytics_storage': 'denied'
-                });
-            </script>
-    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-5TBCPCRB6X"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'G-5TBCPCRB6X');
-            </script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'auto_examples/index';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://griffithslab.github.io/whobpyt/auto_examples/index.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="canonical" href="https://mne.tools/stable/auto_examples/index.html" />
-    
+    <link rel="next" title="Getting started: simulate and fit a whole-brain model" href="eg__getting_started.html" />
+    <link rel="prev" title="Visualization" href="../documentation/api/visualization.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -89,7 +71,6 @@
     <script src="../_static/language_data.js"></script>
     <script src="../searchindex.js"></script>
   
-
   </head>
   <body data-default-mode="auto">
   
@@ -152,8 +133,8 @@
       
     
     
-    <img src="../_static/whobpyt_logo_feet.png" class="logo__image only-light" alt="MNE  documentation - Home"/>
-    <img src="../_static/whobpyt_logo_feet_dark.png" class="logo__image only-dark pst-js-only" alt="MNE  documentation - Home"/>
+    <img src="../_static/whobpyt_logo_feet.png" class="logo__image only-light" alt="WhoBPyT - Home"/>
+    <img src="../_static/whobpyt_logo_feet_dark.png" class="logo__image only-dark pst-js-only" alt="WhoBPyT - Home"/>
   
   
 </a></div>
@@ -192,6 +173,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../documentation/development/index.html">
     Contribute
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Examples
   </a>
 </li>
 
@@ -266,8 +254,6 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
@@ -308,6 +294,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../documentation/development/index.html">
     Contribute
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Examples
   </a>
 </li>
 
@@ -380,17 +373,23 @@
               
 <div>
   
-  <p># WhobPyt Examples</p>
-<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Replicating Ismail et al. 2025"><img alt="" src="../_images/sphx_glr_eg__ismail2025_thumb.png" />
-<p><a class="reference internal" href="eg__ismail2025.html"><span class="doc">Replicating Ismail et al. 2025</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Replicating Ismail et al. 2025</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Replicating Ismail et al. 2026"><img alt="" src="../_images/sphx_glr_eg__ismail2026_thumb.png" />
+  <section id="whobpyt-examples">
+<span id="examples-gallery"></span><h1>WhoBPyT Examples<a class="headerlink" href="#whobpyt-examples" title="Link to this heading">#</a></h1>
+<p>Worked examples showing how to use WhoBPyT to build, fit, and analyse
+whole-brain models of neuroimaging and neurophysiology data. Most examples
+reproduce the main analyses of a published paper. Each one can be downloaded
+as a Python script or a Jupyter notebook using the links at the bottom of the
+example page.</p>
+<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This tutorial walks through the core WhoBPyT workflow on a small toy network, so it runs in a minute or two on a laptop CPU and needs no data downloads."><img alt="" src="../_images/sphx_glr_eg__getting_started_thumb.png" />
+<p><a class="reference internal" href="eg__getting_started.html"><span class="doc">Getting started: simulate and fit a whole-brain model</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Getting started: simulate and fit a whole-brain model</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example replicates the whole-brain modelling in Ismail et al. (Nature Communications 2026). If you use this code, please cite the paper:"><img alt="" src="../_images/sphx_glr_eg__ismail2026_thumb.png" />
 <p><a class="reference internal" href="eg__ismail2026.html"><span class="doc">Replicating Ismail et al. 2026</span></a></p>
   <div class="sphx-glr-thumbnail-title">Replicating Ismail et al. 2026</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example gives a replication and didactic explanation of the TMS-EEG modelling  and results reported in Momi, Wang, &amp; Griffiths (ELife 2023). "><img alt="" src="../_images/sphx_glr_eg__momi2023_thumb.png" />
 <p><a class="reference internal" href="eg__momi2023.html"><span class="doc">The Role of Recurrent Network Feedback in TMS-EEG Evoked Responses</span></a></p>
   <div class="sphx-glr-thumbnail-title">The Role of Recurrent Network Feedback in TMS-EEG Evoked Responses</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example gives a replication and didactic explanation of the multi-site Steroetactic (s)EEG modelling  and results reported in Momi et al. (Nature Comms 2025). "><img alt="" src="../_images/sphx_glr_eg__momi2025_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example gives a replication and didactic explanation of the multi-site stereotactic (s)EEG modelling  and results reported in Momi et al. (Nature Comms 2025). "><img alt="" src="../_images/sphx_glr_eg__momi2025_thumb.png" />
 <p><a class="reference internal" href="eg__momi2025.html"><span class="doc">Gradients of Excitability and Recurrence Revealed by Stimulation Mapping and Whole-Brain Modelling</span></a></p>
   <div class="sphx-glr-thumbnail-title">Gradients of Excitability and Recurrence Revealed by Stimulation Mapping and Whole-Brain Modelling</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to organize the empirical eeg data, set-up JR model with user-defined learnable model parameters and train model. After train how to test model with new inputs (noises) to generate simulated EEG. Furethermore, show some analysis based on uncovered neural states from the model."><img alt="" src="../_images/sphx_glr_eg__tmseeg_thumb.png" />
@@ -407,6 +406,7 @@
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 
 
   
@@ -419,6 +419,24 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../documentation/api/visualization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Visualization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="eg__getting_started.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Getting started: simulate and fit a whole-brain model</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -436,18 +454,16 @@
     </div>
   </div>
   
-    
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
   <script defer src="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
 <script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
 
-    <script src="https://mne.tools/versionwarning.js"></script>
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
   
     <div class="footer-items__start">
       
-        <div class="footer-item"><p class="text-center small">&copy; Copyright </p></div>
+        <div class="footer-item"><p class="text-center small">&copy; Copyright 2022–2026, the WhoBPyT developers</p></div>
       
     </div>
   

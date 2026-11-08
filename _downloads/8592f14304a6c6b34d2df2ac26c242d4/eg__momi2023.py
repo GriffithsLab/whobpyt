@@ -90,7 +90,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 #   :width: 600px
 #   :align: center
 #
-#    Studying the role of recurrent connectivity in stimulation-evoked neural responses 
+#   Studying the role of recurrent connectivity in stimulation-evoked neural responses 
 #
 #   
 # Large-scale neurophysiological brain network model
@@ -678,7 +678,7 @@ print(new_df1.head())
 
 # %%
 # 3.2 Plot Post Distributions of the fitted model parameters
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 sns.set_style('darkgrid',{'axes.edgecolor': '.9'},)
 f, ax = plt.subplots(3,3,figsize = (25,13))
@@ -1308,7 +1308,7 @@ ax.set_title('R2=' + str(round(r,2)) + ' p=' + str(round(p,2)))
 # %% 
 # **Those two plots above can be found in Figure 2 Panel D**
 # Comparison between simulated and empirical TMS-EEG data in channel space.
-#  Perturbational complexity index (PCI) values extracted from the empirical (orange) and simulated (blue) TMS-EEG time series (left). A significant positive correlation (R2=80%, p<0.001) was found between the simulated and the empirical PCI (right), demonstrating high correspondence between empirical and simulated data.
+# Perturbational complexity index (PCI) values extracted from the empirical (orange) and simulated (blue) TMS-EEG time series (left). A significant positive correlation (R2=80%, p<0.001) was found between the simulated and the empirical PCI (right), demonstrating high correspondence between empirical and simulated data.
 
 
 
