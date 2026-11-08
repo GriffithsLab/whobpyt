@@ -39,8 +39,8 @@ returns the path of the folder it downloaded.
    data_dir = fetch_egtmseeg(dest_folder="/data/wbm")   # custom location
    data_dir = fetch_egtmseeg(redownload=True)           # force a fresh copy
 
-The other fetchers are ``fetch_egmomi2023``, ``fetch_egmomi2025``,
-``fetch_egismail2025`` and ``fetch_egismail2026``.
+The other fetchers are ``fetch_egmomi2023``, ``fetch_egmomi2025`` and
+``fetch_egismail2026``.
 
 
 Make a parameter fixed or learnable

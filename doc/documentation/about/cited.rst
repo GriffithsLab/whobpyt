@@ -25,6 +25,13 @@ Papers whose modelling is replicated step by step in the
   `doi:10.1038/s41467-026-71918-7 <https://doi.org/10.1038/s41467-026-71918-7>`__
   · Example: :ref:`ex-ismail2026`
 
+Other papers using WhoBPyT:
+
+* Diaconescu AO, Wang Z, Griffiths JD. **A connectome-constrained Jansen–Rit
+  framework for inferring cortical gain control and ensemble stability.**
+  *bioRxiv* (2026).
+  `doi:10.64898/2026.01.28.702100 <https://www.biorxiv.org/content/10.64898/2026.01.28.702100v1>`__
+
 The method WhoBPyT implements was introduced in Griffiths et al. (2022); see
 :doc:`cite`. For the group's wider publication list, see the
 `Whole-Brain Modelling Group publications page <https://www.grifflab.com/publication/>`__.

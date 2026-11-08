@@ -159,7 +159,7 @@ html_context = {
             text="Evoked and induced activity during cognitive tasks.",
             url="documentation/science/brain_cognition/index.html",
             img="homepage/brain_cognition.jpg",
-            alt="Personalized brain network model of language lateralization (Ismail et al. 2025)",
+            alt="Personalized brain network model of language lateralization (Ismail et al. 2026)",
         ),
     ],
     "institutions": [

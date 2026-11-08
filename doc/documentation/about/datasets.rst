@@ -49,14 +49,11 @@ Overview
        anatomical files (BEM, source space, head transform, parcellation),
        an example fitting result, and inputs for the virtual dissection
        analysis.
-   * - ``fetch_egismail2025``
-     - Replicating Ismail et al. 2025
+   * - ``fetch_egismail2026``
+     - :ref:`ex-ismail2026`
      - Evoked MEG for verb generation and noise trials, empirical and
        simulated source and sensor time series, lead field, structural
        weights and distances.
-   * - ``fetch_egismail2026``
-     - :ref:`ex-ismail2026`
-     - The same kinds of files as ``fetch_egismail2025``.
 
 
 File details
@@ -83,12 +80,12 @@ File details
    ``empirical_data/``, ``example_fittingresults/`` and
    ``virtual_dissection/``.
 
-``fetch_egismail2025`` → ``~/.whobpyt/data/eg__ismail2025`` and ``fetch_egismail2026`` → ``~/.whobpyt/data/eg__ismail2026``
+``fetch_egismail2026`` → ``~/.whobpyt/data/eg__ismail2026``
    ``verb_evoked.npy`` and ``noise_evoked.npy`` (evoked MEG),
    ``emp_*_source.npy`` and ``sim_*_source.npy`` / ``sim_*_sensor.npy``
    (empirical and simulated time series), ``leadfield_3d.mat``,
    ``weights.csv`` (structural connectivity), ``distance.txt``, and
-   ``info.pkl`` (MNE measurement info).
+   ``info.pkl`` / ``info_nosubjinfo.pkl`` (MNE measurement info).
 
 
 Using your own data
