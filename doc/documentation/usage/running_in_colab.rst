@@ -1,30 +1,32 @@
-======================================
-Running whobpyt in google colab
-======================================
+.. _colab:
 
-Google colab is an increasingly convenient and useful scientific omputing environment. 
+================================
+Running WhoBPyT in Google Colab
+================================
 
-WhoBPyT can be used in google colab with some minimal additional steps. 
+`Google Colab <https://colab.research.google.com>`_ runs Jupyter notebooks in
+the cloud for free, with optional GPU access. Every example in the
+:ref:`examples gallery <examples-gallery>` can be run there.
 
-First, in a browser tab, navigate to https://colab.research.google.com/github/GriffithsLab/whobpyt , 
-selecting organization GriffithsLab, repository whobpyt, and branch gh-pages. 
+1. Open the example you want in the gallery, scroll to the bottom, and click
+   **Download Jupyter notebook**.
+2. In Colab, choose **File > Upload notebook** and select the downloaded
+   ``.ipynb`` file.
+3. Add a new cell at the top of the notebook and run it to install WhoBPyT:
 
-You should then see a drop-down list of .ipynb files, corresponding to each of the examples in the sphinx-gallery docs. 
+   .. code-block:: text
 
-Select one of these, and approve the 'run anyway' option. 
+      !pip install "mne==1.9.0" "scipy<1.15" nilearn pooch gdown
+      !pip install --no-deps git+https://github.com/GriffithsLab/whobpyt.git
 
-Then, insert and run the following in a cell at the top:
+   Colab already provides PyTorch, NumPy, pandas, matplotlib and
+   scikit-learn, so this only adds what's missing (``--no-deps`` skips the
+   documentation and testing tools in ``requirements.txt``). If Colab asks you
+   to restart the session afterwards, do so, then carry on from the next
+   cell.
 
+4. Run the rest of the notebook as normal. Example data are downloaded
+   automatically the first time they are needed.
 
-.. code::
-
-    import os,time
-    os.system('rm -rf whobpyt')
-    os.system('git clone https://github.com/griffithslab/whobpyt')
-    time.sleep(3)
-    os.chdir('whobpyt')
-    time.sleep(3)
-    os.system('python install_colab.py')    
-    
-Now you should be good to continue with the rest of the example code in the notebook, and experiment with new ideas. 
-
+To use a GPU, choose **Runtime > Change runtime type** and select a GPU
+before you run the notebook.

@@ -1,51 +1,22 @@
 .. _cite:
 
 How to cite WhoBPyT
-======================
+===================
 
-( Coming soon....)
+If you use WhoBPyT in your research, please cite the papers that describe its
+methodology:
 
+* Griffiths JD, Wang Z, Ather SH, Momi D, Rich S, Diaconescu A, McIntosh AR,
+  Shen K. **Deep Learning-Based Parameter Estimation for Neurophysiological
+  Models of Neuroimaging Data.** *bioRxiv* (2022).
+  `Paper page <https://www.grifflab.com/publication/2022-griffiths-et-al-deeplearningbasedparameterestimation/>`__
 
-Citing the software
--------------------
+* Momi D, Wang Z, Griffiths JD. **TMS-evoked responses are driven by recurrent
+  large-scale network dynamics.** *eLife* 12:e83232 (2023).
+  `doi:10.7554/eLife.83232 <https://doi.org/10.7554/eLife.83232>`__
 
-.. footbibliography::
+If your work builds on one of the paper replications in the
+:ref:`examples gallery <examples-gallery>`, please also cite that paper.
 
-.. dropdown:: BibTeX for WhoBPyt
-    :color: info
-    :icon: typography
-
-    .. include:: ../references.bib
-        :code: bibtex
-        :start-after: % WhoBPyt reference
-        :end-before: % everything else
-
-
-Citing the inverse imaging algorithms
--------------------------------------
-
-To cite WhoBPyt or the inverse imaging implementations provided by the WhoBPyT
-software, please use :footcite:`Momi et al. 2023")
-
-
-
-.. footbibliography::
-
-
-.. dropdown:: BibTeX for inverse algorithms / WhoBPyt
-    :color: info
-    :icon: typography
-
-    .. include:: ../references.bib
-        :code: bibtex
-        :start-after:  whobpyt reference
-        :end-before: % whobpyt reference
-
-
-Citing other algorithms
------------------------
-
-Depending on your research topic, it may also be appropriate to cite related
-method papers, some of which are listed in the documentation strings of the
-relevant functions or methods. All references cited in the whobpyt codebase
-and documentation are collected in the :ref:`general_bibliography`.
+You can also cite the software itself by linking to the
+`WhoBPyT GitHub repository <https://github.com/GriffithsLab/whobpyt>`__.
