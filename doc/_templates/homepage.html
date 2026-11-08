@@ -1,29 +1,16 @@
 <!-- homepage gallery -->
 <div class="container">
-  <div class="d-flex flex-wrap flex-row justify-content-between">
+  <div class="row g-3 frontpage-gallery-row">
     {% for item in carousel %}
-      <div class="col-12 col-sm-6 col-lg-4 px-2 my-2">
-        <div class="card frontpage-gallery">
-          <a href="{{ item.url }}">
-            <img class="card-img institution" src="{{ item.img if item.img.startswith('http') else pathto('_images/' + item.img, 1) }}" alt="{{ item.alt }}">
-            <div class="card-img-overlay px-3 py-1">
-              <p class="lead mb-1 fadeout">{{ item.title }}</p>
-              <p class="card-text fadeout">{{ item.text }}</p>
-            </div>
-          </a>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-</div>
-<!-- funders -->
-<div class="container my-4">
-  <p class="h4 text-center font-weight-light"></p>
-  <div id="funder-logos" class="d-flex flex-wrap flex-row justify-content-center align-items-center">
-    {% for item in funders -%}
-      <div class="card my-1 mx-2 {{ item.klass }}" style="{{ 'width: ' + item.size + 'rem;' }}">
-        <a href="{{ pathto('funding.html', 1) }}">
-            <img class="card-img institution" src="{{ pathto('_static/funding/' + item.img, 1) }}" title="{{ item.title }}" alt="{{ item.title }}">
+      <div class="col-12 col-sm-6 col-lg-4">
+        <a class="card h-100 frontpage-gallery" href="{{ pathto(item.url, 1) }}">
+          <div class="frontpage-gallery-img">
+            <img src="{{ item.img if item.img.startswith('http') else pathto('_static/' + item.img, 1) }}" alt="{{ item.alt }}" loading="lazy">
+          </div>
+          <div class="card-body">
+            <p class="h5 card-title mb-1">{{ item.title }}</p>
+            <p class="card-text mb-0">{{ item.text }}</p>
+          </div>
         </a>
       </div>
     {% endfor %}
@@ -41,6 +28,4 @@
       </div>
     {% endfor %}
   </div>
-<!-- contributors -->
-{% include 'avatars.html' %}
 </div>

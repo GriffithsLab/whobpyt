@@ -1,5 +1,5 @@
 
-# sphinx_gallery_thumbnail_path = '../_static/momi2025__Figure_2.PNG'
+# sphinx_gallery_thumbnail_path = '../_static/momi2025__SummaryFigure.png'
 
 """
 .. _ex-momi2025:
@@ -8,16 +8,17 @@
 Gradients of Excitability and Recurrence Revealed by Stimulation Mapping and Whole-Brain Modelling 
 ====================================================================================================
 
-This example gives a replication and didactic explanation of the multi-site Steroetactic (s)EEG modelling 
+This example gives a replication and didactic explanation of the multi-site stereotactic (s)EEG modelling 
 and results reported in Momi et al. (Nature Comms 2025). 
 
 The code includes data fetching, model fitting, and result visualization based on the methods presented in the paper.
 
-Please read our `paper <https://elifesciences.org/articles/83232>`_, and if you use this code, please cite it:
+Please read our `paper <https://doi.org/10.1038/s41467-025-58187-6>`_, and if you use this code, please cite it:
 
-Momi D.,...,.... Griffiths J.D. (2025).
-"Gradients of Excitability in Human Cortex Revealed by Stimulation Mapping and Whole-Brain Modelling."
-eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
+Momi D., Wang Z., Parmigiani S., Mikulan E., Bastiaens S.P., Oveisi M.P., Kadak K., Gaglioti G.,
+Waters A.C., Hill S., Pigorini A., Keller C.J., Griffiths J.D. (2025).
+"Stimulation mapping and whole-brain modeling reveal gradients of excitability and recurrence in cortical networks."
+Nature Communications 16, 3222, `doi: 10.1038/s41467-025-58187-6 <https://doi.org/10.1038/s41467-025-58187-6>`_.
 """
 
 # %%
@@ -43,7 +44,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # Study Overview
 # ^^^^^^^^^^^^^^^
 #
-# .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig1_momi2025.png?raw=true
+# .. figure:: /_static/fig1_momi2025.png
 #   :alt: diagram fig 2025 
 #   :width: 600px
 #
@@ -72,7 +73,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # Results 
 # ^^^^^^^
 #
-# .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig2_momi2025.png?raw=true
+# .. figure:: /_static/fig2_momi2025.png
 #   :alt: results1 fig 2025 
 #   :width: 600px
 #
@@ -95,7 +96,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # hierarchy reported in the functional magnetic resonance imaging (fMRI) literature, which describes 
 # a general pattern from low-order to high-order regions
 #
-# .. figure:: https://github.com/JohnWangDataAnalyst/whobpyt/blob/states/doc/_static/fig3_momi2025.png?raw=true
+# .. figure:: /_static/fig3_momi2025.png
 #   :alt: results2 fig 2025 
 #   :width: 600px
 #
@@ -112,7 +113,7 @@ eLife, `doi: 10.7554/eLife.83232 <https://elifesciences.org/articles/83232>`_.
 # (error bars), with individual subject data points overlaid (36 independent subjects, 323 stimulation 
 # sessions). A significant reduction in the AUC was found for late responses (78−373 ms) of high-order 
 # networks (LN, SN, DAN, FPN, and DMN) compared to low-order networks (Visual Network [VN] and 
-# Somatomotor Network [SMN]), indicated by asterisks (*P < 0.05). 
+# Somatomotor Network [SMN]), indicated by asterisks (\*P < 0.05). 
 #
 # C. Demonstration of the network 
 # recurrence-based theory for two representative sessions. Simulations of evoked dynamics are run using 

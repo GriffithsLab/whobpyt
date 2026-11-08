@@ -309,33 +309,52 @@ h5.card-header::before {
     margin-top: 0px;
 }
 /* ******************************************************* homepage carousel */
-div.frontpage-gallery {
+a.frontpage-gallery {
     overflow: hidden;
-    height: 180px;
-    justify-content: center;
-}
-div.frontpage-gallery a {
+    border: 1px solid var(--pst-color-border);
+    background-color: var(--pst-color-background);
     text-decoration: none;
     color: var(--pst-color-text-base);
+    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 }
-div.frontpage-gallery img.card-img {
-    transform: scale(1.8);
-    transform-origin: 40% 20%;
-    opacity: 0.2;
-    transition: 400ms ease-out;
+a.frontpage-gallery:hover,
+a.frontpage-gallery:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    color: var(--pst-color-text-base);
 }
-div.frontpage-gallery:hover img.card-img {
-    transform: scale(1.2);
-    opacity: 1.0;
-    transition: 400ms ease-out;
+a.frontpage-gallery .card-title {
+    margin-top: 0;  /* the theme gives .h5 a large top margin */
+    color: var(--pst-color-primary);
 }
-div.frontpage-gallery .fadeout {
-    opacity: 1.0;
-    transition: 200ms linear;
+a.frontpage-gallery .card-text {
+    color: var(--pst-color-text-muted);
 }
-div.frontpage-gallery:hover .fadeout {
-    opacity: 0.0;
-    transition: 200ms linear;
+div.frontpage-gallery-img {
+    height: 170px;
+    overflow: hidden;
+    background-color: #fff;  /* figures have white backgrounds, also in dark mode */
+    border-bottom: 1px solid var(--pst-color-border);
+}
+div.frontpage-gallery-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: transform 400ms ease-out;
+}
+a.frontpage-gallery:hover div.frontpage-gallery-img img {
+    transform: scale(1.05);
+}
+@media (prefers-reduced-motion: reduce) {
+    a.frontpage-gallery,
+    div.frontpage-gallery-img img {
+        transition: none;
+    }
+    a.frontpage-gallery:hover,
+    a.frontpage-gallery:hover div.frontpage-gallery-img img {
+        transform: none;
+    }
 }
 /* affects the homepage gallery tiles and the homepage sidebar quicklinks card;
    needed for dark mode. */
