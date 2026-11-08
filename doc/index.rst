@@ -38,9 +38,9 @@ and `here <https://www.grifflab.com/publication/2023-momi-et-al-tmsevokedrespons
 and :doc:`papers using WhoBPyT <documentation/about/cited>` for more info on scientific background, 
 mathematical foundations, and technical implementation. 
 
-**To jump straight in**, follow the :doc:`installation instructions <documentation/usage/installation>`, 
-and then explore some of the detailed worked examples linked to below and in the 
-:doc:`examples gallery <auto_examples/index>`. 
+**To jump straight in**, follow the :doc:`installation instructions <documentation/usage/installation>`,
+work through the :ref:`getting started tutorial <ex-getting-started>`, and then explore the detailed
+worked examples linked below and in the :doc:`examples gallery <auto_examples/index>`.
 
 
 .. frontpage gallery is added by a conditional in _templates/layout.html
