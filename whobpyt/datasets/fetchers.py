@@ -9,6 +9,7 @@
 # Importage
 import os,sys,glob,json,shutil,pathlib,numpy as np, pandas as pd
 import requests,zipfile,gdown
+import warnings
 from datetime import datetime
 #from kaggle.api.kaggle_api_extended import KaggleApi
 
@@ -262,50 +263,18 @@ def fetch_egmomi2023(dest_folder=None, redownload=False):
 
 def fetch_egismail2025(dest_folder=None, redownload=False):
     """
-    Fetch multiple files for Ismail2025 using pull_file function.
+    Deprecated alias for :func:`fetch_egismail2026`.
+
+    The Ismail et al. paper was published in 2026, and its example dataset is
+    now fetched by ``fetch_egismail2026``. This name is kept so that older
+    code keeps working; it will be removed in a future release.
     """
-    
-    cwd = os.getcwd()
-
-    if dest_folder is None:
-        defpath = get_localdefaultdatapath()
-        dest_folder = os.path.join(defpath, 'eg__ismail2025')
-
-    # If input instruction was to re-download and folder is already present, remove it
-    if os.path.isdir(dest_folder) and redownload == True:
-        shutil.rmtree(dest_folder)
-
-    # Create the destination folder if it doesn't exist
-    if not os.path.isdir(dest_folder):
-        os.makedirs(dest_folder)
-
-    os.chdir(dest_folder)
-
-    files_to_download = [
-        ('1P4WSVLiWDdoK_S2cSlDyt1V7JuphfsaZ', 'distance.txt'),
-        ('1hubOoaJcCExawBKk-fpxNXSmSi-dx2-v', 'emp_noise_source.npy'),
-        ('1frpLiDxwdduE1LAOWGPCSDTETTWjkKUh', 'emp_verb_source.npy'),
-        ('1HpMJzTzxNn-YItSo_GJvCpI3EEuvVWUP', 'info.pkl'),
-        ('1gtVxgl1z6QQKDyuxlWdePUpU__i2Njba', 'leadfield_3d.mat'),
-        ('1rgaPu3fRPYxRb6EHkFac4ahC0McbBBJb', 'noise_evoked.npy'),
-        ('1Lr3VV69jBVkNWqz7iPxJHVmflgBTsyYq', 'sim_noise_sensor.npy'),
-        ('18os1jbGZS2si7_0p1bb7nplHEKYqW54J', 'sim_noise_source.npy'),
-        ('1pSVY_YPic5mFAoU3xX99HzejS5Fq0ezW', 'sim_verb_sensor.npy'),
-        ('1DCLLXr7e6y4o9Gs9sQhGDWrRO6HJU7Oe', 'sim_verb_source.npy'),
-        ('1VKCFgHQ78rraTvyJxVWBYevm4omMYMxG', 'verb_evoked.npy'),
-        ('1zFBPr25WZEPJVICLx19-JS3XQESsQVNu', 'weights.csv'),
-    ]
-
-    total_files = len(files_to_download)
-
-    for idx, (dlcode, output_filename) in enumerate(files_to_download, start=1):
-        print(f"Downloading file {idx} of {total_files}: {output_filename}")
-        destination_path = os.path.join(dest_folder, output_filename)
-        pull_file(dlcode, destination_path, download_method="gdown")
-
-    os.chdir(cwd)
-
-    return dest_folder
+    warnings.warn(
+        "fetch_egismail2025 is deprecated; use fetch_egismail2026 instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return fetch_egismail2026(dest_folder=dest_folder, redownload=redownload)
 
 
 
