@@ -126,12 +126,13 @@ class Timeseries():
             The time series data in a windowed format
         '''
         
-        node_size = self.data.shape[0]
-        length_ts = self.data.shape[1]
+        data = self.data.detach().cpu().numpy() if torch.is_tensor(self.data) else np.asarray(self.data)
+        node_size = data.shape[0]
+        length_ts = data.shape[1]
         num_windows = int(length_ts / TPperWindow)
         data_out = np.zeros((num_windows, node_size, TPperWindow))
     
         for i_win in range(num_windows):
-            data_out[i_win, :, :] = self.data[:, i_win * TPperWindow:(i_win + 1) * TPperWindow]
+            data_out[i_win, :, :] = data[:, i_win * TPperWindow:(i_win + 1) * TPperWindow]
     
         return data_out
