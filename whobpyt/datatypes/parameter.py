@@ -8,48 +8,56 @@ import numpy
 import numpy as np
 
 class Parameter:
-    '''
-    Features of this class:
-     - This class contains a global parameter value or array of values (one per node)
-     - It can also contain associated priors (mean and variance)
-     - It also has attributes for whether the parameter and/or priors should be fit during training
-     - It has a method to return the parameter as numpy value
-     - It has a method to set a random val using based on priors
-     - It has functionality to represent val as log(val) so that during training val will be constrained to be positive
+    """A model parameter: its value and, optionally, a prior and whether it is learnable.
+
+    Parameters
+    ----------
+    val : float or ndarray
+        The value, or an array of values (for example one per region). For a
+        learnable parameter with a prior and ``asRand=True``, this is
+        replaced by a random draw from the prior (only its shape is used for
+        arrays).
+    prior_mean : float, optional
+        Mean of the Gaussian prior.
+    prior_std : float, optional
+        Standard deviation of the Gaussian prior.
+    fit_par : bool
+        If True, the value is learned during training. If a prior is also
+        given, the prior's mean and precision are learned too.
+    asLog : bool
+        If True, ``val`` (and the prior) are given on a log scale and the
+        parameter's value is ``lb + exp(val)``, which keeps it positive.
+    asRand : bool
+        If True (and the parameter is learnable with a prior), start from a
+        random draw from the prior instead of ``val``.
+    lb : float
+        Lower bound, added to the value.
+    device : torch.device
+        Device to store the parameter on.
 
     Attributes
-    ------------
-    val : Tensor
-        The parameter value (or an array of node specific parameter values)
-    prior_mean : Tensor
-        Prior mean of the data value
-    prior_precision : Tensor
-        Prior inverse of variance of the value
-    
-    fit_par: Bool
-        Whether the parameter value should be set to as a PyTorch Parameter
-    fit_hyper : Bool
-        Whether the parameter prior mean and prior variance should be set as a PyTorch Parameter
-    asLog : Bool
-        Whether the log of the parameter value will be stored instead of the parameter itself (will prevent parameter from being negative).
-    '''
+    ----------
+    val : torch.Tensor
+        The stored (possibly log-scaled) value. Use :meth:`value` to get the
+        parameter's actual value.
+    prior_mean : torch.Tensor
+        Prior mean, if a prior was given.
+    prior_precision : torch.Tensor
+        Prior precision (1 / variance), if a prior was given.
+    fit_par : bool
+        Whether the value is learned.
+    fit_hyper : bool
+        Whether the prior mean and precision are learned.
+
+    Examples
+    --------
+    >>> from whobpyt.datatypes import Parameter as par
+    >>> A = par(3.25)                               # fixed
+    >>> a = par(100, 100, 2, True)                  # learnable, prior N(100, 2**2)
+    >>> mu = par(np.log(1.5), np.log(1.5), 0.1, True, True, lb=0.1)  # positive
+    """
 
     def __init__(self, val, prior_mean = None, prior_std = None, fit_par = False, asLog = False, asRand = True, lb = 0, device = torch.device('cpu')):
-        '''
-
-        Parameters
-        ----------
-        val : Float (or Array)
-            The parameter value (or an array of node specific parameter values)
-        prior_mean : Float
-            Prior mean of the data value
-        prior_std : Float
-            Prior std of the value
-        fit_par: Bool
-            Whether the parameter value should be set to as a PyTorch Parameter
-        device: torch.device
-            Whether to run on CPU or GPU
-        '''
         self.fit_par = fit_par
         self.device = device
         self.asLog = asLog
@@ -85,8 +93,7 @@ class Parameter:
 
 
     def to(self, device):
-        '''
-        '''
+        '''Move the parameter to ``device`` (a :class:`torch.device`).'''
         self.device = device
         
         self.val = self.val.to(self.device)
@@ -95,9 +102,10 @@ class Parameter:
     def npValue(self):
         '''
         Returns
-        --------
-        NumPy of Value
-            The parameter value(s) as a NumPy Array
+        -------
+        ndarray
+            The parameter value(s), including the lower bound and undoing
+            the log transform if ``asLog`` is set.
         '''
         
         if self.asLog:
@@ -108,9 +116,10 @@ class Parameter:
     def value(self):
         '''
         Returns
-        ---------
-        Tensor of Value
-            The parameter value(s) as a PyTorch Tensor
+        -------
+        torch.Tensor
+            The parameter value(s), including the lower bound and undoing
+            the log transform if ``asLog`` is set. Gradients flow through it.
         '''
 
 

@@ -56,3 +56,12 @@ class TestTimeseries:
 def test_git_commit_hash_is_none_or_sha():
     h = get_git_commit_hash()
     assert h is None or (len(h) == 40 and all(c in "0123456789abcdef" for c in h))
+
+
+def test_get_fitted_names():
+    from whobpyt.models.jansen_rit import JansenRitParams
+
+    params = JansenRitParams(a=par(100, 100, 2, True), A=par(3.25))
+    names = params.getFittedNames()
+    assert "a" in names and "a_m" in names and "a_v_inv" in names
+    assert "A" not in names

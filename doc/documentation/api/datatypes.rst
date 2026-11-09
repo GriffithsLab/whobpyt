@@ -1,17 +1,11 @@
-Data Types
-===================================
+Data types
+==========
 
-.. autoclass:: whobpyt.datatypes.timeseries.Timeseries
+.. autoclass:: whobpyt.datatypes.Parameter
+   :members: value, npValue, to
+
+.. autoclass:: whobpyt.datatypes.Timeseries
+   :members: pyTS, npTS, npNodeByTime, npTimeByNodes, windowedTensor
+
+.. autoclass:: whobpyt.datatypes.TrainingStats
    :members:
-   :undoc-members:
-   :special-members: __init__
-   
-.. autoclass:: whobpyt.datatypes.parameter.Parameter
-   :members:
-   :undoc-members:
-   :special-members: __init__
-   
-.. autoclass:: whobpyt.datatypes.outputs.TrainingStats
-   :members:
-   :undoc-members:
-   :special-members: __init__

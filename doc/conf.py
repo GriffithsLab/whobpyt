@@ -56,6 +56,33 @@ numpydoc_class_members_toctree = False
 numpydoc_show_inherited_class_members = False
 numpydoc_attributes_as_param_list = True
 numpydoc_xref_param_type = True
+# Map the type names used in WhoBPyT docstrings to their documentation.
+numpydoc_xref_aliases = {
+    "Parameter": "whobpyt.datatypes.Parameter",
+    "Timeseries": "whobpyt.datatypes.Timeseries",
+    "Recording": "whobpyt.datatypes.Timeseries",
+    "TrainingStats": "whobpyt.datatypes.TrainingStats",
+    "AbstractParams": "whobpyt.datatypes.AbstractParams",
+    "AbstractNeuralModel": "whobpyt.datatypes.AbstractNeuralModel",
+    "AbstractNMM": "whobpyt.datatypes.AbstractNeuralModel",
+    "AbstractLoss": "whobpyt.datatypes.AbstractLoss",
+    "AbstractFitting": "whobpyt.datatypes.AbstractFitting",
+    "JansenRitParams": "whobpyt.models.jansen_rit.JansenRitParams",
+    "ParamsJR": "whobpyt.models.jansen_rit.JansenRitParams",
+    "Tensor": "torch.Tensor",
+    "torch.tensor": "torch.Tensor",
+    "ndarray": "numpy.ndarray",
+    "Int": "int",
+    "Float": "float",
+    "Bool": "bool",
+    "String": "str",
+}
+# Words in type descriptions that are not types
+numpydoc_xref_ignore = {
+    "of", "or", "and", "default", "optional", "shape", "other", "x",
+    "node_size", "output_size", "num_regions", "ts_length", "steps_per_TR",
+    "TRs_per_window", "delays_max", "num_windows", "window_length",
+}
 
 # -- Sphinx-gallery ----------------------------------------------------------
 

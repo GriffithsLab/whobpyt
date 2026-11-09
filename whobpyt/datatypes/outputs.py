@@ -103,7 +103,7 @@ class TrainingStats:
         
         Parameters
         -----------
-        newValue : Array
+        newValue : ndarray
             Current state of the structural connectivity being tracked. 
         
         """
@@ -114,7 +114,7 @@ class TrainingStats:
         
         Parameters
         -----------
-        newValue : Array
+        newValue : ndarray
             Current state of the structural connectivity being tracked. 
         
         """
@@ -125,7 +125,7 @@ class TrainingStats:
         
         Parameters
         -----------
-        newValue : Array
+        newValue : ndarray
             Current state of the structural connectivity being tracked. 
         
         """
@@ -137,7 +137,7 @@ class TrainingStats:
         
         Parameters
         -----------
-        newValue : Array
+        newValue : ndarray
             Current state of the structural connectivity being tracked. 
         
         """
@@ -149,7 +149,7 @@ class TrainingStats:
         
         Parameters
         -----------
-        newValue : Array
+        newValue : ndarray
             Current state of a lead field matrix being tracked.
             
         """

@@ -64,3 +64,19 @@ def test_save_and_reload(make_jr_model, toy_network, tmp_path):
     with open(path, "rb") as f:
         loaded = pickle.load(f)
     assert loaded.model.node_size == toy_network["n_nodes"]
+
+
+def test_default_params_are_complete(toy_network):
+    """JansenRitParams() provides every parameter the model needs except the lead field."""
+    from whobpyt.datatypes import Parameter as par
+    from whobpyt.models.jansen_rit import JansenRitModel, JansenRitParams
+
+    params = JansenRitParams(lm=par(toy_network["lm"]), ki=par(toy_network["ki"]))
+    for name in ["c3", "g_f", "g_b"]:
+        assert hasattr(params, name)
+    model = JansenRitModel(params, node_size=toy_network["n_nodes"], TRs_per_window=5,
+                           output_size=toy_network["n_chans"], sc=toy_network["sc"],
+                           lm=toy_network["lm"], dist=toy_network["dist"])
+    out, _ = model(torch.zeros((toy_network["n_nodes"], model.steps_per_TR, 5)),
+                   model.createIC(ver=0), model.createDelayIC(ver=0))
+    assert out["eeg"].shape == (toy_network["n_chans"], 5)

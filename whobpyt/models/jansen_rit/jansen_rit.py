@@ -40,49 +40,102 @@ JR params class
 """
 
 class JansenRitParams(AbstractParams):
-    """
-    A class for setting the parameters of a neural mass model for M/EEG data fitting.
+    """Parameters of the :class:`JansenRitModel`.
 
-    Attributes:
-        A (par): The amplitude of the EPSP (excitatory post synaptic potential).
-        a (par): A metric of the rate constant for the EPSP.
-        B (par): The amplitude of the IPSP (inhibitory post synaptic potential).
-        b (par): A metric of the rate constant for the IPSP.
-        g (par): The gain of ???.
-        c1 (par): The connectivity parameter from the pyramidal to excitatory interneurons.
-        c2 (par): The connectivity parameter from the excitatory interneurons to the pyramidal cells.
-        c3 (par): The connectivity parameter from the pyramidal to inhibitory interneurons.
-        c4 (par): The connectivity parameter from the inhibitory interneurons to the pyramidal cells.
-        std_in (par): The standard deviation of the input noise.
-        vmax (par): The maximum value of the sigmoid function.
-        v0 (par): The midpoint of the sigmoid function.
-        r (par): The slope of the sigmoid function.
-        y0 (par): ???.
-        mu (par): The mean of the input.
-        k (par): ???.
-        cy0 (par): ???.
-        ki (par): ???.
+    Every parameter is a :class:`~whobpyt.datatypes.Parameter`,
+    so it can be fixed or learnable and can carry a prior. Pass any
+    parameter as a keyword argument to override its default, for example
+    ``JansenRitParams(a=par(100, 100, 2, True))``.
+
+    The symbols follow Jansen & Rit (1995). In the equations below, ``P``,
+    ``E`` and ``I`` are the pyramidal, excitatory interneuron and inhibitory
+    interneuron populations of each brain region.
+
+    Parameters
+    ----------
+    A : Parameter, default 3.25
+        Maximum amplitude of the excitatory postsynaptic potential (mV).
+    a : Parameter, default 100
+        Excitatory synaptic rate constant (1/s), the inverse of the
+        excitatory time constant.
+    B : Parameter, default 22
+        Maximum amplitude of the inhibitory postsynaptic potential (mV).
+    b : Parameter, default 50
+        Inhibitory synaptic rate constant (1/s), the inverse of the
+        inhibitory time constant.
+    c1, c2 : Parameter, default 135 and 108
+        Average number of synaptic contacts between the pyramidal cells and
+        the excitatory interneurons. ``c1`` scales the pyramidal input to the
+        excitatory sigmoid and ``c2`` scales the excitatory interneurons'
+        output.
+    c3, c4 : Parameter, default 33.75 and 33.75
+        Average number of synaptic contacts between the pyramidal cells and
+        the inhibitory interneurons, used in the same way as ``c1`` and
+        ``c2``.
+    vmax : Parameter, default 5
+        Maximum firing rate of the sigmoid (1/s).
+    v0 : Parameter, default 6
+        Membrane potential at which the sigmoid reaches half its maximum
+        firing rate (mV).
+    r : Parameter, default 0.56
+        Steepness of the sigmoid (1/mV).
+    g : Parameter, default 1000
+        Global coupling gain of the long-range, delayed input from other
+        regions to the pyramidal population.
+    g_f : Parameter, default 10
+        Gain of the long-range input to the excitatory interneurons
+        ("feedforward").
+    g_b : Parameter, default 10
+        Gain of the long-range input to the inhibitory interneurons
+        ("feedback").
+    std_in : Parameter, default 100
+        Standard deviation of the Gaussian noise added to the input of each
+        population at every integration step.
+    mu : Parameter, default 0.5
+        Conduction velocity used to compute the long-range delays,
+        ``delay = distance / mu``, in output samples.
+    k : Parameter, default 5
+        Gain of the external input (stimulus) to the pyramidal population.
+    ki : Parameter, default 1
+        Weight of the external input for each region, shape
+        ``(node_size, 1)``. Set it to zero for regions that should not be
+        stimulated.
+    cy0 : Parameter, default 5
+        Scaling of the simulated M/EEG signal.
+    y0 : Parameter, default 2
+        Constant offset subtracted from the simulated M/EEG signal.
+    lm : Parameter
+        Lead field matrix, shape ``(output_size, node_size)``, mapping region
+        activity to sensors. It has no default and must be given. It can be
+        made learnable.
+    k0 : Parameter, optional
+        Accepted for compatibility with older code but not used by the
+        model.
+
+    Notes
+    -----
+    The simulated M/EEG signal is ``cy0 * L @ (E - I) - y0``, where ``L`` is
+    the lead field ``lm`` normalised per channel and average-referenced.
+
+    References
+    ----------
+    Jansen BH, Rit VG. Electroencephalogram and visual evoked potential
+    generation in a mathematical model of coupled cortical columns.
+    Biological Cybernetics 73, 357-366 (1995).
     """
     def __init__(self, **kwargs):
-        """
-        Initializes the ParamsJR object.
-
-        Args:
-            **kwargs: Keyword arguments for the model parameters.
-
-        Returns:
-            None
-        """
         param = {
             "A": par(3.25), 
             "a": par(100), 
             "B": par(22), 
             "b": par(50), 
             "g": par(1000),
+            "g_f": par(10),
+            "g_b": par(10),
             
             "c1": par(135), 
             "c2": par(135 * 0.8), 
-            "c3 ": par(135 * 0.25), 
+            "c3": par(135 * 0.25), 
             "c4": par(135 * 0.25),
             
             "std_in": par(100), 
@@ -111,71 +164,57 @@ JR model class
 """
 
 class JansenRitModel(AbstractNeuralModel):
-    """
-    A module for forward model (JansenRit) to simulate EEG signals
-    
-    Attibutes
-    ---------
-    state_size : int
-        Number of states in the JansenRit model
+    """Connectome-based Jansen-Rit neural mass model of M/EEG.
 
+    Each brain region is a Jansen-Rit neural mass with pyramidal,
+    excitatory and inhibitory populations. Regions are coupled through the
+    structural connectivity, with conduction delays computed from the
+    distance matrix. A lead field maps the activity of every region onto the
+    M/EEG sensors. The equations are integrated with the forward Euler
+    method in PyTorch, so the simulation is differentiable and its
+    parameters can be fitted by gradient descent.
+
+    Parameters
+    ----------
+    params : JansenRitParams
+        The model parameters.
+    node_size : int
+        Number of brain regions.
+    TRs_per_window : int
+        Number of output samples simulated per call to :meth:`forward`.
+        Training back-propagates through one window at a time.
+    step_size : float
+        Integration step, in seconds.
     output_size : int
-        Number of EEG channels.
+        Number of M/EEG channels. Overridden by ``lm.shape[0]``.
+    tr : float
+        Interval between output samples, in seconds (for example 0.001 for
+        1000 Hz). Must be a multiple of ``step_size``.
+    sc : ndarray, shape (node_size, node_size)
+        Structural connectivity.
+    lm : ndarray, shape (output_size, node_size)
+        Lead field matrix.
+    dist : ndarray, shape (node_size, node_size)
+        Distances between regions, used for the conduction delays.
+    use_fit_gains : bool
+        If True, learn a separate gain for every connection of the
+        pyramidal-to-pyramidal, -excitatory and -inhibitory connectivity
+        matrices. If False, the gains are fixed.
+    use_laplacian : bool
+        If True, add a Laplacian (diagonal) term to the long-range coupling.
+    use_fit_lfm : bool
+        Whether to fit the lead field matrix. To make the lead field
+        learnable, pass ``lm`` in ``params`` as a learnable Parameter.
 
-    node_size: int
-        Number of ROIs
-
-    hidden_size: int
-        Number of step_size for each sampling step
-
-    step_size: float
-        Integration step for forward model
-
-    tr : float # TODO: CHANGE THE NAME TO sampling_rate
-        Sampling rate of the simulated EEG signals 
-
-    TRs_per_window: int # TODO: CHANGE THE NAME
-        Number of EEG signals to simulate
-
-    sc: ndarray (node_size x node_size) of floats
-        Structural connectivity
-
-    lm: ndarray of floats
-        Leadfield matrix from source space to EEG space
-
-    dist: ndarray of floats
-        Distance matrix
-
-    use_fit_gains: bool
-        Flag for fitting gains. 1: fit, 0: not fit
-
-    use_fit_lfm: bool
-        Flag for fitting the leadfield matrix. 1: fit, 0: not fit
-
-    # FIGURE OUT: g, c1, c2, c3, c4: tensor with gradient on 
-    #     model parameters to be fit
-
-    std_in: tensor with gradient on
-        Standard deviation for input noise
-
-    params: ParamsJR
-        Model parameters object.
-
-
-    Methods
-    -------
-    createIC(self, ver):
-        Creates the initial conditions for the model.
-
-    createDelayIC(self, ver):
-        Creates the initial conditions for the delays.
-
-    setModelParameters(self):    
-        Sets the parameters of the model.
-    
-    forward(input, noise_out, hx)
-        Forward pass for generating a number of EEG signals with current model parameters
-    
+    Attributes
+    ----------
+    state_names : list of str
+        The model's state variables: ``'E', 'Ev', 'I', 'Iv', 'P', 'Pv'``
+        (each population's current and its derivative).
+    output_names : list of str
+        ``['eeg']``.
+    steps_per_TR : int
+        Integration steps per output sample, ``int(tr / step_size)``.
     """
 
     def __init__(self, 
@@ -192,34 +231,6 @@ class JansenRitModel(AbstractNeuralModel):
                  use_laplacian=True,
                  use_fit_lfm=False
                  ):               
-        """
-        Parameters
-        ----------
-        node_size: int
-            Number of ROIs
-        TRs_per_window: int # TODO: CHANGE THE NAME
-            Number of EEG signals to simulate
-        step_size: float
-            Integration step for forward model
-        output_size : int
-            Number of EEG channels.
-        tr : float # TODO: CHANGE THE NAME TO sampling_rate
-            Sampling rate of the simulated EEG signals 
-        sc: ndarray node_size x node_size float array
-            Structural connectivity
-        lm: ndarray float array
-            Leadfield matrix from source space to EEG space
-        dist: ndarray float array
-            Distance matrix
-        use_fit_gains: bool
-            Flag for fitting gains. 1: fit, 0: not fit
-        use_laplacian: bool
-            Flat for using laplacian. 1: yes, 0: no. 
-        use_fit_lfm: bool
-            Flag for fitting the leadfield matrix. 1: fit, 0: not fit
-        params: ParamsJR
-            Model parameters object.
-        """
         method_arg_type_check(self.__init__) # Check that the passed arguments (excluding self) abide by their expected data types
         
         super(JansenRitModel, self).__init__(params)
@@ -251,17 +262,20 @@ class JansenRitModel(AbstractNeuralModel):
     
     def createIC(self, ver, state_lb = -0.5, state_ub = 0.5):
         """
-        Creates the initial conditions for the model.
+        Create random initial conditions for the model's states.
 
         Parameters
         ----------
-        ver : int # TODO: ADD MORE DESCRIPTION
-            Initial condition version. (in the JR model, the version is not used. It is just for consistency with other models)
+        ver : int
+            Initial condition version. Not used by this model; kept for
+            consistency with other models.
+        state_lb, state_ub : float
+            Lower and upper bound of the uniform random initial values.
 
         Returns
         -------
         torch.Tensor
-            Tensor of shape (node_size, state_size) with random values between `state_lb` and `state_ub`.
+            Tensor of shape (node_size, state_size) with random values between ``state_lb`` and ``state_ub``.
         """
 
         n_nodes = self.node_size
@@ -274,18 +288,23 @@ class JansenRitModel(AbstractNeuralModel):
 
     def createDelayIC(self, ver, delays_max=500, state_lb=-0.5, state_ub=0.5):
         """
-        Creates the initial conditions for the delays.
+        Create random initial history for the delayed long-range input.
 
         Parameters
         ----------
         ver : int
-            Initial condition version. 
-            (in the JR model, the version is not used. It is just for consistency with other models)
+            Initial condition version. Not used by this model; kept for
+            consistency with other models.
+        delays_max : int
+            Length of the history buffer, in output samples. Must be longer
+            than the longest conduction delay.
+        state_lb, state_ub : float
+            Lower and upper bound of the uniform random initial values.
 
         Returns
         -------
         torch.Tensor
-            Tensor of shape (node_size, delays_max) with random values between `state_lb` and `state_ub`.
+            Tensor of shape (node_size, delays_max) with random values between ``state_lb`` and ``state_ub``.
         """
 
         n_nodes = self.node_size
@@ -297,7 +316,13 @@ class JansenRitModel(AbstractNeuralModel):
 
     def setModelSCParameters(self, small_constant=0.05):
         """
-        Sets the parameters of the model.
+        Create the connection gains for the long-range coupling.
+
+        Parameters
+        ----------
+        small_constant : float
+            Initial value of every gain (they enter the model as
+            ``exp(gain)``).
         """
         
         # Create the arrays in numpy
@@ -337,21 +362,22 @@ class JansenRitModel(AbstractNeuralModel):
 
         Parameters
         ----------
-        external : torch.Tensor
-            Input tensor of shape (batch_size, num_ROIs) representing the input to the model.
-        hx : Optional[torch.Tensor]
-            Optional tensor of shape (batch_size, state_size, num_ROIs) representing the initial hidden state.
-        hE : Optional[torch.Tensor]
-            Optional tensor of shape (batch_size, num_ROIs, delays_max) representing the initial delays.
+        external : torch.Tensor, shape (node_size, steps_per_TR, TRs_per_window)
+            External input (stimulus) for this window.
+        hx : torch.Tensor, shape (node_size, 6)
+            Current state of every region.
+        hE : torch.Tensor, shape (node_size, delays_max)
+            History of the pyramidal population, used for the delayed
+            long-range input.
 
         Returns
         -------
         next_state : dict
-            Dictionary containing the updated current state, EEG signals, and the history of
-            each population's current and voltage at each time step.
-
+            ``'current_state'`` (the state at the end of the window),
+            ``'eeg'`` (shape ``(output_size, TRs_per_window)``) and each
+            state variable (shape ``(node_size, TRs_per_window)``).
         hE : torch.Tensor
-            Tensor representing the updated history of the pyramidal population's current.
+            The updated history of the pyramidal population.
         """
 
         # Generate the ReLU module

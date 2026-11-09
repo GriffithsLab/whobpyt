@@ -46,7 +46,7 @@ The other fetchers are ``fetch_egmomi2023``, ``fetch_egmomi2025`` and
 Make a parameter fixed or learnable
 -----------------------------------
 
-Model parameters are :class:`~whobpyt.datatypes.parameter.Parameter` objects:
+Model parameters are :class:`~whobpyt.datatypes.Parameter` objects:
 ``par(val, prior_mean=None, prior_std=None, fit_par=False, asLog=False, lb=0)``.
 
 .. code-block:: python
@@ -93,7 +93,7 @@ Prepare EEG data from MNE
 -------------------------
 
 WhoBPyT expects recordings as a
-:class:`~whobpyt.datatypes.timeseries.Timeseries` of shape
+:class:`~whobpyt.datatypes.Timeseries` of shape
 ``(channels, samples)``. From an :class:`mne.Evoked`:
 
 .. code-block:: python

@@ -9,8 +9,10 @@ package, organised by sub-module.
 .. toctree::
    :maxdepth: 2
 
-   Data types <datatypes>
    Models <models>
-   Optimization <optimization>
+   Data types <datatypes>
+   Objective functions <optimization>
    Model fitting & simulation <run>
+   Datasets <datasets>
    Visualization <visualization>
+   Base classes <base_classes>
