@@ -432,3 +432,16 @@ div.sphx-glr-animation video {
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
+
+/* ********************************* example pages: Binder and Colab badges */
+div.sphx-glr-footer div.binder-badge,
+div.sphx-glr-footer div.colab-badge {
+    display: inline-block;
+    margin: 1em 0.5em 1em 0;
+    vertical-align: middle;
+}
+div.sphx-glr-footer div.binder-badge img,
+div.sphx-glr-footer div.colab-badge img {
+    height: 28px;
+    width: auto;
+}

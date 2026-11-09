@@ -126,7 +126,49 @@ sphinx_gallery_conf = {
         "notebooks_dir": "notebooks",
         "use_jupyter_lab": True,
     },
+    # Google Colab does not have WhoBPyT installed, so every notebook starts
+    # with a cell that installs it there (and does nothing anywhere else).
+    "first_notebook_cell": (
+        "# Running on Google Colab? This cell installs WhoBPyT first. It does\n"
+        "# nothing anywhere else. If Colab asks you to restart the session\n"
+        "# afterwards, do so and carry on from the next cell.\n"
+        "import subprocess, sys\n"
+        "if 'google.colab' in sys.modules:\n"
+        "    subprocess.run([sys.executable, '-m', 'pip', 'install', '-q',\n"
+        "                    'whobpyt[examples] @ git+https://github.com/GriffithsLab/whobpyt.git'],\n"
+        "                   check=True)"
+    ),
 }
+
+# "Open in Colab" badge next to the Binder badge on each example page. Colab
+# opens the same notebooks that are published to gh-pages for Binder.
+_COLAB_BADGE = """
+    .. container:: colab-badge
+
+      .. image:: https://colab.research.google.com/assets/colab-badge.svg
+        :target: https://colab.research.google.com/github/{org}/{repo}/blob/{branch}/{nb_dir}/{path}.ipynb
+        :alt: Open in Colab
+        :height: 28px
+"""
+
+
+def _add_colab_badge(app, docname, source):
+    """Insert the Colab badge after the Binder badge in generated example pages."""
+    import re
+
+    gallery_dir = sphinx_gallery_conf["gallery_dirs"][0]
+    if not docname.startswith(gallery_dir + "/") or "binder-badge" not in source[0]:
+        return
+    binder = sphinx_gallery_conf["binder"]
+    badge = _COLAB_BADGE.format(org=binder["org"], repo=binder["repo"],
+                                branch=binder["branch"], nb_dir=binder["notebooks_dir"],
+                                path=docname)
+    source[0] = re.sub(r"(    \.\. container:: binder-badge\n\n(?:      .*\n)+)",
+                       lambda m: m.group(1) + badge, source[0], count=1)
+
+
+def setup(app):
+    app.connect("source-read", _add_colab_badge)
 
 # -- HTML output -------------------------------------------------------------
 

@@ -23,21 +23,14 @@ Google Colab
 `Google Colab <https://colab.research.google.com>`_ also runs notebooks for
 free, with optional GPU access, and lets you save your work to Google Drive.
 
-1. Open the example you want in the gallery, scroll to the bottom, and click
-   **Download Jupyter notebook**.
-2. In Colab, choose **File > Upload notebook** and select the downloaded
-   ``.ipynb`` file.
-3. Add a new cell at the top of the notebook and run it to install WhoBPyT:
-
-   .. code-block:: text
-
-      !pip install "whobpyt[examples] @ git+https://github.com/GriffithsLab/whobpyt.git"
-
-   This takes a few minutes. If Colab asks you to restart the session
-   afterwards, do so, then carry on from the next cell.
-
-4. Run the rest of the notebook as normal. Example data are downloaded
+1. Click the **Open in Colab** button at the bottom of any example page.
+2. Run the first cell. It installs WhoBPyT, which takes a few minutes. If
+   Colab asks you to restart the session afterwards, do so, then carry on
+   from the next cell.
+3. Run the rest of the notebook as normal. Example data are downloaded
    automatically the first time they are needed.
+
+To keep your changes, choose **File > Save a copy in Drive**.
 
 To use a GPU, choose **Runtime > Change runtime type** and select a GPU
 before you run the notebook.
