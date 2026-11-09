@@ -39,6 +39,8 @@ examples = [
     "nilearn",
     "nibabel",
     "h5py",
+    "openpyxl",     # pandas.read_excel, used by the Momi 2025 example
+    "pooch",        # dataset downloads in MNE-Python and nilearn
     "gdown",        # older datasets hosted on Google Drive
 ]
 docs = [
