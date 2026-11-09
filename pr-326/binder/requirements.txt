@@ -1,0 +1,6 @@
+# Environment for running the example notebooks on mybinder.org.
+# Sphinx-gallery publishes this file with the website (gh-pages branch),
+# and the "launch binder" buttons on the example pages use it.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+whobpyt[examples] @ git+https://github.com/GriffithsLab/whobpyt.git

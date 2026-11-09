@@ -1,0 +1,996 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Data types &#8212; WhoBPyT</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.css?v=b3df3ca5" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/fix-sidebar.css?v=52f27943" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="../../_static/documentation_options.js?v=afeeb49e"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/api/datatypes';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://griffithslab.github.io/whobpyt/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://griffithslab.github.io/whobpyt/documentation/api/datatypes.html" />
+    <link rel="icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Objective functions" href="optimization.html" />
+    <link rel="prev" title="Models" href="models.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.0.dev0" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="auto">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/whobpyt_logo_feet.png" class="logo__image only-light" alt="WhoBPyT - Home"/>
+    <img src="../../_static/whobpyt_logo_feet_dark.png" class="logo__image only-dark pst-js-only" alt="WhoBPyT - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../development/index.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../development/index.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../about/index.html">About the Library</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about/overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/architecture.html">Code Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/implementation.html">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/design_philosophy.html">Design Philosophy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/datasets.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/cite.html">How to Cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/cited.html">Papers Using WhoBPyT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/glossary.html">Glossary</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../usage/index.html">Installation and Usage</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/cookbook.html">Cookbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/running_in_codespaces.html">GitHub Codespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/running_in_colab.html">Run in your browser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/index.html">Development and Contributor Guidelines</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html">Contributing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/governance.html">Governance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html">Roadmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/releasing.html">Making a Release</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../science/index.html">Scientific Research Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../science/brain_dynamics/index.html">Brain Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../science/brain_stimulation/index.html">Brain Stimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../science/brain_cognition/index.html">Brain and Cognition</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Python API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization.html">Objective functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html">Model fitting &amp; simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base_classes.html">Base classes</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+<div>
+  
+  <section id="data-types">
+<h1>Data types<a class="headerlink" href="#data-types" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Parameter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.datatypes.</span></span><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_par</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asRand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.device('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Parameter" title="Link to this definition">#</a></dt>
+<dd><p>A model parameter: its value and, optionally, a prior and whether it is learnable.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>val</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>The value, or an array of values (for example one per region). For a
+learnable parameter with a prior and <code class="docutils literal notranslate"><span class="pre">asRand=True</span></code>, this is
+replaced by a random draw from the prior (only its shape is used for
+arrays).</p>
+</dd>
+<dt><strong>prior_mean</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a>, optional</span></dt><dd><p>Mean of the Gaussian prior.</p>
+</dd>
+<dt><strong>prior_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a>, optional</span></dt><dd><p>Standard deviation of the Gaussian prior.</p>
+</dd>
+<dt><strong>fit_par</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bltin-boolean-values" title="(in Python v3.15)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>If True, the value is learned during training. If a prior is also
+given, the prior’s mean and precision are learned too.</p>
+</dd>
+<dt><strong>asLog</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bltin-boolean-values" title="(in Python v3.15)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>If True, <code class="docutils literal notranslate"><span class="pre">val</span></code> (and the prior) are given on a log scale and the
+parameter’s value is <code class="docutils literal notranslate"><span class="pre">lb</span> <span class="pre">+</span> <span class="pre">exp(val)</span></code>, which keeps it positive.</p>
+</dd>
+<dt><strong>asRand</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bltin-boolean-values" title="(in Python v3.15)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>If True (and the parameter is learnable with a prior), start from a
+random draw from the prior instead of <code class="docutils literal notranslate"><span class="pre">val</span></code>.</p>
+</dd>
+<dt><strong>lb</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Lower bound, added to the value.</p>
+</dd>
+<dt><strong>device</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.device</span></code></a></span></dt><dd><p>Device to store the parameter on.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>val</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></span></dt><dd><p>The stored (possibly log-scaled) value. Use <a class="reference internal" href="#whobpyt.datatypes.Parameter.value" title="whobpyt.datatypes.Parameter.value"><code class="xref py py-meth docutils literal notranslate"><span class="pre">value()</span></code></a> to get the
+parameter’s actual value.</p>
+</dd>
+<dt><strong>prior_mean</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></span></dt><dd><p>Prior mean, if a prior was given.</p>
+</dd>
+<dt><strong>prior_precision</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></span></dt><dd><p>Prior precision (1 / variance), if a prior was given.</p>
+</dd>
+<dt><strong>fit_par</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bltin-boolean-values" title="(in Python v3.15)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Whether the value is learned.</p>
+</dd>
+<dt><strong>fit_hyper</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bltin-boolean-values" title="(in Python v3.15)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Whether the prior mean and precision are learned.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.Parameter.npValue" title="whobpyt.datatypes.Parameter.npValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">npValue</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.Parameter.to" title="whobpyt.datatypes.Parameter.to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to</span></code></a>(device)</p></td>
+<td><p>Move the parameter to <code class="docutils literal notranslate"><span class="pre">device</span></code> (a <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.device</span></code></a>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.Parameter.value" title="whobpyt.datatypes.Parameter.value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">value</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt.datatypes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parameter</span> <span class="k">as</span> <span class="n">par</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mf">3.25</span><span class="p">)</span>                               <span class="c1"># fixed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>                  <span class="c1"># learnable, prior N(100, 2**2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">par</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.5</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.5</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">lb</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># positive</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Parameter.npValue">
+<span class="sig-name descname"><span class="pre">npValue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Parameter.npValue" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></dt><dd><p>The parameter value(s), including the lower bound and undoing
+the log transform if <code class="docutils literal notranslate"><span class="pre">asLog</span></code> is set.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Parameter.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Parameter.to" title="Link to this definition">#</a></dt>
+<dd><p>Move the parameter to <code class="docutils literal notranslate"><span class="pre">device</span></code> (a <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.device</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Parameter.value">
+<span class="sig-name descname"><span class="pre">value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Parameter.value" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></dt><dd><p>The parameter value(s), including the lower bound and undoing
+the log transform if <code class="docutils literal notranslate"><span class="pre">asLog</span></code> is set. Gradients flow through it.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Timeseries">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.datatypes.</span></span><span class="sig-name descname"><span class="pre">Timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Timeseries" title="Link to this definition">#</a></dt>
+<dd><p>A recording or simulation: a regions (or channels) x time array.</p>
+<p>Empirical data are passed to the fitting classes as <code class="docutils literal notranslate"><span class="pre">Timeseries</span></code>
+objects, and simulation results come back as <code class="docutils literal notranslate"><span class="pre">Timeseries</span></code> (in
+<code class="docutils literal notranslate"><span class="pre">fit.lastRec</span></code>). The plotting functions in <code class="docutils literal notranslate"><span class="pre">whobpyt.visualization</span></code>
+also take them. Inside the models, a plain dictionary of tensors is used
+instead.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>data</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> or <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>, shape (num_regions, ts_length)</span></dt><dd><p>The time series. NumPy arrays are converted to a tensor.</p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Time between samples, in seconds.</p>
+</dd>
+<dt><strong>modality</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name of the modality, for example <code class="docutils literal notranslate"><span class="pre">'eeg'</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>data</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>, shape (num_regions, ts_length)</span></dt><dd><p>The time series.</p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Time between samples, in seconds.</p>
+</dd>
+<dt><strong>modality</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name of the modality.</p>
+</dd>
+<dt><strong>numNodes</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Number of regions or channels.</p>
+</dd>
+<dt><strong>length</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Number of time points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.Timeseries.npNodeByTime" title="whobpyt.datatypes.Timeseries.npNodeByTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">npNodeByTime</span></code></a>()</p></td>
+<td><p>Return the data as a NumPy array, shape <code class="docutils literal notranslate"><span class="pre">(num_regions,</span> <span class="pre">ts_length)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.Timeseries.npTS" title="whobpyt.datatypes.Timeseries.npTS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">npTS</span></code></a>()</p></td>
+<td><p>Return the data as a NumPy array, shape <code class="docutils literal notranslate"><span class="pre">(num_regions,</span> <span class="pre">ts_length)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.Timeseries.npTimeByNodes" title="whobpyt.datatypes.Timeseries.npTimeByNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">npTimeByNodes</span></code></a>()</p></td>
+<td><p>Return the transposed data as a NumPy array, shape <code class="docutils literal notranslate"><span class="pre">(ts_length,</span> <span class="pre">num_regions)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.Timeseries.pyTS" title="whobpyt.datatypes.Timeseries.pyTS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyTS</span></code></a>()</p></td>
+<td><p>Return the data as a tensor, shape <code class="docutils literal notranslate"><span class="pre">(num_regions,</span> <span class="pre">ts_length)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.Timeseries.windowedTensor" title="whobpyt.datatypes.Timeseries.windowedTensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">windowedTensor</span></code></a>(TPperWindow)</p></td>
+<td><p>This method is called by the Model_fitting Class during training to reshape the data into windowed segments (adds another dimension).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Timeseries.npNodeByTime">
+<span class="sig-name descname"><span class="pre">npNodeByTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Timeseries.npNodeByTime" title="Link to this definition">#</a></dt>
+<dd><p>Return the data as a NumPy array, shape <code class="docutils literal notranslate"><span class="pre">(num_regions,</span> <span class="pre">ts_length)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Timeseries.npTS">
+<span class="sig-name descname"><span class="pre">npTS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Timeseries.npTS" title="Link to this definition">#</a></dt>
+<dd><p>Return the data as a NumPy array, shape <code class="docutils literal notranslate"><span class="pre">(num_regions,</span> <span class="pre">ts_length)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Timeseries.npTimeByNodes">
+<span class="sig-name descname"><span class="pre">npTimeByNodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Timeseries.npTimeByNodes" title="Link to this definition">#</a></dt>
+<dd><p>Return the transposed data as a NumPy array, shape <code class="docutils literal notranslate"><span class="pre">(ts_length,</span> <span class="pre">num_regions)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Timeseries.pyTS">
+<span class="sig-name descname"><span class="pre">pyTS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Timeseries.pyTS" title="Link to this definition">#</a></dt>
+<dd><p>Return the data as a tensor, shape <code class="docutils literal notranslate"><span class="pre">(num_regions,</span> <span class="pre">ts_length)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.Timeseries.windowedTensor">
+<span class="sig-name descname"><span class="pre">windowedTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.Timeseries.windowedTensor" title="Link to this definition">#</a></dt>
+<dd><p>This method is called by the Model_fitting Class during training to reshape the data into windowed segments (adds another dimension).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>TPperWindow</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></a></span></dt><dd><p>The number of time points in the window that will be back propagated</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Tensor: num_windows x num_regions x window_length</dt><dd><p>The time series data in a windowed format</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.datatypes.</span></span><span class="sig-name descname"><span class="pre">TrainingStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats" title="Link to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>This class is responsible for recording stats during training (it replaces OutputNM) including:</dt><dd><ul class="simple">
+<li><p>The training and validation losses over time</p></li>
+<li><p>The change in model parameters over time</p></li>
+<li><p>changing hyper parameters over time like learing rates TODO</p></li>
+</ul>
+</dd>
+</dl>
+<p>These are things typically recorded on a per window/epoch basis</p>
+<dl class="field-list">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>model_info</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dict</span></code></span></dt><dd><p>Information about model being tracked during training.</p>
+</dd>
+<dt><strong>track_params</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">List</span></code></span></dt><dd><p>List of parameter names being tracked during training.</p>
+</dd>
+<dt><strong>loss</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">List</span></code></span></dt><dd><p>A list of loss values over training.</p>
+</dd>
+<dt><strong>connectivity</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">List</span></code></span></dt><dd><p>A list of connectivity values over training.</p>
+</dd>
+<dt><strong>leadfield</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">List</span></code></span></dt><dd><p>A list of leadfield matrices over training.</p>
+</dd>
+<dt><strong>fit_params</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dict</span></code></span></dt><dd><p>A dictionary of lists where the key is the parameter name and the value is the list of parameter values over training.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.TrainingStats.appendLF" title="whobpyt.datatypes.TrainingStats.appendLF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendLF</span></code></a>(newValue)</p></td>
+<td><p>Append Lead Field Loss</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.TrainingStats.appendLoss" title="whobpyt.datatypes.TrainingStats.appendLoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendLoss</span></code></a>(newValue)</p></td>
+<td><p>Append Trainig Loss</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.TrainingStats.appendParam" title="whobpyt.datatypes.TrainingStats.appendParam"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendParam</span></code></a>(newValues)</p></td>
+<td><p>Append Fit Parameters</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.TrainingStats.appendSC" title="whobpyt.datatypes.TrainingStats.appendSC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendSC</span></code></a>(newValue)</p></td>
+<td><p>Append Network Connections</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.TrainingStats.appendSC_p2e" title="whobpyt.datatypes.TrainingStats.appendSC_p2e"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendSC_p2e</span></code></a>(newValue)</p></td>
+<td><p>Append Network Connections</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.TrainingStats.appendSC_p2i" title="whobpyt.datatypes.TrainingStats.appendSC_p2i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendSC_p2i</span></code></a>(newValue)</p></td>
+<td><p>Append Network Connections</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.TrainingStats.appendSC_p2p" title="whobpyt.datatypes.TrainingStats.appendSC_p2p"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendSC_p2p</span></code></a>(newValue)</p></td>
+<td><p>Append Network Connections</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.TrainingStats.reset" title="whobpyt.datatypes.TrainingStats.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<td><p>Resets the attributes of the model to a pre-training state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.TrainingStats.save" title="whobpyt.datatypes.TrainingStats.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(filename)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats.appendLF">
+<span class="sig-name descname"><span class="pre">appendLF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats.appendLF" title="Link to this definition">#</a></dt>
+<dd><p>Append Lead Field Loss</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>newValue</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Current state of a lead field matrix being tracked.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats.appendLoss">
+<span class="sig-name descname"><span class="pre">appendLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats.appendLoss" title="Link to this definition">#</a></dt>
+<dd><p>Append Trainig Loss</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>newValue</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Float</span></code></a></span></dt><dd><p>The loss value of objective function being tracked.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats.appendParam">
+<span class="sig-name descname"><span class="pre">appendParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newValues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats.appendParam" title="Link to this definition">#</a></dt>
+<dd><p>Append Fit Parameters</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>newValues</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dict</span></code></span></dt><dd><p>Dictionary with current states of each model parameter being tracked.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats.appendSC">
+<span class="sig-name descname"><span class="pre">appendSC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats.appendSC" title="Link to this definition">#</a></dt>
+<dd><p>Append Network Connections</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>newValue</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Current state of the structural connectivity being tracked.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats.appendSC_p2e">
+<span class="sig-name descname"><span class="pre">appendSC_p2e</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats.appendSC_p2e" title="Link to this definition">#</a></dt>
+<dd><p>Append Network Connections</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>newValue</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Current state of the structural connectivity being tracked.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats.appendSC_p2i">
+<span class="sig-name descname"><span class="pre">appendSC_p2i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats.appendSC_p2i" title="Link to this definition">#</a></dt>
+<dd><p>Append Network Connections</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>newValue</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Current state of the structural connectivity being tracked.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats.appendSC_p2p">
+<span class="sig-name descname"><span class="pre">appendSC_p2p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats.appendSC_p2p" title="Link to this definition">#</a></dt>
+<dd><p>Append Network Connections</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>newValue</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Current state of the structural connectivity being tracked.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats.reset" title="Link to this definition">#</a></dt>
+<dd><p>Resets the attributes of the model to a pre-training state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.TrainingStats.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.TrainingStats.save" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>filename</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">String</span></code></a></span></dt><dd><p>The filename to use to save the TrainingStats as a pickle object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+  
+</div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="models.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="optimization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Objective functions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Parameter.npValue"><code class="docutils literal notranslate"><span class="pre">Parameter.npValue()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Parameter.to"><code class="docutils literal notranslate"><span class="pre">Parameter.to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Parameter.value"><code class="docutils literal notranslate"><span class="pre">Parameter.value()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Timeseries"><code class="docutils literal notranslate"><span class="pre">Timeseries</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Timeseries.npNodeByTime"><code class="docutils literal notranslate"><span class="pre">Timeseries.npNodeByTime()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Timeseries.npTS"><code class="docutils literal notranslate"><span class="pre">Timeseries.npTS()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Timeseries.npTimeByNodes"><code class="docutils literal notranslate"><span class="pre">Timeseries.npTimeByNodes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Timeseries.pyTS"><code class="docutils literal notranslate"><span class="pre">Timeseries.pyTS()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.Timeseries.windowedTensor"><code class="docutils literal notranslate"><span class="pre">Timeseries.windowedTensor()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats"><code class="docutils literal notranslate"><span class="pre">TrainingStats</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats.appendLF"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLF()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats.appendLoss"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendLoss()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats.appendParam"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendParam()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats.appendSC"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats.appendSC_p2e"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2e()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats.appendSC_p2i"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2i()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats.appendSC_p2p"><code class="docutils literal notranslate"><span class="pre">TrainingStats.appendSC_p2p()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats.reset"><code class="docutils literal notranslate"><span class="pre">TrainingStats.reset()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.TrainingStats.save"><code class="docutils literal notranslate"><span class="pre">TrainingStats.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><p class="text-center small">&copy; Copyright 2022–2026, the WhoBPyT developers</p></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

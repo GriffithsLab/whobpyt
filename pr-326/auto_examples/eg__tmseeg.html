@@ -1,0 +1,761 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Modelling TMS-EEG evoked responses &#8212; WhoBPyT</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css?v=b3df3ca5" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/fix-sidebar.css?v=52f27943" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="../_static/documentation_options.js?v=afeeb49e"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fd10adb8"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'auto_examples/eg__tmseeg';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://griffithslab.github.io/whobpyt/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://griffithslab.github.io/whobpyt/auto_examples/eg__tmseeg.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Gradients of Excitability and Recurrence Revealed by Stimulation Mapping and Whole-Brain Modelling" href="eg__momi2025.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.0.dev0" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="auto">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/whobpyt_logo_feet.png" class="logo__image only-light" alt="WhoBPyT - Home"/>
+    <img src="../_static/whobpyt_logo_feet_dark.png" class="logo__image only-dark pst-js-only" alt="WhoBPyT - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../documentation/about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../documentation/index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../documentation/science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../documentation/development/index.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../documentation/about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../documentation/index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../documentation/science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../documentation/development/index.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+<div>
+  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-eg-tmseeg-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code or to run this example in your browser via Binder.</p>
+</div>
+<section class="sphx-glr-example-title" id="modelling-tms-eeg-evoked-responses">
+<span id="ex-tmseeg"></span><span id="sphx-glr-auto-examples-eg-tmseeg-py"></span><h1>Modelling TMS-EEG evoked responses<a class="headerlink" href="#modelling-tms-eeg-evoked-responses" title="Link to this heading">#</a></h1>
+<p>This example shows how to organize the empirical eeg data, set-up JR model with user-defined learnable model
+parameters and train model. After train how to test model with new inputs (noises) to generate simulated EEG.
+Furethermore, show some analysis based on uncovered neural states from the model.</p>
+<p>First we must import the necessary packages required for the example:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># System-based packages</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span><span class="w">
+</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'</span><span class="s1">..</span><span class="s1">'</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Whobpyt modules taken from the whobpyt package</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">whobpyt</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">datatypes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parameter</span> <span class="k">as</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><span class="n">Timeseries</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">models</span><span class="nn">.</span><span class="nn">jansen_rit</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-whobpyt-models-jansen_rit sphx-glr-backref-type-py-class reference internal" href="../documentation/api/models.html#whobpyt.models.jansen_rit.JansenRitModel" title="whobpyt.models.jansen_rit.JansenRitModel"><span class="n">JansenRitModel</span></a><span class="p">,</span><a class="sphx-glr-backref-module-whobpyt-models-jansen_rit sphx-glr-backref-type-py-class reference internal" href="../documentation/api/models.html#whobpyt.models.jansen_rit.JansenRitParams" title="whobpyt.models.jansen_rit.JansenRitParams"><span class="n">JansenRitParams</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">run</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class reference internal" href="../documentation/api/run.html#whobpyt.run.ModelFitting" title="whobpyt.run.ModelFitting"><span class="n">ModelFitting</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">optimization</span><span class="nn">.</span><span class="nn">custom_cost_JR</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-whobpyt-optimization-custom_cost_JR sphx-glr-backref-type-py-class reference internal" href="../documentation/api/optimization.html#whobpyt.optimization.custom_cost_JR.CostsJR" title="whobpyt.optimization.custom_cost_JR.CostsJR"><span class="n">CostsJR</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">datasets</span><span class="nn">.</span><span class="nn">fetchers</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-whobpyt-datasets-fetchers sphx-glr-backref-type-py-function reference internal" href="../documentation/api/datasets.html#whobpyt.datasets.fetchers.fetch_egtmseeg" title="whobpyt.datasets.fetchers.fetch_egtmseeg"><span class="n">fetch_egtmseeg</span></a><span class="w">
+</span><span class="w">
+</span><span class="c1"># Python Packages used for processing and displaying given analytical data (supported for .mat and Google Drive files)</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">io</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">gdown</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span><span class="w">
+</span><a class="sphx-glr-backref-module-warnings sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/warnings.html#warnings.filterwarnings" title="warnings.filterwarnings"><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span></a><span class="p">(</span><span class="s1">'</span><span class="s1">ignore</span><span class="s1">'</span><span class="p">)</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span> <span class="c1"># Plotting library (For Visualization)</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">mne</span> <span class="c1"># Neuroimaging package</span><span class="w">
+</span></pre></div></div>
+<p>Download and load example data</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">data_dir</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datasets-fetchers sphx-glr-backref-type-py-function reference internal" href="../documentation/api/datasets.html#whobpyt.datasets.fetchers.fetch_egtmseeg" title="whobpyt.datasets.fetchers.fetch_egtmseeg"><span class="n">fetch_egtmseeg</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[1/6] Downloading Schaefer2018_200Parcels_7Networks_count.csv
+[2/6] Downloading Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt
+[3/6] Downloading stim_weights.npy
+[4/6] Downloading Subject_1_low_voltage.fif
+[5/6] Downloading Subject_1_low_voltage_fittingresults_stim_exp.pkl
+[6/6] Downloading Subject_1_low_voltage_lf.npy
+</pre></div>
+</div>
+<p>Load EEG data</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">eeg_file_name</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">data_dir</span></a><span class="p">,</span> <span class="s1">'</span><span class="s1">Subject_1_low_voltage.fif</span><span class="s1">'</span><span class="p">)</span><span class="w">
+</span><span class="n">epoched</span> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function reference external" href="https://mne.tools/stable/generated/mne.read_epochs.html#mne.read_epochs" title="mne.read_epochs"><span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">eeg_file_name</span></a><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="p">;</span><span class="w">
+</span><a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="mne.EvokedArray"><span class="n">evoked</span></a> <span class="o">=</span> <span class="n">epoched</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p>Load Atlas</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">atlas_file_name</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">data_dir</span></a><span class="p">,</span> <span class="s1">'</span><span class="s1">Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt</span><span class="s1">'</span><span class="p">)</span><span class="w">
+</span><span class="n">atlas</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">atlas_file_name</span></a><span class="p">)</span><span class="w">
+</span><span class="n">labels</span> <span class="o">=</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">'</span><span class="s1">ROI Name</span><span class="s1">'</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">coords</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">(</span><span class="p">[</span><span class="n">atlas</span><span class="p">[</span><span class="s1">'</span><span class="s1">R</span><span class="s1">'</span><span class="p">]</span><span class="p">,</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">'</span><span class="s1">A</span><span class="s1">'</span><span class="p">]</span><span class="p">,</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">'</span><span class="s1">S</span><span class="s1">'</span><span class="p">]</span><span class="p">]</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">conduction_velocity</span></a> <span class="o">=</span> <span class="mi">5</span> <span class="c1">#in ms</span><span class="w">
+</span></pre></div></div>
+<p>Compute the distance matrix which is used to calculate delay between regions</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">dist</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">coords</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">coords</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="k">for</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi1</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">coords</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>  <span class="k">for</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi2</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">coords</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">dist</span></a><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi2</span></a><span class="p">]</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="numpy.sum"><span class="n">np</span><span class="o">.</span><span class="n">sum</span></a><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">coords</span></a><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi1</span></a><span class="p">,</span><span class="p">:</span><span class="p">]</span> <span class="o">-</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">coords</span></a><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi2</span></a><span class="p">,</span><span class="p">:</span><span class="p">]</span><span class="p">)</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">dist</span></a><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi2</span></a><span class="p">]</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="numpy.sum"><span class="n">np</span><span class="o">.</span><span class="n">sum</span></a><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">coords</span></a><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi1</span></a><span class="p">,</span><span class="p">:</span><span class="p">]</span> <span class="o">-</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">coords</span></a><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">roi2</span></a><span class="p">,</span><span class="p">:</span><span class="p">]</span><span class="p">)</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p>Load the stim weights matrix which encode where to inject the external input</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">stim_weights</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.load.html#numpy.load" title="numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><a class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">data_dir</span></a><span class="p">,</span> <span class="s1">'</span><span class="s1">stim_weights.npy</span><span class="s1">'</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">stim_weights_thr</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">stim_weights</span></a><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="n">labels</span><span class="p">[</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.where.html#numpy.where" title="numpy.where"><span class="n">np</span><span class="o">.</span><span class="n">where</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">stim_weights_thr</span></a><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">]</span><span class="w">
+</span></pre></div></div>
+<p>Load the structural connectivity matrix</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">sc_file</span></a> <span class="o">=</span>  <a class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">data_dir</span></a><span class="p">,</span> <span class="s1">'</span><span class="s1">Schaefer2018_200Parcels_7Networks_count.csv</span><span class="s1">'</span><span class="p">)</span><span class="w">
+</span><span class="n">sc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">sc_file</span></a><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">'</span><span class="s1"> </span><span class="s1">'</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sc</span></a> <span class="o">=</span> <span class="n">sc_df</span><span class="o">.</span><span class="n">values</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sc</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">np</span><span class="o">.</span><span class="n">log1p</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sc</span></a><span class="p">)</span> <span class="o">/</span> <a class="sphx-glr-backref-module-numpy-linalg sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html#numpy.linalg.norm" title="numpy.linalg.norm"><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">np</span><span class="o">.</span><span class="n">log1p</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sc</span></a><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p>Load the leadfield matrix</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lm</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">data_dir</span></a><span class="p">,</span> <span class="s1">'</span><span class="s1">Subject_1_low_voltage_lf.npy</span><span class="s1">'</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">ki0</span></a> <span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">stim_weights_thr</span></a><span class="p">[</span><span class="p">:</span><span class="p">,</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.newaxis" title="numpy.newaxis"><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span></a><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">delays</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">dist</span></a><span class="o">/</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">conduction_velocity</span></a><span class="w">
+</span></pre></div></div>
+<p>define options for JR model: batch size integration step and sampling rate of the empirical eeg
+the number of regions in the parcellation and the number of channels</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">eeg_data</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-property reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.data" title="mne.EvokedArray.data"><span class="n">evoked</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64"><span class="n">time_start</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.where.html#numpy.where" title="numpy.where"><span class="n">np</span><span class="o">.</span><span class="n">where</span></a><span class="p">(</span><a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-property reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.times" title="mne.EvokedArray.times"><span class="n">evoked</span><span class="o">.</span><span class="n">times</span></a><span class="o">==</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64"><span class="n">time_end</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.where.html#numpy.where" title="numpy.where"><span class="n">np</span><span class="o">.</span><span class="n">where</span></a><span class="p">(</span><a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-property reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.times" title="mne.EvokedArray.times"><span class="n">evoked</span><span class="o">.</span><span class="n">times</span></a><span class="o">==</span><span class="mf">0.3</span><span class="p">)</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">eeg_data</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">eeg_data</span></a><span class="p">[</span><span class="p">:</span><span class="p">,</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64"><span class="n">time_start</span></a><span class="p">:</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64"><span class="n">time_end</span></a><span class="p">]</span><span class="o">/</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">eeg_data</span></a><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">node_size</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">sc</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">output_size</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">eeg_data</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">batch_size</span></a> <span class="o">=</span> <span class="mi">20</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">step_size</span></a> <span class="o">=</span> <span class="mf">0.0001</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">num_epochs</span></a> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># num_epochs = 20</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">tr</span></a> <span class="o">=</span> <span class="mf">0.001</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">state_size</span></a> <span class="o">=</span> <span class="mi">6</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">base_batch_num</span></a> <span class="o">=</span> <span class="mi">20</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">time_dim</span></a> <span class="o">=</span> <span class="mi">400</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">state_size</span></a> <span class="o">=</span> <span class="mi">6</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">base_batch_num</span></a> <span class="o">=</span> <span class="mi">20</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">hidden_size</span></a> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">tr</span></a><span class="o">/</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">step_size</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p>prepare empirical data structure of the model</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><span class="n">data_mean</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><span class="n">Timeseries</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">eeg_data</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">step_size</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">tr</span></a><span class="p">,</span> <span class="n">modality</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">eeg</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p>get model parameters structure and define the fitted parameters by setting non-zero variance for the model</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lm</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">output_size</span></a><span class="p">,</span><span class="mi">200</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lm_v</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">output_size</span></a><span class="p">,</span><span class="mi">200</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-whobpyt-models-jansen_rit sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/models.html#whobpyt.models.jansen_rit.JansenRitParams" title="whobpyt.models.jansen_rit.JansenRitParams"><span class="n">params</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-models-jansen_rit sphx-glr-backref-type-py-class reference internal" href="../documentation/api/models.html#whobpyt.models.jansen_rit.JansenRitParams" title="whobpyt.models.jansen_rit.JansenRitParams"><span class="n">JansenRitParams</span></a><span class="p">(</span><span class="n">A</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mf">3.25</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">a</span><span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">B</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">22</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">b</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">g</span><span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">g_f</span><span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">g_b</span><span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">c1</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">135</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">c2</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">135</span><span class="o">*</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">c3</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">c4</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">135</span><span class="o">*</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">std_in</span><span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="p">,</span> <span class="mf">.1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">vmax</span><span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">v0</span><span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">r</span><span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mf">0.56</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">y0</span><span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">mu</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                                  <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span><span class="p">,</span> <span class="mf">.1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">lb</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">k</span> <span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">lb</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">k0</span><span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">cy0</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <span class="n">ki</span><span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">ki0</span></a><span class="p">)</span><span class="p">,</span><span class="w">
+</span>                         <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lm</span></a><span class="o">=</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><span class="n">par</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lm</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lm</span></a><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">output_size</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">node_size</span></a><span class="p">)</span><span class="p">)</span><span class="o">+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lm_v</span></a><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="w">
+</span>                         <span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p>call model want to fit</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-whobpyt-models-jansen_rit sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/models.html#whobpyt.models.jansen_rit.JansenRitModel" title="whobpyt.models.jansen_rit.JansenRitModel"><span class="n">model</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-models-jansen_rit sphx-glr-backref-type-py-class reference internal" href="../documentation/api/models.html#whobpyt.models.jansen_rit.JansenRitModel" title="whobpyt.models.jansen_rit.JansenRitModel"><span class="n">JansenRitModel</span></a><span class="p">(</span><a class="sphx-glr-backref-module-whobpyt-models-jansen_rit sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/models.html#whobpyt.models.jansen_rit.JansenRitParams" title="whobpyt.models.jansen_rit.JansenRitParams"><span class="n">params</span></a><span class="p">,</span><span class="w">
+</span>                       <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">node_size</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">node_size</span></a><span class="p">,</span><span class="w">
+</span>                       <span class="n">TRs_per_window</span><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">batch_size</span></a><span class="p">,</span><span class="w">
+</span>                       <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">step_size</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">step_size</span></a><span class="p">,</span><span class="w">
+</span>                       <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">output_size</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">output_size</span></a><span class="p">,</span><span class="w">
+</span>                       <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">tr</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">tr</span></a><span class="p">,</span><span class="w">
+</span>                       <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sc</span></a><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sc</span></a><span class="p">,</span><span class="w">
+</span>                       <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lm</span></a><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lm</span></a><span class="p">,</span><span class="w">
+</span>                       <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">dist</span></a><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">dist</span></a><span class="p">,</span><span class="w">
+</span>                       <span class="n">use_fit_gains</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="w">
+</span>                       <span class="n">use_fit_lfm</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># create objective function</span><span class="w">
+</span><a class="sphx-glr-backref-module-whobpyt-optimization-custom_cost_JR sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/optimization.html#whobpyt.optimization.custom_cost_JR.CostsJR" title="whobpyt.optimization.custom_cost_JR.CostsJR"><span class="n">ObjFun</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-optimization-custom_cost_JR sphx-glr-backref-type-py-class reference internal" href="../documentation/api/optimization.html#whobpyt.optimization.custom_cost_JR.CostsJR" title="whobpyt.optimization.custom_cost_JR.CostsJR"><span class="n">CostsJR</span></a><span class="p">(</span><a class="sphx-glr-backref-module-whobpyt-models-jansen_rit sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/models.html#whobpyt.models.jansen_rit.JansenRitModel" title="whobpyt.models.jansen_rit.JansenRitModel"><span class="n">model</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p>call model fit</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/run.html#whobpyt.run.ModelFitting" title="whobpyt.run.ModelFitting"><span class="n">F</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class reference internal" href="../documentation/api/run.html#whobpyt.run.ModelFitting" title="whobpyt.run.ModelFitting"><span class="n">ModelFitting</span></a><span class="p">(</span><a class="sphx-glr-backref-module-whobpyt-models-jansen_rit sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/models.html#whobpyt.models.jansen_rit.JansenRitModel" title="whobpyt.models.jansen_rit.JansenRitModel"><span class="n">model</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-whobpyt-optimization-custom_cost_JR sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/optimization.html#whobpyt.optimization.custom_cost_JR.CostsJR" title="whobpyt.optimization.custom_cost_JR.CostsJR"><span class="n">ObjFun</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p>model training given time-varing the stimulus</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">u</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">node_size</span></a><span class="p">,</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">hidden_size</span></a><span class="p">,</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">time_dim</span></a><span class="p">)</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">u</span></a><span class="p">[</span><span class="p">:</span><span class="p">,</span><span class="p">:</span><span class="p">,</span><span class="mi">80</span><span class="p">:</span><span class="mi">120</span><span class="p">]</span><span class="o">=</span> <span class="mi">1000</span><span class="w">
+</span><a class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-method reference internal" href="../documentation/api/run.html#whobpyt.run.ModelFitting.train" title="whobpyt.run.ModelFitting.train"><span class="n">F</span><span class="o">.</span><span class="n">train</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">u</span></a><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">u</span></a><span class="p">,</span> <span class="n">empRecs</span> <span class="o">=</span> <span class="p">[</span><a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><span class="n">data_mean</span></a><span class="p">]</span><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">num_epochs</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">num_epochs</span></a><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">batch_size</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Epoch:  0
+epoch:  0 loss: 3.135431 Pseudo FC_cor:  0.011764502796314177 cos_sim:  0.060826039509449134
+Epoch:  1
+epoch:  1 loss: 2.4671896 Pseudo FC_cor:  0.05595798998966252 cos_sim:  0.001697045592247326
+</pre></div>
+</div>
+<p>quick test run with 2 epochs</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-method reference internal" href="../documentation/api/run.html#whobpyt.run.ModelFitting.evaluate" title="whobpyt.run.ModelFitting.evaluate"><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">u</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">u</span></a><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><span class="n">data_mean</span></a><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">batch_size</span></a><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.028457683608678085 cos_sim:  -0.016471660270750994
+</pre></div>
+</div>
+<p>load in a previously completed model fitting results object
+run evaluate to generate the simulated eeg with new inputs based on the forward model</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">full_run_fname</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">data_dir</span></a><span class="p">,</span> <span class="s1">'</span><span class="s1">Subject_1_low_voltage_fittingresults_stim_exp.pkl</span><span class="s1">'</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/run.html#whobpyt.run.ModelFitting" title="whobpyt.run.ModelFitting"><span class="n">F</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pickle sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/pickle.html#pickle.load" title="pickle.load"><span class="n">pickle</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="nb">open</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">full_run_fname</span></a><span class="p">,</span> <span class="s1">'</span><span class="s1">rb</span><span class="s1">'</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-whobpyt-run sphx-glr-backref-type-py-method reference internal" href="../documentation/api/run.html#whobpyt.run.ModelFitting.evaluate" title="whobpyt.run.ModelFitting.evaluate"><span class="n">F</span><span class="o">.</span><span class="n">evaluate</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">u</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">u</span></a><span class="p">,</span> <span class="n">empRec</span> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datatypes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../documentation/api/datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><span class="n">data_mean</span></a><span class="p">,</span> <span class="n">TPperWindow</span> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">batch_size</span></a><span class="p">,</span> <span class="n">base_window_num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>FC_cor:  0.45079027812396955 cos_sim:  0.38182338551640627
+</pre></div>
+</div>
+<p>Plot the original and simulated EEG data</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">epoched</span> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function reference external" href="https://mne.tools/stable/generated/mne.read_epochs.html#mne.read_epochs" title="mne.read_epochs"><span class="n">mne</span><span class="o">.</span><span class="n">read_epochs</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">eeg_file_name</span></a><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="p">;</span><span class="w">
+</span><a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="mne.EvokedArray"><span class="n">evoked</span></a> <span class="o">=</span> <span class="n">epoched</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">ts_args</span></a> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.3</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">ch</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs1</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.get_peak" title="mne.EvokedArray.get_peak"><span class="n">evoked</span><span class="o">.</span><span class="n">get_peak</span></a><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">'</span><span class="s1">eeg</span><span class="s1">'</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">ch</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs2</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.get_peak" title="mne.EvokedArray.get_peak"><span class="n">evoked</span><span class="o">.</span><span class="n">get_peak</span></a><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">'</span><span class="s1">eeg</span><span class="s1">'</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">ch</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs3</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.get_peak" title="mne.EvokedArray.get_peak"><span class="n">evoked</span><span class="o">.</span><span class="n">get_peak</span></a><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">'</span><span class="s1">eeg</span><span class="s1">'</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">ch</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs4</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.get_peak" title="mne.EvokedArray.get_peak"><span class="n">evoked</span><span class="o">.</span><span class="n">get_peak</span></a><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">'</span><span class="s1">eeg</span><span class="s1">'</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">ch</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs5</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.get_peak" title="mne.EvokedArray.get_peak"><span class="n">evoked</span><span class="o">.</span><span class="n">get_peak</span></a><span class="p">(</span><span class="n">ch_type</span><span class="o">=</span><span class="s1">'</span><span class="s1">eeg</span><span class="s1">'</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.20</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">times</span></a> <span class="o">=</span> <span class="p">[</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs2</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs3</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs4</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs5</span></a><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure"><span class="n">plot</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.plot_joint" title="mne.EvokedArray.plot_joint"><span class="n">evoked</span><span class="o">.</span><span class="n">plot_joint</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">ts_args</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">ts_args</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">times</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">times</span></a><span class="p">)</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="mne.EvokedArray"><span class="n">simulated_EEG_st</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.copy" title="mne.EvokedArray.copy"><span class="n">evoked</span><span class="o">.</span><span class="n">copy</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-property reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.data" title="mne.EvokedArray.data"><span class="n">simulated_EEG_st</span><span class="o">.</span><span class="n">data</span></a><span class="p">[</span><span class="p">:</span><span class="p">,</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64"><span class="n">time_start</span></a><span class="p">:</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64"><span class="n">time_end</span></a><span class="p">]</span> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">F</span><span class="o">.</span><span class="n">lastRec</span></a><span class="p">[</span><span class="s1">'</span><span class="s1">eeg</span><span class="s1">'</span><span class="p">]</span><span class="o">.</span><span class="n">npTS</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">times</span></a> <span class="o">=</span> <span class="p">[</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs2</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs3</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs4</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">peak_locs5</span></a><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure"><span class="n">simulated_joint_st</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.plot_joint" title="mne.EvokedArray.plot_joint"><span class="n">simulated_EEG_st</span><span class="o">.</span><span class="n">plot_joint</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">ts_args</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">ts_args</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">times</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">times</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_eg__tmseeg_001.png" srcset="../_images/sphx_glr_eg__tmseeg_001.png" alt="EEG (60 channels), 0.005 s, 0.020 s, 0.040 s, 0.078 s, 0.150 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_eg__tmseeg_002.png" srcset="../_images/sphx_glr_eg__tmseeg_002.png" alt="EEG (60 channels), 0.005 s, 0.020 s, 0.040 s, 0.078 s, 0.150 s" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Projections have already been applied. Setting proj attribute to True.
+Projections have already been applied. Setting proj attribute to True.
+</pre></div>
+</div>
+<p>Plots of loss over Training (loss should be decressing with nosie)</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">loss</span></a><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">loss</span></a><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.title.html#matplotlib.pyplot.title" title="matplotlib.pyplot.title"><span class="n">plt</span><span class="o">.</span><span class="n">title</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">Total Loss over Training Epochs</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<img src="../_images/sphx_glr_eg__tmseeg_003.png" srcset="../_images/sphx_glr_eg__tmseeg_003.png" alt="Total Loss over Training Epochs" class = "sphx-glr-single-img"/><p>Plots of parameter values over Training (check if converges)</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span></a><span class="p">[</span><span class="s1">'</span><span class="s1">a</span><span class="s1">'</span><span class="p">]</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s2">a</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span></a><span class="p">[</span><span class="s1">'</span><span class="s1">b</span><span class="s1">'</span><span class="p">]</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s2">b</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span></a><span class="p">[</span><span class="s1">'</span><span class="s1">c1</span><span class="s1">'</span><span class="p">]</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s2">c1</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span></a><span class="p">[</span><span class="s1">'</span><span class="s1">c2</span><span class="s1">'</span><span class="p">]</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s2">c2</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span></a><span class="p">[</span><span class="s1">'</span><span class="s1">c3</span><span class="s1">'</span><span class="p">]</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s2">c3</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">F</span><span class="o">.</span><span class="n">trainingStats</span><span class="o">.</span><span class="n">fit_params</span></a><span class="p">[</span><span class="s1">'</span><span class="s1">c4</span><span class="s1">'</span><span class="p">]</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s2">c4</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.title.html#matplotlib.pyplot.title" title="matplotlib.pyplot.title"><span class="n">plt</span><span class="o">.</span><span class="n">title</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">Select Variables Changing Over Training Epochs</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<img src="../_images/sphx_glr_eg__tmseeg_004.png" srcset="../_images/sphx_glr_eg__tmseeg_004.png" alt="Select Variables Changing Over Training Epochs" class = "sphx-glr-single-img"/><section id="results-description">
+<h2>Results Description<a class="headerlink" href="#results-description" title="Link to this heading">#</a></h2>
+<p>The plot above shows the original EEG data and the simulated EEG data using the fitted Jansen-Rit model.
+The simulated data closely resembles the original EEG data, indicating that the model fitting was successful.
+Peak locations extracted from different time intervals are marked on the plots, demonstrating the model’s ability
+to capture key features of the EEG signal.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 52.773 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-tmseeg-py">
+<div class="binder-badge docutils container">
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/GriffithsLab/whobpyt/gh-pages?urlpath=lab/tree/notebooks/auto_examples/eg__tmseeg.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" style="width: 150px;" />
+</a>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/adddac552e627b5207e7ec47e04b862e/eg__tmseeg.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__tmseeg.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/d286feff2953e5f5cb87b179e160e2a2/eg__tmseeg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">eg__tmseeg.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/afd7c9b8f2de3ee98ad077e2f1c87a74/eg__tmseeg.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">eg__tmseeg.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+  
+</div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="eg__momi2025.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Gradients of Excitability and Recurrence Revealed by Stimulation Mapping and Whole-Brain Modelling</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-description">Results Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><p class="text-center small">&copy; Copyright 2022–2026, the WhoBPyT developers</p></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
