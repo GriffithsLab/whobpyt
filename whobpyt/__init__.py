@@ -1,7 +1,3 @@
-#from . import models
-#from . import optimization
-#from . import run
-#from . import datasets
-#from . import datatypes
-#from . import functions
-#from . import visualization
+"""WhoBPyT: whole-brain modelling in PyTorch."""
+
+__version__ = "0.1.0.dev0"

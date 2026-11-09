@@ -1,7 +1,7 @@
 
 
 .. image:: https://github.com/griffithslab/whobpyt/raw/main/doc/_static/whobpyt_logo_shire.png
-   :target: https://github.io/griffithslab/whobpyt/examples/index.html
+   :target: https://griffithslab.github.io/whobpyt/
    :alt: whobpyt
    :align: center
 
@@ -24,3 +24,15 @@ Happy Questing!
 .. _documentation pages: https://griffithslab.github.io/whobpyt
 
 
+Installation
+------------
+
+WhoBPyT needs Python 3.10 or newer. Install it, with the extra packages the
+examples use, from GitHub::
+
+    pip install "whobpyt[examples] @ git+https://github.com/GriffithsLab/whobpyt.git"
+
+For development, clone the repository and run ``pip install -e ".[dev]"``.
+See the `installation instructions`_ for details.
+
+.. _installation instructions: https://griffithslab.github.io/whobpyt/documentation/usage/installation.html

@@ -1,6 +1,6 @@
 {
     "name": "WhoBPyT-docs",
-    "image": "mcr.microsoft.com/devcontainers/python:3.9",
+    "image": "mcr.microsoft.com/devcontainers/python:3.10",
       
     "customizations": {
       "vscode": {
@@ -16,7 +16,7 @@
     "forwardPorts": [
       8000
     ],
-    "postCreateCommand": "pip install -r requirements.txt && pip install . && echo 'Dependencies installed' && cd doc && mkdir _static && echo 'Created _static directory' && make html && echo 'HTML documentation built'",
+    "postCreateCommand": "pip install -e \".[dev]\" && echo 'Dependencies installed' && cd doc && make html-noplot && echo 'HTML documentation built (run make html to also run the examples)'",
     "appPort": 8000
   
   }

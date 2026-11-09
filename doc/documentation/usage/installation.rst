@@ -5,42 +5,68 @@ Installation
 ============
 
 WhoBPyT needs Python 3.10 or newer. We recommend installing it into its own
-conda (or virtualenv) environment.
+conda (or virtualenv) environment:
 
-1. Create and activate an environment:
+.. code-block:: console
 
-   .. code-block:: console
+   $ conda create -n whobpyt python=3.10 pip
+   $ conda activate whobpyt
 
-      $ conda create -n whobpyt python=3.10 git pip
-      $ conda activate whobpyt
+Install WhoBPyT
+---------------
 
-2. Clone the latest version from GitHub:
+WhoBPyT is not yet on PyPI, so install it from GitHub:
 
-   .. code-block:: console
+.. code-block:: console
 
-      $ git clone https://github.com/GriffithsLab/whobpyt
-      $ cd whobpyt
+   $ pip install "whobpyt[examples] @ git+https://github.com/GriffithsLab/whobpyt.git"
 
-3. Install the dependencies and WhoBPyT itself (in editable mode, so that
-   changes you pull or make are picked up automatically):
+The ``[examples]`` part also installs the packages the
+:ref:`examples gallery <examples-gallery>` uses, such as MNE-Python. Leave it
+out if you only need the library itself:
 
-   .. code-block:: console
+.. code-block:: console
 
-      $ pip install -r requirements.txt
-      $ pip install -e .
+   $ pip install "git+https://github.com/GriffithsLab/whobpyt.git"
 
-4. Check that it worked:
+Check that it worked:
 
-   .. code-block:: console
+.. code-block:: console
 
-      $ python -c "import whobpyt; from whobpyt.run import ModelFitting; print('WhoBPyT OK')"
+   $ python -c "import whobpyt; print(whobpyt.__version__)"
+
+Install for development
+-----------------------
+
+To work on WhoBPyT itself, clone the repository and install it in editable
+mode, with everything needed for the examples, documentation and tests:
+
+.. code-block:: console
+
+   $ git clone https://github.com/GriffithsLab/whobpyt
+   $ cd whobpyt
+   $ pip install -e ".[dev]"
+   $ pytest
+
+See the :doc:`/documentation/development/contributing` for more.
+
+Optional extras
+---------------
+
+=============  ==============================================================
+``examples``   Packages used by the example scripts (MNE-Python, nilearn, ...)
+``docs``       Everything needed to build this documentation
+``test``       The test runner (pytest)
+``dev``        All of the above
+=============  ==============================================================
 
 GPU support
 -----------
 
 WhoBPyT runs on the CPU by default. To use an NVIDIA GPU, install a
 CUDA-enabled build of PyTorch by following the instructions at
-`pytorch.org <https://pytorch.org/get-started/locally/>`_ *before* step 3.
+`pytorch.org <https://pytorch.org/get-started/locally/>`_ *before* installing
+WhoBPyT.
 
 Next steps
 ----------
