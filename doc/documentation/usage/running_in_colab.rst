@@ -1,12 +1,27 @@
 .. _colab:
 
-================================
-Running WhoBPyT in Google Colab
-================================
+=====================================
+Running the examples in your browser
+=====================================
 
-`Google Colab <https://colab.research.google.com>`_ runs Jupyter notebooks in
-the cloud for free, with optional GPU access. Every example in the
-:ref:`examples gallery <examples-gallery>` can be run there.
+Every example in the :ref:`examples gallery <examples-gallery>` can be run
+online, with nothing to install.
+
+Binder
+------
+
+Click the **launch binder** button at the bottom of any example page. This
+opens the example as a notebook on `mybinder.org <https://mybinder.org>`_,
+with WhoBPyT already installed. Starting can take a few minutes, especially
+the first time after the documentation is updated. Binder sessions are
+free, run on CPU with limited memory, and are deleted when you close them,
+so download anything you want to keep.
+
+Google Colab
+------------
+
+`Google Colab <https://colab.research.google.com>`_ also runs notebooks for
+free, with optional GPU access, and lets you save your work to Google Drive.
 
 1. Open the example you want in the gallery, scroll to the bottom, and click
    **Download Jupyter notebook**.

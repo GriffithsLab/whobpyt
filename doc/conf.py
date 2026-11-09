@@ -107,6 +107,17 @@ sphinx_gallery_conf = {
     "abort_on_example_error": False,
     "plot_gallery": "True",
     "parallel": True,
+    # "launch binder" buttons on each example page. The notebooks and
+    # binder/requirements.txt are published with the site to gh-pages.
+    "binder": {
+        "org": "GriffithsLab",
+        "repo": "whobpyt",
+        "branch": "gh-pages",
+        "binderhub_url": "https://mybinder.org",
+        "dependencies": "./binder/requirements.txt",
+        "notebooks_dir": "notebooks",
+        "use_jupyter_lab": True,
+    },
 }
 
 # -- HTML output -------------------------------------------------------------

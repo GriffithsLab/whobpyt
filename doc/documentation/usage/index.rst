@@ -24,11 +24,12 @@ Using WhoBPyT
 
       A ready-made cloud environment in your browser, with nothing to install.
 
-   .. grid-item-card:: :fab:`google` Google Colab
+   .. grid-item-card:: :fas:`globe` Run in your browser
       :link: running_in_colab
       :link-type: doc
 
-      Run the example notebooks in Colab, including on a free GPU.
+      Run the example notebooks on Binder or Google Colab, with nothing to
+      install.
 
 .. toctree::
    :hidden:
@@ -36,4 +37,4 @@ Using WhoBPyT
    Installation <installation>
    Cookbook <cookbook>
    GitHub Codespaces <running_in_codespaces>
-   Google Colab <running_in_colab>
+   Run in your browser <running_in_colab>
