@@ -2,48 +2,38 @@ import torch
 import numpy as np
 
 class Timeseries():
-    '''    
-    This class is responsible for holding timeseries of empirical and simulated data. It is: 
-        - Part of the input and output of Model_fitting and Model_simulation[future]. 
-        - It is the format expected by the visualization function of whobpyt. 
-    
-    However, the Recording class is not used within and across the NMM and Modals, as a simpler dictionary of tensors is used in those contexts. 
+    """A recording or simulation: a regions (or channels) x time array.
 
-    Numerical simulation internals don't necessarily use this data structure, as calculations may be more efficient as the transpose: ts_length x num_regions.
-    
-    
+    Empirical data are passed to the fitting classes as ``Timeseries``
+    objects, and simulation results come back as ``Timeseries`` (in
+    ``fit.lastRec``). The plotting functions in ``whobpyt.visualization``
+    also take them. Inside the models, a plain dictionary of tensors is used
+    instead.
+
+    Parameters
+    ----------
+    data : ndarray or torch.Tensor, shape (num_regions, ts_length)
+        The time series. NumPy arrays are converted to a tensor.
+    step_size : float
+        Time between samples, in seconds.
+    modality : str
+        Name of the modality, for example ``'eeg'``.
+
     Attributes
-    -------------
-    data : Numpy Array or Tensor of dimensions num_regions x ts_length
-        The time series data, either empirical or simulated
-    step_size : Float
-        The step size of the time points in the data class
-    modality : String
-        The name of the modality of the time series   
-    numNodes : Int
-        The number of nodes it time series.
-    length : Int 
-        The number of time points in the time series. 
-    
-    
-    '''
-        
+    ----------
+    data : torch.Tensor, shape (num_regions, ts_length)
+        The time series.
+    step_size : float
+        Time between samples, in seconds.
+    modality : str
+        Name of the modality.
+    numNodes : int
+        Number of regions or channels.
+    length : int
+        Number of time points.
+    """
+
     def __init__(self, data, step_size, modality = ""):
-        '''
-        
-        Parameters
-        -----------
-        
-        data : Numpy Array or Tensor of dimensions num_regions x ts_length
-            The time series data, either empirical or simulated
-        step_size : Float
-            The step size of the time points in the data class
-        modality : String
-            The name of the modality of the time series
-        
-        '''
-        
-        
         if not(torch.is_tensor(data)):
             data = torch.tensor(data) # Store as Tensor
         
@@ -54,54 +44,23 @@ class Timeseries():
         self.length = self.data.shape[1]
     
     def pyTS(self):
-        '''
-        Returns
-        --------
-        Tensor of num_regions x ts_length
-        
-        '''
+        """Return the data as a tensor, shape ``(num_regions, ts_length)``."""
         
         return self.data
     
     def npTS(self):
-        '''
-        Returns
-        ---------
-        Numpy Array of num_regions x ts_length
-        
-        '''
-        
+        """Return the data as a NumPy array, shape ``(num_regions, ts_length)``."""
         return self.data.cpu().numpy()
         
     def npNodeByTime(self):
-        '''
-        Returns
-        ---------
-        Numpy Array of num_regions x ts_length        
-        
-        '''
+        """Return the data as a NumPy array, shape ``(num_regions, ts_length)``."""
         
         return self.data.cpu().numpy()
         
     def npTimeByNodes(self):
-        '''
-        Returns
-        ---------
-        Numpy Array of ts_length x num_regions        
-        
-        '''
+        """Return the transposed data as a NumPy array, shape ``(ts_length, num_regions)``."""
         
         return self.data.cpu().numpy().T
-        
-    def length(self):
-        '''
-        Returns
-        ---------
-        The time series length
-        
-        '''   
-        
-        return self.length
         
     def npResample(self):
         '''
@@ -126,12 +85,13 @@ class Timeseries():
             The time series data in a windowed format
         '''
         
-        node_size = self.data.shape[0]
-        length_ts = self.data.shape[1]
+        data = self.data.detach().cpu().numpy() if torch.is_tensor(self.data) else np.asarray(self.data)
+        node_size = data.shape[0]
+        length_ts = data.shape[1]
         num_windows = int(length_ts / TPperWindow)
         data_out = np.zeros((num_windows, node_size, TPperWindow))
     
         for i_win in range(num_windows):
-            data_out[i_win, :, :] = self.data[:, i_win * TPperWindow:(i_win + 1) * TPperWindow]
+            data_out[i_win, :, :] = data[:, i_win * TPperWindow:(i_win + 1) * TPperWindow]
     
         return data_out

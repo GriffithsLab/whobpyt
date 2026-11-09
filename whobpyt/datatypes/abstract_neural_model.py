@@ -6,22 +6,65 @@ import torch
 from .parameter import Parameter as par
 from torch.nn.parameter import Parameter as ptParameter
 from torch.nn import Module as ptModule
+import os
 import subprocess
 
 def get_git_commit_hash():
+    """Return the git commit of the WhoBPyT source tree, or None.
+
+    Only reports a hash when WhoBPyT itself is running from a git checkout
+    (for example an editable install). It looks in the package's own
+    directory, not the current working directory, so it never reports
+    the commit of an unrelated repository, and it stays silent when git
+    is unavailable or the package is not in a checkout.
+    """
+    pkg_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     try:
-        # Run the Git command to get the current commit hash
-        commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip().decode('utf-8')
-        return commit_hash
-    except subprocess.CalledProcessError:
-        # Handle the case where the git command fails, for example, if not in a git repository
+        toplevel = subprocess.check_output(
+            ['git', 'rev-parse', '--show-toplevel'], cwd=pkg_root,
+            stderr=subprocess.DEVNULL).strip().decode('utf-8')
+        if os.path.realpath(toplevel) != os.path.realpath(pkg_root):
+            return None  # the package sits inside some other repository
+        return subprocess.check_output(
+            ['git', 'rev-parse', 'HEAD'], cwd=pkg_root,
+            stderr=subprocess.DEVNULL).strip().decode('utf-8')
+    except (OSError, subprocess.CalledProcessError):
+        # git not installed, or not a git checkout
         return None
 
 
 
 class AbstractNeuralModel(ptModule):
-    # This is the abstract class for the models (typically neural mass models) that are being trained. 
-    # The neuroimaging modality might be integrated into the model as well. 
+    """Base class for models (typically neural mass models) that can be fitted.
+
+    A model is a :class:`torch.nn.Module` that simulates one window of
+    activity per call to :meth:`forward`. The measurement model (for example
+    a lead field for EEG) may be part of the model.
+
+    Subclasses should set ``state_names`` and ``output_names``, call
+    :meth:`setModelParameters` in their ``__init__``, and implement
+    :meth:`createIC`, :meth:`createDelayIC` and :meth:`forward`.
+
+    Parameters
+    ----------
+    params : AbstractParams
+        The model's parameters.
+
+    Attributes
+    ----------
+    state_names : list of str
+        Names of the model's state variables.
+    output_names : list of str
+        Names of the model's outputs. The first is used by the objective
+        functions by default.
+    track_params : list of str
+        Names of the learnable parameters, recorded during training.
+    params_fitted : dict
+        ``'modelparameter'`` and ``'hyperparameter'`` lists of tensors that the
+        optimizers update. Set by :meth:`setModelParameters`.
+    commit_hash : str or None
+        WhoBPyT's git commit, if running from a git checkout.
+    """
 
     def __init__(self, params):
         super(AbstractNeuralModel, self).__init__() # May not want to enherit from torch.nn.Module in the future 
@@ -33,7 +76,7 @@ class AbstractNeuralModel(ptModule):
         
         
     def info(self):
-        # Information about the model, which may be used by other classes to know which variables to use. 
+        """Return the model's state names, output names, tracked parameters and commit."""
         
         return {"state_names": self.state_names, 
                 "output_names": self.output_names,
@@ -41,11 +84,13 @@ class AbstractNeuralModel(ptModule):
                 "commit_hash": self.commit_hash}
             
     def setModelParameters(self):
-        # Setting the parameters that will be optimized as either model parameters or 2ndLevel/hyper
-        # parameters (for various optional features). 
-        # This should be called in the __init__() function implementation for convenience if possible.
-        """
-        Sets the parameters of the model.
+        """Register the learnable parameters with PyTorch.
+
+        Every :class:`~whobpyt.datatypes.Parameter` in ``params``
+        with ``fit_par=True`` becomes a ``torch.nn.Parameter`` and is added to
+        ``params_fitted['modelparameter']``; learnable priors
+        (``fit_hyper=True``) are added to ``params_fitted['hyperparameter']``.
+        Call this in the subclass's ``__init__``.
         """
 
         param_reg = []
@@ -81,15 +126,34 @@ class AbstractNeuralModel(ptModule):
         self.params_fitted = {'modelparameter': param_reg,'hyperparameter': param_hyper}
         
     def createIC(self, ver):
-        # Create the initial conditions for the model state variables. 
+        """Return initial conditions for the model's state variables."""
         pass
         
     def createDelayIC(self, ver):
-        # Creates a time series of state variables to represent their past values as needed when delays are used. 
-        
+        """Return the initial history of state variables needed for delays.
+
+        The default returns a dummy tensor, for models without delays.
+        """
         return torch.tensor(1.0) #Dummy variable if delays are not used
     
     def forward(self, external, hx, hE):
-        # Run the mode simulation.
-        # Returns a dictionary with values of state variables during the simulation.
+        """Simulate one window.
+
+        Parameters
+        ----------
+        external : torch.Tensor
+            External input for the window.
+        hx : torch.Tensor
+            Current state.
+        hE : torch.Tensor
+            History used for delayed inputs.
+
+        Returns
+        -------
+        next_state : dict
+            Simulated time series of each state variable and output, plus
+            ``'current_state'``, the state at the end of the window.
+        hE : torch.Tensor
+            Updated history.
+        """
         pass

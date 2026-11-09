@@ -1,32 +1,26 @@
-Optimization
-===================================
+Objective functions
+===================
+
+Objective (cost) functions compare simulated and empirical data. All of
+them inherit from :class:`~whobpyt.datatypes.AbstractLoss`.
+
+.. autoclass:: whobpyt.optimization.custom_cost_JR.CostsJR
+   :members:
 
 .. autoclass:: whobpyt.optimization.CostsTS
    :members:
-   :undoc-members:
-   :special-members: __init__
 
 .. autoclass:: whobpyt.optimization.CostsFC
    :members:
-   :undoc-members:
-   :special-members: __init__
 
 .. autoclass:: whobpyt.optimization.CostsFixedFC
    :members:
-   :undoc-members:
-   :special-members: __init__
+
+.. autoclass:: whobpyt.optimization.CostsFixedPSD
+   :members:
+
+.. autoclass:: whobpyt.optimization.CostsMean
+   :members:
 
 .. autoclass:: whobpyt.optimization.CostsPSD
    :members:
-   :undoc-members:
-   :special-members: __init__
-   
-.. autoclass:: whobpyt.optimization.CostsFixedPSD
-   :members:
-   :undoc-members:
-   :special-members: __init__
-   
-.. autoclass:: whobpyt.optimization.CostsMean
-   :members:
-   :undoc-members:
-   :special-members: __init__

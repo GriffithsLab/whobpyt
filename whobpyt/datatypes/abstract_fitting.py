@@ -6,10 +6,30 @@ from .abstract_loss import AbstractLoss
 from .outputs import TrainingStats
 
 class AbstractFitting():
-    # AbstractFitting is a template class for different parameter optimization or machine learning paradigms to inherit from. 
+    """Base class for fitting paradigms.
+
+    A fitting paradigm runs a model, compares its output with data using an
+    objective function, and updates the model's learnable parameters.
+    Subclasses implement :meth:`train`, :meth:`evaluate` and :meth:`simulate`.
+
+    Parameters
+    ----------
+    model : AbstractNeuralModel
+        The model to fit.
+    cost : AbstractLoss
+        The objective function.
+    device : torch.device
+        Device to compute on.
+
+    Attributes
+    ----------
+    trainingStats : TrainingStats
+        Loss and parameter values recorded during training.
+    lastRec : dict of Timeseries or None
+        The simulated time series from the most recent run.
+    """
 
     def __init__(self, model: AbstractNeuralModel, cost: AbstractLoss, device = torch.device('cpu')):
-        # Initializing the class
         
         self.model = model
         self.cost = cost
@@ -20,23 +40,23 @@ class AbstractFitting():
     
     
     def save(self, filename):
-        # Saving the entire class
+        """Save this object, including the model and training history, with pickle."""
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
         
         
-    def train():
-        # This function is for training of a model. 
-        pass
+    def train(self, *args, **kwargs):
+        """Fit the model's learnable parameters to data."""
+        raise NotImplementedError
     
     
-    def evaluate():
-        # The function is intended to calculate statistics as they are calculated during training, but not updating model parameters. 
-        pass
+    def evaluate(self, *args, **kwargs):
+        """Run the model and compare it with data, without updating parameters."""
+        raise NotImplementedError
     
     
-    def simulate():
-        # This function is intended for running some fixed duration of simulation.
-        pass
+    def simulate(self, *args, **kwargs):
+        """Run the model for a fixed duration."""
+        raise NotImplementedError
     
     

@@ -65,7 +65,7 @@ File details
    ``Schaefer2018_200Parcels_7Networks_count.csv`` (structural connectivity),
    ``Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt``
    (region coordinates), ``Subject_1_low_voltage_fittingresults_stim_exp.pkl``
-   (a saved :class:`~whobpyt.run.model_fitting.ModelFitting` object).
+   (a saved :class:`~whobpyt.run.ModelFitting` object).
 
 ``fetch_egmomi2023`` → ``~/.whobpyt/data/eg__momi2023``
    ``sub_<n>_fittingresults_stim_exp.pkl`` and ``sub_<n>_leadfield`` for

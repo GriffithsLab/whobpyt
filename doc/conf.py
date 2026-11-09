@@ -17,6 +17,14 @@ matplotlib.use("agg")  # never open GUI windows while running examples
 project = "WhoBPyT"
 copyright = f"2022–{datetime.now(tz=timezone.utc).year}, the WhoBPyT developers"  # noqa: A001
 
+import whobpyt  # noqa: E402
+
+release = whobpyt.__version__
+version = release
+# Which entry of _static/versions.json this build is: "dev" for the development
+# docs built from main, otherwise the release number (e.g. "0.1.0").
+switcher_version = "dev" if ".dev" in release else release
+
 # -- General configuration ---------------------------------------------------
 
 extensions = [
@@ -56,6 +64,33 @@ numpydoc_class_members_toctree = False
 numpydoc_show_inherited_class_members = False
 numpydoc_attributes_as_param_list = True
 numpydoc_xref_param_type = True
+# Map the type names used in WhoBPyT docstrings to their documentation.
+numpydoc_xref_aliases = {
+    "Parameter": "whobpyt.datatypes.Parameter",
+    "Timeseries": "whobpyt.datatypes.Timeseries",
+    "Recording": "whobpyt.datatypes.Timeseries",
+    "TrainingStats": "whobpyt.datatypes.TrainingStats",
+    "AbstractParams": "whobpyt.datatypes.AbstractParams",
+    "AbstractNeuralModel": "whobpyt.datatypes.AbstractNeuralModel",
+    "AbstractNMM": "whobpyt.datatypes.AbstractNeuralModel",
+    "AbstractLoss": "whobpyt.datatypes.AbstractLoss",
+    "AbstractFitting": "whobpyt.datatypes.AbstractFitting",
+    "JansenRitParams": "whobpyt.models.jansen_rit.JansenRitParams",
+    "ParamsJR": "whobpyt.models.jansen_rit.JansenRitParams",
+    "Tensor": "torch.Tensor",
+    "torch.tensor": "torch.Tensor",
+    "ndarray": "numpy.ndarray",
+    "Int": "int",
+    "Float": "float",
+    "Bool": "bool",
+    "String": "str",
+}
+# Words in type descriptions that are not types
+numpydoc_xref_ignore = {
+    "of", "or", "and", "default", "optional", "shape", "other", "x",
+    "node_size", "output_size", "num_regions", "ts_length", "steps_per_TR",
+    "TRs_per_window", "delays_max", "num_windows", "window_length",
+}
 
 # -- Sphinx-gallery ----------------------------------------------------------
 
@@ -80,6 +115,17 @@ sphinx_gallery_conf = {
     "abort_on_example_error": False,
     "plot_gallery": "True",
     "parallel": True,
+    # "launch binder" buttons on each example page. The notebooks and
+    # binder/requirements.txt are published with the site to gh-pages.
+    "binder": {
+        "org": "GriffithsLab",
+        "repo": "whobpyt",
+        "branch": "gh-pages",
+        "binderhub_url": "https://mybinder.org",
+        "dependencies": "./binder/requirements.txt",
+        "notebooks_dir": "notebooks",
+        "use_jupyter_lab": True,
+    },
 }
 
 # -- HTML output -------------------------------------------------------------
@@ -109,7 +155,14 @@ html_theme_options = {
     "icon_links_label": "External Links",
     "navbar_start": ["navbar-logo"],
     "navbar_center": ["navbar-nav"],
-    "navbar_end": ["theme-switcher", "navbar-icon-links"],
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
+    # The switcher reads the list of versions from the live site, so every
+    # version's docs show the same, current list.
+    "switcher": {
+        "json_url": "https://griffithslab.github.io/whobpyt/_static/versions.json",
+        "version_match": switcher_version,
+    },
+    "check_switcher": False,  # don't fetch json_url at build time (offline builds)
     "navbar_persistent": ["search-button"],
     "navbar_align": "left",
     "navigation_with_keys": False,

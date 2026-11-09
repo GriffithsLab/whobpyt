@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "whobpyt"
+dynamic = ["version"]
+description = "Whole-brain modelling in PyTorch"
+readme = "README.rst"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Whole-Brain Modelling Group, CAMH Krembil Centre for Neuroinformatics" }]
+requires-python = ">=3.10"
+keywords = ["neuroscience", "whole-brain modelling", "neural mass models", "connectomics",
+            "EEG", "MEG", "fMRI", "TMS", "PyTorch"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+# Only what the whobpyt package itself imports.
+dependencies = [
+    "torch",
+    "numpy",
+    "scipy",
+    "pandas",
+    "matplotlib",
+    "seaborn",
+    "scikit-learn",
+    "requests",
+]
+
+[project.optional-dependencies]
+# Extra packages used by the example scripts and their datasets.
+examples = [
+    "mne==1.9.0",
+    "scipy<1.15",   # mne 1.9 imports scipy.special.sph_harm, removed in scipy 1.15
+    "nilearn",
+    "nibabel",
+    "h5py",
+    "openpyxl",     # pandas.read_excel, used by the Momi 2025 example
+    "pooch",        # dataset downloads in MNE-Python and nilearn
+    "gdown",        # older datasets hosted on Google Drive
+]
+docs = [
+    "whobpyt[examples]",
+    "sphinx>=8.1",
+    "sphinx-gallery",
+    "sphinx-copybutton",
+    "sphinx-design",
+    "numpydoc",
+    "pydata-sphinx-theme",
+]
+test = [
+    "pytest",
+]
+dev = [
+    "whobpyt[examples,docs,test]",
+]
+
+[project.urls]
+Homepage = "https://griffithslab.github.io/whobpyt/"
+Documentation = "https://griffithslab.github.io/whobpyt/"
+Source = "https://github.com/GriffithsLab/whobpyt"
+Issues = "https://github.com/GriffithsLab/whobpyt/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "whobpyt.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["whobpyt*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

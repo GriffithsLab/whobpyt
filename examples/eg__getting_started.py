@@ -26,14 +26,14 @@ The same steps, applied to real TMS-EEG data, are shown in
 #
 # The pieces you need from WhoBPyT are:
 #
-# * :class:`~whobpyt.datatypes.parameter.Parameter` for defining model
+# * :class:`~whobpyt.datatypes.Parameter` for defining model
 #   parameters and their priors,
-# * :class:`~whobpyt.datatypes.timeseries.Timeseries` for holding
+# * :class:`~whobpyt.datatypes.Timeseries` for holding
 #   empirical (or simulated) recordings,
-# * :class:`~whobpyt.models.jansen_rit.jansen_rit.JansenRitModel` and its
+# * :class:`~whobpyt.models.jansen_rit.JansenRitModel` and its
 #   parameter container ``JansenRitParams``,
 # * a cost function, here ``CostsJR``, and
-# * :class:`~whobpyt.run.model_fitting.ModelFitting`, which runs the
+# * :class:`~whobpyt.run.ModelFitting`, which runs the
 #   simulation and training loops.
 
 import numpy as np
@@ -97,7 +97,7 @@ fig.tight_layout()
 # 2. Define the model parameters
 # ------------------------------
 #
-# Every model parameter is a :class:`~whobpyt.datatypes.parameter.Parameter`.
+# Every model parameter is a :class:`~whobpyt.datatypes.Parameter`.
 # Its arguments are ``par(value, prior_mean, prior_std, fit_par, asLog)``:
 #
 # * ``par(3.25)`` is a **fixed** parameter.
@@ -204,7 +204,7 @@ fig.tight_layout()
 # **new** model to it. The new model starts from a different random draw
 # from the priors.
 #
-# :meth:`~whobpyt.run.model_fitting.ModelFitting.train` runs the model
+# :meth:`~whobpyt.run.ModelFitting.train` runs the model
 # window by window, compares each simulated window with the matching
 # empirical window using the cost function, and updates the learnable
 # parameters by back-propagating through time.
@@ -238,7 +238,7 @@ fig.tight_layout()
 
 # %%
 # Finally, run the trained model once more with
-# :meth:`~whobpyt.run.model_fitting.ModelFitting.evaluate` and compare its
+# :meth:`~whobpyt.run.ModelFitting.evaluate` and compare its
 # EEG with the target.
 
 fit.evaluate(u=u, empRec=emp, TPperWindow=TRs_per_window, base_window_num=20)

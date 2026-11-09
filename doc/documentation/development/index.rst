@@ -28,9 +28,16 @@ project roadmap.
 
       What we're working on next.
 
+   .. grid-item-card:: :fas:`tag` Making a release
+      :link: releasing
+      :link-type: doc
+
+      How to publish a new version to PyPI.
+
 .. toctree::
    :hidden:
 
    Contributing Guide <contributing>
    Governance <governance>
    Roadmap <roadmap>
+   Making a Release <releasing>

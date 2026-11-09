@@ -6,7 +6,22 @@ import torch
 from .parameter import Parameter as par
 
 class AbstractLoss:
-    # This is the abstract class for objective function components, or for a custom objective function with multiple components. 
+    """Base class for objective functions.
+
+    Subclasses implement :meth:`main_loss`, which compares simulated and
+    empirical data. A full objective can combine it with :meth:`prior_loss`,
+    as :class:`~whobpyt.optimization.custom_cost_JR.CostsJR` does.
+
+    Parameters
+    ----------
+    simKey : str
+        Which of the model's outputs or state variables to compare with the
+        data, for example ``'eeg'``.
+    model : AbstractNeuralModel
+        The model being fitted. Needed by :meth:`prior_loss`.
+    device : torch.device
+        Device to compute on.
+    """
 
     def __init__(self, simKey = None, model = None, device = torch.device('cpu')):
     
@@ -15,15 +30,39 @@ class AbstractLoss:
         self.model = model
     
     def main_loss(self, simData, empData):
-        # Calculates a loss to be backpropagated through
-        # If the objective function needs additional info, it should be defined at initialization so that the parameter fitting paradigms don't need to change
-        
-        # simData: is a dictionary of simulated state variable/neuroimaging modality time series. Typically accessed as simData[self.simKey].
-        # empData: is the target either as a time series or a calculated phenomena metric
-        
+        """Return the loss comparing simulated and empirical data.
+
+        Any other information the loss needs should be given when the object
+        is created, so the fitting classes can call every loss the same way.
+
+        Parameters
+        ----------
+        simData : dict of torch.Tensor
+            Simulated time series, keyed by variable name. Usually accessed as
+            ``simData[self.simKey]``.
+        empData : torch.Tensor
+            The target: an empirical time series or a summary measure
+            computed from one.
+
+        Returns
+        -------
+        torch.Tensor
+            A scalar loss to back-propagate.
+        """
         pass
     
     def prior_loss(self):
+        """Return the penalties keeping learnable parameters near their priors.
+
+        For every parameter whose prior is learned (``fit_hyper=True``), the
+        penalty is the precision-weighted squared distance between the value
+        and the prior mean, minus the log precision.
+
+        Returns
+        -------
+        list of torch.Tensor
+            One penalty per parameter; sum them to add to the loss.
+        """
         loss_prior = []
         lb =0.001
         m = torch.nn.ReLU()

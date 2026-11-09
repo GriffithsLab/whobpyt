@@ -1,264 +1,244 @@
-# ------------------------------------
-# WhobPyT Data Fetcher Functionalities
-# ------------------------------------
-#
-# Modified directly from code in grifflab/kernel-flow-tools
-# Inspired by nilearn & mne
-#
+"""Fetchers for the WhoBPyT example datasets.
 
-# Importage
-import os,sys,glob,json,shutil,pathlib,numpy as np, pandas as pd
-import requests,zipfile,gdown
+Each ``fetch_*`` function downloads one example dataset (once) and returns
+the folder it was saved to. By default, data are saved under
+``~/.whobpyt/data/<dataset name>``.
+
+Modified from code in grifflab/kernel-flow-tools; inspired by nilearn and MNE.
+"""
+
+import os
+import shutil
+import tempfile
 import warnings
-from datetime import datetime
-#from kaggle.api.kaggle_api_extended import KaggleApi
+import zipfile
+
+import requests
 
 
 WHOBPYT_DATA_FOLDER = '~/.whobpyt/data'
+OSF_DOWNLOAD_URL = 'https://osf.io/download'
+
+_CHUNK_SIZE = 1024 * 1024
+_TIMEOUT = 60  # seconds, per network read
 
 
 def get_localdefaultdatapath():
+    """Return the default data folder (``~/.whobpyt/data``, expanded)."""
     return os.path.expanduser(WHOBPYT_DATA_FOLDER)
 
 
-def pull_file(dlcode,destination,download_method):
+# --------------------------------------------------------------------------
+# Low-level download helpers
+# --------------------------------------------------------------------------
 
-  dest_file = destination.split('/')[-1]
-  print('\n\nDownloading %s\n' %dest_file)
+def _download_url(url, destination):
+    """Stream ``url`` to ``destination``.
 
-  if download_method == "wget": 
-    os.system('wget %s -O %s' %(dlcode, destination))
-
-  elif download_method == "gdown":
-    url = "https://drive.google.com/uc?id=" + dlcode
-    gdown.download(url, destination, quiet=False)
-
-  elif download_method == "requests":
-    url = "https://docs.google.com/uc?export=download"
-    session = requests.Session()
-    response = session.get(
-    url, params={"id": dlcode}, stream=True)
-    # get the confirmation token to download large files
-    token = None
-    for key, value in response.cookies.items():
-      if key.startswith("download_warning"):
-        token = value
-    if token:
-      params = {"id": id, "confirm": token}
-      response = session.get(url, params=params, stream=True)
-    # save content to the zip-file  
-    CHUNK_SIZE = 32768
-    with open(destination, "wb") as f:
-      for chunk in response.iter_content(CHUNK_SIZE):
-        if chunk:
-          f.write(chunk)
+    The file is written to a temporary name first and only moved into place
+    once complete, so an interrupted download never leaves a partial file
+    that later calls would mistake for a finished one.
+    """
+    dest_dir = os.path.dirname(os.path.abspath(destination))
+    os.makedirs(dest_dir, exist_ok=True)
+    fd, tmp_path = tempfile.mkstemp(dir=dest_dir, suffix='.part')
+    try:
+        with requests.get(url, stream=True, timeout=_TIMEOUT) as response:
+            response.raise_for_status()
+            with os.fdopen(fd, 'wb') as f:
+                for chunk in response.iter_content(_CHUNK_SIZE):
+                    if chunk:
+                        f.write(chunk)
+        os.replace(tmp_path, destination)
+    except BaseException:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+        raise
 
 
-def pull_folder(dlcode: str, newfolder_name: str, dest_folder = None, download_method='wget'):
+def _gdown():
+    try:
+        import gdown
+    except ImportError as err:
+        raise ImportError(
+            'Downloading this dataset from Google Drive needs the gdown package: '
+            'pip install gdown') from err
+    return gdown
 
-    # Creates a new folder `newfolder_name` inside `dest_folder`, 
-    # downloads the data into that location, 
-    # and returns the location as a string
 
-    # (dest_folder is the location this folder will be downloaded into)
+def pull_file(dlcode, destination, download_method='wget'):
+    """Download a single file to ``destination``.
 
-    # if no dest folder supplied, use the default location in user's home    
-    if dest_folder is None: dest_folder = get_localdefaultdatapath()
+    Parameters
+    ----------
+    dlcode : str
+        A full URL (``download_method='wget'``, the name is kept for backward
+        compatibility; the download is done in Python, not with the ``wget``
+        program), or a Google Drive file ID (``'gdown'`` or ``'requests'``).
+    destination : str
+        Path of the file to write.
+    download_method : {'wget', 'gdown', 'requests'}
+    """
+    print('Downloading %s' % os.path.basename(destination))
+    if download_method == 'wget':
+        _download_url(dlcode, destination)
+    elif download_method in ('gdown', 'requests'):
+        dest_dir = os.path.dirname(os.path.abspath(destination))
+        os.makedirs(dest_dir, exist_ok=True)
+        out = _gdown().download(id=dlcode, output=destination, quiet=False)
+        if out is None:
+            raise RuntimeError('Failed to download Google Drive file %s' % dlcode)
+    else:
+        raise ValueError("download_method must be 'wget', 'gdown' or 'requests', "
+                         "got %r" % (download_method,))
+
+
+def pull_folder(dlcode, newfolder_name, dest_folder=None, download_method='wget'):
+    """Download a whole folder into ``dest_folder/newfolder_name``.
+
+    Skipped if that folder already exists.
+
+    Parameters
+    ----------
+    dlcode : str
+        URL of a zip archive (``download_method='wget'``) or a Google Drive
+        folder ID (``'gdown'``).
+    newfolder_name : str
+        Name of the folder to create inside ``dest_folder``.
+    dest_folder : str | None
+        Parent folder. Defaults to :func:`get_localdefaultdatapath`.
+    download_method : {'wget', 'gdown'}
+
+    Returns
+    -------
+    str
+        Path of the downloaded folder.
+    """
+    if dest_folder is None:
+        dest_folder = get_localdefaultdatapath()
     newfolder = os.path.join(dest_folder, newfolder_name)
+    if os.path.isdir(newfolder) and os.listdir(newfolder):
+        return newfolder
 
-    # Create dest folder if it does not exist
-    if not os.path.exists(newfolder): 
-
-      os.makedirs(newfolder) 
-
-      # cd to dest folder, grab the download, cd back to current dir  
-      cwd = os.getcwd()
-      os.chdir(newfolder)
-
-      if download_method == 'gdown':
-
-        # Assemble gdown gdrive url target
-        url = "https://drive.google.com/drive/folders/" + dlcode
-        gdown.download_folder(url, remaining_ok=True)
-
-      elif download_method == 'wget':
-
-        url = dlcode
-        os.system('wget %s -O download.zip' %url)
-        os.system('unzip download.zip')
-        os.system('rm download.zip')
-
-      print('\n\nDownloaded \n\n%s \n\nto \n\n%s\n\n' %(url,newfolder))           
-
-      os.chdir(cwd)
-
+    # Download into a temporary folder and move it into place at the end, so
+    # a failed download does not leave a half-filled folder behind.
+    os.makedirs(dest_folder, exist_ok=True)
+    tmp_folder = tempfile.mkdtemp(dir=dest_folder, prefix='.%s-' % newfolder_name)
+    try:
+        if download_method == 'wget':
+            zip_path = os.path.join(tmp_folder, 'download.zip')
+            _download_url(dlcode, zip_path)
+            with zipfile.ZipFile(zip_path) as zf:
+                zf.extractall(tmp_folder)
+            os.remove(zip_path)
+        elif download_method == 'gdown':
+            url = 'https://drive.google.com/drive/folders/' + dlcode
+            out = _gdown().download_folder(url=url, output=tmp_folder, quiet=False)
+            if not out:
+                raise RuntimeError('Failed to download Google Drive folder %s' % dlcode)
+        else:
+            raise ValueError("download_method must be 'wget' or 'gdown', got %r"
+                             % (download_method,))
+        if os.path.isdir(newfolder):
+            os.rmdir(newfolder)  # only reached if it exists and is empty
+        os.replace(tmp_folder, newfolder)
+    except BaseException:
+        shutil.rmtree(tmp_folder, ignore_errors=True)
+        raise
+    print('Downloaded %s to %s' % (dlcode, newfolder))
     return newfolder
 
 
-def fetch_hcpl2k8(dest_folder = None):
+def _fetch_osf_files(files_dict, dataset_name, dest_folder=None, redownload=False):
+    """Download OSF files ``{osf_id: relative_path}`` into a dataset folder.
 
-    dlcode = "18smy3ElTd4VksoL4Z15dhwT5l3yjk6xS"
+    Files that are already present are skipped, so an interrupted download
+    can be resumed by calling the fetcher again.
+    """
+    if dest_folder is None:
+        dest_folder = os.path.join(get_localdefaultdatapath(), dataset_name)
+    if redownload and os.path.isdir(dest_folder):
+        shutil.rmtree(dest_folder)
+    os.makedirs(dest_folder, exist_ok=True)
 
-    res_location = pull_folder(dlcode, dest_folder=dest_folder, 
-                               newfolder_name = 'hcpl2k8')
-
-    return res_location
-
-   
-
-
-def fetch_MomiEtAlELife2023(dest_folder=None):
-    #
-    # -----
-    # Usage
-    # -----
-    #
-    # thisdir = os.getcwd()
-    # dest_folder = os.path.join(thisdir,'reproduce_Momi_et_al_2023')
-    #
-    # res = fetch_MomiEtAlElife2023(dest_folder=dest_folder)
-    #
-
-    cwd = os.getcwd()
-   
-    # Life hack to stop for erroring on the next line
-    if dest_folder is None: dest_folder = ''
-
-    # Create the target out dir
-    if not os.path.isdir(dest_folder): os.makedirs(dest_folder)
-    os.chdir(dest_folder)
-
-    # Pull the data folder
-    newf_name = ''
-    dlcode = '1t-9m0E88xUUcGWWH024H32maQUs_Jjgx'  # This is the DATA_LITE folder
-    # dlcode = '1iwsxrmu_rnDCvKNYDwTskkCNt709MPuF' This is the FULL data folder (too large to download)
-    res_loc_1 = pull_folder(dlcode, dest_folder=dest_folder,newfolder_name=newf_name)
-
-    # Pull the fsaverage folder
-    newf_name = '' 
-    dlcode = '1YPyf3h9YKnZi0zRwBwolROQuqDtxEfzF'
-    res_loc_2 = pull_folder(dlcode, dest_folder=dest_folder,newfolder_name=newf_name)
-
-    # Confirm you got everything and go back to initial dir
-    os.chdir(cwd)
+    missing = {osf_id: rel_path for osf_id, rel_path in files_dict.items()
+               if not os.path.isfile(os.path.join(dest_folder, rel_path))}
+    for i, (osf_id, rel_path) in enumerate(missing.items(), start=1):
+        print('[%d/%d] ' % (i, len(missing)), end='')
+        pull_file('%s/%s' % (OSF_DOWNLOAD_URL, osf_id),
+                  os.path.join(dest_folder, rel_path), download_method='wget')
+    return dest_folder
 
 
-
+# --------------------------------------------------------------------------
+# Example dataset fetchers
+# --------------------------------------------------------------------------
 
 def fetch_egtmseeg(dest_folder=None, redownload=False):
-    #
-    # -----
-    # Usage
-    # -----
-    #
-    # res = fetch_egtmseeg()
-    #
+    """Fetch the data for the TMS-EEG example (one subject).
 
-    osf_url_pfx = 'https://osf.io/download'
-    files_dict = {'680fc6eb5210d93da17c5a1d':'Schaefer2018_200Parcels_7Networks_count.csv',
-                  '680fe69f9ba48ef173568c07':'Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt',
-                  '680fc6fbab92f2b5627c5a0f':'stim_weights.npy',
-                  '680fc6f63068d66fc8568e3e':'Subject_1_low_voltage.fif',
-                  '680fc6f80959f56dde568f29':'Subject_1_low_voltage_fittingresults_stim_exp.pkl',
-                  '680fc6f99f030183213cbfd3':'Subject_1_low_voltage_lf.npy'}
-    
-    cwd = os.getcwd()
-   
-    if dest_folder is None:
-        defpath = get_localdefaultdatapath()
-        dest_folder = os.path.join(defpath, 'eg__tmseeg')
+    Parameters
+    ----------
+    dest_folder : str | None
+        Where to save the files. Defaults to ``~/.whobpyt/data/eg__tmseeg``.
+    redownload : bool
+        If True, delete any existing copy and download again.
 
-    # If input instruction was to re-download and folder is already present, remove it
-    if os.path.isdir(dest_folder) and redownload == True:
-        os.system('rm -rf %s' %dest_folder)
-
-    # If the folder does not exist, create it and download the files
-    if not os.path.isdir(dest_folder): 
-        os.makedirs(dest_folder)    
-        os.chdir(dest_folder)
-        for file_code, file_name in files_dict.items():
-            dlcode = osf_url_pfx + '/' + file_code
-            pull_file(dlcode, file_name, download_method='wget')        
-        os.chdir(cwd) # go back to where we started
-
-    return dest_folder 
-
+    Returns
+    -------
+    str
+        The folder containing the data.
+    """
+    files_dict = {
+        '680fc6eb5210d93da17c5a1d': 'Schaefer2018_200Parcels_7Networks_count.csv',
+        '680fe69f9ba48ef173568c07': 'Schaefer2018_200Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.txt',
+        '680fc6fbab92f2b5627c5a0f': 'stim_weights.npy',
+        '680fc6f63068d66fc8568e3e': 'Subject_1_low_voltage.fif',
+        '680fc6f80959f56dde568f29': 'Subject_1_low_voltage_fittingresults_stim_exp.pkl',
+        '680fc6f99f030183213cbfd3': 'Subject_1_low_voltage_lf.npy',
+    }
+    return _fetch_osf_files(files_dict, 'eg__tmseeg', dest_folder, redownload)
 
 
 def fetch_egmomi2023(dest_folder=None, redownload=False):
+    """Fetch the data for the Momi et al. (2023) example.
+
+    Parameters
+    ----------
+    dest_folder : str | None
+        Where to save the files. Defaults to ``~/.whobpyt/data/eg__momi2023``.
+    redownload : bool
+        If True, delete any existing copy and download again.
+
+    Returns
+    -------
+    str
+        The folder containing the data.
     """
-    Fetch multiple files for Momi2023 using pull_file function.
-    """
-    
-    osf_url_pfx = 'https://osf.io/download'    
-    cwd = os.getcwd()
-
-    if dest_folder is None:
-        defpath = get_localdefaultdatapath()
-        dest_folder = os.path.join(defpath, 'eg__momi2023')
-
-    # If input instruction was to re-download and folder is already present, remove it
-    if os.path.isdir(dest_folder) and redownload == True:
-        shutil.rmtree(dest_folder)
-
-    """
-    files_to_download = [('10CNgKxKtuF-fHCSzAZszrMWxfiE3npBZ','sub_0_fittingresults_stim_exp.pkl'),
-                         ('10EKlRPE3LhMe4g3-etEtcgpGAnUBxX7L','sub_1_fittingresults_stim_exp.pkl'),
-                         ('10EhWhBQhoE-_FU8EsZjPQCNlt_7HtKPZ','sub_2_fittingresults_stim_exp.pkl'),
-                         ('10LT6yM3zY4OHV4iFZxhYffeE0dW6-82m','sub_3_fittingresults_stim_exp.pkl'),
-                         ('10MATp09A6wkIaBxr0V0dRejmI4MxnVES','sub_4_fittingresults_stim_exp.pkl'),
-                         ('10TTUXcLaOGIcvJERZXR2YGd7-tvTbHU7','sub_5_fittingresults_stim_exp.pkl'),
-                         ('109p5O9bsprTWxDGGFIh2KUZ6B4uP51oO', 'stim_weights'),
-                         ('1z9uz8jgoWk8BqviPaxVMBU4ES_GV-obb', 'Schaefer2018_200Parcels_7Networks_distance.csv'),
-                         ('1fMTVFgKfshF5WN0PV87GZY489ZSTESOh', 'Schaefer2018_200Parcels_7Networks_count.csv'),
-                         ('1Ve1LsL-zoJ4bOYCtlkS-1PTLCc_NwmYR', 'rh.Schaefer2018_200Parcels_7Networks_order.annot'),
-                         ('1LOY3j5Ti3pf6G0KUnmL1tEKZ2EIx8i3c', 'real_EEG'),
-                         ('1n3W892HiPumKaQ6eE6veZgsPlKrxDGvH', 'only_high_trial.mat'),
-                         ('1BnlXHlGJK1O-xPSB0dS09lm-2f35yR4O', 'lh.Schaefer2018_200Parcels_7Networks_order.annot'),
-                         ('1GZ8fmw3HeLlLDUXVMMV9VQMI-mZ8esVl', 'leadfield'),
-                         ('1-SA-ooEa6s6Jo4uarSUzqqZkId3sYDTg', 'all_avg.mat_avg_high_epoched')]"
-     """
-
-    files_dict = {                                   "h7nmz": "sub_0_fittingresults_stim_exp.pkl",
-                                  "681075a6e72532ce337c5a4a": "sub_1_fittingresults_stim_exp.pkl",
-                                  "6810c2f5839107c1b17c5a99": "sub_2_fittingresults_stim_exp.pkl",
-                                  "6810dfaca4dd9539133cc0c2": "sub_3_fittingresults_stim_exp.pkl",
-                                  "681168b4d9b48f0d6d568bda": "sub_4_fittingresults_stim_exp.pkl",
-                                  "681168ce093e4604787c5a8d": "sub_5_fittingresults_stim_exp.pkl",
-                                  "68225ef961764a34f5eadf3c": "sub_0_leadfield",
-                                  "68225efa143105dcdbc4c2bb": "sub_1_leadfield",
-                                  "68225ef7143105dcdbc4c2b7": "sub_2_leadfield",
-                                  "68225ef761764a34f5eadf3a": "sub_3_leadfield",
-                                  "6822923f01f350cd9a9c41a6": "sub_4_leadfield",
-                                  "68229241b71e556932ce9dcf": "sub_5_leadfield",
-                                  "68226048878c115ac49c4483": "stim_weights.npy",
-                                  "6810759b339396b1eb7c5b28": "Schaefer2018_200Parcels_7Networks_distance.csv",
-                                  "68107591430f2af683568cb2": "Schaefer2018_200Parcels_7Networks_count.csv",   
-                                  "6810758e11d6cb1d67568d05": "rh.Schaefer2018_200Parcels_7Networks_order.annot",
-                                  "6810758c78cb4eb6283cc01e": "real_EEG",
-                                  "6810758752a8beebd55ef7b9": "only_high_trial.mat",
-                                  "681074df24f63ddb219fddf8": "lh.Schaefer2018_200Parcels_7Networks_order.annot",
-                                  '68107567fed207be8f3cbf9f': "all_avg.mat_avg_high_epoched" ,
-                                  "681074d878cb4eb6283cbffa": "leadfield"}
-
-    total_files = len(files_dict)
-
-    # If the folder does not exist, create it and download the files
-    if not os.path.isdir(dest_folder): 
-
-        os.makedirs(dest_folder)
-    
-        os.chdir(dest_folder)
-
-        for file_code, file_name in files_dict.items():
-          dlcode = osf_url_pfx + '/' + file_code
-          pull_file(dlcode, file_name, download_method='wget')
-
-
-    os.chdir(cwd)
-
-    return dest_folder
-
+    files_dict = {
+        'h7nmz':                    'sub_0_fittingresults_stim_exp.pkl',
+        '681075a6e72532ce337c5a4a': 'sub_1_fittingresults_stim_exp.pkl',
+        '6810c2f5839107c1b17c5a99': 'sub_2_fittingresults_stim_exp.pkl',
+        '6810dfaca4dd9539133cc0c2': 'sub_3_fittingresults_stim_exp.pkl',
+        '681168b4d9b48f0d6d568bda': 'sub_4_fittingresults_stim_exp.pkl',
+        '681168ce093e4604787c5a8d': 'sub_5_fittingresults_stim_exp.pkl',
+        '68225ef961764a34f5eadf3c': 'sub_0_leadfield',
+        '68225efa143105dcdbc4c2bb': 'sub_1_leadfield',
+        '68225ef7143105dcdbc4c2b7': 'sub_2_leadfield',
+        '68225ef761764a34f5eadf3a': 'sub_3_leadfield',
+        '6822923f01f350cd9a9c41a6': 'sub_4_leadfield',
+        '68229241b71e556932ce9dcf': 'sub_5_leadfield',
+        '68226048878c115ac49c4483': 'stim_weights.npy',
+        '6810759b339396b1eb7c5b28': 'Schaefer2018_200Parcels_7Networks_distance.csv',
+        '68107591430f2af683568cb2': 'Schaefer2018_200Parcels_7Networks_count.csv',
+        '6810758e11d6cb1d67568d05': 'rh.Schaefer2018_200Parcels_7Networks_order.annot',
+        '6810758c78cb4eb6283cc01e': 'real_EEG',
+        '6810758752a8beebd55ef7b9': 'only_high_trial.mat',
+        '681074df24f63ddb219fddf8': 'lh.Schaefer2018_200Parcels_7Networks_order.annot',
+        '68107567fed207be8f3cbf9f': 'all_avg.mat_avg_high_epoched',
+        '681074d878cb4eb6283cbffa': 'leadfield',
+    }
+    return _fetch_osf_files(files_dict, 'eg__momi2023', dest_folder, redownload)
 
 
 def fetch_egismail2025(dest_folder=None, redownload=False):
@@ -277,135 +257,134 @@ def fetch_egismail2025(dest_folder=None, redownload=False):
     return fetch_egismail2026(dest_folder=dest_folder, redownload=redownload)
 
 
-
 def fetch_egismail2026(dest_folder=None, redownload=False):
+    """Fetch the data for the Ismail et al. (2026) example.
+
+    Parameters
+    ----------
+    dest_folder : str | None
+        Where to save the files. Defaults to ``~/.whobpyt/data/eg__ismail2026``.
+    redownload : bool
+        If True, delete any existing copy and download again.
+
+    Returns
+    -------
+    str
+        The folder containing the data.
     """
-    Fetch multiple files for Ismail 2026 using pull_file function.
-    """
-    
-    osf_url_pfx = 'https://osf.io/download'    
-    cwd = os.getcwd()
-
-    if dest_folder is None:
-        defpath = get_localdefaultdatapath()
-        dest_folder = os.path.join(defpath, 'eg__ismail2026')
-
-    # If input instruction was to re-download and folder is already present, remove it
-    if os.path.isdir(dest_folder) and redownload == True:
-        shutil.rmtree(dest_folder)
-
-    files_dict = {'4xw2t': 'distance.txt',
-                  'dbwp9': 'emp_noise_source.npy',
-                  'h6gjx': 'emp_verb_source.npy',
-                  '5e68s': 'info.pkl',
-                  's6wvn': 'info_nosubjinfo.pkl',
-                  'rkzjw': 'leadfield_3d.mat',
-                  'edcg2': 'noise_evoked.npy',
-                  'gmr72': 'sim_noise_sensor.npy',
-                  'ud9vf': 'sim_noise_source.npy',
-                  '5tw97': 'sim_verb_sensor.npy',
-                  'wgcza': 'sim_verb_source.npy',
-                  'mp5ut': 'verb_evoked.npy',
-                  'cz8bj': 'weights.csv'}
-
-    total_files = len(files_dict)
-
-    # If the folder does not exist, create it and download the files
-    if not os.path.isdir(dest_folder): 
-        os.makedirs(dest_folder)
-        os.chdir(dest_folder)
-        for file_code, file_name in files_dict.items():
-          dlcode = osf_url_pfx + '/' + file_code
-          pull_file(dlcode, file_name, download_method='wget')
-    os.chdir(cwd)
-
-    return dest_folder
-
+    files_dict = {
+        '4xw2t': 'distance.txt',
+        'dbwp9': 'emp_noise_source.npy',
+        'h6gjx': 'emp_verb_source.npy',
+        '5e68s': 'info.pkl',
+        's6wvn': 'info_nosubjinfo.pkl',
+        'rkzjw': 'leadfield_3d.mat',
+        'edcg2': 'noise_evoked.npy',
+        'gmr72': 'sim_noise_sensor.npy',
+        'ud9vf': 'sim_noise_source.npy',
+        '5tw97': 'sim_verb_sensor.npy',
+        'wgcza': 'sim_verb_source.npy',
+        'mp5ut': 'verb_evoked.npy',
+        'cz8bj': 'weights.csv',
+    }
+    return _fetch_osf_files(files_dict, 'eg__ismail2026', dest_folder, redownload)
 
 
 def fetch_egmomi2025(dest_folder=None, redownload=False):
+    """Fetch the data for the Momi et al. (2025) example.
+
+    Parameters
+    ----------
+    dest_folder : str | None
+        Where to save the files. Defaults to ``~/.whobpyt/data/eg__momi2025``.
+    redownload : bool
+        If True, delete any existing copy and download again.
+
+    Returns
+    -------
+    str
+        The folder containing the data, organised into the sub-folders
+        ``anatomical``, ``calculate_distance``, ``empirical_data``,
+        ``example_fittingresults`` and ``virtual_dissection``.
     """
-    Fetch multiple files for Momi2025 using pull_file function.
-    """
-    
-    osf_url_pfx = 'https://osf.io/download'    
-    cwd = os.getcwd()
-
-    if dest_folder is None:
-        defpath = get_localdefaultdatapath()
-        dest_folder = os.path.join(defpath, 'eg__momi2025')
-
-    # If input instruction was to re-download and folder is already present, remove it
-    if os.path.isdir(dest_folder) and redownload == True:
-        shutil.rmtree(dest_folder)
-
-    files_dict = {'6824a8c71ff4f0e5d9ce9f63': 'anatomical/example-bem',
-                  '6824a8b613f407a746c4c0f0': 'anatomical/example-src.fif',
-                  '6824a8a91ff4f0e5d9ce9f59': 'anatomical/example-trans.fif',
-                  '6824a8ac83462d95da9c415e': 'anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot',
-                  '6824a8ae66baea5d447a1b32': 'anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot',
-                  '6824a8b193c4fffcc97a1c1e': 'anatomical/sub_dist.pickle',
-                  '6824a75c66baea5d447a1afc': 'calculate_distance/example_ieeg.fif',
-                  '6824c8b91fc5936557c4c0a7': 'calculate_distance/example_Schaefer2018_200Parcels_7Networks_rewritten.nii',
-                  '6824a80bcae9ca1675c4c1fb': 'empirical_data/all_eeg_evoked.npy',
-                  '6824c909325133be06eae20a': 'empirical_data/all_epo_seeg.pkl',
-                  '6824c8ef57a8ae682f9c4456': 'empirical_data/example_epoched.fif',
-                  '6824c8f1f0bdacd73cce9eb7': 'empirical_data/dist_Schaefer_1000parcels_7net.pkl',
-                  '6824b6d93bf9c82dfbce9fa1': 'example_fittingresults/example-fittingresults.pkl',
-                  '6824a6f7b8afb1d4399c43bc': 'virtual_dissection/dist_Schaefer_1000parcels_7net.pkl',
-                  '6824a6f57de85602327a1bc5': 'virtual_dissection/eeg_template.fif',
-                  '6824a73282323cc35c9c4207': 'virtual_dissection/model_results.npy'}
-
-    total_files = len(files_dict)
-
-    # If the folder does not exist, create it and download the files
-    if not os.path.isdir(dest_folder): 
-        os.makedirs(dest_folder)
-        dest_subfolders = ['anatomical', 'calculate_distance', 'empirical_data', 
-                           'example_fittingresults', 'virtual_dissection']
-        for sf in dest_subfolders:
-            os.makedirs(os.path.join(dest_folder, sf))
-        os.chdir(dest_folder)
-
-        for file_code, file_name in files_dict.items():
-          dlcode = osf_url_pfx + '/' + file_code
-          pull_file(dlcode, file_name, download_method='wget')
-
-    os.chdir(cwd)
-
-    return dest_folder
-
+    files_dict = {
+        '6824a8c71ff4f0e5d9ce9f63': 'anatomical/example-bem',
+        '6824a8b613f407a746c4c0f0': 'anatomical/example-src.fif',
+        '6824a8a91ff4f0e5d9ce9f59': 'anatomical/example-trans.fif',
+        '6824a8ac83462d95da9c415e': 'anatomical/lh.Schaefer2018_200Parcels_7Networks_order.annot',
+        '6824a8ae66baea5d447a1b32': 'anatomical/rh.Schaefer2018_200Parcels_7Networks_order.annot',
+        '6824a8b193c4fffcc97a1c1e': 'anatomical/sub_dist.pickle',
+        '6824a75c66baea5d447a1afc': 'calculate_distance/example_ieeg.fif',
+        '6824c8b91fc5936557c4c0a7': 'calculate_distance/example_Schaefer2018_200Parcels_7Networks_rewritten.nii',
+        '6824a80bcae9ca1675c4c1fb': 'empirical_data/all_eeg_evoked.npy',
+        '6824c909325133be06eae20a': 'empirical_data/all_epo_seeg.pkl',
+        '6824c8ef57a8ae682f9c4456': 'empirical_data/example_epoched.fif',
+        '6824c8f1f0bdacd73cce9eb7': 'empirical_data/dist_Schaefer_1000parcels_7net.pkl',
+        '6824b6d93bf9c82dfbce9fa1': 'example_fittingresults/example-fittingresults.pkl',
+        '6824a6f7b8afb1d4399c43bc': 'virtual_dissection/dist_Schaefer_1000parcels_7net.pkl',
+        '6824a6f57de85602327a1bc5': 'virtual_dissection/eeg_template.fif',
+        '6824a73282323cc35c9c4207': 'virtual_dissection/model_results.npy',
+    }
+    return _fetch_osf_files(files_dict, 'eg__momi2025', dest_folder, redownload)
 
 
 def fetch_eggriffiths2022(dest_folder=None, redownload=False):
-    """
-    Fetch multiple files for Griffiths 2022 using pull_file function.
-    """
-    
-    # url for entire folder download
-    osf_folder_url = "https://files.ca-1.osf.io/v1/resources/u7kgw/providers/osfstorage/6837772e428f2b32e585b232/?zip="
-    
-    cwd = os.getcwd()
+    """Fetch the data for Griffiths et al. (2022), as one OSF folder.
 
-    newfolder_name = 'eg__griffiths2022'
-    
+    Parameters
+    ----------
+    dest_folder : str | None
+        Parent folder to save into. The data go in an ``eg__griffiths2022``
+        sub-folder. Defaults to ``~/.whobpyt/data``.
+    redownload : bool
+        If True, delete any existing copy and download again.
+
+    Returns
+    -------
+    str
+        The folder containing the data.
+    """
+    osf_folder_url = ('https://files.ca-1.osf.io/v1/resources/u7kgw/providers/'
+                      'osfstorage/6837772e428f2b32e585b232/?zip=')
     if dest_folder is None:
-        newfolder_parent = get_localdefaultdatapath()
-        newfolder = os.path.join(newfolder_parent, newfolder_name)
-
-    # If input instruction was to re-download and folder is already present, remove it
-    if os.path.isdir(newfolder) and redownload == True:
+        dest_folder = get_localdefaultdatapath()
+    newfolder = os.path.join(dest_folder, 'eg__griffiths2022')
+    if redownload and os.path.isdir(newfolder):
         shutil.rmtree(newfolder)
-
-    # If the folder does not exist, create it and download the files
-    #if not os.path.isdir(dest_folder): 
-    #    os.makedirs(dest_folder)
-    #    os.chdir(dest_folder)
-
-    dlcode = osf_folder_url
-        
-    pull_folder(dlcode, dest_folder=newfolder_parent, newfolder_name=newfolder_name, download_method='wget')
-
-    return newfolder
+    return pull_folder(osf_folder_url, newfolder_name='eg__griffiths2022',
+                       dest_folder=dest_folder, download_method='wget')
 
 
+# --------------------------------------------------------------------------
+# Older datasets hosted on Google Drive
+# --------------------------------------------------------------------------
+
+def fetch_hcpl2k8(dest_folder=None):
+    """Fetch the ``hcpl2k8`` dataset from Google Drive.
+
+    Returns the path of the ``hcpl2k8`` folder inside ``dest_folder``
+    (default ``~/.whobpyt/data``).
+    """
+    return pull_folder('18smy3ElTd4VksoL4Z15dhwT5l3yjk6xS', newfolder_name='hcpl2k8',
+                       dest_folder=dest_folder, download_method='gdown')
+
+
+def fetch_MomiEtAlELife2023(dest_folder=None):
+    """Fetch the full Momi et al. (2023) reproduction data from Google Drive.
+
+    Downloads the ``DATA_LITE`` folder and the ``fsaverage`` folder into
+    ``dest_folder`` (default ``~/.whobpyt/data/MomiEtAlELife2023``). For the
+    example in the documentation, use :func:`fetch_egmomi2023` instead.
+
+    Returns
+    -------
+    str
+        The folder containing the data.
+    """
+    if dest_folder is None:
+        dest_folder = os.path.join(get_localdefaultdatapath(), 'MomiEtAlELife2023')
+    pull_folder('1t-9m0E88xUUcGWWH024H32maQUs_Jjgx', newfolder_name='data',
+                dest_folder=dest_folder, download_method='gdown')
+    pull_folder('1YPyf3h9YKnZi0zRwBwolROQuqDtxEfzF', newfolder_name='fsaverage',
+                dest_folder=dest_folder, download_method='gdown')
+    return dest_folder
