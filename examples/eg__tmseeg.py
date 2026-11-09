@@ -111,7 +111,7 @@ hidden_size = int(tr/step_size)
 
 # %%
 # prepare empirical data structure of the model
-data_mean = Timeseries(eeg_data, num_epochs, batch_size)
+data_mean = Timeseries(eeg_data, step_size=tr, modality="eeg")
 
 # %%
 # get model parameters structure and define the fitted parameters by setting non-zero variance for the model
