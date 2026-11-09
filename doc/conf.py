@@ -17,6 +17,14 @@ matplotlib.use("agg")  # never open GUI windows while running examples
 project = "WhoBPyT"
 copyright = f"2022–{datetime.now(tz=timezone.utc).year}, the WhoBPyT developers"  # noqa: A001
 
+import whobpyt  # noqa: E402
+
+release = whobpyt.__version__
+version = release
+# Which entry of _static/versions.json this build is: "dev" for the development
+# docs built from main, otherwise the release number (e.g. "0.1.0").
+switcher_version = "dev" if ".dev" in release else release
+
 # -- General configuration ---------------------------------------------------
 
 extensions = [
@@ -147,7 +155,14 @@ html_theme_options = {
     "icon_links_label": "External Links",
     "navbar_start": ["navbar-logo"],
     "navbar_center": ["navbar-nav"],
-    "navbar_end": ["theme-switcher", "navbar-icon-links"],
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
+    # The switcher reads the list of versions from the live site, so every
+    # version's docs show the same, current list.
+    "switcher": {
+        "json_url": "https://griffithslab.github.io/whobpyt/_static/versions.json",
+        "version_match": switcher_version,
+    },
+    "check_switcher": False,  # don't fetch json_url at build time (offline builds)
     "navbar_persistent": ["search-button"],
     "navbar_align": "left",
     "navigation_with_keys": False,
