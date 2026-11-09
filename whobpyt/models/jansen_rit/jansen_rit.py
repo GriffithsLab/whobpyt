@@ -307,7 +307,8 @@ class JansenRitModel(AbstractNeuralModel):
         w_p2i = zsmat.copy() # the pyramidal to inhibitory interneuron cross-layer gains
         w_p2p = zsmat.copy() # the pyramidal to pyramidal cells same-layer gains
 
-        # Set w_p2i, w_p2e, and w_p2p as attributes as type Parameter if use_fit_gains is True
+        # Set w_p2i, w_p2e, and w_p2p as attributes as type Parameter if use_fit_gains is True;
+        # otherwise keep them as fixed (non-learnable) tensors.
         if self.use_fit_gains:
             
             w_p2e = ptParameter(pttensor(w_p2e, dtype=ptfloat32))
@@ -315,6 +316,10 @@ class JansenRitModel(AbstractNeuralModel):
             w_p2p = ptParameter(pttensor(w_p2p, dtype=ptfloat32))
             mps = self.params_fitted['modelparameter']
             mps.append(w_p2e); mps.append(w_p2i); mps.append(w_p2p)
+        else:
+            w_p2e = pttensor(w_p2e, dtype=ptfloat32)
+            w_p2i = pttensor(w_p2i, dtype=ptfloat32)
+            w_p2p = pttensor(w_p2p, dtype=ptfloat32)
 
         # Add to the current object
         self.w_p2e = w_p2e
@@ -400,21 +405,19 @@ class JansenRitModel(AbstractNeuralModel):
         sc = self.sc
         ptsc = pttensor(sc, dtype=ptfloat32)
 
-        if self.use_fit_gains:
+        # Pyramidal to excitatory, pyramidal to inhibitory, and pyramidal to pyramidal connectivity
+        # matrices, scaled by the gains w_xx (learnable if use_fit_gains, otherwise fixed).
+        w_b = ptexp(self.w_p2i) * ptsc
+        w_n_b = w_b / ptnorm(w_b)
+        self.sc_p2i = w_n_b
 
-            # Update the pyramidal to excitatory, pyramidal to inhibitory, and pyramidal to pyramidal connectivity matrices based on the gains w_xx
-            
-            w_b = ptexp(self.w_p2i) * ptsc
-            w_n_b = w_b / ptnorm(w_b)
-            self.sc_p2i = w_n_b
+        w_f = ptexp(self.w_p2e) * ptsc
+        w_n_f = w_f / ptnorm(w_f)
+        self.sc_p2e = w_n_f
 
-            w_f = ptexp(self.w_p2e) * ptsc     
-            w_n_f = w_f / ptnorm(w_f)
-            self.sc_p2e = w_n_f
-
-            w_l = ptexp(self.w_p2p) * ptsc         
-            w_n_l = (0.5 * (w_l + pttranspose(w_l, 0, 1))) / ptnorm(   0.5 * (w_l + pttranspose(w_l, 0, 1)))
-            self.sc_p2p = w_n_l
+        w_l = ptexp(self.w_p2p) * ptsc
+        w_n_l = (0.5 * (w_l + pttranspose(w_l, 0, 1))) / ptnorm(   0.5 * (w_l + pttranspose(w_l, 0, 1)))
+        self.sc_p2p = w_n_l
 
 
         if self.use_laplacian:
