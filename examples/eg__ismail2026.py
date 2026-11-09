@@ -12,6 +12,13 @@ Ismail M.M., Momi D., Wang Z., Bastiaens S.P., Oveisi M.P., Greiner H.M., Mabbot
 Griffiths J.D., Kadis D.S. (2026).
 "Developmental disinhibition gates language lateralization in childhood."
 Nature Communications, `doi: 10.1038/s41467-026-71918-7 <https://doi.org/10.1038/s41467-026-71918-7>`_.
+
+.. note::
+
+   To reproduce the published results exactly, this example fits the
+   original model code from the paper, kept in ``whobpyt.depr.ismail2026``.
+   That code differs from the current WhoBPyT API. To learn the current API,
+   start with :ref:`ex-getting-started` and :ref:`ex-tmseeg`.
 """
 # sphinx_gallery_thumbnail_number = 1
 # %% [markdown]

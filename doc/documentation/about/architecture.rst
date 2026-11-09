@@ -82,8 +82,9 @@ Fitting paradigms (``whobpyt.run``)
 Other modules
    ``whobpyt.datasets`` fetches the example datasets (see :doc:`datasets`),
    ``whobpyt.visualization`` has plotting helpers, and ``whobpyt.depr``
-   keeps the older, paper-specific model code that some of the paper
-   replications still use.
+   keeps the original model code from the Momi 2023, Momi 2025 and Ismail
+   2026 papers. Their replications in the examples gallery use it, and the
+   model fits saved with it, to reproduce the published results exactly.
 
 
 Extending WhoBPyT

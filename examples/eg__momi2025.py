@@ -19,6 +19,14 @@ Momi D., Wang Z., Parmigiani S., Mikulan E., Bastiaens S.P., Oveisi M.P., Kadak 
 Waters A.C., Hill S., Pigorini A., Keller C.J., Griffiths J.D. (2025).
 "Stimulation mapping and whole-brain modeling reveal gradients of excitability and recurrence in cortical networks."
 Nature Communications 16, 3222, `doi: 10.1038/s41467-025-58187-6 <https://doi.org/10.1038/s41467-025-58187-6>`_.
+
+.. note::
+
+   To reproduce the published results exactly, this example uses the
+   original model code from the paper, kept in ``whobpyt.depr.momi2025``,
+   and loads model fits computed with it. That code differs from the current
+   WhoBPyT API. To learn the current API, start with
+   :ref:`ex-getting-started` and :ref:`ex-tmseeg`.
 """
 
 # %%
