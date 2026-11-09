@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Run &#8212; WhoBPyT</title>
+    <title>Model fitting and simulation &#8212; WhoBPyT</title>
   
   
   
@@ -46,7 +46,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../_static/documentation_options.js?v=afeeb49e"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -54,16 +54,23 @@
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/api/run';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://griffithslab.github.io/whobpyt/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://griffithslab.github.io/whobpyt/documentation/api/run.html" />
     <link rel="icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Visualization" href="visualization.html" />
-    <link rel="prev" title="Optimization" href="optimization.html" />
+    <link rel="next" title="Datasets" href="datasets.html" />
+    <link rel="prev" title="Objective functions" href="optimization.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="0.1.0.dev0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -200,6 +207,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -318,6 +345,26 @@
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -379,13 +426,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../usage/cookbook.html">Cookbook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../usage/running_in_codespaces.html">GitHub Codespaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../usage/running_in_colab.html">Google Colab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/running_in_colab.html">Run in your browser</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../development/index.html">Development and Contributor Guidelines</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../development/contributing.html">Contributing Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../development/governance.html">Governance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html">Roadmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/releasing.html">Making a Release</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../science/index.html">Scientific Research Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -395,11 +443,13 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Python API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="datatypes.html">Data types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models.html">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatypes.html">Data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization.html">Objective functions</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Model fitting &amp; simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base_classes.html">Base classes</a></li>
 </ul>
 </details></li>
 </ul>
@@ -432,11 +482,11 @@
               
 <div>
   
-  <section id="run">
-<h1>Run<a class="headerlink" href="#run" title="Link to this heading">#</a></h1>
+  <section id="model-fitting-and-simulation">
+<h1>Model fitting and simulation<a class="headerlink" href="#model-fitting-and-simulation" title="Link to this heading">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="whobpyt.run.model_fitting.ModelFitting">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.run.model_fitting.</span></span><span class="sig-name descname"><span class="pre">ModelFitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AbstractNeuralModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AbstractLoss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.device('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.model_fitting.ModelFitting" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="whobpyt.run.ModelFitting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></span><span class="sig-name descname"><span class="pre">ModelFitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base_classes.html#whobpyt.datatypes.AbstractNeuralModel" title="whobpyt.datatypes.abstract_neural_model.AbstractNeuralModel"><span class="pre">AbstractNeuralModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base_classes.html#whobpyt.datatypes.AbstractLoss" title="whobpyt.datatypes.abstract_loss.AbstractLoss"><span class="pre">AbstractLoss</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.device('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.ModelFitting" title="Link to this definition">#</a></dt>
 <dd><p>This Model_fitting class is able to fit resting state data or evoked potential data 
 for which the input training data is empty or some stimulus to one or more NMM nodes,
 and the label is an associated empirical neuroimaging recording.</p>
@@ -461,42 +511,28 @@ is associated with an empirical recording, must use a different fitting class.</
 <p class="rubric">Methods</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.run.model_fitting.ModelFitting.evaluate" title="whobpyt.run.model_fitting.ModelFitting.evaluate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate</span></code></a>(u, empRec, TPperWindow[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.run.ModelFitting.evaluate" title="whobpyt.run.ModelFitting.evaluate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate</span></code></a>(u, empRec, TPperWindow[, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.run.model_fitting.ModelFitting.save" title="whobpyt.run.model_fitting.ModelFitting.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(filename)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.run.ModelFitting.save" title="whobpyt.run.ModelFitting.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(filename)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.run.model_fitting.ModelFitting.train" title="whobpyt.run.model_fitting.ModelFitting.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(u, empRecs, num_epochs, TPperWindow[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.run.ModelFitting.simulate" title="whobpyt.run.ModelFitting.simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulate</span></code></a>(u, numTP[, base_window_num, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.run.ModelFitting.train" title="whobpyt.run.ModelFitting.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(u, empRecs, num_epochs, TPperWindow[, ...])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.run.model_fitting.ModelFitting.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AbstractNeuralModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AbstractLoss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.device('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.model_fitting.ModelFitting.__init__" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="whobpyt.run.ModelFitting.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_window_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transient_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.ModelFitting.evaluate" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>model: AbstractNMM</strong></dt><dd><p>Whole Brain Model to Simulate</p>
-</dd>
-<dt><strong>cost: AbstractLoss</strong></dt><dd><p>A particular objective function which the model will be optimized for.</p>
-</dd>
-<dt><strong>device</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.device</span></code></a></span></dt><dd><p>Whether the fitting is to run on CPU or GPU</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.run.model_fitting.ModelFitting.evaluate">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_window_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transient_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.model_fitting.ModelFitting.evaluate" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>u</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></span></dt><dd><p>external or stimulus</p>
+<dt><strong>u</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a> or <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></a></span></dt><dd><p>external or stimulus</p>
 </dd>
 <dt><strong>empRec: list of Recording</strong></dt><dd><p>This is the ML “Training Labels”</p>
 </dd>
@@ -513,8 +549,8 @@ is associated with an empirical recording, must use a different fitting class.</
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.run.model_fitting.ModelFitting.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.model_fitting.ModelFitting.save" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="whobpyt.run.ModelFitting.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.ModelFitting.save" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -526,8 +562,28 @@ is associated with an empirical recording, must use a different fitting class.</
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.run.model_fitting.ModelFitting.train">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRecs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmupWindow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningrate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_2ndLevel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_scheduler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.model_fitting.ModelFitting.train" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="whobpyt.run.ModelFitting.simulate">
+<span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numTP</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_window_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transient_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.ModelFitting.simulate" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>u</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a> or <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></a></span></dt><dd><p>external or stimulus</p>
+</dd>
+<dt><strong>numTP</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of time points ot simulate</p>
+</dd>
+<dt><strong>base_window_num</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>length of num_windows for resting</p>
+</dd>
+<dt><strong>transient_num</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of initial time points to exclude from some metrics</p>
+</dd>
+<dt><strong>———–</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.run.ModelFitting.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empRecs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">TPperWindow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmupWindow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningrate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_2ndLevel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_scheduler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.ModelFitting.train" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -552,6 +608,168 @@ is associated with an empirical recording, must use a different fitting class.</
 
 </dd></dl>
 
+<section id="specialised-fitting-paradigms">
+<h2>Specialised fitting paradigms<a class="headerlink" href="#specialised-fitting-paradigms" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.run.FittingFNGFPG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></span><span class="sig-name descname"><span class="pre">FittingFNGFPG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.device('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.FittingFNGFPG" title="Link to this definition">#</a></dt>
+<dd><p>Fitting Forward No Gradient Forward Parallel Gradient (FNG-FPG)</p>
+<dl class="simple">
+<dt>This is a specalized model fitting class to:</dt><dd><ul class="simple">
+<li><p>backpropagate through time of the duration of 10’s of seconds of real time scale simulation</p></li>
+<li><p>learn generalized NMM parameters such that given a SC the model predicts the corresponding FC</p></li>
+<li><p>the label can be a fixed value (example a FC matrix, instead of a neuroimaging recording)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>model</strong><span class="classifier"><a class="reference internal" href="base_classes.html#whobpyt.datatypes.AbstractNeuralModel" title="whobpyt.datatypes.AbstractNeuralModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractNMM</span></code></a></span></dt><dd><p>The model which has parameters to be trained.</p>
+</dd>
+<dt><strong>cost</strong><span class="classifier"><a class="reference internal" href="base_classes.html#whobpyt.datatypes.AbstractLoss" title="whobpyt.datatypes.AbstractLoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractLoss</span></code></a></span></dt><dd><p>The objective function that will be used to calculate a loss.</p>
+</dd>
+<dt><strong>trainingStats</strong><span class="classifier"><a class="reference internal" href="datatypes.html#whobpyt.datatypes.TrainingStats" title="whobpyt.datatypes.TrainingStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainingStats</span></code></a></span></dt><dd><p>An object that will keep track of optimization/machine learning statistics during training.</p>
+</dd>
+<dt><strong>lastSerial</strong><span class="classifier"><a class="reference internal" href="datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Recording</span></code></a></span></dt><dd><p>The simulated data from the last serial run (FNG)</p>
+</dd>
+<dt><strong>lastRec</strong><span class="classifier"><a class="reference internal" href="datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Recording</span></code></a></span></dt><dd><p>The simulated data from the last parallel run (FPG)</p>
+</dd>
+<dt><strong>device</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.device</span></code></a></span></dt><dd><p>Whether the fitting is to run on CPU or GPU</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.run.FittingFNGFPG.evaluate" title="whobpyt.run.FittingFNGFPG.evaluate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate</span></code></a>(stim, empData)</p></td>
+<td><p>Not implemented yet.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.run.FittingFNGFPG.simulate" title="whobpyt.run.FittingFNGFPG.simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulate</span></code></a>(stim, numTP)</p></td>
+<td><p>Not implemented yet.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.run.FittingFNGFPG.train" title="whobpyt.run.FittingFNGFPG.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(stim, empDatas, num_epochs, block_len)</p></td>
+<td><p>Method to train the model.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.run.FittingFNGFPG.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.FittingFNGFPG.evaluate" title="Link to this definition">#</a></dt>
+<dd><p>Not implemented yet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.run.FittingFNGFPG.simulate">
+<span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numTP</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.FittingFNGFPG.simulate" title="Link to this definition">#</a></dt>
+<dd><p>Not implemented yet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.run.FittingFNGFPG.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empDatas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resetIC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.FittingFNGFPG.train" title="Link to this definition">#</a></dt>
+<dd><p>Method to train the model.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>stim</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></a> or <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></a></span></dt><dd><p>The input into the NMM (is 0 for the resting state case).</p>
+</dd>
+<dt><strong>empDatas</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">List</span></code> of <a class="reference internal" href="datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Recording</span></code></a> or other <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></span></dt><dd><p>The empirical data compared to in the objective function.</p>
+</dd>
+<dt><strong>num_epochs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></a></span></dt><dd><p>Number of epochs for training.</p>
+</dd>
+<dt><strong>block_len</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></a></span></dt><dd><p>The number of simulation steps per block. Total number of steps should be divisable by this number.</p>
+</dd>
+<dt><strong>learningrate</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Float</span></code></a></span></dt><dd><p>Learning rate used by backpropagation optimizer.</p>
+</dd>
+<dt><strong>resetIC</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bool</span></code></a></span></dt><dd><p>Whether to reset the models initial condition after every backpropagation</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.run.FittingBatch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.run.</span></span><span class="sig-name descname"><span class="pre">FittingBatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.device('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.FittingBatch" title="Link to this definition">#</a></dt>
+<dd><p>Fitting Batch</p>
+<p>This is a specalized model fitting class to train using a batched approach.</p>
+<dl class="field-list">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>model</strong><span class="classifier"><a class="reference internal" href="base_classes.html#whobpyt.datatypes.AbstractNeuralModel" title="whobpyt.datatypes.AbstractNeuralModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractNMM</span></code></a></span></dt><dd><p>The model which has parameters to be trained.</p>
+</dd>
+<dt><strong>cost</strong><span class="classifier"><a class="reference internal" href="base_classes.html#whobpyt.datatypes.AbstractLoss" title="whobpyt.datatypes.AbstractLoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractLoss</span></code></a></span></dt><dd><p>The objective function that will be used to calculate a loss.</p>
+</dd>
+<dt><strong>trainingStats</strong><span class="classifier"><a class="reference internal" href="datatypes.html#whobpyt.datatypes.TrainingStats" title="whobpyt.datatypes.TrainingStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainingStats</span></code></a></span></dt><dd><p>An object that will keep track of optimization/machine learning statistics during training.</p>
+</dd>
+<dt><strong>lastRec</strong><span class="classifier"><a class="reference internal" href="datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Recording</span></code></a></span></dt><dd><p>The simulated data from the last batch run</p>
+</dd>
+<dt><strong>device</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.device</span></code></a></span></dt><dd><p>Whether the fitting is to run on CPU or GPU</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.run.FittingBatch.evaluate" title="whobpyt.run.FittingBatch.evaluate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate</span></code></a>(stim, empData)</p></td>
+<td><p>Not implemented yet.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.run.FittingBatch.simulate" title="whobpyt.run.FittingBatch.simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulate</span></code></a>(stim, numTP)</p></td>
+<td><p>Not implemented yet.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.run.FittingBatch.train" title="whobpyt.run.FittingBatch.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(stim, empDatas, num_epochs, batch_size)</p></td>
+<td><p>Method to train the model.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.run.FittingBatch.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.FittingBatch.evaluate" title="Link to this definition">#</a></dt>
+<dd><p>Not implemented yet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.run.FittingBatch.simulate">
+<span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numTP</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.FittingBatch.simulate" title="Link to this definition">#</a></dt>
+<dd><p>Not implemented yet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.run.FittingBatch.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empDatas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">staticIC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">staticNoise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.run.FittingBatch.train" title="Link to this definition">#</a></dt>
+<dd><p>Method to train the model.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>stim</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></a> or <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></a></span></dt><dd><p>The input into the NMM (is 0 for the resting state case).</p>
+</dd>
+<dt><strong>empDatas</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">List</span></code> of <a class="reference internal" href="datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Recording</span></code></a> or other <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></span></dt><dd><p>The empirical data compared to in the objective function.</p>
+</dd>
+<dt><strong>num_epochs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></a></span></dt><dd><p>Number of epochs for training.</p>
+</dd>
+<dt><strong>batch_size</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></a></span></dt><dd><p>The number of simulations run that will be backpropagated through simultaneously.</p>
+</dd>
+<dt><strong>learningrate</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Float</span></code></a></span></dt><dd><p>Learning rate used by backpropagation optimizer.</p>
+</dd>
+<dt><strong>staticIC</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bool</span></code></a></span></dt><dd><p>Whether to reset the models initial condition after every backpropagation</p>
+</dd>
+<dt><strong>staticNoise</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bool</span></code></a></span></dt><dd><p>Whether to use the same noise for each epoch</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
 
@@ -571,15 +789,15 @@ is associated with an empirical recording, must use a different fitting class.</
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Optimization</p>
+        <p class="prev-next-title">Objective functions</p>
       </div>
     </a>
     <a class="right-next"
-       href="visualization.html"
+       href="datasets.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Visualization</p>
+        <p class="prev-next-title">Datasets</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -602,11 +820,26 @@ is associated with an empirical recording, must use a different fitting class.</
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.model_fitting.ModelFitting"><code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.model_fitting.ModelFitting.__init__"><code class="docutils literal notranslate"><span class="pre">ModelFitting.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.model_fitting.ModelFitting.evaluate"><code class="docutils literal notranslate"><span class="pre">ModelFitting.evaluate()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.model_fitting.ModelFitting.save"><code class="docutils literal notranslate"><span class="pre">ModelFitting.save()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.model_fitting.ModelFitting.train"><code class="docutils literal notranslate"><span class="pre">ModelFitting.train()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.ModelFitting"><code class="docutils literal notranslate"><span class="pre">ModelFitting</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.ModelFitting.evaluate"><code class="docutils literal notranslate"><span class="pre">ModelFitting.evaluate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.ModelFitting.save"><code class="docutils literal notranslate"><span class="pre">ModelFitting.save()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.ModelFitting.simulate"><code class="docutils literal notranslate"><span class="pre">ModelFitting.simulate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.ModelFitting.train"><code class="docutils literal notranslate"><span class="pre">ModelFitting.train()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialised-fitting-paradigms">Specialised fitting paradigms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.FittingFNGFPG"><code class="docutils literal notranslate"><span class="pre">FittingFNGFPG</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.FittingFNGFPG.evaluate"><code class="docutils literal notranslate"><span class="pre">FittingFNGFPG.evaluate()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.FittingFNGFPG.simulate"><code class="docutils literal notranslate"><span class="pre">FittingFNGFPG.simulate()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.FittingFNGFPG.train"><code class="docutils literal notranslate"><span class="pre">FittingFNGFPG.train()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.FittingBatch"><code class="docutils literal notranslate"><span class="pre">FittingBatch</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.FittingBatch.evaluate"><code class="docutils literal notranslate"><span class="pre">FittingBatch.evaluate()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.FittingBatch.simulate"><code class="docutils literal notranslate"><span class="pre">FittingBatch.simulate()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.run.FittingBatch.train"><code class="docutils literal notranslate"><span class="pre">FittingBatch.train()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

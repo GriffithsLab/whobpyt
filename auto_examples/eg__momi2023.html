@@ -46,7 +46,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../_static/documentation_options.js?v=afeeb49e"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,6 +55,13 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'auto_examples/eg__momi2023';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://griffithslab.github.io/whobpyt/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://griffithslab.github.io/whobpyt/auto_examples/eg__momi2023.html" />
     <link rel="icon" href="../_static/favicon.ico"/>
@@ -64,7 +71,7 @@
     <link rel="prev" title="Replicating Ismail et al. 2026" href="eg__ismail2026.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="0.1.0.dev0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -201,6 +208,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -319,6 +346,26 @@
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -380,7 +427,7 @@
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-eg-momi2023-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code.</p>
+to download the full example code or to run this example in your browser via Binder.</p>
 </div>
 <section class="sphx-glr-example-title" id="the-role-of-recurrent-network-feedback-in-tms-eeg-evoked-responses">
 <span id="ex-momi2023"></span><span id="sphx-glr-auto-examples-eg-momi2023-py"></span><h1>The Role of Recurrent Network Feedback in TMS-EEG Evoked Responses<a class="headerlink" href="#the-role-of-recurrent-network-feedback-in-tms-eeg-evoked-responses" title="Link to this heading">#</a></h1>
@@ -391,6 +438,14 @@ and results reported in Momi, Wang, &amp; Griffiths (ELife 2023).</p>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023).
 “TMS-evoked responses are driven by recurrent large-scale network dynamics.”
 eLife, <a class="reference external" href="https://elifesciences.org/articles/83232">doi: 10.7554/eLife.83232</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To reproduce the published results exactly, this example uses the
+original model code from the paper, kept in <code class="docutils literal notranslate"><span class="pre">whobpyt.depr.momi2023</span></code>,
+and loads model fits computed with it. That code differs from the current
+WhoBPyT API. To learn the current API, start with
+<a class="reference internal" href="eg__getting_started.html#ex-getting-started"><span class="std std-ref">Getting started: simulate and fit a whole-brain model</span></a> and <a class="reference internal" href="eg__tmseeg.html#ex-tmseeg"><span class="std std-ref">Modelling TMS-EEG evoked responses</span></a>.</p>
+</div>
 <section id="overview-of-study-and-summary-of-key-results">
 <h2>0. Overview of study and summary of key results<a class="headerlink" href="#overview-of-study-and-summary-of-key-results" title="Link to this heading">#</a></h2>
 <p><em>(content modified from GriffithsLab/PyTepFit github repo, and the paper itself)</em></p>
@@ -650,10 +705,10 @@ The following figures from the paper are replicated in the provided Jupyter Note
 </span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span><span class="w">
 </span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="w">
 </span><span class="w">
-</span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">datasets</span><span class="nn">.</span><span class="nn">fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_egmomi2023</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">datasets</span><span class="nn">.</span><span class="nn">fetchers</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-whobpyt-datasets-fetchers sphx-glr-backref-type-py-function reference internal" href="../documentation/api/datasets.html#whobpyt.datasets.fetchers.fetch_egmomi2023" title="whobpyt.datasets.fetchers.fetch_egmomi2023"><span class="n">fetch_egmomi2023</span></a><span class="w">
 </span></pre></div></div>
 <p>Download data</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">files_dir</span></a> <span class="o">=</span> <span class="n">fetch_egmomi2023</span><span class="p">(</span><span class="p">)</span><span class="w">
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">files_dir</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datasets-fetchers sphx-glr-backref-type-py-function reference internal" href="../documentation/api/datasets.html#whobpyt.datasets.fetchers.fetch_egmomi2023" title="whobpyt.datasets.fetchers.fetch_egmomi2023"><span class="n">fetch_egmomi2023</span></a><span class="p">(</span><span class="p">)</span><span class="w">
 </span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">sc_file</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">files_dir</span></a> <span class="o">+</span> <span class="s1">'</span><span class="s1">/Schaefer2018_200Parcels_7Networks_count.csv</span><span class="s1">'</span><span class="w">
 </span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">high_file</span></a> <span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">files_dir</span></a> <span class="o">+</span> <span class="s1">'</span><span class="s1">/only_high_trial.mat</span><span class="s1">'</span><span class="w">
 </span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">dist_file</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">files_dir</span></a> <span class="o">+</span> <span class="s1">'</span><span class="s1">/Schaefer2018_200Parcels_7Networks_distance.csv</span><span class="s1">'</span><span class="w">
@@ -662,87 +717,27 @@ The following figures from the paper are replicated in the provided Jupyter Note
 </span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">file_eeg</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">files_dir</span></a> <span class="o">+</span> <span class="s1">'</span><span class="s1">/real_EEG</span><span class="s1">'</span><span class="w">
 </span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">eeg</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.load.html#numpy.load" title="numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">file_eeg</span></a><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="w">
 </span></pre></div></div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading sub_0_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_1_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_2_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_3_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_4_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_5_fittingresults_stim_exp.pkl
-
-
-
-Downloading sub_0_leadfield
-
-
-
-Downloading sub_1_leadfield
-
-
-
-Downloading sub_2_leadfield
-
-
-
-Downloading sub_3_leadfield
-
-
-
-Downloading sub_4_leadfield
-
-
-
-Downloading sub_5_leadfield
-
-
-
-Downloading stim_weights.npy
-
-
-
-Downloading Schaefer2018_200Parcels_7Networks_distance.csv
-
-
-
-Downloading Schaefer2018_200Parcels_7Networks_count.csv
-
-
-
-Downloading rh.Schaefer2018_200Parcels_7Networks_order.annot
-
-
-
-Downloading real_EEG
-
-
-
-Downloading only_high_trial.mat
-
-
-
-Downloading lh.Schaefer2018_200Parcels_7Networks_order.annot
-
-
-
-Downloading all_avg.mat_avg_high_epoched
-
-
-
-Downloading leadfield
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[1/21] Downloading sub_0_fittingresults_stim_exp.pkl
+[2/21] Downloading sub_1_fittingresults_stim_exp.pkl
+[3/21] Downloading sub_2_fittingresults_stim_exp.pkl
+[4/21] Downloading sub_3_fittingresults_stim_exp.pkl
+[5/21] Downloading sub_4_fittingresults_stim_exp.pkl
+[6/21] Downloading sub_5_fittingresults_stim_exp.pkl
+[7/21] Downloading sub_0_leadfield
+[8/21] Downloading sub_1_leadfield
+[9/21] Downloading sub_2_leadfield
+[10/21] Downloading sub_3_leadfield
+[11/21] Downloading sub_4_leadfield
+[12/21] Downloading sub_5_leadfield
+[13/21] Downloading stim_weights.npy
+[14/21] Downloading Schaefer2018_200Parcels_7Networks_distance.csv
+[15/21] Downloading Schaefer2018_200Parcels_7Networks_count.csv
+[16/21] Downloading rh.Schaefer2018_200Parcels_7Networks_order.annot
+[17/21] Downloading real_EEG
+[18/21] Downloading only_high_trial.mat
+[19/21] Downloading lh.Schaefer2018_200Parcels_7Networks_order.annot
+[20/21] Downloading all_avg.mat_avg_high_epoched
+[21/21] Downloading leadfield
 </pre></div>
 </div>
 </section>
@@ -980,10 +975,10 @@ for the convergence 100-200 epochs need to run for the trainning</p>
 loading leadfield file: /home/runner/.whobpyt/data/eg__momi2023/sub_1_leadfield
 call model fitting
 epoch:  0 4034.7136
-epoch:  0 0.391269582671807 cos_sim:  0.1091794168089291
+epoch:  0 0.39126958267180695 cos_sim:  0.1091794168089291
 epoch:  1 -1168.6849
-epoch:  1 0.43057856499970915 cos_sim:  -0.0005451651500056502
-running time is  14.585137605667114 's
+epoch:  1 0.4305785649997093 cos_sim:  -0.0005451651500056537
+running time is  27.05295729637146 's
 </pre></div>
 </div>
 <p>check the output of output_sim.eeg_test</p>
@@ -1798,8 +1793,12 @@ TMS-EEG time series showing a robust recovery of grand-mean empirical TMS-EEG ev
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Momi, D., Wang, Z., Griffiths, J.D. (2023). “TMS-evoked responses are driven by recurrent large-scale network dynamics.” eLife, 10.7554/eLife.83232. <a class="reference external" href="https://doi.org/10.7554/eLife.83232">https://doi.org/10.7554/eLife.83232</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 4.128 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 33.518 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-momi2023-py">
+<div class="binder-badge docutils container">
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/GriffithsLab/whobpyt/gh-pages?urlpath=lab/tree/notebooks/auto_examples/eg__momi2023.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" style="width: 150px;" />
+</a>
+</div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c0aa0ed03c2583762d5d6226381b960b/eg__momi2023.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__momi2023.ipynb</span></code></a></p>
 </div>

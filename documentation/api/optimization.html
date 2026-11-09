@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Optimization &#8212; WhoBPyT</title>
+    <title>Objective functions &#8212; WhoBPyT</title>
   
   
   
@@ -46,7 +46,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../_static/documentation_options.js?v=afeeb49e"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -54,16 +54,23 @@
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/api/optimization';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://griffithslab.github.io/whobpyt/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://griffithslab.github.io/whobpyt/documentation/api/optimization.html" />
     <link rel="icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Run" href="run.html" />
-    <link rel="prev" title="Models" href="models.html" />
+    <link rel="next" title="Model fitting and simulation" href="run.html" />
+    <link rel="prev" title="Data types" href="datatypes.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="0.1.0.dev0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -200,6 +207,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -318,6 +345,26 @@
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -379,13 +426,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../usage/cookbook.html">Cookbook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../usage/running_in_codespaces.html">GitHub Codespaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../usage/running_in_colab.html">Google Colab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/running_in_colab.html">Run in your browser</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../development/index.html">Development and Contributor Guidelines</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../development/contributing.html">Contributing Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../development/governance.html">Governance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html">Roadmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/releasing.html">Making a Release</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../science/index.html">Scientific Research Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -395,11 +443,13 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Python API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="datatypes.html">Data types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models.html">Models</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatypes.html">Data types</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Objective functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run.html">Model fitting &amp; simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base_classes.html">Base classes</a></li>
 </ul>
 </details></li>
 </ul>
@@ -432,8 +482,24 @@
               
 <div>
   
-  <section id="optimization">
-<h1>Optimization<a class="headerlink" href="#optimization" title="Link to this heading">#</a></h1>
+  <section id="objective-functions">
+<h1>Objective functions<a class="headerlink" href="#objective-functions" title="Link to this heading">#</a></h1>
+<p>Objective (cost) functions compare simulated and empirical data. All of
+them inherit from <a class="reference internal" href="base_classes.html#whobpyt.datatypes.AbstractLoss" title="whobpyt.datatypes.AbstractLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractLoss</span></code></a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.optimization.custom_cost_JR.CostsJR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.optimization.custom_cost_JR.</span></span><span class="sig-name descname"><span class="pre">CostsJR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.custom_cost_JR.CostsJR" title="Link to this definition">#</a></dt>
+<dd><p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>loss</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="whobpyt.optimization.CostsTS">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></span><span class="sig-name descname"><span class="pre">CostsTS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsTS" title="Link to this definition">#</a></dt>
@@ -446,11 +512,6 @@
 </tbody>
 </table>
 </div>
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsTS.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsTS.__init__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="whobpyt.optimization.CostsTS.main_loss">
 <span class="sig-name descname"><span class="pre">main_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsTS.main_loss" title="Link to this definition">#</a></dt>
@@ -493,19 +554,6 @@ The cost function is the negative log-likelihood of the Pearson correlation betw
 </table>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsFC.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsFC.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>simKey: str</strong></dt><dd><p>type of cost function to be used</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="whobpyt.optimization.CostsFC.main_loss">
 <span class="sig-name descname"><span class="pre">main_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsFC.main_loss" title="Link to this definition">#</a></dt>
 <dd><p>Function to calculate the cost function for Functional Connectivity (FC) fitting. It initially calculates the FC matrix using the data from the BOLD time series, makes that mean-zero, and then calculates the Pearson Correlation between the simulated FC and empirical FC. The FC matrix values are then transposed to the 0-1 range. We then use this FC matrix as a probability matrix and use it to get the cross-entropy-like loss using negative log likelihood.</p>
@@ -520,7 +568,7 @@ The cost function is the negative log-likelihood of the Pearson correlation betw
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>losses_corr: <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.tensor.html#torch.tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.tensor</span></code></a></dt><dd><p>cost function value</p>
+<dt>losses_corr: <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.tensor</span></code></a></dt><dd><p>cost function value</p>
 </dd>
 </dl>
 </dd>
@@ -560,21 +608,6 @@ The cost function is the negative log-likelihood of the Pearson correlation betw
 </table>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsFixedFC.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ptdevice('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsFixedFC.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>simKey: str</strong></dt><dd><p>The state variable or output variable from the model used for the simulated FC</p>
-</dd>
-<dt><strong>device: torch.device</strong></dt><dd><p>Whether to run on GPU or CPU</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="whobpyt.optimization.CostsFixedFC.loss">
 <span class="sig-name descname"><span class="pre">loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsFixedFC.loss" title="Link to this definition">#</a></dt>
 <dd><p>Function to calculate the cost function for Functional Connectivity (FC) fitting. 
@@ -593,62 +626,12 @@ We then use this FC matrix as a probability matrix and use it to get the cross-e
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>losses_corr: <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.tensor.html#torch.tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.tensor</span></code></a></dt><dd><p>cost function value</p>
+<dt>losses_corr: <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.tensor</span></code></a></dt><dd><p>cost function value</p>
 </dd>
 </dl>
 </dd>
 </dl>
 </dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsPSD">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></span><span class="sig-name descname"><span class="pre">CostsPSD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsPSD" title="Link to this definition">#</a></dt>
-<dd><p>WARNING: This function is no longer supported.
-TODO: Needs to be updated.</p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>calcPSD</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>downSmoothPSD</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>loss</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>scalePSD</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsPSD.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsPSD.__init__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsPSD.calcPSD">
-<span class="sig-name descname"><span class="pre">calcPSD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minFreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxFreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axMethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsPSD.calcPSD" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsPSD.downSmoothPSD">
-<span class="sig-name descname"><span class="pre">downSmoothPSD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sdValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsPSD.downSmoothPSD" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsPSD.loss">
-<span class="sig-name descname"><span class="pre">loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsPSD.loss" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsPSD.scalePSD">
-<span class="sig-name descname"><span class="pre">scalePSD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sdValues_dS</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsPSD.scalePSD" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -695,37 +678,6 @@ TODO: Needs to be updated.</p>
 </table>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsFixedPSD.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minFreq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxFreq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmTransient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.device('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsFixedPSD.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>num_regions; Int</strong></dt><dd><p>The number of nodes in the model.</p>
-</dd>
-<dt><strong>simKey: String</strong></dt><dd><p>Name of the state variable or modality to be used as input to the cost function.</p>
-</dd>
-<dt><strong>sampleFreqHz: Int</strong></dt><dd><p>The sampling frequency of the data.</p>
-</dd>
-<dt><strong>minFreq: Int</strong></dt><dd><p>The minimum frequnecy of the PSD to return.</p>
-</dd>
-<dt><strong>maxFreq: Int</strong></dt><dd><p>The maximum frequency of the PSD to return.</p>
-</dd>
-<dt><strong>targetValue: torch.tensor</strong></dt><dd><p>The sampling frequency of the data.</p>
-</dd>
-<dt><strong>empiricalData: torch.tensor</strong></dt><dd><p>NOT IMPLEMENTED: This is a placeholder for the case of getting an empirical timeseries as input, which would be applicable if doing a windowed fitting paradigm</p>
-</dd>
-<dt><strong>batch_size: Int</strong></dt><dd><p>The number of elements in the batch.</p>
-</dd>
-<dt><strong>rmTransient: Int</strong></dt><dd><p>The number of initial time steps of simulation to remove as the transient. Default: 0</p>
-</dd>
-<dt><strong>device: torch.device</strong></dt><dd><p>Whether to run the objective function on CPU or GPU.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="whobpyt.optimization.CostsFixedPSD.calcPSD">
 <span class="sig-name descname"><span class="pre">calcPSD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minFreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxFreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axMethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsFixedPSD.calcPSD" title="Link to this definition">#</a></dt>
 <dd><p>This method calculates the Power Spectral Density (PSD) as the square of the Fast Fourier Transform (FFT).</p>
@@ -747,9 +699,9 @@ TODO: Needs to be updated.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>sdAxis: <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.tensor.html#torch.tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.tensor</span></code></a></dt><dd><p>The axis values of the PSD</p>
+<dt>sdAxis: <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.tensor</span></code></a></dt><dd><p>The axis values of the PSD</p>
 </dd>
-<dt>sdValues: <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.tensor.html#torch.tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.tensor</span></code></a></dt><dd><p>The PSD values [____, ____]</p>
+<dt>sdValues: <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.tensor</span></code></a></dt><dd><p>The PSD values [____, ____]</p>
 </dd>
 </dl>
 </dd>
@@ -788,11 +740,11 @@ TODO: Needs to be updated.</p>
 <dl class="field-list">
 <dt class="field-odd">Attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>num_regions</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></span></dt><dd><p>The number of reagons in the model beign fit</p>
+<dt><strong>num_regions</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></a></span></dt><dd><p>The number of reagons in the model beign fit</p>
 </dd>
-<dt><strong>simKey</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">String</span></code></span></dt><dd><p>The name of the variable for which the mean is calculated</p>
+<dt><strong>simKey</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">String</span></code></a></span></dt><dd><p>The name of the variable for which the mean is calculated</p>
 </dd>
-<dt><strong>targetValue</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></span></dt><dd><p>The target value either as single number or vector</p>
+<dt><strong>targetValue</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></a></span></dt><dd><p>The target value either as single number or vector</p>
 </dd>
 <dt><strong>device</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.device</span></code></a></span></dt><dd><p>Whether the objective function is to run on GPU</p>
 </dd>
@@ -809,23 +761,6 @@ TODO: Needs to be updated.</p>
 </table>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="whobpyt.optimization.CostsMean.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ptdevice('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsMean.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>num_regions</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Int</span></code></span></dt><dd><p>The number of regions in the model being fit</p>
-</dd>
-<dt><strong>simKey</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">String</span></code></span></dt><dd><p>The name of the variable for which the mean is calculated</p>
-</dd>
-<dt><strong>targetValue</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></span></dt><dd><p>The target value either as single number or vector</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="whobpyt.optimization.CostsMean.loss">
 <span class="sig-name descname"><span class="pre">loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsMean.loss" title="Link to this definition">#</a></dt>
 <dd><p>Method to calculate the loss</p>
@@ -838,13 +773,38 @@ TODO: Needs to be updated.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></dt><dd><p>The loss value</p>
+<dt><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tensor</span></code></a></dt><dd><p>The loss value</p>
 </dd>
 </dl>
 </dd>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.optimization.CostsPSD">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.optimization.</span></span><span class="sig-name descname"><span class="pre">CostsPSD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleFreqHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empiricalData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.optimization.CostsPSD" title="Link to this definition">#</a></dt>
+<dd><p>WARNING: This function is no longer supported.
+TODO: Needs to be updated.</p>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>calcPSD</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>downSmoothPSD</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>loss</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>scalePSD</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
 </dd></dl>
 
 </section>
@@ -861,12 +821,12 @@ TODO: Needs to be updated.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="models.html"
+       href="datatypes.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Models</p>
+        <p class="prev-next-title">Data types</p>
       </div>
     </a>
     <a class="right-next"
@@ -874,7 +834,7 @@ TODO: Needs to be updated.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Run</p>
+        <p class="prev-next-title">Model fitting and simulation</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -897,40 +857,29 @@ TODO: Needs to be updated.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.custom_cost_JR.CostsJR"><code class="docutils literal notranslate"><span class="pre">CostsJR</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsTS"><code class="docutils literal notranslate"><span class="pre">CostsTS</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsTS.__init__"><code class="docutils literal notranslate"><span class="pre">CostsTS.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsTS.main_loss"><code class="docutils literal notranslate"><span class="pre">CostsTS.main_loss()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFC"><code class="docutils literal notranslate"><span class="pre">CostsFC</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFC.__init__"><code class="docutils literal notranslate"><span class="pre">CostsFC.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFC.main_loss"><code class="docutils literal notranslate"><span class="pre">CostsFC.main_loss()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFixedFC"><code class="docutils literal notranslate"><span class="pre">CostsFixedFC</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFixedFC.__init__"><code class="docutils literal notranslate"><span class="pre">CostsFixedFC.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFixedFC.loss"><code class="docutils literal notranslate"><span class="pre">CostsFixedFC.loss()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsPSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsPSD.__init__"><code class="docutils literal notranslate"><span class="pre">CostsPSD.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsPSD.calcPSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD.calcPSD()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsPSD.downSmoothPSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD.downSmoothPSD()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsPSD.loss"><code class="docutils literal notranslate"><span class="pre">CostsPSD.loss()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsPSD.scalePSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD.scalePSD()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFixedPSD"><code class="docutils literal notranslate"><span class="pre">CostsFixedPSD</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFixedPSD.__init__"><code class="docutils literal notranslate"><span class="pre">CostsFixedPSD.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFixedPSD.calcPSD"><code class="docutils literal notranslate"><span class="pre">CostsFixedPSD.calcPSD()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsFixedPSD.loss"><code class="docutils literal notranslate"><span class="pre">CostsFixedPSD.loss()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsMean"><code class="docutils literal notranslate"><span class="pre">CostsMean</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsMean.__init__"><code class="docutils literal notranslate"><span class="pre">CostsMean.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsMean.loss"><code class="docutils literal notranslate"><span class="pre">CostsMean.loss()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.optimization.CostsPSD"><code class="docutils literal notranslate"><span class="pre">CostsPSD</span></code></a></li>
 </ul>
   </nav></div>
 

@@ -46,7 +46,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../_static/documentation_options.js?v=afeeb49e"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -54,6 +54,13 @@
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/usage/installation';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://griffithslab.github.io/whobpyt/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://griffithslab.github.io/whobpyt/documentation/usage/installation.html" />
     <link rel="icon" href="../../_static/favicon.ico"/>
@@ -63,7 +70,7 @@
     <link rel="prev" title="Using WhoBPyT" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="0.1.0.dev0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -200,6 +207,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -318,6 +345,26 @@
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -379,13 +426,14 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="running_in_codespaces.html">GitHub Codespaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="running_in_colab.html">Google Colab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running_in_colab.html">Run in your browser</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../development/index.html">Development and Contributor Guidelines</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../development/contributing.html">Contributing Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../development/governance.html">Governance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html">Roadmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/releasing.html">Making a Release</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../science/index.html">Scientific Research Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -395,11 +443,13 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">Python API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api/datatypes.html">Data types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/models.html">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/datatypes.html">Data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/optimization.html">Objective functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/run.html">Model fitting &amp; simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/datasets.html">Datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/visualization.html">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/base_classes.html">Base classes</a></li>
 </ul>
 </details></li>
 </ul>
@@ -435,38 +485,66 @@
   <section id="installation">
 <span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
 <p>WhoBPyT needs Python 3.10 or newer. We recommend installing it into its own
-conda (or virtualenv) environment.</p>
-<ol class="arabic">
-<li><p>Create and activate an environment:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>whobpyt<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>git<span class="w"> </span>pip
+conda (or virtualenv) environment:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>whobpyt<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>pip
 <span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>whobpyt
 </pre></div>
 </div>
-</li>
-<li><p>Clone the latest version from GitHub:</p>
+<section id="install-whobpyt">
+<h2>Install WhoBPyT<a class="headerlink" href="#install-whobpyt" title="Link to this heading">#</a></h2>
+<p>WhoBPyT is not yet on PyPI, so install it from GitHub:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"whobpyt[examples] @ git+https://github.com/GriffithsLab/whobpyt.git"</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">[examples]</span></code> part also installs the packages the
+<a class="reference internal" href="../../auto_examples/index.html#examples-gallery"><span class="std std-ref">examples gallery</span></a> uses, such as MNE-Python. Leave it
+out if you only need the library itself:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"git+https://github.com/GriffithsLab/whobpyt.git"</span>
+</pre></div>
+</div>
+<p>Check that it worked:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import whobpyt; print(whobpyt.__version__)"</span>
+</pre></div>
+</div>
+</section>
+<section id="install-for-development">
+<h2>Install for development<a class="headerlink" href="#install-for-development" title="Link to this heading">#</a></h2>
+<p>To work on WhoBPyT itself, clone the repository and install it in editable
+mode, with everything needed for the examples, documentation and tests:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/GriffithsLab/whobpyt
 <span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>whobpyt
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev]"</span>
+<span class="gp">$ </span>pytest
 </pre></div>
 </div>
-</li>
-<li><p>Install the dependencies and WhoBPyT itself (in editable mode, so that
-changes you pull or make are picked up automatically):</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</pre></div>
+<p>See the <a class="reference internal" href="../development/contributing.html"><span class="doc">Contributing Guide</span></a> for more.</p>
+</section>
+<section id="optional-extras">
+<h2>Optional extras<a class="headerlink" href="#optional-extras" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">examples</span></code></p></td>
+<td><p>Packages used by the example scripts (MNE-Python, nilearn, …)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">docs</span></code></p></td>
+<td><p>Everything needed to build this documentation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test</span></code></p></td>
+<td><p>The test runner (pytest)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dev</span></code></p></td>
+<td><p>All of the above</p></td>
+</tr>
+</tbody>
+</table>
 </div>
-</li>
-<li><p>Check that it worked:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import whobpyt; from whobpyt.run import ModelFitting; print('WhoBPyT OK')"</span>
-</pre></div>
-</div>
-</li>
-</ol>
+</section>
 <section id="gpu-support">
 <h2>GPU support<a class="headerlink" href="#gpu-support" title="Link to this heading">#</a></h2>
 <p>WhoBPyT runs on the CPU by default. To use an NVIDIA GPU, install a
 CUDA-enabled build of PyTorch by following the instructions at
-<a class="reference external" href="https://pytorch.org/get-started/locally/">pytorch.org</a> <em>before</em> step 3.</p>
+<a class="reference external" href="https://pytorch.org/get-started/locally/">pytorch.org</a> <em>before</em> installing
+WhoBPyT.</p>
 </section>
 <section id="next-steps">
 <h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
@@ -474,7 +552,7 @@ CUDA-enabled build of PyTorch by following the instructions at
 <li><p>Work through <a class="reference internal" href="../../auto_examples/eg__getting_started.html#ex-getting-started"><span class="std std-ref">Getting started: simulate and fit a whole-brain model</span></a>.</p></li>
 <li><p>Browse the <a class="reference internal" href="cookbook.html"><span class="doc">Cookbook</span></a> and the <a class="reference internal" href="../../auto_examples/index.html#examples-gallery"><span class="std std-ref">examples gallery</span></a>.</p></li>
 <li><p>Prefer not to install anything? Use <a class="reference internal" href="running_in_codespaces.html"><span class="doc">Running WhoBPyT in GitHub Codespaces</span></a> or
-<a class="reference internal" href="running_in_colab.html"><span class="doc">Running WhoBPyT in Google Colab</span></a>.</p></li>
+<a class="reference internal" href="running_in_colab.html"><span class="doc">Running the examples in your browser</span></a>.</p></li>
 </ul>
 </section>
 </section>
@@ -527,6 +605,9 @@ CUDA-enabled build of PyTorch by following the instructions at
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-whobpyt">Install WhoBPyT</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-for-development">Install for development</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-extras">Optional extras</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu-support">GPU support</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>

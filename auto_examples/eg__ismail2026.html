@@ -46,7 +46,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../_static/documentation_options.js?v=afeeb49e"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -54,6 +54,13 @@
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'auto_examples/eg__ismail2026';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://griffithslab.github.io/whobpyt/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://griffithslab.github.io/whobpyt/auto_examples/eg__ismail2026.html" />
     <link rel="icon" href="../_static/favicon.ico"/>
@@ -63,7 +70,7 @@
     <link rel="prev" title="Getting started: simulate and fit a whole-brain model" href="eg__getting_started.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
+  <meta name="docsearch:version" content="0.1.0.dev0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -200,6 +207,26 @@
       
       
         <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -318,6 +345,26 @@
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
@@ -379,7 +426,7 @@
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-eg-ismail2026-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code.</p>
+to download the full example code or to run this example in your browser via Binder.</p>
 </div>
 <section class="sphx-glr-example-title" id="replicating-ismail-et-al-2026">
 <span id="ex-ismail2026"></span><span id="sphx-glr-auto-examples-eg-ismail2026-py"></span><h1>Replicating Ismail et al. 2026<a class="headerlink" href="#replicating-ismail-et-al-2026" title="Link to this heading">#</a></h1>
@@ -389,6 +436,13 @@ to download the full example code.</p>
 Griffiths J.D., Kadis D.S. (2026).
 “Developmental disinhibition gates language lateralization in childhood.”
 Nature Communications, <a class="reference external" href="https://doi.org/10.1038/s41467-026-71918-7">doi: 10.1038/s41467-026-71918-7</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To reproduce the published results exactly, this example fits the
+original model code from the paper, kept in <code class="docutils literal notranslate"><span class="pre">whobpyt.depr.ismail2026</span></code>.
+That code differs from the current WhoBPyT API. To learn the current API,
+start with <a class="reference internal" href="eg__getting_started.html#ex-getting-started"><span class="std std-ref">Getting started: simulate and fit a whole-brain model</span></a> and <a class="reference internal" href="eg__tmseeg.html#ex-tmseeg"><span class="std std-ref">Modelling TMS-EEG evoked responses</span></a>.</p>
+</div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span class="w">
 </span></pre></div></div>
 <section id="overview">
@@ -419,7 +473,7 @@ inhibition to drive laterality. This work provides a developmental framework for
 </span><span class="kn">import</span><span class="w"> </span><span class="nn">gdown</span><span class="w">
 </span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">loadmat</span><span class="w">
 </span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">depr</span><span class="nn">.</span><span class="nn">ismail2026</span><span class="nn">.</span><span class="nn">jansen_rit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamsModel</span><span class="p">,</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="torch.nn.Module"><span class="n">RNNJANSEN</span></a><span class="p">,</span> <span class="n">Model_fitting</span><span class="p">,</span> <span class="n">dataloader</span><span class="w">
-</span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">datasets</span><span class="nn">.</span><span class="nn">fetchers</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_egismail2026</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">whobpyt</span><span class="nn">.</span><span class="nn">datasets</span><span class="nn">.</span><span class="nn">fetchers</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-whobpyt-datasets-fetchers sphx-glr-backref-type-py-function reference internal" href="../documentation/api/datasets.html#whobpyt.datasets.fetchers.fetch_egismail2026" title="whobpyt.datasets.fetchers.fetch_egismail2026"><span class="n">fetch_egismail2026</span></a><span class="w">
 </span><span class="kn">import</span><span class="w"> </span><span class="nn">mne</span><span class="w">
 </span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
 </span><span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span><span class="w">
@@ -430,57 +484,21 @@ inhibition to drive laterality. This work provides a developmental framework for
 <section id="download-data">
 <h2>2. Download data<a class="headerlink" href="#download-data" title="Link to this heading">#</a></h2>
 <p>We use an example dataset for one subject on a public Google Drive folder</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">output_dir</span></a> <span class="o">=</span> <span class="n">fetch_egismail2026</span><span class="p">(</span><span class="p">)</span><span class="w">
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">output_dir</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-whobpyt-datasets-fetchers sphx-glr-backref-type-py-function reference internal" href="../documentation/api/datasets.html#whobpyt.datasets.fetchers.fetch_egismail2026" title="whobpyt.datasets.fetchers.fetch_egismail2026"><span class="n">fetch_egismail2026</span></a><span class="p">(</span><span class="p">)</span><span class="w">
 </span></pre></div></div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading distance.txt
-
-
-
-Downloading emp_noise_source.npy
-
-
-
-Downloading emp_verb_source.npy
-
-
-
-Downloading info.pkl
-
-
-
-Downloading info_nosubjinfo.pkl
-
-
-
-Downloading leadfield_3d.mat
-
-
-
-Downloading noise_evoked.npy
-
-
-
-Downloading sim_noise_sensor.npy
-
-
-
-Downloading sim_noise_source.npy
-
-
-
-Downloading sim_verb_sensor.npy
-
-
-
-Downloading sim_verb_source.npy
-
-
-
-Downloading verb_evoked.npy
-
-
-
-Downloading weights.csv
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[1/13] Downloading distance.txt
+[2/13] Downloading emp_noise_source.npy
+[3/13] Downloading emp_verb_source.npy
+[4/13] Downloading info.pkl
+[5/13] Downloading info_nosubjinfo.pkl
+[6/13] Downloading leadfield_3d.mat
+[7/13] Downloading noise_evoked.npy
+[8/13] Downloading sim_noise_sensor.npy
+[9/13] Downloading sim_noise_source.npy
+[10/13] Downloading sim_verb_sensor.npy
+[11/13] Downloading sim_verb_source.npy
+[12/13] Downloading verb_evoked.npy
+[13/13] Downloading weights.csv
 </pre></div>
 </div>
 </section>
@@ -575,10 +593,10 @@ tensor([[-0.1098,  0.0624, -0.3300,  ..., -0.5234,  0.3307,  0.1307],
         [ 0.6493,  0.8077,  0.7365,  ..., -0.5151, -0.9416, -0.8089]],
        requires_grad=True)
 epoch:  0 -225555.33
-epoch:  0 0.30460155878342454 cos_sim:  -0.056387935592963456
+epoch:  0 0.3046015587834246 cos_sim:  -0.056387935592963456
 epoch:  1 -226226.97
-epoch:  1 0.36637415763452535 cos_sim:  0.04921187246012653
-0.41102292114150885 cos_sim:  0.10147384586990191
+epoch:  1 0.36637415763452547 cos_sim:  0.04921187246012653
+0.4110229211415088 cos_sim:  0.10147384586990191
 Finished fitting model to verb trials
 Parameter containing:
 tensor([[-0.1098,  0.0624, -0.3300,  ..., -0.5234,  0.3307,  0.1307],
@@ -590,10 +608,10 @@ tensor([[-0.1098,  0.0624, -0.3300,  ..., -0.5234,  0.3307,  0.1307],
         [ 0.6493,  0.8077,  0.7365,  ..., -0.5151, -0.9416, -0.8089]],
        requires_grad=True)
 epoch:  0 -225559.33
-epoch:  0 0.22818162342166357 cos_sim:  -0.11490302792671207
+epoch:  0 0.2281816234216635 cos_sim:  -0.11490302792671207
 epoch:  1 -226230.73
 epoch:  1 0.2739276935614341 cos_sim:  -0.07553709377701305
-0.2712973112594996 cos_sim:  -0.019322574906271518
+0.27129731125949963 cos_sim:  -0.019322574906271518
 Finished fitting model to noise trials
 </pre></div>
 </div>
@@ -688,8 +706,8 @@ Create longer empty array with same shape and fill with the first 500 ms</p>
 </span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sim_source_noise</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">noise_F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">P_test</span></a><span class="w">
 </span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sim_sensor_noise</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">noise_F</span><span class="o">.</span><span class="n">output_sim</span><span class="o">.</span><span class="n">eeg_test</span></a><span class="w">
 </span></pre></div></div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.4199185557221877 cos_sim:  0.08540972934983257
-0.24435109338388383 cos_sim:  -0.029608468320017574
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.41991855572218806 cos_sim:  0.08540972934983256
+0.24435109338388372 cos_sim:  -0.02960846832001758
 </pre></div>
 </div>
 </section>
@@ -760,8 +778,12 @@ We will load the empirical source data (model was fitted with sensor MEG data) a
 </div>
 <p><strong>Results Description:</strong>
 Remarkably, despite being trained solely on early responses (0–400 ms), the models generalized beyond the fitted time window and domain, predicting beta-band oscillations (13-30 Hz) observed in a later time window during language production (700–1200 ms; Fig. 1B) in the frequency domain (Fig. 1D). This is a non-trivial result that highlights the model’s capacity to link temporal and spectral features of neural dynamics during the task. For this adolescent subject, models predicted a left-lateralized pattern, with left-right difference in the noun-noise beta power difference. Specifically, lower beta power, relative to noise trials, in the left frontal lobe (ERD) and greater beta power in the right (ERS) was observed. In the paper (Figure 1E) we compare the pattern of beta ERD/S between young children and adolescents and uur simulations captured developmental differences in the degree of lateralization of language production oscillatory patterns in response to speech versus noise (Fig. 1E).</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (3 minutes 23.361 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (6 minutes 7.663 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-eg-ismail2026-py">
+<div class="binder-badge docutils container">
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/GriffithsLab/whobpyt/gh-pages?urlpath=lab/tree/notebooks/auto_examples/eg__ismail2026.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" style="width: 150px;" />
+</a>
+</div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/053c9953b94e62892b145c5f664b294e/eg__ismail2026.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">eg__ismail2026.ipynb</span></code></a></p>
 </div>

@@ -1,0 +1,916 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Base classes &#8212; WhoBPyT</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.css?v=b3df3ca5" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/fix-sidebar.css?v=52f27943" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="../../_static/documentation_options.js?v=afeeb49e"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/api/base_classes';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://griffithslab.github.io/whobpyt/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://griffithslab.github.io/whobpyt/documentation/api/base_classes.html" />
+    <link rel="icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="WhoBPyT Examples" href="../../auto_examples/index.html" />
+    <link rel="prev" title="Visualization" href="visualization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.0.dev0" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="auto">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/whobpyt_logo_feet.png" class="logo__image only-light" alt="WhoBPyT - Home"/>
+    <img src="../../_static/whobpyt_logo_feet_dark.png" class="logo__image only-dark pst-js-only" alt="WhoBPyT - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../development/index.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/index.html">
+    Science
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../development/index.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="External Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/griffithslab/whobpyt" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../about/index.html">About the Library</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about/overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/architecture.html">Code Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/implementation.html">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/design_philosophy.html">Design Philosophy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/datasets.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/cite.html">How to Cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/cited.html">Papers Using WhoBPyT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about/glossary.html">Glossary</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../usage/index.html">Installation and Usage</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../usage/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/cookbook.html">Cookbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/running_in_codespaces.html">GitHub Codespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/running_in_colab.html">Run in your browser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/index.html">Development and Contributor Guidelines</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html">Contributing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/governance.html">Governance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html">Roadmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/releasing.html">Making a Release</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../science/index.html">Scientific Research Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../science/brain_dynamics/index.html">Brain Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../science/brain_stimulation/index.html">Brain Stimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../science/brain_cognition/index.html">Brain and Cognition</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Python API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatypes.html">Data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization.html">Objective functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html">Model fitting &amp; simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Base classes</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+<div>
+  
+  <section id="base-classes">
+<h1>Base classes<a class="headerlink" href="#base-classes" title="Link to this heading">#</a></h1>
+<p>Inherit from these classes to add a new model, objective function or
+fitting paradigm that works with the rest of WhoBPyT. See
+<a class="reference internal" href="../about/architecture.html"><span class="doc">Code architecture</span></a> for an overview.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractParams">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.datatypes.</span></span><span class="sig-name descname"><span class="pre">AbstractParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractParams" title="Link to this definition">#</a></dt>
+<dd><p>Base class for a model’s parameter container.</p>
+<p>Subclasses set each model parameter as an attribute holding a
+<a class="reference internal" href="datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a>, typically with defaults
+that keyword arguments can override (see
+<a class="reference internal" href="models.html#whobpyt.models.jansen_rit.JansenRitParams" title="whobpyt.models.jansen_rit.JansenRitParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">JansenRitParams</span></code></a>). The parameters may
+belong to the neural mass model and/or the measurement model.</p>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractParams.getFittedNames" title="whobpyt.datatypes.AbstractParams.getFittedNames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getFittedNames</span></code></a>()</p></td>
+<td><p>Return the names of the learnable parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractParams.to" title="whobpyt.datatypes.AbstractParams.to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to</span></code></a>(device)</p></td>
+<td><p>Move all parameters to <code class="docutils literal notranslate"><span class="pre">device</span></code> (a <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.device</span></code></a>).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractParams.getFittedNames">
+<span class="sig-name descname"><span class="pre">getFittedNames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractParams.getFittedNames" title="Link to this definition">#</a></dt>
+<dd><p>Return the names of the learnable parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>The name of every parameter with <code class="docutils literal notranslate"><span class="pre">fit_par=True</span></code>, plus
+<code class="docutils literal notranslate"><span class="pre">&lt;name&gt;_m</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;_v_inv</span></code> for every parameter whose
+prior mean and precision are learned (<code class="docutils literal notranslate"><span class="pre">fit_hyper=True</span></code>).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractParams.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractParams.to" title="Link to this definition">#</a></dt>
+<dd><p>Move all parameters to <code class="docutils literal notranslate"><span class="pre">device</span></code> (a <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.device</span></code></a>).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractNeuralModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.datatypes.</span></span><span class="sig-name descname"><span class="pre">AbstractNeuralModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractNeuralModel" title="Link to this definition">#</a></dt>
+<dd><p>Base class for models (typically neural mass models) that can be fitted.</p>
+<p>A model is a <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> that simulates one window of
+activity per call to <a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.forward" title="whobpyt.datatypes.AbstractNeuralModel.forward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code></a>. The measurement model (for example
+a lead field for EEG) may be part of the model.</p>
+<p>Subclasses should set <code class="docutils literal notranslate"><span class="pre">state_names</span></code> and <code class="docutils literal notranslate"><span class="pre">output_names</span></code>, call
+<a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.setModelParameters" title="whobpyt.datatypes.AbstractNeuralModel.setModelParameters"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setModelParameters()</span></code></a> in their <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, and implement
+<a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.createIC" title="whobpyt.datatypes.AbstractNeuralModel.createIC"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createIC()</span></code></a>, <a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.createDelayIC" title="whobpyt.datatypes.AbstractNeuralModel.createDelayIC"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createDelayIC()</span></code></a> and <a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.forward" title="whobpyt.datatypes.AbstractNeuralModel.forward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>params</strong><span class="classifier"><a class="reference internal" href="#whobpyt.datatypes.AbstractParams" title="whobpyt.datatypes.AbstractParams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractParams</span></code></a></span></dt><dd><p>The model’s parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>state_names</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Names of the model’s state variables.</p>
+</dd>
+<dt><strong>output_names</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Names of the model’s outputs. The first is used by the objective
+functions by default.</p>
+</dd>
+<dt><strong>track_params</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Names of the learnable parameters, recorded during training.</p>
+</dd>
+<dt><strong>params_fitted</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">'modelparameter'</span></code> and <code class="docutils literal notranslate"><span class="pre">'hyperparameter'</span></code> lists of tensors that the
+optimizers update. Set by <a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.setModelParameters" title="whobpyt.datatypes.AbstractNeuralModel.setModelParameters"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setModelParameters()</span></code></a>.</p>
+</dd>
+<dt><strong>commit_hash</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></span></dt><dd><p>WhoBPyT’s git commit, if running from a git checkout.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.createDelayIC" title="whobpyt.datatypes.AbstractNeuralModel.createDelayIC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">createDelayIC</span></code></a>(ver)</p></td>
+<td><p>Return the initial history of state variables needed for delays.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.createIC" title="whobpyt.datatypes.AbstractNeuralModel.createIC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">createIC</span></code></a>(ver)</p></td>
+<td><p>Return initial conditions for the model's state variables.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.forward" title="whobpyt.datatypes.AbstractNeuralModel.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(external, hx, hE)</p></td>
+<td><p>Simulate one window.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.info" title="whobpyt.datatypes.AbstractNeuralModel.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>()</p></td>
+<td><p>Return the model's state names, output names, tracked parameters and commit.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel.setModelParameters" title="whobpyt.datatypes.AbstractNeuralModel.setModelParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setModelParameters</span></code></a>()</p></td>
+<td><p>Register the learnable parameters with PyTorch.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractNeuralModel.createDelayIC">
+<span class="sig-name descname"><span class="pre">createDelayIC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractNeuralModel.createDelayIC" title="Link to this definition">#</a></dt>
+<dd><p>Return the initial history of state variables needed for delays.</p>
+<p>The default returns a dummy tensor, for models without delays.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractNeuralModel.createIC">
+<span class="sig-name descname"><span class="pre">createIC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ver</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractNeuralModel.createIC" title="Link to this definition">#</a></dt>
+<dd><p>Return initial conditions for the model’s state variables.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractNeuralModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractNeuralModel.forward" title="Link to this definition">#</a></dt>
+<dd><p>Simulate one window.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>external</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></span></dt><dd><p>External input for the window.</p>
+</dd>
+<dt><strong>hx</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></span></dt><dd><p>Current state.</p>
+</dd>
+<dt><strong>hE</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></span></dt><dd><p>History used for delayed inputs.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>next_state</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Simulated time series of each state variable and output, plus
+<code class="docutils literal notranslate"><span class="pre">'current_state'</span></code>, the state at the end of the window.</p>
+</dd>
+<dt><strong>hE</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></span></dt><dd><p>Updated history.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractNeuralModel.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractNeuralModel.info" title="Link to this definition">#</a></dt>
+<dd><p>Return the model’s state names, output names, tracked parameters and commit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractNeuralModel.setModelParameters">
+<span class="sig-name descname"><span class="pre">setModelParameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractNeuralModel.setModelParameters" title="Link to this definition">#</a></dt>
+<dd><p>Register the learnable parameters with PyTorch.</p>
+<p>Every <a class="reference internal" href="datatypes.html#whobpyt.datatypes.Parameter" title="whobpyt.datatypes.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> in <code class="docutils literal notranslate"><span class="pre">params</span></code>
+with <code class="docutils literal notranslate"><span class="pre">fit_par=True</span></code> becomes a <code class="docutils literal notranslate"><span class="pre">torch.nn.Parameter</span></code> and is added to
+<code class="docutils literal notranslate"><span class="pre">params_fitted['modelparameter']</span></code>; learnable priors
+(<code class="docutils literal notranslate"><span class="pre">fit_hyper=True</span></code>) are added to <code class="docutils literal notranslate"><span class="pre">params_fitted['hyperparameter']</span></code>.
+Call this in the subclass’s <code class="docutils literal notranslate"><span class="pre">__init__</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.datatypes.</span></span><span class="sig-name descname"><span class="pre">AbstractLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simKey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.device('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractLoss" title="Link to this definition">#</a></dt>
+<dd><p>Base class for objective functions.</p>
+<p>Subclasses implement <a class="reference internal" href="#whobpyt.datatypes.AbstractLoss.main_loss" title="whobpyt.datatypes.AbstractLoss.main_loss"><code class="xref py py-meth docutils literal notranslate"><span class="pre">main_loss()</span></code></a>, which compares simulated and
+empirical data. A full objective can combine it with <a class="reference internal" href="#whobpyt.datatypes.AbstractLoss.prior_loss" title="whobpyt.datatypes.AbstractLoss.prior_loss"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prior_loss()</span></code></a>,
+as <a class="reference internal" href="optimization.html#whobpyt.optimization.custom_cost_JR.CostsJR" title="whobpyt.optimization.custom_cost_JR.CostsJR"><code class="xref py py-class docutils literal notranslate"><span class="pre">CostsJR</span></code></a> does.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>simKey</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Which of the model’s outputs or state variables to compare with the
+data, for example <code class="docutils literal notranslate"><span class="pre">'eeg'</span></code>.</p>
+</dd>
+<dt><strong>model</strong><span class="classifier"><a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel" title="whobpyt.datatypes.AbstractNeuralModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractNeuralModel</span></code></a></span></dt><dd><p>The model being fitted. Needed by <a class="reference internal" href="#whobpyt.datatypes.AbstractLoss.prior_loss" title="whobpyt.datatypes.AbstractLoss.prior_loss"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prior_loss()</span></code></a>.</p>
+</dd>
+<dt><strong>device</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.device</span></code></a></span></dt><dd><p>Device to compute on.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractLoss.main_loss" title="whobpyt.datatypes.AbstractLoss.main_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main_loss</span></code></a>(simData, empData)</p></td>
+<td><p>Return the loss comparing simulated and empirical data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractLoss.prior_loss" title="whobpyt.datatypes.AbstractLoss.prior_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prior_loss</span></code></a>()</p></td>
+<td><p>Return the penalties keeping learnable parameters near their priors.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractLoss.main_loss">
+<span class="sig-name descname"><span class="pre">main_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empData</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractLoss.main_loss" title="Link to this definition">#</a></dt>
+<dd><p>Return the loss comparing simulated and empirical data.</p>
+<p>Any other information the loss needs should be given when the object
+is created, so the fitting classes can call every loss the same way.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>simData</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></span></dt><dd><p>Simulated time series, keyed by variable name. Usually accessed as
+<code class="docutils literal notranslate"><span class="pre">simData[self.simKey]</span></code>.</p>
+</dd>
+<dt><strong>empData</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></span></dt><dd><p>The target: an empirical time series or a summary measure
+computed from one.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></dt><dd><p>A scalar loss to back-propagate.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractLoss.prior_loss">
+<span class="sig-name descname"><span class="pre">prior_loss</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractLoss.prior_loss" title="Link to this definition">#</a></dt>
+<dd><p>Return the penalties keeping learnable parameters near their priors.</p>
+<p>For every parameter whose prior is learned (<code class="docutils literal notranslate"><span class="pre">fit_hyper=True</span></code>), the
+penalty is the precision-weighted squared distance between the value
+and the prior mean, minus the log precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a></dt><dd><p>One penalty per parameter; sum them to add to the loss.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractFitting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">whobpyt.datatypes.</span></span><span class="sig-name descname"><span class="pre">AbstractFitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel" title="whobpyt.datatypes.abstract_neural_model.AbstractNeuralModel"><span class="pre">AbstractNeuralModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#whobpyt.datatypes.AbstractLoss" title="whobpyt.datatypes.abstract_loss.AbstractLoss"><span class="pre">AbstractLoss</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.device('cpu')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractFitting" title="Link to this definition">#</a></dt>
+<dd><p>Base class for fitting paradigms.</p>
+<p>A fitting paradigm runs a model, compares its output with data using an
+objective function, and updates the model’s learnable parameters.
+Subclasses implement <a class="reference internal" href="#whobpyt.datatypes.AbstractFitting.train" title="whobpyt.datatypes.AbstractFitting.train"><code class="xref py py-meth docutils literal notranslate"><span class="pre">train()</span></code></a>, <a class="reference internal" href="#whobpyt.datatypes.AbstractFitting.evaluate" title="whobpyt.datatypes.AbstractFitting.evaluate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">evaluate()</span></code></a> and <a class="reference internal" href="#whobpyt.datatypes.AbstractFitting.simulate" title="whobpyt.datatypes.AbstractFitting.simulate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">simulate()</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>model</strong><span class="classifier"><a class="reference internal" href="#whobpyt.datatypes.AbstractNeuralModel" title="whobpyt.datatypes.AbstractNeuralModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractNeuralModel</span></code></a></span></dt><dd><p>The model to fit.</p>
+</dd>
+<dt><strong>cost</strong><span class="classifier"><a class="reference internal" href="#whobpyt.datatypes.AbstractLoss" title="whobpyt.datatypes.AbstractLoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractLoss</span></code></a></span></dt><dd><p>The objective function.</p>
+</dd>
+<dt><strong>device</strong><span class="classifier"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.device</span></code></a></span></dt><dd><p>Device to compute on.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>trainingStats</strong><span class="classifier"><a class="reference internal" href="datatypes.html#whobpyt.datatypes.TrainingStats" title="whobpyt.datatypes.TrainingStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainingStats</span></code></a></span></dt><dd><p>Loss and parameter values recorded during training.</p>
+</dd>
+<dt><strong>lastRec</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="datatypes.html#whobpyt.datatypes.Timeseries" title="whobpyt.datatypes.Timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Timeseries</span></code></a> or <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></span></dt><dd><p>The simulated time series from the most recent run.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractFitting.evaluate" title="whobpyt.datatypes.AbstractFitting.evaluate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Run the model and compare it with data, without updating parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractFitting.save" title="whobpyt.datatypes.AbstractFitting.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(filename)</p></td>
+<td><p>Save this object, including the model and training history, with pickle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractFitting.simulate" title="whobpyt.datatypes.AbstractFitting.simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulate</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Run the model for a fixed duration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#whobpyt.datatypes.AbstractFitting.train" title="whobpyt.datatypes.AbstractFitting.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Fit the model's learnable parameters to data.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractFitting.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractFitting.evaluate" title="Link to this definition">#</a></dt>
+<dd><p>Run the model and compare it with data, without updating parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractFitting.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractFitting.save" title="Link to this definition">#</a></dt>
+<dd><p>Save this object, including the model and training history, with pickle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractFitting.simulate">
+<span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractFitting.simulate" title="Link to this definition">#</a></dt>
+<dd><p>Run the model for a fixed duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="whobpyt.datatypes.AbstractFitting.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#whobpyt.datatypes.AbstractFitting.train" title="Link to this definition">#</a></dt>
+<dd><p>Fit the model’s learnable parameters to data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+  
+</div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="visualization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Visualization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../auto_examples/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">WhoBPyT Examples</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractParams"><code class="docutils literal notranslate"><span class="pre">AbstractParams</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractParams.getFittedNames"><code class="docutils literal notranslate"><span class="pre">AbstractParams.getFittedNames()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractParams.to"><code class="docutils literal notranslate"><span class="pre">AbstractParams.to()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractNeuralModel"><code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractNeuralModel.createDelayIC"><code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel.createDelayIC()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractNeuralModel.createIC"><code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel.createIC()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractNeuralModel.forward"><code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel.forward()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractNeuralModel.info"><code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel.info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractNeuralModel.setModelParameters"><code class="docutils literal notranslate"><span class="pre">AbstractNeuralModel.setModelParameters()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractLoss"><code class="docutils literal notranslate"><span class="pre">AbstractLoss</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractLoss.main_loss"><code class="docutils literal notranslate"><span class="pre">AbstractLoss.main_loss()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractLoss.prior_loss"><code class="docutils literal notranslate"><span class="pre">AbstractLoss.prior_loss()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractFitting"><code class="docutils literal notranslate"><span class="pre">AbstractFitting</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractFitting.evaluate"><code class="docutils literal notranslate"><span class="pre">AbstractFitting.evaluate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractFitting.save"><code class="docutils literal notranslate"><span class="pre">AbstractFitting.save()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractFitting.simulate"><code class="docutils literal notranslate"><span class="pre">AbstractFitting.simulate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#whobpyt.datatypes.AbstractFitting.train"><code class="docutils literal notranslate"><span class="pre">AbstractFitting.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><p class="text-center small">&copy; Copyright 2022–2026, the WhoBPyT developers</p></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
